@@ -15,7 +15,13 @@ RiskLevel = Literal["HIGH", "MODERATE", "SAFE"]
 
 @dataclass(frozen=True)
 class FindingSignals:
-    """Signals required to classify a monkey patch finding."""
+    """Signals required to classify a monkey patch finding.
+
+    Attributes:
+        category: Classification category of the patch (e.g., sys_modules_assignment).
+        is_test: Whether the patch is located in test code.
+        is_module_scope: Whether the patch occurs at module scope.
+    """
 
     category: str
     is_test: bool

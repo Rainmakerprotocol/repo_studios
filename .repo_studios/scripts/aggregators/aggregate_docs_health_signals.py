@@ -79,6 +79,21 @@ DEFAULT_OUTPUT_DIR = build_topic_path("aggregator", TOPIC_SLUG)
 
 @dataclass(frozen=True)
 class Paths:
+    """Path configuration for docs health signal aggregation.
+
+    Attributes:
+        repo_root: Repository root directory.
+        output_dir: Directory for aggregator artifacts.
+        churn_report: Path to code/doc churn report input.
+        undocumented_report: Path to undocumented logic report input.
+        anchor_inventory: Path to anchor inventory input.
+        anchor_validation: Path to markdown anchor validation input.
+        docs_integrity: Path to docs integrity report input.
+        metrics_stub: Path to metrics stub validation input.
+        placeholder_report: Path to code placeholder scan input.
+        monkey_patch_report: Path to monkey patch scan input.
+    """
+
     repo_root: Path
     output_dir: Path
     churn_report: Path
@@ -93,6 +108,13 @@ class Paths:
 
 @dataclass
 class Options:
+    """Options for docs health signal aggregation.
+
+    Attributes:
+        artifacts_to_keep: Number of historical run directories to retain.
+        include_hygiene: Whether to include hygiene signal blending.
+    """
+
     artifacts_to_keep: int
     include_hygiene: bool = True
 
@@ -150,6 +172,20 @@ OPTIONS_CONFIG = OptionsConfig(
 
 @dataclass
 class SignalResult:
+    """Result of a single health signal computation.
+
+    Attributes:
+        category: Signal category name.
+        title: Human-readable signal title.
+        score: Computed score (0-100) or None if unavailable.
+        status: Status string (healthy, warning, critical, unknown).
+        metrics: Dictionary of signal-specific metrics.
+        top_findings: List of top findings for this signal.
+        notes: List of explanatory notes.
+        sources: List of source file paths.
+        source_versions: Dictionary of source version info.
+    """
+
     category: str
     title: str
     score: float | None
@@ -162,6 +198,14 @@ class SignalResult:
 
 
 def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
+    """Parse command-line arguments for docs health signal aggregation.
+
+    Args:
+        argv: Command-line arguments. Uses sys.argv[1:] if None.
+
+    Returns:
+        Parsed namespace with validated arguments.
+    """
     parser = argparse.ArgumentParser(description=__doc__ or "")
     parser.add_argument("--repo-root", help="Repository root override")
     parser.add_argument(
@@ -220,6 +264,11 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
 
 
 def _configure_logging(level: str) -> None:
+    """Configure logging with the specified verbosity level.
+
+    Args:
+        level: Logging level name (DEBUG, INFO, WARNING, ERROR, CRITICAL).
+    """
     logging.basicConfig(
         level=getattr(logging, level.upper(), logging.INFO),
         format="%(levelname)s %(message)s",
@@ -229,6 +278,19 @@ def _configure_logging(level: str) -> None:
 def _resolve_latest_json_input(
     path: Path, label: str, logger: logging.Logger
 ) -> Path | None:
+    """Resolve a path to the latest telemetry.json file.
+
+    Handle files, bundle directories, and topic directories with
+    multiple timestamped bundles.
+
+    Args:
+        path: Input path (file, bundle dir, or topic dir).
+        label: Label for logging messages.
+        logger: Logger for warnings.
+
+    Returns:
+        Resolved path to telemetry.json or None if unavailable.
+    """
     if path.is_file():
         return path
     if not path.exists():
@@ -258,6 +320,19 @@ def _resolve_latest_json_input(
 
 
 def _load_json(path: Path, label: str, logger: logging.Logger) -> dict[str, Any] | None:
+    """Load JSON data from a path and extract the payload.
+
+    Resolve to the latest telemetry.json if path is a directory,
+    then extract payload or metrics as appropriate.
+
+    Args:
+        path: Input path (file or directory).
+        label: Label for logging messages.
+        logger: Logger for warnings.
+
+    Returns:
+        Parsed JSON payload dictionary or None if unavailable.
+    """
     resolved = _resolve_latest_json_input(path, label, logger)
     if resolved is None:
         return None
@@ -291,6 +366,16 @@ def _validate_payload(
     required_summary_keys: Iterable[str],
     logger: logging.Logger,
 ) -> None:
+    """Validate a payload dictionary has required summary keys.
+
+    Log warnings for missing summary blocks or missing keys.
+
+    Args:
+        payload: Payload dictionary to validate.
+        label: Label for logging messages.
+        required_summary_keys: Keys that must be present in summary.
+        logger: Logger for warnings.
+    """
     if payload is None:
         return
     summary = payload.get("summary")
@@ -305,6 +390,15 @@ def _validate_payload(
 
 
 def _ratio_score(numerator: float, denominator: float) -> float:
+    """Compute a percentage score from a ratio.
+
+    Args:
+        numerator: Numerator value.
+        denominator: Denominator value.
+
+    Returns:
+        Score as a percentage (0-100).
+    """
     if denominator <= 0:
         return 100.0 if numerator <= 0 else 0.0
     ratio = max(0.0, min(1.0, numerator / denominator))
@@ -312,10 +406,26 @@ def _ratio_score(numerator: float, denominator: float) -> float:
 
 
 def _clamp(value: float) -> float:
+    """Clamp a value to the 0-100 range.
+
+    Args:
+        value: Value to clamp.
+
+    Returns:
+        Value clamped to [0.0, 100.0].
+    """
     return max(0.0, min(100.0, value))
 
 
 def _status_for_score(score: float | None) -> str:
+    """Determine status string from a score.
+
+    Args:
+        score: Score value (0-100) or None.
+
+    Returns:
+        Status string: healthy, warning, critical, or unknown.
+    """
     if score is None:
         return "unknown"
     if score >= 80.0:
@@ -326,12 +436,30 @@ def _status_for_score(score: float | None) -> str:
 
 
 def _format_score(score: float | None) -> str:
+    """Format a score for display.
+
+    Args:
+        score: Score value or None.
+
+    Returns:
+        Formatted score string or 'n/a' if None.
+    """
     return "n/a" if score is None else f"{score:.2f}"
 
 
 def _compute_freshness(
     churn: dict[str, Any] | None,
 ) -> tuple[float | None, dict[str, Any], list[dict[str, Any]], list[str]]:
+    """Compute the freshness signal from churn report data.
+
+    Measure how well documentation keeps pace with code changes.
+
+    Args:
+        churn: Churn report payload dictionary.
+
+    Returns:
+        Tuple of (score, metrics dict, findings list, notes list).
+    """
     if not churn:
         return None, {}, [], ["Churn report unavailable."]
     summary = churn.get("summary") or {}
@@ -372,6 +500,16 @@ def _compute_freshness(
 def _compute_coverage(
     report: dict[str, Any] | None,
 ) -> tuple[float | None, dict[str, Any], list[dict[str, Any]], list[str]]:
+    """Compute the coverage signal from undocumented logic report.
+
+    Measure docstring coverage across scanned code entities.
+
+    Args:
+        report: Undocumented logic report payload dictionary.
+
+    Returns:
+        Tuple of (score, metrics dict, findings list, notes list).
+    """
     if not report:
         return None, {}, [], ["Undocumented logic report unavailable."]
     summary = report.get("summary") or {}
@@ -417,6 +555,17 @@ def _compute_structure(
     inventory: dict[str, Any] | None,
     validation: dict[str, Any] | None,
 ) -> tuple[float | None, dict[str, Any], list[dict[str, Any]], list[str]]:
+    """Compute the structure signal from anchor inventory and validation.
+
+    Measure document structure quality (H1/H2 headings, duplicates).
+
+    Args:
+        inventory: Anchor inventory payload dictionary.
+        validation: Anchor validation payload dictionary.
+
+    Returns:
+        Tuple of (score, metrics dict, findings list, notes list).
+    """
     if not inventory and not validation:
         return None, {}, [], ["Anchor inventory and validation reports unavailable."]
     summary = inventory.get("summary") if inventory else {}
@@ -465,6 +614,17 @@ def _compute_integrity(
     docs_integrity: dict[str, Any] | None,
     metrics_stub: dict[str, Any] | None,
 ) -> tuple[float | None, dict[str, Any], list[dict[str, Any]], list[str]]:
+    """Compute the integrity signal from docs integrity and metrics stub.
+
+    Measure documentation accuracy and metrics anchor completeness.
+
+    Args:
+        docs_integrity: Docs integrity payload dictionary.
+        metrics_stub: Metrics stub validation payload dictionary.
+
+    Returns:
+        Tuple of (score, metrics dict, findings list, notes list).
+    """
     if not docs_integrity and not metrics_stub:
         return None, {}, [], ["Docs integrity and metrics stub reports unavailable."]
     score = 100.0
@@ -521,6 +681,17 @@ def _compute_hygiene(
     placeholder_report: dict[str, Any] | None,
     monkey_report: dict[str, Any] | None,
 ) -> tuple[float | None, dict[str, Any], list[dict[str, Any]], list[str]]:
+    """Compute the hygiene signal from placeholder and monkey patch scans.
+
+    Measure code cleanliness based on placeholder markers and patch usage.
+
+    Args:
+        placeholder_report: Placeholder scan payload dictionary.
+        monkey_report: Monkey patch scan payload dictionary.
+
+    Returns:
+        Tuple of (score, metrics dict, findings list, notes list).
+    """
     if not placeholder_report and not monkey_report:
         return None, {}, [], ["Hygiene signals unavailable."]
     score = 100.0
@@ -563,6 +734,15 @@ def _compute_hygiene(
 def _flatten_metrics(
     metrics: dict[str, Any], category: str
 ) -> list[tuple[str, str, str]]:
+    """Flatten a metrics dictionary into TSV/CSV rows.
+
+    Args:
+        metrics: Key-value metrics dictionary to flatten.
+        category: Signal category label for the rows.
+
+    Returns:
+        List of (category, key, value) tuples.
+    """
     rows: list[tuple[str, str, str]] = []
     for key, value in metrics.items():
         if isinstance(value, (dict, list)):
@@ -576,6 +756,15 @@ def _flatten_metrics(
 def _weighted_score(
     signals: Iterable[SignalResult], weights: dict[str, float]
 ) -> float | None:
+    """Compute weighted average score across signal results.
+
+    Args:
+        signals: Iterable of SignalResult instances.
+        weights: Category-to-weight mapping.
+
+    Returns:
+        Weighted average score, or None if no weights apply.
+    """
     total = 0.0
     weight_sum = 0.0
     for signal in signals:
@@ -595,6 +784,16 @@ def _render_markdown(
     summary: dict[str, Any],
     signals: list[SignalResult],
 ) -> str:
+    """Render signal results as a Markdown summary report.
+
+    Args:
+        generated_at: UTC timestamp for report generation.
+        summary: Overall summary dictionary.
+        signals: List of SignalResult instances.
+
+    Returns:
+        Markdown-formatted report string.
+    """
     lines: list[str] = ["# Docs Health Signals", ""]
     lines.append(f"Generated (UTC): {generated_at.isoformat(timespec='seconds')}")
     lines.append("")
@@ -648,6 +847,14 @@ def _render_markdown(
 
 
 def _render_tsv(signals: list[SignalResult]) -> str:
+    """Render signal results as a TSV-formatted string.
+
+    Args:
+        signals: List of SignalResult instances.
+
+    Returns:
+        Tab-separated values string.
+    """
     rows: list[list[str]] = [["category", "metric", "status", "score", "value"]]
     for signal in signals:
         score_str = _format_score(signal.score)
@@ -657,6 +864,14 @@ def _render_tsv(signals: list[SignalResult]) -> str:
 
 
 def _render_csv(signals: list[SignalResult]) -> str:
+    """Render signal results as a CSV-formatted string.
+
+    Args:
+        signals: List of SignalResult instances.
+
+    Returns:
+        CSV-formatted string.
+    """
     buffer = io.StringIO()
     writer = csv.writer(buffer)
     writer.writerow(["category", "metric", "status", "score", "value"])
@@ -668,6 +883,17 @@ def _render_csv(signals: list[SignalResult]) -> str:
 
 
 def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
+    """Execute the docs health signals aggregator.
+
+    Load upstream reports, compute weighted signals, and write summary
+    artifacts.
+
+    Args:
+        argv: Command-line arguments. Defaults to sys.argv if None.
+
+    Returns:
+        Exit status dictionary with 'return_code' key.
+    """
     args = parse_args(argv)
     _configure_logging(args.log_level)
     logger = logging.getLogger("aggregate_docs_health_signals")
@@ -954,6 +1180,14 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
 
 
 def main(argv: Sequence[str] | None = None) -> int:
+    """Entry point for CLI invocation.
+
+    Args:
+        argv: Command-line arguments. Defaults to sys.argv if None.
+
+    Returns:
+        Exit code (0 on success).
+    """
     run(argv)
     return 0
 

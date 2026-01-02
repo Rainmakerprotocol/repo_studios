@@ -54,6 +54,16 @@ SCHEMA_VERSION = 1
 
 @dataclass(frozen=True)
 class Paths:
+    """Resolved path configuration for the summarizer.
+
+    Attributes:
+        repo_root: Repository root directory.
+        consumer_output_dir: Consumer reports output directory.
+        producer_output_dir: Producer reports output directory.
+        aggregator_output_dir: Aggregator reports output directory.
+        output_dir: Summarizer output directory.
+    """
+
     repo_root: Path
     consumer_output_dir: Path
     producer_output_dir: Path
@@ -81,6 +91,22 @@ PATHS_CONFIG = PathsConfig(
 
 @dataclass(frozen=True)
 class Options:
+    """Runtime options for the summarizer.
+
+    Attributes:
+        artifacts_to_keep: Number of artifact bundles to retain.
+        log_level: Logging verbosity level.
+        run_timestamp: Timestamp for artifact generation.
+        duplicate_matrix: Optional path to duplicate detection matrix.
+        consumer_summary_override: Explicit consumer summary path.
+        consumer_bundle_summary_override: Explicit consumer bundle summary path.
+        trend_json_override: Explicit aggregator trend JSON path.
+        trend_markdown_override: Explicit aggregator trend markdown path.
+        trend_bundle_summary_override: Explicit aggregator bundle summary path.
+        producer_report_override: Explicit producer report path.
+        producer_matches_override: Explicit producer matches path.
+    """
+
     artifacts_to_keep: int
     log_level: str
     run_timestamp: datetime
@@ -96,6 +122,12 @@ class Options:
 
 @dataclass(frozen=True)
 class KeepValues:
+    """Retention configuration values.
+
+    Attributes:
+        artifacts_to_keep: Number of artifact bundles to retain.
+    """
+
     artifacts_to_keep: int
 
 
@@ -106,6 +138,16 @@ OPTIONS_CONFIG = OptionsConfig(
 
 
 def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
+    """Parse command-line arguments.
+
+    Configure the argument parser with all summarizer options.
+
+    Args:
+        argv: Command-line arguments or None for sys.argv.
+
+    Returns:
+        Parsed namespace with configuration options.
+    """
     parser = argparse.ArgumentParser(description=__doc__ or "")
     parser.add_argument("--repo-root", help="Repository root override")
     parser.add_argument("--consumer-output-dir", default=str(DEFAULT_CONSUMER_OUTPUT_DIR))
@@ -135,6 +177,19 @@ def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
 
 
 def _parse_timestamp(raw: str | None) -> datetime:
+    """Parse an optional timestamp string to datetime.
+
+    Parse ISO-8601 format timestamp, defaulting to current UTC time.
+
+    Args:
+        raw: ISO-8601 timestamp string or None.
+
+    Returns:
+        Parsed datetime in UTC timezone.
+
+    Raises:
+        SystemExit: If timestamp format is invalid.
+    """
     if not raw:
         return datetime.now(timezone.utc)
     try:
@@ -147,6 +202,17 @@ def _parse_timestamp(raw: str | None) -> datetime:
 
 
 def _resolve_optional_path(repo_root: Path, raw: str | None) -> Path | None:
+    """Resolve an optional path string to an absolute path.
+
+    Expand user home and resolve relative paths against repo root.
+
+    Args:
+        repo_root: Repository root for relative path resolution.
+        raw: Path string or None.
+
+    Returns:
+        Resolved absolute Path or None if raw is empty.
+    """
     if not raw:
         return None
     candidate = Path(raw).expanduser()
@@ -156,10 +222,31 @@ def _resolve_optional_path(repo_root: Path, raw: str | None) -> Path | None:
 
 
 def build_paths(args: argparse.Namespace) -> Paths:
+    """Build resolved path configuration from CLI arguments.
+
+    Use the standard path builder with the summarizer's path configuration.
+
+    Args:
+        args: Parsed command-line arguments.
+
+    Returns:
+        Resolved Paths dataclass.
+    """
     return cast(Paths, build_standard_paths(args, PATHS_CONFIG, origin=Path(__file__)))
 
 
 def build_options(args: argparse.Namespace, *, paths: Paths) -> Options:
+    """Build runtime options from CLI arguments.
+
+    Resolve all optional path overrides and retention settings.
+
+    Args:
+        args: Parsed command-line arguments.
+        paths: Resolved path configuration.
+
+    Returns:
+        Populated Options dataclass.
+    """
     keep_values = build_standard_options(args, OPTIONS_CONFIG)
 
     return Options(
@@ -182,10 +269,27 @@ def build_options(args: argparse.Namespace, *, paths: Paths) -> Options:
 
 
 def configure_logging(level: str) -> None:
+    """Configure the logging subsystem.
+
+    Set up basic logging with the specified verbosity level.
+
+    Args:
+        level: Logging level name (DEBUG, INFO, WARNING, ERROR, CRITICAL).
+    """
     logging.basicConfig(level=getattr(logging, level.upper(), logging.INFO), format="%(levelname)s %(message)s")
 
 
 def _read_json(path: Path | None) -> Any | None:
+    """Read and parse a JSON file.
+
+    Return None if the path is None, does not exist, or parsing fails.
+
+    Args:
+        path: Path to JSON file or None.
+
+    Returns:
+        Parsed JSON content or None on failure.
+    """
     if path is None or not path.exists():
         return None
     try:
@@ -195,6 +299,15 @@ def _read_json(path: Path | None) -> Any | None:
 
 
 def _latest_pointer(base: Path, name: str) -> Path | None:
+    """Resolve a latest pointer file if it exists.
+
+    Args:
+        base: Base directory containing the pointer file.
+        name: Name of the pointer file.
+
+    Returns:
+        Resolved path if the pointer exists, None otherwise.
+    """
     pointer = base / name
     if pointer.exists():
         return pointer.resolve()
@@ -202,6 +315,19 @@ def _latest_pointer(base: Path, name: str) -> Path | None:
 
 
 def _latest_run_artifact(base: Path, stem: str, filename: str) -> Path | None:
+    """Find the latest artifact file from timestamped run directories.
+
+    Search for directories matching the stem prefix and return the
+    requested artifact from the most recent run.
+
+    Args:
+        base: Base directory containing run directories.
+        stem: Directory name prefix to match.
+        filename: Artifact filename to look for.
+
+    Returns:
+        Path to the artifact if found, None otherwise.
+    """
     if not base.exists():
         return None
     candidates = [child for child in base.iterdir() if child.is_dir() and child.name.startswith(stem)]
@@ -213,6 +339,17 @@ def _latest_run_artifact(base: Path, stem: str, filename: str) -> Path | None:
 
 
 def _normalize_relative(path: Path | None, repo_root: Path) -> str | None:
+    """Convert a path to a POSIX relative path string.
+
+    Attempt to make the path relative to repo_root, fall back to absolute.
+
+    Args:
+        path: Path to normalize or None.
+        repo_root: Repository root for relative path computation.
+
+    Returns:
+        POSIX path string or None if path is None.
+    """
     if path is None:
         return None
     try:
@@ -222,6 +359,16 @@ def _normalize_relative(path: Path | None, repo_root: Path) -> str | None:
 
 
 def _collect_duplicate_targets(payload: Any) -> set[str]:
+    """Recursively collect file paths from a duplicate matrix payload.
+
+    Extract all string values from keys indicating file paths.
+
+    Args:
+        payload: Nested dictionary or list structure.
+
+    Returns:
+        Set of collected file path strings.
+    """
     collected: set[str] = set()
     if isinstance(payload, Mapping):
         for key, value in payload.items():
@@ -236,6 +383,16 @@ def _collect_duplicate_targets(payload: Any) -> set[str]:
 
 
 def _collect_monkey_patch_files(matches_payload: Any) -> set[str]:
+    """Extract file paths from monkey patch matches payload.
+
+    Parse the matches list and collect unique file paths.
+
+    Args:
+        matches_payload: List of match dictionaries.
+
+    Returns:
+        Set of file path strings.
+    """
     if not isinstance(matches_payload, list):
         return set()
     files: set[str] = set()
@@ -248,6 +405,20 @@ def _collect_monkey_patch_files(matches_payload: Any) -> set[str]:
 
 
 def _ensure_path(source: Path | None, *, base: Path, pointer_name: str, stem: str | None, filename: str) -> Path | None:
+    """Resolve an artifact path with fallback strategies.
+
+    Try the source path first, then pointer file, then latest run artifact.
+
+    Args:
+        source: Explicit source path or None.
+        base: Base directory for fallback searches.
+        pointer_name: Name of the pointer file to check.
+        stem: Directory stem prefix for run directory search.
+        filename: Artifact filename to look for.
+
+    Returns:
+        Resolved path if found through any strategy, None otherwise.
+    """
     if source and source.exists():
         return source
     pointer = _latest_pointer(base, pointer_name)
@@ -272,6 +443,27 @@ def _build_markdown(
     overlap: list[dict[str, Any]],
     notes: list[str],
 ) -> str:
+    """Build the overview markdown summary.
+
+    Format portfolio snapshot, trend signals, duplicate follow-up,
+    and notes into a complete markdown document.
+
+    Args:
+        generated_at: Generation timestamp.
+        counts: Risk level counts dictionary.
+        total_findings: Total finding count or None.
+        producer_report: Relative path to producer report.
+        producer_matches: Relative path to producer matches.
+        consumer_summary: Relative path to consumer summary.
+        trend_json: Relative path to trend JSON.
+        trend_markdown: Relative path to trend markdown.
+        duplicate_matrix: Relative path to duplicate matrix.
+        overlap: List of overlapping file entries.
+        notes: List of informational notes.
+
+    Returns:
+        Markdown-formatted overview string.
+    """
     lines: list[str] = ["# Monkey Patch Oversight Overview", ""]
     lines.append(f"Generated (UTC): {generated_at.isoformat(timespec='seconds')}")
     lines.append("")
@@ -324,6 +516,17 @@ def _build_markdown(
 
 
 def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
+    """Execute the monkey patch overview summarizer.
+
+    Collect artifacts from producer, consumer, and aggregator tiers,
+    compute overlap with duplicate matrix, and write overview artifacts.
+
+    Args:
+        argv: Command-line arguments or None for sys.argv.
+
+    Returns:
+        Result dictionary with status and artifact paths.
+    """
     args = _parse_args(argv)
     paths = build_paths(args)
     options = build_options(args, paths=paths)
@@ -488,6 +691,13 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
 
 
 def main(argv: Sequence[str] | None = None) -> None:
+    """CLI entry point for the monkey patch overview summarizer.
+
+    Run the summarizer and exit with appropriate status code.
+
+    Args:
+        argv: Command-line arguments or None for sys.argv.
+    """
     raise SystemExit(0 if run(argv).get("status") == "ok" else 1)
 
 

@@ -66,7 +66,7 @@ DIFF_MODULE = "scripts.producers.diff_standards_index"
 PROMPT_MODULE = "scripts.producers.seed_standards_prompts"
 SUMMARY_MODULE = "scripts.summarizers.summarize_standards"
 
-DEFAULT_INDEX_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports")
+DEFAULT_INDEX_OUTPUT_DIR = build_topic_path("producer", "standards_index")
 DEFAULT_INDEX_PATH = Path(".repo_studios/scripts/repo_standards_index.yaml")
 DEFAULT_CATEGORIES_PATH = Path(".repo_studios/scripts/.repo_studios/standards_categories.yaml")
 DEFAULT_GAP_OUTPUT_DIR = Path(".repo_studios/command_center/reports")
@@ -366,7 +366,7 @@ def _execute_index(paths: Paths, options: Options) -> IndexOutcome:
         raise RuntimeError(f"generate_standards_index exit code {exit_code}")
 
     run_slug = _format_run_slug(options.run_timestamp)
-    candidate_dir = paths.index_output_dir / INDEX_VIEWER_SLUG / INDEX_TOPIC_SLUG / run_slug
+    candidate_dir = paths.index_output_dir / run_slug
     telemetry_path = candidate_dir / "telemetry.json"
     payload = _read_json(telemetry_path)
     if payload is None:

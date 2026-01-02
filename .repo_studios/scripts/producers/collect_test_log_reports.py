@@ -60,6 +60,14 @@ DEFAULT_KEEP = get_keep("collect_test_log_reports")
 
 
 def _load_element_tree():
+    """Load an XML ElementTree implementation with security preference.
+
+    Attempts to import defusedxml for safer XML parsing. Falls back to
+    the standard library xml.etree.ElementTree if defusedxml is unavailable.
+
+    Returns:
+        The ElementTree module to use for XML parsing.
+    """
     try:
         import defusedxml.ElementTree as ElementTree  # type: ignore
 
@@ -71,6 +79,15 @@ def _load_element_tree():
 
 
 def _bool_env(name: str, default: bool = False) -> bool:
+    """Parse a boolean value from an environment variable.
+
+    Args:
+        name: The environment variable name to read.
+        default: Value to return if the variable is not set.
+
+    Returns:
+        True unless the value is explicitly falsy (0, false, no, off, or empty).
+    """
     value = os.environ.get(name)
     if value is None:
         return default
@@ -79,6 +96,14 @@ def _bool_env(name: str, default: bool = False) -> bool:
 
 
 def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
+    """Parse command-line arguments for the test log collector.
+
+    Args:
+        argv: Command-line arguments. Uses sys.argv if None.
+
+    Returns:
+        Parsed argument namespace with all CLI options.
+    """
     parser = argparse.ArgumentParser(description="Collect pytest log summaries into structured artifacts")
     parser.add_argument(
         "--repo-root",
@@ -130,6 +155,17 @@ def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
 
 
 def _discover_run_candidates(base: Path) -> list[Path]:
+    """Discover pytest log run directories under a base path.
+
+    Recursively searches for directories containing pytest or junit artifacts,
+    sorted by modification time (newest first).
+
+    Args:
+        base: The root directory to search for log runs.
+
+    Returns:
+        List of directories containing log artifacts, sorted newest first.
+    """
     if not base.exists():
         return []
     seen: set[Path] = set()
@@ -156,6 +192,15 @@ def _discover_run_candidates(base: Path) -> list[Path]:
 
 
 def _resolve_run_dir(explicit: Path | None, logs_dir: Path) -> Path | None:
+    """Resolve the pytest log run directory to use.
+
+    Args:
+        explicit: An explicitly specified run directory, if any.
+        logs_dir: The base logs directory to search if no explicit path.
+
+    Returns:
+        The resolved run directory, or None if no runs are found.
+    """
     if explicit is not None:
         return explicit
     candidates = _discover_run_candidates(logs_dir)
@@ -170,6 +215,21 @@ def _capture_pytest_run(
     log: logging.Logger,
     pytest_args: Sequence[str],
 ) -> tuple[Path, int, list[str]]:
+    """Execute pytest and capture its output to a log directory.
+
+    Creates a timestamped run directory, executes pytest with JUnit XML output,
+    and captures stdout/stderr to a log file.
+
+    Args:
+        repo_root: Repository root for pytest execution context.
+        logs_dir: Base directory for storing log runs.
+        logs_run: Explicit run directory to use, or None to auto-generate.
+        log: Logger instance for status messages.
+        pytest_args: Additional arguments to pass to pytest.
+
+    Returns:
+        Tuple of (run_directory, pytest_exit_code, executed_command).
+    """
     logs_dir.mkdir(parents=True, exist_ok=True)
 
     run_dir = logs_run
@@ -259,6 +319,17 @@ def _extract_failures_from_junit(junit_path: Path | None, limit: int = 25) -> li
     return failures
 
 def _resolve_timestamp_slug(explicit: str | None) -> str:
+    """Resolve or generate a timestamp slug for the run directory.
+
+    Args:
+        explicit: An explicit timestamp in YYYYMMDD-HHMM format, or None.
+
+    Returns:
+        A validated timestamp slug in YYYYMMDD-HHMM format.
+
+    Raises:
+        ValueError: If explicit timestamp does not match YYYYMMDD-HHMM format.
+    """
     if explicit is None:
         return datetime.now(UTC).strftime("%Y%m%d-%H%M")
 
@@ -271,6 +342,16 @@ def _resolve_timestamp_slug(explicit: str | None) -> str:
 
 
 def _relativize(path: Path | None, repo_root: Path) -> str | None:
+    """Convert an absolute path to a repo-relative POSIX path string.
+
+    Args:
+        path: The path to relativize, or None.
+        repo_root: The repository root to compute relative paths from.
+
+    Returns:
+        The relative POSIX path string, or the original path as string if
+        relativization fails. Returns None if path is None.
+    """
     if path is None:
         return None
     try:
@@ -293,6 +374,23 @@ def _render_summary_markdown(
     pytest_exit_code: int | None,
     markdown_body: str,
 ) -> str:
+    """Render a markdown summary document for the test log report.
+
+    Args:
+        timestamp: Run timestamp slug (YYYYMMDD-HHMM).
+        logs_dir: Base logs directory path.
+        logs_run: Specific run directory path, or None.
+        warnings_total: Total warning count from pytest output.
+        slow_count: Number of slow tests identified.
+        tracebacks: Number of tracebacks detected.
+        tests_total: Total test count.
+        tests_failed: Failed test count.
+        pytest_exit_code: Pytest exit code, or None if not run.
+        markdown_body: Pre-rendered markdown body content.
+
+    Returns:
+        Complete markdown document with header and body.
+    """
     logs_run_display = logs_run.as_posix() if logs_run is not None else "(none)"
     outcome = "unknown"
     if pytest_exit_code is not None:
@@ -328,6 +426,27 @@ def _write_artifacts(
     keep: int,
     logger: logging.Logger,
 ) -> Path:
+    """Write the structured report bundle to the output directory.
+
+    Creates manifest.json, summary.md, and telemetry.json artifacts in a
+    timestamped subdirectory. Prunes old runs according to retention policy.
+
+    Args:
+        result: The analysis result containing report data and markdown.
+        output_dir: Base output directory for report bundles.
+        repo_root: Repository root for path relativization.
+        timestamp: Run timestamp slug for the bundle directory name.
+        logs_dir: Source logs directory for provenance tracking.
+        logs_run: Specific run directory analyzed, or None.
+        pytest_ran: Whether pytest was executed in this run.
+        pytest_exit_code: Pytest exit code, or None if not run.
+        pytest_command: The pytest command executed, or None.
+        keep: Number of historical run directories to retain.
+        logger: Logger instance for status messages.
+
+    Returns:
+        Path to the created bundle directory.
+    """
     summary = result.report.get("summary", {}) if isinstance(result.report, dict) else {}
     warnings_total = int(summary.get("warnings_total", 0) or 0)
     tracebacks = int(summary.get("tracebacks", 0) or 0)
@@ -469,6 +588,17 @@ def _write_artifacts(
 
 
 def run(argv: Sequence[str] | None = None) -> dict[str, object]:
+    """Execute the test log collection workflow.
+
+    Main entry point for programmatic invocation. Parses arguments, optionally
+    runs pytest, analyzes log artifacts, and writes structured report bundles.
+
+    Args:
+        argv: Command-line arguments. Uses sys.argv if None.
+
+    Returns:
+        Result dictionary containing bundle path, metrics, and status.
+    """
     args = _parse_args(argv)
     logging.basicConfig(
         level=getattr(logging, args.log_level.upper(), logging.INFO), format="%(levelname)s %(message)s"
@@ -606,6 +736,14 @@ def run(argv: Sequence[str] | None = None) -> dict[str, object]:
 
 
 def main(argv: Sequence[str] | None = None) -> int:
+    """CLI entry point for the test log collector.
+
+    Args:
+        argv: Command-line arguments. Uses sys.argv if None.
+
+    Returns:
+        Exit code (always 0 on success).
+    """
     run(argv)
     return 0
 

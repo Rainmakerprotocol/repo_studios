@@ -1,0 +1,178 @@
+# Tier-3 YAML — generate_standards_index.py
+# Schema: tier3_script_v1
+# Stage: 6.1 Standards Integrity
+# Record: S61R-002
+
+tool:
+  name: "generate_standards_index"
+  version: "1.0.0"
+  category: "producer"
+  path: ".repo_studios/scripts/producers/generate_standards_index.py"
+  description: >
+    Builds repo_standards_index.yaml by merging seed rules, scanning configured sources,
+    and optionally extracting new standards from markdown files. Emits structured
+    artifacts (manifest, summary, telemetry) for auditing and downstream consumption.
+
+invocation:
+  entrypoint: "main(argv)"
+  python_module: ".repo_studios.scripts.producers.generate_standards_index"
+  cli_example: |
+    python .repo_studios/scripts/producers/generate_standards_index.py \
+      --repo-root . \
+      --output-dir .repo_studios/reports/producer_reports/rawview/standards_index \
+      --categories-path .repo_studios/scripts/.repo_studios/standards_categories.yaml \
+      --seed-path .repo_studios/scripts/.repo_studios/standards_seed.yaml \
+      --index-path .repo_studios/scripts/repo_standards_index.yaml \
+      --artifacts-to-keep 5 \
+      --log-level INFO
+
+parameters:
+  positional: []
+  flags:
+    - name: "--repo-root"
+      type: "Path"
+      required: false
+      default: "auto-detected (3 levels up from script)"
+      description: "Repository root directory."
+    - name: "--output-dir"
+      type: "Path"
+      required: false
+      default: ".repo_studios/reports/producer_reports/rawview/standards_index"
+      description: "Output directory for report bundles."
+    - name: "--categories-path"
+      type: "Path"
+      required: false
+      default: ".repo_studios/scripts/.repo_studios/standards_categories.yaml"
+      description: "Path to standards categories configuration."
+    - name: "--seed-path"
+      type: "Path"
+      required: false
+      default: ".repo_studios/scripts/.repo_studios/standards_seed.yaml"
+      description: "Path to seed rules YAML."
+    - name: "--extraction-module"
+      type: "Path"
+      required: false
+      default: ".repo_studios/scripts/.repo_studios/standards_extraction.py"
+      description: "Path to extraction module with extract_rules function."
+    - name: "--index-path"
+      type: "Path"
+      required: false
+      default: ".repo_studios/scripts/repo_standards_index.yaml"
+      description: "Output path for the generated standards index."
+    - name: "--pending-path"
+      type: "Path"
+      required: false
+      default: ".repo_studios/scripts/repo_standards_pending.yaml"
+      description: "Path for pending extracted rules (when auto-accept is disabled)."
+    - name: "--timestamp"
+      type: "str"
+      required: false
+      default: "null (auto-generated UTC)"
+      description: "ISO8601 timestamp to seed run slug generation."
+    - name: "--artifacts-to-keep"
+      type: "int"
+      required: false
+      default: 5
+      description: "Number of timestamped run directories to retain."
+    - name: "--log-level"
+      type: "str"
+      required: false
+      default: "WARNING"
+      description: "Logging verbosity (DEBUG, INFO, WARNING, ERROR)."
+
+outputs:
+  root: ".repo_studios/reports/producer_reports/rawview/standards_index/<YYYYMMDD-HHMM>/"
+  artifacts:
+    - name: "manifest.json"
+      description: "Run metadata including viewer, topic, git SHA, summary stats, and provenance."
+    - name: "summary.md"
+      description: "Human-readable summary with rule counts, extraction status, and notes."
+    - name: "telemetry.json"
+      description: "Metrics including rule count, category count, extraction counts, and integrity hash."
+  additional:
+    - name: ".repo_studios/scripts/repo_standards_index.yaml"
+      description: "The canonical standards index consumed by downstream tools."
+    - name: ".repo_studios/scripts/repo_standards_pending.yaml"
+      description: "Pending extracted rules when auto-accept is disabled (optional)."
+
+behavior:
+  steps:
+    - step: 1
+      action: "Load categories"
+      description: "Parse standards_categories.yaml to get category definitions and source paths."
+    - step: 2
+      action: "Load seed rules"
+      description: "Read standards_seed.yaml for baseline rule definitions."
+    - step: 3
+      action: "Extract rules (optional)"
+      description: "If extraction module present, scan markdown sources for new standards."
+    - step: 4
+      action: "Merge and validate"
+      description: "Combine seed and extracted rules, validate against category schema."
+    - step: 5
+      action: "Compute integrity hash"
+      description: "Generate hash from rule IDs, timestamps, and severities for change detection."
+    - step: 6
+      action: "Write index"
+      description: "Emit repo_standards_index.yaml to configured path."
+    - step: 7
+      action: "Write pending (conditional)"
+      description: "If extraction enabled without auto-accept, write pending file."
+    - step: 8
+      action: "Write artifacts"
+      description: "Emit manifest.json, summary.md, and telemetry.json to timestamped run dir."
+    - step: 9
+      action: "Prune old runs"
+      description: "Remove excess run directories per --artifacts-to-keep threshold."
+    - step: 10
+      action: "DB integration (optional)"
+      description: "Persist telemetry if REPO_STUDIOS_DB_ENABLED is set."
+
+error_handling:
+  missing_categories: "Raises RuntimeError if categories file not found."
+  invalid_rules: "Raises ValueError if rules missing required fields or reference unknown categories."
+  extraction_failures: "Logs warning per file and continues; aggregates diagnostics in output."
+  db_failures: "Logs warning but does not fail the run (best-effort persistence)."
+
+integration:
+  upstream:
+    - script: "standards_seed.yaml"
+      relationship: "Reads seed rules as baseline input."
+    - script: "standards_categories.yaml"
+      relationship: "Reads category definitions and source paths."
+    - script: "standards_extraction.py"
+      relationship: "Dynamically imports extract_rules function for auto-extraction."
+  downstream:
+    - script: "analyze_standards_index_gaps.py"
+      relationship: "Consumes repo_standards_index.yaml for gap analysis."
+    - script: "diff_standards_index.py"
+      relationship: "Consumes index snapshots for delta comparison."
+    - script: "run_standards_integrity.py"
+      relationship: "Orchestrator delegates to this producer as first step."
+  db_integration:
+    gated_by: "REPO_STUDIOS_DB_ENABLED"
+    marker: "DB_INTEGRATION_MARKER:"
+    behavior: "Warn-only on failure; does not block run completion."
+
+examples:
+  basic_run: |
+    python .repo_studios/scripts/producers/generate_standards_index.py \
+      --repo-root .
+  with_extraction: |
+    python .repo_studios/scripts/producers/generate_standards_index.py \
+      --repo-root . \
+      --extraction-module .repo_studios/scripts/.repo_studios/standards_extraction.py
+  custom_paths: |
+    python .repo_studios/scripts/producers/generate_standards_index.py \
+      --repo-root . \
+      --categories-path custom/categories.yaml \
+      --seed-path custom/seed.yaml \
+      --index-path custom/output_index.yaml
+
+metadata:
+  tier: 3
+  stage: "6.1"
+  record_id: "S61R-002"
+  created: "2026-01-02"
+  last_updated: "2026-01-02"
+  template_version: "v1"

@@ -1,0 +1,157 @@
+# Tier-3 YAML — seed_standards_prompts.py
+# Schema: tier3_script_v1
+# Stage: 6.1 Standards Integrity
+# Record: S61R-005
+
+tool:
+  name: "seed_standards_prompts"
+  version: "1.0.0"
+  category: "producer"
+  path: ".repo_studios/scripts/producers/seed_standards_prompts.py"
+  description: >
+    Generates structured prompt seed bundles from the standards index, filtered by severity.
+    Produces multiple output formats (text, yaml, json) suitable for feeding into
+    prompt tuning workflows and standards-aware AI agents.
+
+invocation:
+  entrypoint: "run(argv)"
+  python_module: ".repo_studios.scripts.producers.seed_standards_prompts"
+  cli_example: |
+    python .repo_studios/scripts/producers/seed_standards_prompts.py \
+      --repo-root . \
+      --index-path .repo_studios/scripts/repo_standards_index.yaml \
+      --output-dir .repo_studios/reports/producer_reports/standards_prompt_seeds \
+      --include-warn \
+      --artifact-formats text yaml json \
+      --artifacts-to-keep 5 \
+      --log-level INFO
+
+parameters:
+  positional: []
+  flags:
+    - name: "--repo-root"
+      type: "Path"
+      required: false
+      default: "auto-detected (4 levels up from script)"
+      description: "Repository root directory."
+    - name: "--index-path"
+      type: "Path"
+      required: false
+      default: ".repo_studios/scripts/repo_standards_index.yaml"
+      description: "Path to the standards index YAML."
+    - name: "--output-dir"
+      type: "Path"
+      required: false
+      default: ".repo_studios/reports/producer_reports/standards_prompt_seeds"
+      description: "Output directory for prompt seed bundles."
+    - name: "--include-warn"
+      type: "flag"
+      required: false
+      default: false
+      description: "Include warn-severity rules in the seed (default: error-only)."
+    - name: "--artifact-formats"
+      type: "list[str]"
+      required: false
+      default: "['text', 'yaml', 'json']"
+      description: "Seed output formats to generate (text, yaml, json)."
+    - name: "--format"
+      type: "str"
+      required: false
+      default: "null"
+      description: "Legacy: single format for stdout output."
+    - name: "--out"
+      type: "Path"
+      required: false
+      default: "null"
+      description: "Legacy: explicit output path for legacy format."
+    - name: "--artifacts-to-keep"
+      type: "int"
+      required: false
+      default: 5
+      description: "Number of timestamped run directories to retain."
+    - name: "--log-level"
+      type: "str"
+      required: false
+      default: "WARNING"
+      description: "Logging verbosity (DEBUG, INFO, WARNING, ERROR)."
+
+outputs:
+  root: ".repo_studios/reports/producer_reports/standards_prompt_seeds/standards_prompt_seed-<YYYYMMDD_HHMMSS>/"
+  artifacts:
+    - name: "report.json"
+      description: "Run metadata including status, timestamp, summary, and seed integrity hash."
+    - name: "report.md"
+      description: "Human-readable report with severity counts and category breakdown."
+    - name: "log.txt"
+      description: "Structured log entries for automation consumption."
+    - name: "seed.txt"
+      description: "Plain text seed suitable for prompt injection."
+    - name: "seed.yaml"
+      description: "YAML-formatted seed with structured categories and rules."
+    - name: "seed.json"
+      description: "JSON-formatted seed for programmatic consumption."
+
+behavior:
+  steps:
+    - step: 1
+      action: "Load standards index"
+      description: "Read repo_standards_index.yaml; fallback to legacy path if missing."
+    - step: 2
+      action: "Build seed"
+      description: "Filter rules by severity threshold (error-only or error+warn)."
+    - step: 3
+      action: "Summarize seed"
+      description: "Compute category counts, rule counts, and severity distribution."
+    - step: 4
+      action: "Compose payload"
+      description: "Build run metadata including run_id, timestamps, and summary."
+    - step: 5
+      action: "Create run directory"
+      description: "Generate timestamped run folder under output_dir."
+    - step: 6
+      action: "Write artifacts"
+      description: "Emit report.json, report.md, log.txt, and seed files in requested formats."
+    - step: 7
+      action: "Prune old runs"
+      description: "Remove excess run directories using stem_prefix matching."
+    - step: 8
+      action: "Legacy output (optional)"
+      description: "Write to stdout or explicit path if legacy flags provided."
+
+error_handling:
+  missing_index: "Returns error payload with status 'error' and logs failure."
+  file_write_errors: "Raises exception and exits with non-zero code."
+  invalid_format: "Ignored silently if format not in valid choices."
+
+integration:
+  upstream:
+    - script: "generate_standards_index.py"
+      relationship: "Consumes repo_standards_index.yaml produced by index generator."
+  downstream:
+    - script: "run_standards_integrity.py"
+      relationship: "Orchestrator delegates to this producer for prompt seed generation."
+  db_integration:
+    gated_by: "N/A"
+    marker: "N/A"
+    behavior: "No DB integration in this producer."
+
+examples:
+  basic_run: |
+    python .repo_studios/scripts/producers/seed_standards_prompts.py \
+      --repo-root .
+  with_warnings: |
+    python .repo_studios/scripts/producers/seed_standards_prompts.py \
+      --repo-root . --include-warn
+  custom_formats: |
+    python .repo_studios/scripts/producers/seed_standards_prompts.py \
+      --repo-root . \
+      --artifact-formats text yaml \
+      --output-dir reports/seeds
+
+metadata:
+  tier: 3
+  stage: "6.1"
+  record_id: "S61R-005"
+  created: "2026-01-02"
+  last_updated: "2026-01-02"
+  template_version: "v1"

@@ -1,0 +1,190 @@
+# Tier-3: classify_monkey_patches.py
+# Consumer script that classifies monkey-patch findings by risk level.
+
+tool:
+  id: classify_monkey_patches
+  name: Classify Monkey Patches
+  description: |
+    Consumes monkey-patch scan results from the producer and classifies each finding
+    by risk level (HIGH, MODERATE, SAFE) based on category, scope, and test context.
+
+    Emits a canonical HealthView bundle under:
+
+      .repo_studios/reports/healthview/consumer_reports/monkey_patch_risk/<YYYYMMDD-HHMM>/
+
+    The bundle includes summary.json, SUMMARY.md, and bundle_summary.json.
+  keywords:
+    - healthview
+    - consumer
+    - monkey-patch
+    - risk-classification
+    - telemetry
+  use_when:
+    - Need to classify monkey-patch findings by risk level
+    - Producing risk-stratified telemetry for downstream aggregators/summarizers
+    - Validating Stage 5.1 consumer outputs and retention behavior
+  dont_use_when:
+    - You only need raw monkey-patch findings (use scan_monkey_patches.py producer)
+    - You do not have producer scan results available
+
+invocation:
+  command_template: |
+    python {script_path} \
+      --scan-dir {scan_dir} \
+      --output-base {output_base} \
+      --artifacts-to-keep {artifacts_to_keep} \
+      --log-level {log_level}
+  script_path: .repo_studios/scripts/consumers/classify_monkey_patches.py
+  importable: true
+  entry_function: run
+  environment:
+    requires_venv: true
+    python_version: ">=3.11"
+
+parameters:
+  - name: scan_dir
+    type: path
+    required: false
+    default: null
+    description: |
+      Explicit path to a producer scan run directory containing matches.json.
+      If omitted, discovers the latest scan from base_dir roots.
+    validation:
+      must_exist: true
+      must_be_directory: true
+
+  - name: base_dir
+    type: path
+    required: false
+    default: null
+    description: |
+      Base directories for discovering producer scan runs. Can be specified
+      multiple times. Searches both structured and legacy roots by default.
+
+  - name: output_base
+    type: path
+    required: false
+    default: .repo_studios/reports/healthview/consumer_reports/monkey_patch_risk
+    description: HealthView root where bundles are written.
+    validation:
+      parent_must_exist: false
+
+  - name: artifacts_to_keep
+    type: int
+    required: false
+    default: 5
+    description: Number of historical run directories to retain.
+    validation:
+      min_value: 1
+
+  - name: log_level
+    type: enum
+    required: false
+    default: INFO
+    choices: [DEBUG, INFO, WARNING, ERROR, CRITICAL]
+
+  - name: verbose
+    type: bool
+    required: false
+    default: false
+    description: Enable verbose output (equivalent to --log-level DEBUG).
+
+outputs:
+  primary:
+    type: directory
+    format: healthview_bundle
+    path_pattern: >-
+      .repo_studios/reports/healthview/consumer_reports/monkey_patch_risk/<YYYYMMDD-HHMM>/
+    description: HealthView bundle directory for a single run.
+    contents:
+      required:
+        - summary.json
+        - SUMMARY.md
+        - bundle_summary.json
+
+  secondary:
+    - type: stdout
+      format: text
+      description: Logging output describing classification and bundle creation.
+
+behavior:
+  idempotent: false
+  side_effects:
+    - Reads producer scan results (matches.json) from scan_dir or discovered latest
+    - Writes a timestamped HealthView bundle directory
+    - Prunes older sibling run directories beyond artifacts_to_keep
+  duration_estimate: "1-5 seconds"
+  blocking: true
+  mutates_repo: false
+  mutates_filesystem: true
+
+error_handling:
+  common_errors:
+    - exit_code: 1
+      meaning: "No scan runs found or scan data missing."
+      agent_action: "Ensure producer has run and generated matches.json."
+
+    - exit_code: 2
+      meaning: "Invalid CLI inputs."
+      agent_action: "Fix the input validation error and retry."
+
+  stderr_patterns:
+    - pattern: "NoScansFoundError"
+      meaning: "No producer scan directories were found."
+      agent_action: "Run scan_monkey_patches.py producer first."
+
+integration:
+  typical_workflow:
+    - step: 1
+      action: Run the monkey patch scan producer
+      command: |
+        python .repo_studios/scripts/producers/scan_monkey_patches.py \
+          --repo-root . --log-level INFO
+      output: HealthView bundle under producer_reports/monkey_patches
+
+    - step: 2
+      action: Classify findings by risk level
+      command: |
+        python .repo_studios/scripts/consumers/classify_monkey_patches.py \
+          --log-level INFO
+      output: HealthView bundle under consumer_reports/monkey_patch_risk
+
+  input_producers:
+    - .repo_studios/scripts/producers/scan_monkey_patches.py
+
+  output_consumers:
+    - .repo_studios/scripts/aggregators/analyze_monkey_patch_trends.py
+    - .repo_studios/scripts/summarizers/summarize_monkey_patch_overview.py
+    - .repo_studios/scripts/orchestrators/run_monkey_patch_oversight.py
+
+examples:
+  - description: Standard run using auto-discovery
+    command: |
+      python .repo_studios/scripts/consumers/classify_monkey_patches.py --log-level INFO
+
+  - description: Explicit scan directory
+    command: |
+      python .repo_studios/scripts/consumers/classify_monkey_patches.py \
+        --scan-dir .repo_studios/reports/healthview/producer_reports/monkey_patches/20260102-1200 \
+        --log-level INFO
+
+  - description: Verbose output for debugging
+    command: |
+      python .repo_studios/scripts/consumers/classify_monkey_patches.py --verbose
+
+metadata:
+  category: consumer
+  tier: 3
+  status: draft
+  version: 0.1.0
+  author: Repo Studios Team
+  last_updated: 2026-01-02
+  dependencies_tier3:
+    - tier3_prune_logs.yaml
+    - tier3_report_paths.yaml
+  tier2_rosters:
+    - healthview_orchestration_pipeline/tier2_roster/tier2_monkey_patch_oversight_roster.md
+  tier1_pipelines:
+    - healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md
+  testing:
+    test_file: .repo_studios/tests/tests_consumers/test_classify_monkey_patches.py

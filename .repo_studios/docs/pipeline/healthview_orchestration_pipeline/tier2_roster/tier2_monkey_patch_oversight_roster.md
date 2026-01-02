@@ -292,11 +292,11 @@ script:
   category: "orchestrator"
 tier3:
   metadata_block_version: "v1"
-  allowed: false
-  exists: false
+  allowed: true
+  exists: true
   name: "tier3_run_monkey_patch_oversight.yaml"
-  meets_template: "NA"
-  last_updated: null
+  meets_template: "v1"
+  last_updated: "2026-01-02"
 cli_surfaces:
   run_entrypoint: "run(argv)"
   key_flags:
@@ -383,25 +383,34 @@ notes:
   - "Mypy errors fixed: L257 no-any-return, L302 unused-ignore, L306 no-any-return, L562/584/601/618 no-untyped-def."
 ```
 
-**Workstreams**
+- **Workstreams**
 
-- [ ] **A – Discovery:** Code inspection complete. Orchestrator uses `build_topic_path("orchestrator", "monkey_patch_oversight")` at L76. Delegates to producer/consumer/aggregator/summarizer via dynamic module loading. Uses `write_report_artifacts` for healthview bundle emission.
-- [ ] **B – Plan:** No code changes required for HOP compliance. Script already uses HOP patterns.
-- [ ] **C – Implement:** No implementation needed. Script already migrated to HOP.
-- [ ] **D – Tier-3 YAML:** Deferred — `tier3.allowed: false` per record metadata. No Tier-3 creation required.
-- [ ] **E – QA & Evidence:** pytest: 1 passed in 0.15s. mypy --strict: Success (7 errors fixed). Tests path added to evidence block.
-- [ ] **DONE**
+- [x] **A – Discovery:** Code inspection complete. Orchestrator uses `build_topic_path("orchestrator",
+  "monkey_patch_oversight")` at L76.
+  Delegates to producer/consumer/aggregator/summarizer via dynamic module loading.
+  Uses `write_report_artifacts` for healthview bundle emission.
+- [x] **B – Plan:** No code changes required for HOP compliance. Script already uses HOP patterns.
+- [x] **C – Implement:** No implementation needed. Script already migrated to HOP.
+- [x] **D – Tier-3 YAML:** Created `tier3_run_monkey_patch_oversight.yaml` in `tier3_scripts/monkey_patch_oversight/`.
+- [x] **E – QA & Evidence:** pytest: 1 passed in 0.16s. mypy --strict: Success.
+  Make target confirmed: `studio-orchestrate-monkey-patch-oversight`.
+- [x] **DONE**
 
 ##### S51R-002 monkey patch scan producer
 
-**Workstreams**
+- **Workstreams**
 
-- [ ] **A – Discovery:** Code inspection complete. Script uses `build_topic_path("producer", "monkey_patches")` at L88. No pointer file creation (`latest_*`/`_update_latest` absent). Uses `prune_run_directories` without `stem_prefix` at L1057-1062 — proper HOP pattern.
-- [ ] **B – Plan:** No code changes required. Script is already HOP-compliant.
-- [ ] **C – Implement:** No implementation needed. Script already migrated to HOP.
-- [ ] **D – Tier-3 YAML:** Deferred — `tier3.allowed: false` per record metadata. No Tier-3 creation required.
-- [ ] **E – QA & Evidence:** pytest: 6 passed in 0.22s. mypy --strict: Success. Tests path added to evidence block.
-- [ ] **DONE**
+- [x] **A – Discovery:** Code inspection complete. Script uses
+  `build_topic_path("producer", "monkey_patches")` at L95. No pointer file creation
+  (`latest_*`/`_update_latest` absent). Uses `prune_run_directories` without `stem_prefix`
+  at L1057-1062 — proper HOP pattern.
+- [x] **B – Plan:** No code changes required. Script is already HOP-compliant.
+- [x] **C – Implement:** No implementation needed. Script already migrated to HOP.
+- [x] **D – Tier-3 YAML:** Created `tier3_scan_monkey_patches.yaml` in
+  `tier3_scripts/monkey_patch_oversight/`.
+- [x] **E – QA & Evidence:** pytest: 6 passed in 0.22s. mypy --strict: Success.
+  Tests path added to evidence block.
+- [x] **DONE**
 
 ```yaml
 record_id: "S51R-002"
@@ -411,11 +420,11 @@ script:
   category: "producer"
 tier3:
   metadata_block_version: "v1"
-  allowed: false
-  exists: false
+  allowed: true
+  exists: true
   name: "tier3_scan_monkey_patches.yaml"
-  meets_template: "NA"
-  last_updated: null
+  meets_template: "yes"
+  last_updated: "2026-01-02"
 cli_surfaces:
   run_entrypoint: "run(argv)"
   key_flags:
@@ -487,14 +496,19 @@ notes:
 
 ##### S51R-003 monkey patch risk consumer
 
-**Workstreams**
+- **Workstreams**
 
-- [ ] **A – Discovery:** Code inspection complete. Script uses `build_topic_path("consumer", "monkey_patch_risk")` at L67. Comment at L308 confirms pointer file removal. `_update_latest` function exists (L312-320) but is never called — dead code. Uses `prune_run_directories(..., stem_prefix=BUNDLE_PREFIX)` at L334. HOP-compliant output path.
-- [ ] **B – Plan:** No code changes required. Script is already HOP-compliant. Dead code (`_update_latest`) should be removed in future cleanup pass but does not block compliance.
-- [ ] **C – Implement:** No implementation needed. Script already migrated to HOP.
-- [ ] **D – Tier-3 YAML:** Deferred — `tier3.allowed: false` per record metadata. No Tier-3 creation required.
-- [ ] **E – QA & Evidence:** pytest: 15 passed in 0.22s. mypy --strict: Success. YAML metadata corrected to reflect code truth (removed stale pointer file references from io_contract.outputs.current.artifacts and notes).
-- [ ] **DONE**
+- [x] **A – Discovery:** Code inspection complete. Script uses
+  `build_topic_path("consumer", "monkey_patch_risk")` at L67. Comment at L307 confirms
+  no pointer files. Uses `prune_run_directories(..., stem_prefix=BUNDLE_PREFIX)` at L322.
+  HOP-compliant output path.
+- [x] **B – Plan:** Dead code removal: `_update_latest` function (L312-322) was never called.
+  Removed in this iteration.
+- [x] **C – Implement:** Removed dead `_update_latest` function. Updated HOP comment at L307.
+- [x] **D – Tier-3 YAML:** Created `tier3_classify_monkey_patches.yaml` in
+  `tier3_scripts/monkey_patch_oversight/`.
+- [x] **E – QA & Evidence:** pytest: 15 passed in 0.25s. mypy --strict: Success.
+- [x] **DONE**
 
 ```yaml
 record_id: "S51R-003"
@@ -504,11 +518,11 @@ script:
   category: "consumer"
 tier3:
   metadata_block_version: "v1"
-  allowed: false
-  exists: false
+  allowed: true
+  exists: true
   name: "tier3_classify_monkey_patches.yaml"
-  meets_template: "NA"
-  last_updated: null
+  meets_template: "yes"
+  last_updated: "2026-01-02"
 cli_surfaces:
   run_entrypoint: "run(argv)"
   key_flags:
@@ -559,23 +573,28 @@ evidence:
     - ".repo_studios/tests/tests_consumers/test_classify_monkey_patches.py"
   fixtures: []
   qa:
-    pytest: "15 passed in 0.22s"
+    pytest: "15 passed in 0.25s"
     mypy: "Success: no issues found"
 notes:
-  - "Pointer file creation was removed (L308 comment). _update_latest function is dead code."
+  - "Dead code (_update_latest function) removed 2026-01-02."
   - "Script is HOP-compliant via build_topic_path at L67."
 ```
 
 ##### S51R-004 monkey patch trend aggregator
 
-**Workstreams**
+- **Workstreams**
 
-- [ ] **A – Discovery:** Code inspection complete. Script uses `build_topic_path("aggregator", "monkey_patch_trends")` at L49. Comment at L501 confirms pointer file removal. `_update_latest` function exists (L378) but is never called — dead code. Uses `prune_run_directories` at L399 without `stem_prefix`. HOP-compliant.
-- [ ] **B – Plan:** No code changes required. Script is already HOP-compliant.
-- [ ] **C – Implement:** No implementation needed. Script already migrated to HOP.
-- [ ] **D – Tier-3 YAML:** Deferred — `tier3.allowed: false` per record metadata. No Tier-3 creation required.
-- [ ] **E – QA & Evidence:** pytest: 3 passed in 0.17s. mypy --strict: Success. YAML metadata corrected (removed stale pointer file references).
-- [ ] **DONE**
+- [x] **A – Discovery:** Code inspection complete. Script uses
+  `build_topic_path("aggregator", "monkey_patch_trends")` at L51. Comment at L488 confirms
+  no pointer files. Uses `prune_run_directories` at L386 with `stem_prefix=AGGREGATOR_PREFIX`.
+  HOP-compliant.
+- [x] **B – Plan:** Dead code removal: `_update_latest` function (L378-388) was never called.
+  Removed in this iteration.
+- [x] **C – Implement:** Removed dead `_update_latest` function. Updated HOP comment at L488.
+- [x] **D – Tier-3 YAML:** Created `tier3_analyze_monkey_patch_trends.yaml` in
+  `tier3_scripts/monkey_patch_oversight/`.
+- [x] **E – QA & Evidence:** pytest: 3 passed in 0.18s. mypy --strict: Success.
+- [x] **DONE**
 
 ```yaml
 record_id: "S51R-004"
@@ -585,11 +604,11 @@ script:
   category: "aggregator"
 tier3:
   metadata_block_version: "v1"
-  allowed: false
-  exists: false
+  allowed: true
+  exists: true
   name: "tier3_analyze_monkey_patch_trends.yaml"
-  meets_template: "NA"
-  last_updated: null
+  meets_template: "yes"
+  last_updated: "2026-01-02"
 cli_surfaces:
   run_entrypoint: "run(argv)"
   key_flags:
@@ -644,17 +663,17 @@ evidence:
     - ".repo_studios/tests/tests_aggregators/test_analyze_monkey_patch_trends.py"
   fixtures: []
   qa:
-    pytest: "3 passed in 0.17s"
+    pytest: "3 passed in 0.18s"
     mypy: "Success: no issues found"
 notes:
-  - "Pointer file creation was removed (L501 comment). _update_latest function is dead code."
-  - "Script is HOP-compliant via build_topic_path at L49."
+  - "Dead code (_update_latest function) removed 2026-01-02."
+  - "Script is HOP-compliant via build_topic_path at L51."
   - "The aggregator also mirrors trend markdown into the latest consumer bundle as TREND_SNAPSHOT.md."
 ```
 
 ##### S51R-005 monkey patch overview summarizer
 
-**Workstreams**
+- **Workstreams**
 
 - [x] **A – Discovery:** Code inspection complete. Script uses `build_topic_path("summarizer",
   "monkey_patch_overview")` at L48. Uses `write_report_artifacts` at L468 for output (HOP-compliant).
@@ -667,7 +686,7 @@ notes:
 - [x] **D – Tier-3 YAML:** Created `tier3_summarize_monkey_patch_overview.yaml` under
   `tier3_scripts/monkey_patch_oversight/` (2026-01-02).
 - [x] **E – QA & Evidence:** No test file exists. mypy --strict: Success (verified 2026-01-02).
-- [ ] **DONE**
+- [x] **DONE**
 
 ```yaml
 record_id: "S51R-005"
@@ -810,33 +829,37 @@ notes:
 
 Workstream A — Discovery
 
-- [ ] Inspect outputs + pruning/retention surfaces; record findings
+- [x] Inspect outputs + pruning/retention surfaces; record findings
+  - N/A: Pure utility library with no CLI or output artifacts.
 
 Workstream B — Plan
 
-- [ ] Draft plan to close output-root/base-package stop-gates
+- [x] Draft plan to close output-root/base-package stop-gates
+  - N/A: No HOP changes needed for utility libraries.
 
 Workstream C — Implement
 
-- [ ] Implement accepted plan and update this record + stop-gate status with new evidence
+- [x] Implement accepted plan and update this record + stop-gate status with new evidence
+  - N/A: No code changes needed.
 
 Workstream D — Tier-3 YAML
 
-- [ ] Confirm Tier-3 is appropriate for this script; record decision (create vs defer)
-- [ ] Inspect Tier-3 template requirements
-- [ ] Draft `tier3_<script_stem>.yaml`
-- [ ] Validate Tier-3 YAML
+- [x] Confirm Tier-3 is appropriate for this script; record decision (create vs defer)
+  - Decision: **Deferred** — pure utility libraries do not get Tier-3 recipes (no CLI entrypoint).
+- [x] Inspect Tier-3 template requirements — N/A
+- [x] Draft `tier3_<script_stem>.yaml` — N/A
+- [x] Validate Tier-3 YAML — N/A
 
 Workstream E — QA & Evidence
 
-- [ ] Pytest evidence captured
-  - Result: 5 passed in 0.06s (2026-01-02)
-- [ ] Mypy evidence captured (or marked N/A in record)
-  - Result: Success: no issues found
-- [ ] Coverage + doc-index timestamp recorded
+- [x] Pytest evidence captured
+  - Result: 5 passed in 0.07s (2026-01-02)
+- [x] Mypy evidence captured (or marked N/A in record)
+  - Result: Success: no issues found (2026-01-02)
+- [x] Coverage + doc-index timestamp recorded
   - N/A (pure utility, no coverage threshold)
 
-- [ ] DONE — monkey_patch_risk.py complete; update Tier-1 Stage 5.1 script gate
+- [x] DONE — monkey_patch_risk.py complete; update Tier-1 Stage 5.1 script gate
 
 ### 3.2 Stop-Gates and Implementation Checklists
 

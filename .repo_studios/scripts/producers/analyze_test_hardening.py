@@ -61,12 +61,26 @@ IGNORED_PARTS = {".git", ".repo_studios", ".venv", "__pycache__"}
 
 @dataclass(frozen=True)
 class Paths:
+    """Path configuration for test hardening analysis.
+
+    Attributes:
+        repo_root: Repository root directory.
+        output_dir: Output directory for generated report bundles.
+    """
+
     repo_root: Path
     output_dir: Path
 
 
 @dataclass(frozen=True)
 class Options:
+    """Runtime options for test hardening analysis.
+
+    Attributes:
+        artifacts_to_keep: Number of historical run directories to retain.
+        log_level: Logging verbosity level.
+    """
+
     artifacts_to_keep: int
     log_level: str = "INFO"
 
@@ -95,6 +109,15 @@ OPTIONS_CONFIG = OptionsConfig(
 
 @dataclass
 class TestIssue:
+    """A single issue detected in a test file.
+
+    Attributes:
+        severity: Issue severity level (high, medium, low).
+        category: Issue category (e.g., missing_mocks, long_test, no_assertions).
+        message: Human-readable description of the issue.
+        line_number: Source line where the issue was detected, if applicable.
+    """
+
     severity: str
     category: str
     message: str
@@ -103,6 +126,17 @@ class TestIssue:
 
 @dataclass
 class TestFileAnalysis:
+    """Analysis results for a single test file.
+
+    Attributes:
+        filepath: Path to the analyzed test file.
+        total_lines: Total line count of the file.
+        test_count: Number of test functions detected.
+        issues: List of issues found during analysis.
+        long_tests: Details of tests exceeding length thresholds.
+        imports: Set of imported module names.
+    """
+
     filepath: Path
     total_lines: int = 0
     test_count: int = 0
@@ -112,6 +146,11 @@ class TestFileAnalysis:
 
     @property
     def severity_counts(self) -> dict[str, int]:
+        """Return counts of issues by severity level.
+
+        Returns:
+            Dictionary with high, medium, and low severity counts.
+        """
         return {
             "high": sum(1 for issue in self.issues if issue.severity == "high"),
             "medium": sum(1 for issue in self.issues if issue.severity == "medium"),
@@ -120,11 +159,24 @@ class TestFileAnalysis:
 
     @property
     def priority_score(self) -> int:
+        """Calculate a weighted priority score based on issue severities.
+
+        Returns:
+            Score weighted as: high*10 + medium*3 + low*1.
+        """
         counts = self.severity_counts
         return counts["high"] * 10 + counts["medium"] * 3 + counts["low"]
 
 
 def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
+    """Parse command-line arguments for test hardening analysis.
+
+    Args:
+        argv: Command-line arguments. Uses sys.argv if None.
+
+    Returns:
+        Parsed argument namespace with all CLI options.
+    """
     parser = argparse.ArgumentParser(
         prog="analyze_test_hardening",
         description=__doc__ or "",
@@ -172,25 +224,65 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
 
 
 def build_paths(args: argparse.Namespace) -> Paths:
+    """Build path configuration from parsed arguments.
+
+    Args:
+        args: Parsed command-line arguments.
+
+    Returns:
+        Paths configuration dataclass.
+    """
     return cast(Paths, build_standard_paths(args, PATH_CONFIG, origin=Path(__file__)))
 
 
 def build_options(args: argparse.Namespace) -> Options:
+    """Build runtime options from parsed arguments.
+
+    Args:
+        args: Parsed command-line arguments.
+
+    Returns:
+        Options configuration dataclass.
+    """
     options = cast(Options, build_standard_options(args, OPTIONS_CONFIG))
     return replace(options, log_level=str(args.log_level))
 
 
 def configure_logging(level: str) -> None:
+    """Configure logging with the specified verbosity level.
+
+    Args:
+        level: Logging level name (DEBUG, INFO, WARNING, ERROR, CRITICAL).
+    """
     logging.basicConfig(level=getattr(logging, level.upper()), format="%(levelname)s %(message)s")
 
 
 def _timestamp_slug(moment: dt.datetime) -> str:
+    """Convert a datetime to a YYYYMMDD-HHMM format slug.
+
+    Args:
+        moment: Datetime to convert (will be normalized to UTC).
+
+    Returns:
+        Timestamp string in YYYYMMDD-HHMM format.
+    """
     if moment.tzinfo is None:
         moment = moment.replace(tzinfo=dt.timezone.utc)
     return moment.astimezone(dt.timezone.utc).strftime("%Y%m%d-%H%M")
 
 
 def _resolve_timestamp(raw: str | None) -> dt.datetime:
+    """Resolve or generate a UTC timestamp for the run.
+
+    Args:
+        raw: ISO 8601 timestamp string, or None for current time.
+
+    Returns:
+        Datetime object normalized to UTC.
+
+    Raises:
+        RuntimeError: If the timestamp string is invalid.
+    """
     if not raw:
         return dt.datetime.now(dt.timezone.utc)
     try:
@@ -203,6 +295,11 @@ def _resolve_timestamp(raw: str | None) -> dt.datetime:
 
 
 def _detect_trigger_type() -> str:
+    """Detect the execution trigger type from environment.
+
+    Returns:
+        One of 'make', 'ci', or 'cli' based on environment variables.
+    """
     import os
 
     if os.getenv("MAKELEVEL"):
@@ -213,12 +310,25 @@ def _detect_trigger_type() -> str:
 
 
 def _detect_requested_by() -> str | None:
+    """Detect the user or actor who triggered the run.
+
+    Returns:
+        Username from GITHUB_ACTOR, USERNAME, or USER environment variables.
+    """
     import os
 
     return os.getenv("GITHUB_ACTOR") or os.getenv("USERNAME") or os.getenv("USER")
 
 
 def _detect_git_sha(repo_root: Path) -> str | None:
+    """Detect the current git commit SHA.
+
+    Args:
+        repo_root: Repository root directory.
+
+    Returns:
+        Git SHA string, or None if not in a git repository.
+    """
     import os
     import subprocess
 
@@ -241,6 +351,19 @@ def _detect_git_sha(repo_root: Path) -> str | None:
 
 
 def discover_test_files(repo_root: Path, tests_dirs: list[Path] | None = None) -> list[Path]:
+    """Discover test files in the repository.
+
+    Searches for files matching test patterns (test_*.py, *_test.py).
+    When explicit directories are provided, only those are scanned.
+    Otherwise, scans from repo root excluding standard ignored paths.
+
+    Args:
+        repo_root: Repository root directory.
+        tests_dirs: Explicit test directories to scan, or None for auto-discovery.
+
+    Returns:
+        Sorted list of discovered test file paths.
+    """
     results: set[Path] = set()
 
     # If explicit test directories are provided, scan them without IGNORED_PARTS filtering
@@ -275,6 +398,18 @@ def discover_test_files(repo_root: Path, tests_dirs: list[Path] | None = None) -
 
 
 def analyze_file(path: Path, repo_root: Path) -> TestFileAnalysis:
+    """Analyze a single test file for hardening issues.
+
+    Parses the file, extracts imports, and checks for common test quality
+    issues like missing mocks, long tests, and lack of assertions.
+
+    Args:
+        path: Path to the test file.
+        repo_root: Repository root for relative path computation.
+
+    Returns:
+        Analysis results containing detected issues.
+    """
     analysis = TestFileAnalysis(filepath=path)
     try:
         content = path.read_text(encoding="utf-8")
@@ -297,6 +432,12 @@ def analyze_file(path: Path, repo_root: Path) -> TestFileAnalysis:
 
 
 def _check_imports(tree: ast.AST, analysis: TestFileAnalysis) -> None:
+    """Check imports for risky external dependencies without mocks.
+
+    Args:
+        tree: Parsed AST of the test file.
+        analysis: Analysis object to update with findings.
+    """
     has_mock = False
     for node in ast.walk(tree):
         if isinstance(node, ast.Import):
@@ -337,6 +478,16 @@ def _check_imports(tree: ast.AST, analysis: TestFileAnalysis) -> None:
 
 
 def _check_test_functions(tree: ast.AST, analysis: TestFileAnalysis, content: str) -> None:
+    """Check test functions for quality issues.
+
+    Detects long tests, vague naming, missing assertions, global state
+    mutation, and flaky patterns like time.sleep().
+
+    Args:
+        tree: Parsed AST of the test file.
+        analysis: Analysis object to update with findings.
+        content: Raw file content for pattern matching.
+    """
     for node in ast.walk(tree):
         if not isinstance(node, ast.FunctionDef):
             continue
@@ -404,6 +555,16 @@ def _check_test_functions(tree: ast.AST, analysis: TestFileAnalysis, content: st
 
 
 def _is_test_function(node: ast.FunctionDef) -> bool:
+    """Determine whether an AST function node represents a test function.
+
+    Check for test_ prefix in name or test-related decorators.
+
+    Args:
+        node: AST function definition node to inspect.
+
+    Returns:
+        True if the function is a test function, False otherwise.
+    """
     if node.name.startswith("test_"):
         return True
     for decorator in node.decorator_list:
@@ -415,6 +576,16 @@ def _is_test_function(node: ast.FunctionDef) -> bool:
 
 
 def _has_assertions(node: ast.FunctionDef) -> bool:
+    """Check whether a function contains any assertion statements.
+
+    Scan the AST for assert statements or pytest-style assert calls.
+
+    Args:
+        node: AST function definition node to inspect.
+
+    Returns:
+        True if any assertions are found, False otherwise.
+    """
     for child in ast.walk(node):
         if isinstance(child, ast.Assert):
             return True
@@ -427,6 +598,16 @@ def _has_assertions(node: ast.FunctionDef) -> bool:
 
 
 def _uses_global_state(node: ast.FunctionDef) -> bool:
+    """Check whether a function mutates module-level state.
+
+    Scan for global statements or writes to uppercase/underscore-prefixed names.
+
+    Args:
+        node: AST function definition node to inspect.
+
+    Returns:
+        True if global state mutation is detected, False otherwise.
+    """
     for child in ast.walk(node):
         if isinstance(child, ast.Global):
             return True
@@ -437,6 +618,16 @@ def _uses_global_state(node: ast.FunctionDef) -> bool:
 
 
 def _has_sleep_calls(node: ast.FunctionDef) -> bool:
+    """Check whether a function contains time.sleep() calls.
+
+    Detect calls that may introduce flakiness through non-deterministic waits.
+
+    Args:
+        node: AST function definition node to inspect.
+
+    Returns:
+        True if sleep calls are found, False otherwise.
+    """
     for child in ast.walk(node):
         if isinstance(child, ast.Call):
             func = child.func
@@ -448,6 +639,14 @@ def _has_sleep_calls(node: ast.FunctionDef) -> bool:
 
 
 def _check_content_patterns(content: str, analysis: TestFileAnalysis) -> None:
+    """Scan file content for hardcoded paths, URLs, and debug artifacts.
+
+    Add issues to analysis when problematic patterns are detected.
+
+    Args:
+        content: Raw file content as string.
+        analysis: TestFileAnalysis object to populate with issues.
+    """
     lines = content.splitlines()
     path_patterns = [
         r"[\"\']/(home|Users|tmp|var|etc)/[^\"\']+[\"\']",
@@ -497,6 +696,17 @@ def _check_content_patterns(content: str, analysis: TestFileAnalysis) -> None:
 
 
 def analyze_all(paths: Paths, tests_dirs: list[Path] | None = None) -> list[TestFileAnalysis]:
+    """Analyze all discovered test files for hardening issues.
+
+    Discover test files, analyze each for issues, and return sorted results.
+
+    Args:
+        paths: Paths configuration containing repo_root.
+        tests_dirs: Optional list of specific test directories to analyze.
+
+    Returns:
+        List of TestFileAnalysis objects sorted by priority score descending.
+    """
     files = discover_test_files(paths.repo_root, tests_dirs=tests_dirs)
     logging.info("Discovered %d candidate test files", len(files))
     results: list[TestFileAnalysis] = []
@@ -509,6 +719,19 @@ def analyze_all(paths: Paths, tests_dirs: list[Path] | None = None) -> list[Test
 
 
 def compose_payload(paths: Paths, options: Options, results: list[TestFileAnalysis], timestamp: dt.datetime) -> dict:
+    """Build the main JSON payload from analysis results.
+
+    Aggregate severity totals, identify clean and priority files, and structure output.
+
+    Args:
+        paths: Paths configuration with repo_root and output_dir.
+        options: Options configuration with artifacts_to_keep and log_level.
+        results: List of TestFileAnalysis objects from analyze_all.
+        timestamp: Timestamp for the report.
+
+    Returns:
+        Dictionary containing structured report payload.
+    """
     severity_totals: Counter[str] = Counter()
     total_issues = 0
     for item in results:
@@ -594,6 +817,16 @@ def compose_payload(paths: Paths, options: Options, results: list[TestFileAnalys
 
 
 def render_markdown_report(payload: dict) -> str:
+    """Render the analysis payload as a Markdown summary report.
+
+    Format summary statistics, top priority files, clean files, and recommendations.
+
+    Args:
+        payload: Dictionary containing structured report data from compose_payload.
+
+    Returns:
+        Markdown-formatted report as a single string.
+    """
     summary = payload.get("summary", {})
     severities = summary.get("severity_totals", {})
     lines: list[str] = []
@@ -675,6 +908,22 @@ def build_manifest(
     exit_code: int,
     tests_dirs: list[Path] | None = None,
 ) -> dict:
+    """Build the manifest metadata for this analysis run.
+
+    Create provenance and configuration metadata for artifact tracking.
+
+    Args:
+        paths: Paths configuration with repo_root and output_dir.
+        options: Options configuration with runtime settings.
+        timestamp: Timestamp for the report.
+        timestamp_slug: Formatted timestamp string for directory naming.
+        status: Report status string (ok or issues-found).
+        exit_code: Exit code for the run (0 or 1).
+        tests_dirs: Optional list of specific test directories analyzed.
+
+    Returns:
+        Dictionary containing manifest metadata.
+    """
     bundle_dir = paths.output_dir / timestamp_slug
     return {
         "schema_version": SCHEMA_VERSION,
@@ -711,6 +960,17 @@ def build_manifest(
 
 
 def build_telemetry(payload: dict, *, timestamp_slug: str) -> dict:
+    """Build telemetry data structure from the analysis payload.
+
+    Extract metrics and component data for downstream telemetry consumers.
+
+    Args:
+        payload: Dictionary containing structured report data.
+        timestamp_slug: Formatted timestamp string for run identification.
+
+    Returns:
+        Dictionary containing telemetry metrics and components.
+    """
     summary = payload.get("summary", {})
     severities = summary.get("severity_totals", {})
     return {
@@ -751,6 +1011,19 @@ def prune_history(
     current_run: Path | None,
     logger: logging.Logger | None,
 ) -> list[Path]:
+    """Remove old run directories beyond the retention threshold.
+
+    Delegate to prune_run_directories utility for timestamp-based cleanup.
+
+    Args:
+        topic_dir: Directory containing timestamped run subdirectories.
+        keep: Number of recent runs to retain (minimum 1).
+        current_run: Current run directory to preserve regardless of age.
+        logger: Logger for debug output.
+
+    Returns:
+        List of paths that were removed.
+    """
     result = prune_run_directories(
         topic_dir,
         keep=max(keep, 1),
@@ -761,6 +1034,17 @@ def prune_history(
 
 
 def _relativize(path: Path, repo_root: Path) -> str:
+    """Convert a path to a repo-relative POSIX string.
+
+    Fall back to absolute POSIX path if path is outside repo_root.
+
+    Args:
+        path: Path to convert.
+        repo_root: Repository root for relative calculation.
+
+    Returns:
+        POSIX-formatted relative or absolute path string.
+    """
     try:
         return path.relative_to(repo_root).as_posix()
     except ValueError:
@@ -768,6 +1052,16 @@ def _relativize(path: Path, repo_root: Path) -> str:
 
 
 def run(argv: Sequence[str] | None = None) -> dict:
+    """Execute the test hardening analysis pipeline.
+
+    Parse arguments, analyze test files, compose payload, and write artifacts.
+
+    Args:
+        argv: Command-line arguments (defaults to sys.argv[1:]).
+
+    Returns:
+        Dictionary containing the full analysis payload with output paths.
+    """
     args = parse_args(argv)
     paths = build_paths(args)
     options = build_options(args)
@@ -822,6 +1116,16 @@ def run(argv: Sequence[str] | None = None) -> dict:
 
 
 def main(argv: Sequence[str] | None = None) -> int:
+    """Entry point for the test hardening analysis script.
+
+    Execute run() and return the exit code from the payload.
+
+    Args:
+        argv: Command-line arguments (defaults to sys.argv[1:]).
+
+    Returns:
+        Exit code (0 for success, 1 if high-severity issues found).
+    """
     payload = run(argv)
     return int(payload.get("exit_code", 0))
 

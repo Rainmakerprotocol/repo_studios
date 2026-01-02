@@ -111,13 +111,13 @@ HOP_TIMESTAMP_PATTERN = re.compile(r"^\d{8}-\d{4}$")
 
 @dataclass(frozen=True)
 class Paths:
-    """
-    Resolved path configuration for summarizer execution.
+    """Resolved path configuration for summarizer execution.
 
-    :ivar repo_root: Repository root directory.
-    :ivar consumer_output_dir: Consumer artifact location.
-    :ivar producer_output_dir: Producer report location.
-    :ivar output_dir: Summarizer output root.
+    Attributes:
+        repo_root: Repository root directory.
+        consumer_output_dir: Consumer artifact location.
+        producer_output_dir: Producer report location.
+        output_dir: Summarizer output root.
     """
 
     repo_root: Path
@@ -143,15 +143,15 @@ PATHS_CONFIG = PathsConfig(
 
 @dataclass(frozen=True)
 class Options:
-    """
-    Runtime options for summarizer execution.
+    """Runtime options for summarizer execution.
 
-    :ivar artifacts_to_keep: Retention budget for output bundles.
-    :ivar log_level: Logging verbosity level.
-    :ivar run_timestamp: UTC timestamp for artifact generation.
-    :ivar consumer_telemetry_override: Explicit telemetry.json path.
-    :ivar consumer_manifest_override: Explicit manifest.json path.
-    :ivar producer_report_override: Explicit producer report path.
+    Attributes:
+        artifacts_to_keep: Retention budget for output bundles.
+        log_level: Logging verbosity level.
+        run_timestamp: UTC timestamp for artifact generation.
+        consumer_telemetry_override: Explicit telemetry.json path.
+        consumer_manifest_override: Explicit manifest.json path.
+        producer_report_override: Explicit producer report path.
     """
 
     artifacts_to_keep: int
@@ -164,6 +164,12 @@ class Options:
 
 @dataclass(frozen=True)
 class KeepValues:
+    """Retention budget values extracted from CLI arguments.
+
+    Attributes:
+        artifacts_to_keep: Number of artifact bundles to retain.
+    """
+
     artifacts_to_keep: int
 
 
@@ -176,10 +182,11 @@ OPTIONS_CONFIG = OptionsConfig(
 def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
     """Parse command-line arguments for summarizer.
 
-    :param argv: Command-line arguments; defaults to sys.argv[1:].
-    :type argv: Sequence[str] | None
-    :returns: Parsed argument namespace.
-    :rtype: argparse.Namespace
+    Args:
+        argv: Command-line arguments; defaults to sys.argv[1:].
+
+    Returns:
+        Parsed argument namespace.
     """
     parser = argparse.ArgumentParser(description=__doc__.split("\n")[0] if __doc__ else "")
     parser.add_argument("--repo-root", help="Repository root override")
@@ -206,11 +213,14 @@ def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
 def _parse_timestamp(raw: str | None) -> datetime:
     """Parse ISO-8601 timestamp or return current UTC time.
 
-    :param raw: ISO-8601 timestamp string or None.
-    :type raw: str | None
-    :returns: Parsed datetime in UTC.
-    :rtype: datetime
-    :raises SystemExit: If timestamp format is invalid.
+    Args:
+        raw: ISO-8601 timestamp string or None.
+
+    Returns:
+        Parsed datetime in UTC.
+
+    Raises:
+        SystemExit: If timestamp format is invalid.
     """
     if not raw:
         return datetime.now(timezone.utc)
@@ -226,12 +236,12 @@ def _parse_timestamp(raw: str | None) -> datetime:
 def _resolve_optional_path(repo_root: Path, raw: str | None) -> Path | None:
     """Resolve optional path relative to repo root.
 
-    :param repo_root: Repository root for relative resolution.
-    :type repo_root: Path
-    :param raw: Raw path string or None.
-    :type raw: str | None
-    :returns: Resolved Path or None.
-    :rtype: Path | None
+    Args:
+        repo_root: Repository root for relative resolution.
+        raw: Raw path string or None.
+
+    Returns:
+        Resolved Path or None.
     """
     if not raw:
         return None
@@ -244,10 +254,11 @@ def _resolve_optional_path(repo_root: Path, raw: str | None) -> Path | None:
 def build_paths(args: argparse.Namespace) -> Paths:
     """Construct Paths dataclass from parsed CLI arguments.
 
-    :param args: Parsed argument namespace from _parse_args().
-    :type args: argparse.Namespace
-    :returns: Resolved path configuration.
-    :rtype: Paths
+    Args:
+        args: Parsed argument namespace from _parse_args().
+
+    Returns:
+        Resolved path configuration.
     """
     result = build_standard_paths(args, PATHS_CONFIG, origin=Path(__file__))
     return Paths(**{f.name: getattr(result, f.name) for f in result.__dataclass_fields__.values()})
@@ -256,12 +267,12 @@ def build_paths(args: argparse.Namespace) -> Paths:
 def build_options(args: argparse.Namespace, *, paths: Paths) -> Options:
     """Construct Options from parsed CLI arguments.
 
-    :param args: Parsed argument namespace from _parse_args().
-    :type args: argparse.Namespace
-    :param paths: Resolved Paths instance.
-    :type paths: Paths
-    :returns: Fully resolved Options instance.
-    :rtype: Options
+    Args:
+        args: Parsed argument namespace from _parse_args().
+        paths: Resolved Paths instance.
+
+    Returns:
+        Fully resolved Options instance.
     """
     keep_values = build_standard_options(args, OPTIONS_CONFIG)
     return Options(
@@ -281,8 +292,8 @@ def build_options(args: argparse.Namespace, *, paths: Paths) -> Options:
 def configure_logging(level: str) -> None:
     """Configure root logger with specified level.
 
-    :param level: Logging level name (e.g., "DEBUG", "INFO").
-    :type level: str
+    Args:
+        level: Logging level name (e.g., "DEBUG", "INFO").
     """
     logging.basicConfig(level=getattr(logging, level.upper(), logging.INFO), format="%(levelname)s %(message)s")
 
@@ -290,10 +301,11 @@ def configure_logging(level: str) -> None:
 def _load_json(path: Path | None) -> Any | None:
     """Load JSON file or return None on failure.
 
-    :param path: Path to JSON file or None.
-    :type path: Path | None
-    :returns: Parsed JSON content or None.
-    :rtype: Any | None
+    Args:
+        path: Path to JSON file or None.
+
+    Returns:
+        Parsed JSON content or None.
     """
     if path is None or not path.exists():
         return None
@@ -306,12 +318,12 @@ def _load_json(path: Path | None) -> Any | None:
 def _normalize_relative(path: Path | None, repo_root: Path) -> str | None:
     """Normalize path to repo-relative POSIX string.
 
-    :param path: Path to normalize or None.
-    :type path: Path | None
-    :param repo_root: Repository root for relative resolution.
-    :type repo_root: Path
-    :returns: Relative POSIX path string or None.
-    :rtype: str | None
+    Args:
+        path: Path to normalize or None.
+        repo_root: Repository root for relative resolution.
+
+    Returns:
+        Relative POSIX path string or None.
     """
     if path is None:
         return None
@@ -324,17 +336,16 @@ def _normalize_relative(path: Path | None, repo_root: Path) -> str | None:
 def _ensure_path(source: Path | None, *, base: Path, filename: str) -> Path | None:
     """Resolve artifact path from override or latest HOP timestamp directory.
 
-    Locates the most recent HOP-compliant timestamp directory (YYYYMMDD-HHMM)
-    under *base* and returns the path to *filename* within it.
+    Locate the most recent HOP-compliant timestamp directory (YYYYMMDD-HHMM)
+    under *base* and return the path to *filename* within it.
 
-    :param source: Explicit override path (returned if exists).
-    :type source: Path | None
-    :param base: Base directory containing timestamp directories.
-    :type base: Path
-    :param filename: Artifact filename to locate within timestamp directory.
-    :type filename: str
-    :returns: Resolved path to artifact, or None if not found.
-    :rtype: Path | None
+    Args:
+        source: Explicit override path (returned if exists).
+        base: Base directory containing timestamp directories.
+        filename: Artifact filename to locate within timestamp directory.
+
+    Returns:
+        Resolved path to artifact, or None if not found.
     """
     if source and source.exists():
         return source
@@ -354,15 +365,15 @@ def _ensure_path(source: Path | None, *, base: Path, filename: str) -> Path | No
 def _find_previous_bundle(base: Path, current_bundle: str | None) -> Path | None:
     """Find the most recent HOP bundle directory excluding the current one.
 
-    Scans *base* for HOP-compliant timestamp directories (YYYYMMDD-HHMM)
-    and returns the newest one that is not *current_bundle*.
+    Scan *base* for HOP-compliant timestamp directories (YYYYMMDD-HHMM)
+    and return the newest one that is not *current_bundle*.
 
-    :param base: Base directory containing timestamp directories.
-    :type base: Path
-    :param current_bundle: Name of current bundle directory to exclude.
-    :type current_bundle: str | None
-    :returns: Path to previous bundle directory, or None if not found.
-    :rtype: Path | None
+    Args:
+        base: Base directory containing timestamp directories.
+        current_bundle: Name of current bundle directory to exclude.
+
+    Returns:
+        Path to previous bundle directory, or None if not found.
     """
     if not base.exists():
         return None
@@ -380,10 +391,11 @@ def _find_previous_bundle(base: Path, current_bundle: str | None) -> Path | None
 def _extract_metrics(bundle_summary: Mapping[str, Any] | None) -> dict[str, int | None]:
     """Extract metrics from consumer manifest payload.
 
-    :param bundle_summary: Consumer manifest payload.
-    :type bundle_summary: Mapping[str, Any] | None
-    :returns: Dict of metric keys to integer values or None.
-    :rtype: dict[str, int | None]
+    Args:
+        bundle_summary: Consumer manifest payload.
+
+    Returns:
+        Dict of metric keys to integer values or None.
     """
     metrics: Mapping[str, Any] | None = None
     if isinstance(bundle_summary, Mapping):
@@ -403,12 +415,12 @@ def _extract_metrics(bundle_summary: Mapping[str, Any] | None) -> dict[str, int 
 def _coerce_int(payload: Mapping[str, Any] | None, key: str) -> int | None:
     """Coerce payload value to int or return None.
 
-    :param payload: Mapping containing the key.
-    :type payload: Mapping[str, Any] | None
-    :param key: Key to extract.
-    :type key: str
-    :returns: Integer value or None.
-    :rtype: int | None
+    Args:
+        payload: Mapping containing the key.
+        key: Key to extract.
+
+    Returns:
+        Integer value or None.
     """
     if not isinstance(payload, Mapping):
         return None
@@ -423,10 +435,11 @@ def _coerce_int(payload: Mapping[str, Any] | None, key: str) -> int | None:
 def _extract_severity(summary_payload: Mapping[str, Any] | None) -> dict[str, int | None]:
     """Extract severity buckets from telemetry payload.
 
-    :param summary_payload: Consumer telemetry payload.
-    :type summary_payload: Mapping[str, Any] | None
-    :returns: Dict of severity bucket keys to integer values.
-    :rtype: dict[str, int | None]
+    Args:
+        summary_payload: Consumer telemetry payload.
+
+    Returns:
+        Dict of severity bucket keys to integer values.
     """
     severity: Mapping[str, Any] | None = None
     summary = summary_payload.get("summary") if isinstance(summary_payload, Mapping) else None
@@ -444,10 +457,11 @@ def _extract_severity(summary_payload: Mapping[str, Any] | None) -> dict[str, in
 def _collect_signature_ids(summary_payload: Mapping[str, Any] | None) -> set[str]:
     """Collect signature IDs from telemetry payload.
 
-    :param summary_payload: Telemetry payload with signatures list.
-    :type summary_payload: Mapping[str, Any] | None
-    :returns: Set of signature ID strings.
-    :rtype: set[str]
+    Args:
+        summary_payload: Telemetry payload with signatures list.
+
+    Returns:
+        Set of signature ID strings.
     """
     if not isinstance(summary_payload, Mapping):
         return set()
@@ -466,10 +480,11 @@ def _collect_signature_ids(summary_payload: Mapping[str, Any] | None) -> set[str
 def _extract_producer_repeat_offender(payload: Mapping[str, Any] | None) -> int | None:
     """Extract repeat_offender count from producer report.
 
-    :param payload: Producer report payload.
-    :type payload: Mapping[str, Any] | None
-    :returns: Repeat offender count or None.
-    :rtype: int | None
+    Args:
+        payload: Producer report payload.
+
+    Returns:
+        Repeat offender count or None.
     """
     if not isinstance(payload, Mapping):
         return None
@@ -490,18 +505,15 @@ def _build_markdown(
 ) -> str:
     """Build Markdown overview summary.
 
-    :param generated_at: Timestamp for generated header.
-    :type generated_at: datetime
-    :param metrics: Current metrics snapshot.
-    :type metrics: Mapping[str, int | None]
-    :param severity: Severity bucket counts.
-    :type severity: Mapping[str, int | None]
-    :param baseline: Baseline comparison data or None.
-    :type baseline: Mapping[str, Any] | None
-    :param notes: Notes to append to summary.
-    :type notes: list[str]
-    :returns: Formatted Markdown content.
-    :rtype: str
+    Args:
+        generated_at: Timestamp for generated header.
+        metrics: Current metrics snapshot.
+        severity: Severity bucket counts.
+        baseline: Baseline comparison data or None.
+        notes: Notes to append to summary.
+
+    Returns:
+        Formatted Markdown content.
     """
     lines: list[str] = ["# Fault Diagnostics Overview", ""]
     lines.append(f"Generated (UTC): {generated_at.isoformat(timespec='seconds')}")
@@ -547,13 +559,14 @@ def _build_markdown(
 def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     """Execute the summarizer and write HOP-compliant artifacts.
 
-    Loads consumer telemetry/manifest artifacts, producer report, compares
-    against previous bundles, and writes a summary overview bundle.
+    Load consumer telemetry/manifest artifacts, producer report, compare
+    against previous bundles, and write a summary overview bundle.
 
-    :param argv: CLI arguments (uses sys.argv if None).
-    :type argv: Iterable[str] | None
-    :returns: Execution result with status, run_dir, slug, and artifacts.
-    :rtype: dict[str, Any]
+    Args:
+        argv: CLI arguments (uses sys.argv if None).
+
+    Returns:
+        Execution result with status, run_dir, slug, and artifacts.
     """
     args = _parse_args(argv)
     paths = build_paths(args)
@@ -688,8 +701,8 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
 def main(argv: Sequence[str] | None = None) -> None:
     """CLI entry point for fault diagnostics overview summarizer.
 
-    :param argv: Command-line arguments; defaults to sys.argv[1:].
-    :type argv: Sequence[str] | None
+    Args:
+        argv: Command-line arguments; defaults to sys.argv[1:].
     """
     raise SystemExit(0 if run(argv).get("status") == "ok" else 1)
 

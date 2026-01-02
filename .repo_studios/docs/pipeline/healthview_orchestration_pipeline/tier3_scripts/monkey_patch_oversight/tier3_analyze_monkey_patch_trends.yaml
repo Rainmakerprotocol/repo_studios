@@ -1,0 +1,204 @@
+# Tier-3: analyze_monkey_patch_trends.py
+# Aggregator script that analyzes monkey-patch trends across historical runs.
+
+tool:
+  id: analyze_monkey_patch_trends
+  name: Analyze Monkey Patch Trends
+  description: |
+    Aggregates monkey-patch classification results from consumer bundles (or falls back to
+    producer reports) and computes trend deltas across historical runs.
+
+    Emits a canonical HealthView bundle under:
+
+      .repo_studios/reports/healthview/aggregator_reports/monkey_patch_trends/<YYYYMMDD-HHMM>/
+
+    The bundle includes trend.json, trend.md, and bundle_summary.json.
+    Also copies trend snapshot into the latest consumer bundle as TREND_SNAPSHOT.md.
+  keywords:
+    - healthview
+    - aggregator
+    - monkey-patch
+    - trends
+    - telemetry
+  use_when:
+    - Need to analyze monkey-patch trends across multiple runs
+    - Producing trend telemetry for downstream summarizers
+    - Validating Stage 5.1 aggregator outputs and retention behavior
+  dont_use_when:
+    - You only need single-run classification (use classify_monkey_patches.py consumer)
+    - You do not have consumer or producer results available
+
+invocation:
+  command_template: |
+    python {script_path} \
+      --consumer-base {consumer_base} \
+      --output-base {output_base} \
+      --artifacts-to-keep {artifacts_to_keep} \
+      --max-runs {max_runs} \
+      --log-level {log_level}
+  script_path: .repo_studios/scripts/aggregators/analyze_monkey_patch_trends.py
+  importable: true
+  entry_function: run
+  environment:
+    requires_venv: true
+    python_version: ">=3.11"
+
+parameters:
+  - name: consumer_base
+    type: path
+    required: false
+    default: .repo_studios/reports/healthview/consumer_reports/monkey_patch_risk
+    description: Base directory for consumer bundle discovery.
+
+  - name: consumer_summary
+    type: path
+    required: false
+    default: null
+    description: |
+      Explicit path to a consumer summary.json file.
+      Overrides consumer_base discovery.
+
+  - name: producer_base
+    type: path
+    required: false
+    default: .repo_studios/reports/healthview/producer_reports/monkey_patches
+    description: |
+      Fallback base directory for producer discovery when no consumer bundles exist.
+
+  - name: output_base
+    type: path
+    required: false
+    default: .repo_studios/reports/healthview/aggregator_reports/monkey_patch_trends
+    description: HealthView root where bundles are written.
+    validation:
+      parent_must_exist: false
+
+  - name: artifacts_to_keep
+    type: int
+    required: false
+    default: 5
+    description: Number of historical run directories to retain.
+    validation:
+      min_value: 1
+
+  - name: max_runs
+    type: int
+    required: false
+    default: 10
+    description: Maximum number of historical runs to include in trend analysis.
+    validation:
+      min_value: 1
+
+  - name: log_level
+    type: enum
+    required: false
+    default: INFO
+    choices: [DEBUG, INFO, WARNING, ERROR, CRITICAL]
+
+  - name: verbose
+    type: bool
+    required: false
+    default: false
+    description: Enable verbose output (equivalent to --log-level DEBUG).
+
+outputs:
+  primary:
+    type: directory
+    format: healthview_bundle
+    path_pattern: >-
+      .repo_studios/reports/healthview/aggregator_reports/monkey_patch_trends/<YYYYMMDD-HHMM>/
+    description: HealthView bundle directory for a single run.
+    contents:
+      required:
+        - trend.json
+        - trend.md
+        - bundle_summary.json
+
+  secondary:
+    - type: file
+      format: markdown
+      path: "<latest_consumer_bundle>/TREND_SNAPSHOT.md"
+      description: Copy of trend.md placed in the latest consumer bundle.
+    - type: stdout
+      format: text
+      description: Logging output describing trend analysis and bundle creation.
+
+behavior:
+  idempotent: false
+  side_effects:
+    - Reads consumer bundles (or producer reports as fallback)
+    - Writes a timestamped HealthView bundle directory
+    - Copies TREND_SNAPSHOT.md to latest consumer bundle
+    - Prunes older sibling run directories beyond artifacts_to_keep
+  duration_estimate: "1-5 seconds"
+  blocking: true
+  mutates_repo: false
+  mutates_filesystem: true
+
+error_handling:
+  common_errors:
+    - exit_code: 1
+      meaning: "No consumer or producer runs found."
+      agent_action: "Ensure classify_monkey_patches.py consumer has run."
+
+    - exit_code: 2
+      meaning: "Invalid CLI inputs."
+      agent_action: "Fix the input validation error and retry."
+
+  stderr_patterns:
+    - pattern: "No runs found"
+      meaning: "Neither consumer nor producer runs were discovered."
+      agent_action: "Run the full pipeline from producer through consumer first."
+
+integration:
+  typical_workflow:
+    - step: 1
+      action: Run the classification consumer
+      command: |
+        python .repo_studios/scripts/consumers/classify_monkey_patches.py --log-level INFO
+      output: HealthView bundle under consumer_reports/monkey_patch_risk
+
+    - step: 2
+      action: Analyze trends
+      command: |
+        python .repo_studios/scripts/aggregators/analyze_monkey_patch_trends.py --log-level INFO
+      output: HealthView bundle under aggregator_reports/monkey_patch_trends
+
+  input_producers:
+    - .repo_studios/scripts/consumers/classify_monkey_patches.py
+    - .repo_studios/scripts/producers/scan_monkey_patches.py (fallback)
+
+  output_consumers:
+    - .repo_studios/scripts/summarizers/summarize_monkey_patch_overview.py
+    - .repo_studios/scripts/orchestrators/run_monkey_patch_oversight.py
+
+examples:
+  - description: Standard run using auto-discovery
+    command: |
+      python .repo_studios/scripts/aggregators/analyze_monkey_patch_trends.py --log-level INFO
+
+  - description: Limit to last 5 runs
+    command: |
+      python .repo_studios/scripts/aggregators/analyze_monkey_patch_trends.py \
+        --max-runs 5 --log-level INFO
+
+  - description: Verbose output for debugging
+    command: |
+      python .repo_studios/scripts/aggregators/analyze_monkey_patch_trends.py --verbose
+
+metadata:
+  category: aggregator
+  tier: 3
+  status: draft
+  version: 0.1.0
+  author: Repo Studios Team
+  last_updated: 2026-01-02
+  dependencies_tier3:
+    - tier3_prune_logs.yaml
+    - tier3_report_paths.yaml
+  tier2_rosters:
+    - healthview_orchestration_pipeline/tier2_roster/tier2_monkey_patch_oversight_roster.md
+  tier1_pipelines:
+    - healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md
+  testing:
+    test_file: .repo_studios/tests/tests_aggregators/test_analyze_monkey_patch_trends.py

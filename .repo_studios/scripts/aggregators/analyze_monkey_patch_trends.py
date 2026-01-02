@@ -54,6 +54,21 @@ DEFAULT_ARTIFACTS_TO_KEEP = get_keep("analyze_monkey_patch_trends")
 
 @dataclass(frozen=True)
 class TrendRun:
+    """Immutable representation of a trend analysis run.
+
+    Attributes:
+        ts_label: Human-readable timestamp label.
+        sort_key: Datetime used for chronological sorting.
+        total: Total number of findings in this run.
+        counts: Risk level counts (HIGH, MODERATE, SAFE).
+        bundle_dir: Consumer bundle directory path if available.
+        summary_path: Path to the summary JSON file.
+        bundle_summary_path: Path to bundle summary if available.
+        scan_dir: Source scan directory path if known.
+        source: Source type indicator (consumer, producer_fallback).
+        metadata: Additional metadata dictionary.
+    """
+
     ts_label: str
     sort_key: datetime
     total: int
@@ -67,6 +82,16 @@ class TrendRun:
 
 
 def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
+    """Parse command-line arguments.
+
+    Configure the argument parser with all trend analyzer options.
+
+    Args:
+        argv: Command-line arguments or None for sys.argv.
+
+    Returns:
+        Parsed namespace with configuration options.
+    """
     parser = argparse.ArgumentParser(
         description=("Blend monkey-patch consumer bundles (or producer fallbacks) into trend artifacts.")
     )
@@ -126,12 +151,33 @@ def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
 
 
 def _resolve_repo_path(path: Path, *, repo_root: Path) -> Path:
+    """Resolve a path relative to the repository root.
+
+    Return absolute paths unchanged, otherwise resolve relative to repo_root.
+
+    Args:
+        path: Path to resolve.
+        repo_root: Repository root for relative path resolution.
+
+    Returns:
+        Resolved absolute path.
+    """
     if path.is_absolute():
         return path.expanduser().resolve()
     return (repo_root / path).resolve()
 
 
 def _iso_to_datetime(value: str | None) -> datetime | None:
+    """Parse an ISO format datetime string to a datetime object.
+
+    Handle timezone normalization and return None for invalid inputs.
+
+    Args:
+        value: ISO format datetime string or None.
+
+    Returns:
+        Parsed datetime in UTC or None if parsing fails.
+    """
     if not value:
         return None
     candidate = value.strip()
@@ -148,6 +194,16 @@ def _iso_to_datetime(value: str | None) -> datetime | None:
 
 
 def _dir_timestamp(name: str) -> datetime | None:
+    """Extract a timestamp from a directory name.
+
+    Strip known prefixes and parse common timestamp formats.
+
+    Args:
+        name: Directory name potentially containing a timestamp.
+
+    Returns:
+        Parsed datetime in UTC or None if no timestamp found.
+    """
     stem = name
     if stem.startswith(CONSUMER_BUNDLE_PREFIX):
         stem = stem[len(CONSUMER_BUNDLE_PREFIX) :]
@@ -163,6 +219,16 @@ def _dir_timestamp(name: str) -> datetime | None:
 
 
 def _classify(findings: Iterable[dict[str, Any]]) -> dict[str, int]:
+    """Classify findings and count by risk level.
+
+    Process each finding through the risk classifier and tally results.
+
+    Args:
+        findings: Iterable of finding dictionaries.
+
+    Returns:
+        Dictionary mapping risk levels to counts.
+    """
     counts = {level: 0 for level in RISK_LEVELS}
     for finding in findings:
         risk = classify_monkey_patch(
@@ -177,6 +243,16 @@ def _classify(findings: Iterable[dict[str, Any]]) -> dict[str, int]:
 
 
 def _complete_counts(counts: dict[str, int]) -> dict[str, int]:
+    """Ensure all risk levels have count entries.
+
+    Fill in missing risk levels with zero counts.
+
+    Args:
+        counts: Partial or complete risk level counts.
+
+    Returns:
+        Complete dictionary with all risk levels.
+    """
     return {level: int(counts.get(level, 0)) for level in RISK_LEVELS}
 
 
@@ -185,6 +261,18 @@ def _load_consumer_runs(
     summary_override: Path | None,
     logger: logging.Logger,
 ) -> list[TrendRun]:
+    """Load trend runs from consumer bundle directories.
+
+    Scan for timestamped consumer bundles and extract summary data.
+
+    Args:
+        base_dir: Base directory containing consumer bundles.
+        summary_override: Optional explicit summary path to include.
+        logger: Logger for diagnostic messages.
+
+    Returns:
+        Sorted list of TrendRun objects from consumer bundles.
+    """
     candidates: dict[Path, Path] = {}
     if base_dir.exists():
         for child in base_dir.iterdir():
@@ -255,6 +343,18 @@ def _load_consumer_runs(
 
 
 def _load_producer_runs(base_dir: Path, logger: logging.Logger) -> list[TrendRun]:
+    """Load trend runs from producer report directories.
+
+    Scan for producer scan directories as a fallback when no consumer
+    bundles are available.
+
+    Args:
+        base_dir: Base directory containing producer scans.
+        logger: Logger for diagnostic messages.
+
+    Returns:
+        Sorted list of TrendRun objects from producer reports.
+    """
     runs: list[TrendRun] = []
     if not base_dir.exists():
         return runs
@@ -294,6 +394,16 @@ def _load_producer_runs(base_dir: Path, logger: logging.Logger) -> list[TrendRun
 
 
 def _latest_delta(runs: list[TrendRun]) -> dict[str, Any] | None:
+    """Compute the delta between the two most recent runs.
+
+    Compare risk counts between the previous and current runs.
+
+    Args:
+        runs: List of TrendRun objects in chronological order.
+
+    Returns:
+        Delta dictionary with prev, cur, and delta sections, or None.
+    """
     if len(runs) < 2:
         return None
     prev, cur = runs[-2], runs[-1]
@@ -321,6 +431,20 @@ def _render_markdown(
     latest: dict[str, Any] | None,
     notes: list[str],
 ) -> str:
+    """Render the trend summary as markdown.
+
+    Format run overview tables, latest run details, and delta comparison.
+
+    Args:
+        generated_at: Generation timestamp.
+        mode: Data source mode (consumer or producer_fallback).
+        runs: List of TrendRun objects to display.
+        latest: Delta comparison dictionary or None.
+        notes: List of informational notes to include.
+
+    Returns:
+        Markdown-formatted trend summary string.
+    """
     lines: list[str] = ["# Monkey Patch Trend Summary", ""]
     lines.append(f"Generated (UTC): {generated_at.isoformat(timespec='seconds')}")
     lines.append("")
@@ -375,20 +499,20 @@ def _render_markdown(
     return "\n".join(lines) + "\n"
 
 
-def _update_latest(base: Path, bundle_dir: Path, filenames: Sequence[str]) -> None:
-    base.mkdir(parents=True, exist_ok=True)
-    for name in filenames:
-        src = bundle_dir / name
-        dest = base / f"latest_{name}"
-        try:
-            if dest.exists() or dest.is_symlink():
-                dest.unlink()
-            dest.hardlink_to(src)
-        except Exception:
-            dest.write_bytes(src.read_bytes())
-
-
 def _prune_history(base: Path, current: Path, keep: int, *, logger: logging.Logger | None) -> list[Path]:
+    """Prune old aggregator bundle directories.
+
+    Remove older bundles beyond the retention limit, keeping the current run.
+
+    Args:
+        base: Base directory containing bundle directories.
+        current: Current bundle directory to preserve.
+        keep: Number of bundles to retain.
+        logger: Logger for pruning messages.
+
+    Returns:
+        List of removed directory paths.
+    """
     try:
         keep_count = int(keep)
     except Exception:
@@ -407,6 +531,18 @@ def _prune_history(base: Path, current: Path, keep: int, *, logger: logging.Logg
 
 
 def _copy_markdown_to_consumer(latest_run: TrendRun, trend_md: Path, logger: logging.Logger) -> Path | None:
+    """Copy trend markdown to the consumer bundle directory.
+
+    Mirror the trend summary for easy access alongside consumer artifacts.
+
+    Args:
+        latest_run: Most recent TrendRun with bundle_dir set.
+        trend_md: Path to the trend markdown file.
+        logger: Logger for diagnostic messages.
+
+    Returns:
+        Path to the copied file or None if copy failed.
+    """
     if latest_run.bundle_dir is None:
         return None
     target = latest_run.bundle_dir / CONSUMER_TREND_COPY_NAME
@@ -419,6 +555,20 @@ def _copy_markdown_to_consumer(latest_run: TrendRun, trend_md: Path, logger: log
 
 
 def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
+    """Execute the monkey patch trend analyzer.
+
+    Load consumer or producer runs, compute trends and deltas,
+    and write aggregator bundle artifacts.
+
+    Args:
+        argv: Command-line arguments or None for sys.argv.
+
+    Returns:
+        Result dictionary with paths and processing metadata.
+
+    Raises:
+        FileNotFoundError: If no runs are available for analysis.
+    """
     args = _parse_args(argv)
     log_level = logging.DEBUG if args.verbose else getattr(logging, str(args.log_level).upper(), logging.INFO)
     logging.basicConfig(level=log_level, format="[%(levelname)s] %(message)s", force=True)
@@ -498,7 +648,7 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     }
     trend_bundle_summary_path.write_text(json.dumps(trend_bundle_summary, indent=2) + "\n", encoding="utf-8")
 
-    # HOP compliance: no pointer files - removed _update_latest call
+    # HOP compliance: no pointer files
     pruned = _prune_history(output_base, bundle_dir, args.artifacts_to_keep, logger=logger)
 
     consumer_snapshot = None
@@ -527,6 +677,16 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
 
 
 def main(argv: Sequence[str] | None = None) -> int:
+    """CLI entry point for the monkey patch trend analyzer.
+
+    Run the analyzer and print results to stdout.
+
+    Args:
+        argv: Command-line arguments or None for sys.argv.
+
+    Returns:
+        Exit code: 0 on success, 1 on error.
+    """
     try:
         result = run(argv)
     except Exception as exc:  # pragma: no cover - unexpected runtime failures

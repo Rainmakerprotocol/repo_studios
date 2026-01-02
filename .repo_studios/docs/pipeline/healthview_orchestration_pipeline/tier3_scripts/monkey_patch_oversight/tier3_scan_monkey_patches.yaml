@@ -1,0 +1,261 @@
+# Tier-3: scan_monkey_patches.py
+# Producer script that scans Python files for monkey-patching patterns and emits
+# a HealthView bundle.
+
+tool:
+  id: scan_monkey_patches
+  name: Scan Monkey Patches
+  description: |
+    Scans Python source files for monkey-patching patterns (setattr on modules/classes,
+    attribute reassignments, wrapt decorators, unittest.mock usage, etc.) and emits
+    a canonical HealthView bundle under:
+
+      .repo_studios/reports/healthview/producer_reports/monkey_patches/<YYYYMMDD-HHMM>/
+
+    The bundle includes manifest.json, summary.md, and telemetry.json.
+
+    Optional git enrichment adds blame and recent-commit metadata to each finding.
+  keywords:
+    - healthview
+    - producer
+    - monkey-patch
+    - telemetry
+    - inventory
+    - static-analysis
+  use_when:
+    - Need a deterministic, timestamped monkey-patch inventory bundle
+    - Validating Stage 5.1 monkey-patch oversight outputs and retention behavior
+    - Producing monkey-patch telemetry for downstream consumers/aggregators/summarizers
+  dont_use_when:
+    - You only need ad-hoc grep for setattr calls (prefer grep or semantic_search)
+    - You do not have a Python codebase to scan
+
+invocation:
+  command_template: |
+    python {script_path} \
+      --repo-root {repo_root} \
+      --root {scan_root} \
+      --output-dir {output_dir} \
+      --artifacts-to-keep {artifacts_to_keep} \
+      --log-level {log_level}
+  script_path: .repo_studios/scripts/producers/scan_monkey_patches.py
+  importable: true
+  entry_function: run
+  environment:
+    requires_venv: true
+    python_version: ">=3.11"
+    notes:
+      - "--with-git requires git to be available on PATH."
+
+parameters:
+  - name: repo_root
+    type: path
+    required: false
+    default: "."
+    description: Repository root for resolving repo-relative paths.
+
+  - name: root
+    type: path
+    required: false
+    default: null
+    description: |
+      Scan root directory. If omitted, defaults to repo_root.
+      Must be inside repo_root.
+    validation:
+      must_exist: true
+      must_be_directory: true
+
+  - name: output_dir
+    type: path
+    required: false
+    default: .repo_studios/reports/healthview/producer_reports/monkey_patches
+    description: HealthView root where bundles are written.
+    validation:
+      parent_must_exist: false
+
+  - name: context_lines
+    type: int
+    required: false
+    default: 3
+    description: Number of source lines to include around each finding.
+    validation:
+      min_value: 0
+
+  - name: artifacts_to_keep
+    type: int
+    required: false
+    default: 5
+    description: Number of historical run directories to retain.
+    validation:
+      min_value: 1
+
+  - name: timestamp
+    type: string
+    required: false
+    default: "current UTC"
+    description: ISO-8601 timestamp for the run slug (naive timestamps treated as UTC).
+
+  - name: with_git
+    type: bool
+    required: false
+    default: false
+    description: Enrich findings with git blame and recent commit metadata.
+
+  - name: strict
+    type: bool
+    required: false
+    default: false
+    description: Exit non-zero if any findings are detected.
+
+  - name: project_packages
+    type: string
+    required: false
+    default: null
+    description: |
+      Comma-separated list of package prefixes considered "project internal."
+      Used to distinguish internal vs external monkey-patch targets.
+
+  - name: exclude_dirs
+    type: string
+    required: false
+    default: null
+    description: |
+      Additional directory names to exclude (beyond built-in excludes like .git, .venv).
+      Multiple values via repeated --exclude-dirs flags.
+
+  - name: exclude_globs
+    type: string
+    required: false
+    default: null
+    description: |
+      Glob patterns to exclude files.
+      Multiple values via repeated --exclude-globs flags.
+
+  - name: log_level
+    type: enum
+    required: false
+    default: INFO
+    choices: [DEBUG, INFO, WARNING, ERROR, CRITICAL]
+
+  - name: self_test
+    type: bool
+    required: false
+    default: false
+    description: Run internal self-test patterns and exit.
+
+outputs:
+  primary:
+    type: directory
+    format: healthview_bundle
+    path_pattern: >-
+      .repo_studios/reports/healthview/producer_reports/monkey_patches/<YYYYMMDD-HHMM>/
+    description: HealthView bundle directory for a single run.
+    contents:
+      required:
+        - manifest.json
+        - summary.md
+        - telemetry.json
+
+  secondary:
+    - type: stdout
+      format: text
+      description: Logging output describing scan progress and bundle creation.
+
+behavior:
+  idempotent: false
+  side_effects:
+    - Reads Python source files under scan_root
+    - Optionally queries git for blame/commit metadata
+    - Writes a timestamped HealthView bundle directory
+    - Prunes older sibling run directories beyond artifacts_to_keep
+  duration_estimate: "5-30 seconds depending on repo size and git enrichment"
+  blocking: true
+  mutates_repo: false
+  mutates_filesystem: true
+
+error_handling:
+  common_errors:
+    - exit_code: 1
+      meaning: "Findings detected when --strict is enabled."
+      agent_action: "Review manifest.json and summary.md for finding details."
+
+    - exit_code: 2
+      meaning: "Invalid CLI inputs (for example, scan_root outside repo_root)."
+      agent_action: "Fix the input validation error and retry."
+
+  stderr_patterns:
+    - pattern: "SyntaxError"
+      meaning: "A Python file could not be parsed."
+      agent_action: "Check for malformed Python files; these are logged and skipped."
+
+    - pattern: "not inside repo_root"
+      meaning: "The --root path is outside --repo-root."
+      agent_action: "Ensure scan_root is a subdirectory of repo_root."
+
+integration:
+  typical_workflow:
+    - step: 1
+      action: Run the monkey patch scan producer
+      command: |
+        python .repo_studios/scripts/producers/scan_monkey_patches.py \
+          --repo-root . --log-level INFO
+      output: HealthView bundle under producer_reports/monkey_patches
+
+    - step: 2
+      action: Classify findings by risk level
+      consumes: producer_reports/monkey_patches bundle
+      command: |
+        python .repo_studios/scripts/consumers/classify_monkey_patches.py \
+          --scan-dir <bundle_path> --log-level INFO
+
+  input_producers:
+    - Python source files in the repository
+
+  output_consumers:
+    - .repo_studios/scripts/consumers/classify_monkey_patches.py
+    - .repo_studios/scripts/aggregators/analyze_monkey_patch_trends.py
+    - .repo_studios/scripts/summarizers/summarize_monkey_patch_overview.py
+    - .repo_studios/scripts/orchestrators/run_monkey_patch_oversight.py
+
+examples:
+  - description: Standard run using defaults
+    command: |
+      python .repo_studios/scripts/producers/scan_monkey_patches.py --log-level INFO
+
+  - description: Full scan with git enrichment
+    command: |
+      python .repo_studios/scripts/producers/scan_monkey_patches.py \
+        --repo-root . \
+        --with-git \
+        --log-level INFO
+
+  - description: Strict mode for CI gating
+    command: |
+      python .repo_studios/scripts/producers/scan_monkey_patches.py \
+        --repo-root . \
+        --strict \
+        --log-level WARNING
+
+  - description: Deterministic run slug for validation
+    command: |
+      python .repo_studios/scripts/producers/scan_monkey_patches.py \
+        --timestamp 2025-12-01T01:01:00+00:00 \
+        --log-level DEBUG
+
+metadata:
+  category: producer
+  tier: 3
+  status: draft
+  version: 0.1.0
+  author: Repo Studios Team
+  last_updated: 2026-01-02
+  dependencies_tier3:
+    - tier3_prune_logs.yaml
+    - tier3_database_integration.yaml
+    - tier3_report_paths.yaml
+  tier2_rosters:
+    - healthview_orchestration_pipeline/tier2_roster/tier2_monkey_patch_oversight_roster.md
+  tier1_pipelines:
+    - healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md
+  testing:
+    test_file: .repo_studios/tests/tests_producers/test_scan_monkey_patches.py

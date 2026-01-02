@@ -85,6 +85,15 @@ DEFAULT_OUTPUT_DIR = build_topic_path("producer", TOPIC_SLUG)
 
 @dataclass
 class JsonBlockResult:
+    """Result of processing a JSON code block in a document.
+
+    Attributes:
+        index: Zero-based index of the block within the document.
+        hash: Computed hash of the JSON block content.
+        updated: Whether the block was updated during processing.
+        path: Path to the document containing the block.
+    """
+
     index: int
     hash: str
     updated: bool
@@ -93,6 +102,14 @@ class JsonBlockResult:
 
 @dataclass(frozen=True)
 class Paths:
+    """Path configuration for the docs integrity verifier.
+
+    Attributes:
+        repo_root: Repository root directory.
+        output_dir: Output directory for generated artifacts.
+        index_path: Path to the documentation index file.
+    """
+
     repo_root: Path
     output_dir: Path
     index_path: Path
@@ -100,6 +117,15 @@ class Paths:
 
 @dataclass(frozen=True)
 class Options:
+    """Runtime options for the docs integrity verifier.
+
+    Attributes:
+        update: Whether to update mismatched JSON blocks in place.
+        regen_table: Whether to regenerate the index table.
+        artifacts_to_keep: Number of historical artifact bundles to retain.
+        log_level: Logging level for output.
+    """
+
     update: bool = False
     regen_table: bool = True
     artifacts_to_keep: int = 1
@@ -135,6 +161,17 @@ OPTIONS_CONFIG = OptionsConfig(
 
 @dataclass
 class DocumentProcessingResult:
+    """Aggregate results from processing all documents.
+
+    Attributes:
+        mismatches: List of JsonBlockResult objects for mismatched blocks.
+        json_blocks_checked: Total JSON blocks examined.
+        documents_processed: Total documents processed.
+        documents_updated: Documents that were modified.
+        missing_documents: Paths of documents that could not be found.
+        errors: Error messages encountered during processing.
+    """
+
     mismatches: list[JsonBlockResult] = field(default_factory=list)
     json_blocks_checked: int = 0
     documents_processed: int = 0
@@ -145,6 +182,20 @@ class DocumentProcessingResult:
 
 @dataclass
 class VerificationOutcome:
+    """Complete verification results including index processing.
+
+    Attributes:
+        mismatches: List of JsonBlockResult objects for mismatched blocks.
+        json_blocks_checked: Total JSON blocks examined.
+        documents_processed: Total documents processed.
+        documents_updated: Documents that were modified.
+        index_blocks_checked: JSON blocks checked in the index file.
+        index_updated: Whether the index file was updated.
+        table_regenerated: Whether the index table was regenerated.
+        missing_documents: Paths of documents that could not be found.
+        errors: Error messages encountered during processing.
+    """
+
     mismatches: list[JsonBlockResult] = field(default_factory=list)
     json_blocks_checked: int = 0
     documents_processed: int = 0
@@ -157,6 +208,17 @@ class VerificationOutcome:
 
 
 def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
+    """Parse command-line arguments for the docs integrity verifier.
+
+    Configure and parse CLI arguments including repo root, output directory,
+    index path, update mode, and table regeneration options.
+
+    Args:
+        argv: Command-line arguments to parse, or None for sys.argv.
+
+    Returns:
+        A Namespace object with parsed argument values.
+    """
     parser = argparse.ArgumentParser(
         prog="verify_docs_integrity",
         description=__doc__ or "",
@@ -201,18 +263,49 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
 
 
 def configure_logging(level: str) -> None:
+    """Configure logging with the specified level.
+
+    Args:
+        level: Logging level name (DEBUG, INFO, WARNING, ERROR, CRITICAL).
+    """
     logging.basicConfig(level=getattr(logging, level.upper()), format="%(levelname)s %(message)s")
 
 
 def _format_run_timestamp(timestamp: dt.datetime) -> str:
+    """Format a datetime as a run timestamp for directory naming.
+
+    Args:
+        timestamp: A datetime object.
+
+    Returns:
+        A string in YYYYMMDD-HHMM format in UTC.
+    """
     return timestamp.astimezone(dt.timezone.utc).strftime("%Y%m%d-%H%M")
 
 
 def build_paths(args: argparse.Namespace) -> Paths:
+    """Build the Paths configuration from parsed arguments.
+
+    Args:
+        args: Parsed command-line arguments.
+
+    Returns:
+        A Paths dataclass with resolved paths.
+    """
     return cast(Paths, build_standard_paths(args, PATH_CONFIG, origin=Path(__file__)))
 
 
 def build_options(args: argparse.Namespace) -> Options:
+    """Build the Options configuration from parsed arguments.
+
+    Merge CLI arguments with defaults to produce the runtime options.
+
+    Args:
+        args: Parsed command-line arguments.
+
+    Returns:
+        An Options dataclass with runtime configuration.
+    """
     base_options = cast(Options, build_standard_options(args, OPTIONS_CONFIG))
     return replace(
         base_options,
@@ -223,6 +316,16 @@ def build_options(args: argparse.Namespace) -> Options:
 
 
 def _extract_json_blocks(text: str) -> list[dict[str, Any]]:
+    """Extract JSON objects from fenced code blocks in markdown.
+
+    Parse all json code blocks and return successfully decoded dictionaries.
+
+    Args:
+        text: Markdown content to parse.
+
+    Returns:
+        A list of parsed JSON dictionaries.
+    """
     blocks: list[dict[str, Any]] = []
     for match in JSON_BLOCK_PATTERN.finditer(text):
         raw = match.group(1).strip()
@@ -234,10 +337,29 @@ def _extract_json_blocks(text: str) -> list[dict[str, Any]]:
 
 
 def _stable_serialize(data: dict[str, Any]) -> str:
+    """Serialize a dictionary to a stable JSON string for hashing.
+
+    Args:
+        data: Dictionary to serialize.
+
+    Returns:
+        A compact, sorted JSON string.
+    """
     return json.dumps(data, sort_keys=True, separators=(",", ":"))
 
 
 def compute_exit_codes_hash() -> str:
+    """Compute the hash of the exit codes policy document.
+
+    Read the exit code doc, extract the codes array, and compute
+    a SHA-256 hash for integrity verification.
+
+    Returns:
+        A hexadecimal hash string.
+
+    Raises:
+        SystemExit: If no JSON blocks or malformed codes array.
+    """
     content = EXIT_CODE_DOC.read_text(encoding="utf-8")
     blocks = _extract_json_blocks(content)
     if not blocks:
@@ -252,11 +374,29 @@ def compute_exit_codes_hash() -> str:
 
 
 def _compute_hash_for_json_block(block: dict[str, Any]) -> str:
+    """Compute a SHA-256 hash for a JSON block excluding content_hash.
+
+    Args:
+        block: JSON block dictionary.
+
+    Returns:
+        A hexadecimal hash string.
+    """
     clone = {k: v for k, v in block.items() if k != "content_hash"}
     return hashlib.sha256(_stable_serialize(clone).encode("utf-8")).hexdigest()
 
 
 def _replace_nth_code_block(text: str, n: int, new_json: dict[str, Any]) -> str:
+    """Replace the nth JSON code block in markdown text.
+
+    Args:
+        text: Markdown content.
+        n: Zero-based index of the block to replace.
+        new_json: New JSON content for the block.
+
+    Returns:
+        Updated markdown text with the block replaced.
+    """
     matches = list(JSON_BLOCK_PATTERN.finditer(text))
     if n >= len(matches):  # pragma: no cover - defensive
         return text
@@ -267,6 +407,18 @@ def _replace_nth_code_block(text: str, n: int, new_json: dict[str, Any]) -> str:
 
 
 def process_file(path: Path, update: bool) -> tuple[list[JsonBlockResult], int, bool]:
+    """Process a markdown file for JSON block integrity.
+
+    Extract JSON blocks, verify content_hash values, and optionally
+    update mismatched hashes in place.
+
+    Args:
+        path: Path to the markdown file.
+        update: Whether to update mismatched blocks.
+
+    Returns:
+        A tuple of (mismatches, blocks_checked, file_was_changed).
+    """
     text = path.read_text(encoding="utf-8")
     blocks = _extract_json_blocks(text)
     results: list[JsonBlockResult] = []
@@ -286,6 +438,17 @@ def process_file(path: Path, update: bool) -> tuple[list[JsonBlockResult], int, 
 
 
 def _load_index_json(index_path: Path) -> dict[str, Any]:
+    """Load the JSON block from the docs index file.
+
+    Args:
+        index_path: Path to the docs index markdown file.
+
+    Returns:
+        The first JSON block as a dictionary.
+
+    Raises:
+        SystemExit: If no JSON block is found.
+    """
     content = index_path.read_text(encoding="utf-8")
     blocks = _extract_json_blocks(content)
     if not blocks:
@@ -294,6 +457,17 @@ def _load_index_json(index_path: Path) -> dict[str, Any]:
 
 
 def regenerate_index_table(index_path: Path, skip: bool) -> bool:
+    """Regenerate the markdown table in the docs index file.
+
+    Parse the index JSON and rebuild the table between markers.
+
+    Args:
+        index_path: Path to the docs index markdown file.
+        skip: If True, skip regeneration entirely.
+
+    Returns:
+        True if the file was updated, False otherwise.
+    """
     if skip:
         return False
     content = index_path.read_text(encoding="utf-8")
@@ -313,6 +487,14 @@ def regenerate_index_table(index_path: Path, skip: bool) -> bool:
 
 
 def _build_index_table_lines(docs: list[dict[str, Any]]) -> list[str]:
+    """Build markdown table lines from document entries.
+
+    Args:
+        docs: List of document metadata dictionaries.
+
+    Returns:
+        A list of markdown table row strings.
+    """
     header = "| Category | Doc ID | File | Summary | JSON | Stability |"
     sep = "|----------|--------|------|---------|------|-----------|"
     rows: list[str] = [header, sep]
@@ -330,6 +512,17 @@ def _build_index_table_lines(docs: list[dict[str, Any]]) -> list[str]:
 
 
 def _derive_summary(doc_id: str) -> str:
+    """Derive a short summary label from a document ID.
+
+    Map known doc IDs to human-readable summaries, or truncate
+    the ID for unknown documents.
+
+    Args:
+        doc_id: The document identifier string.
+
+    Returns:
+        A short summary label.
+    """
     mapping = {
         "exit_code_stability_policy": "Exit codes",
         "additive_observability_policy": "Additive",
@@ -346,6 +539,15 @@ def _derive_summary(doc_id: str) -> str:
 
 
 def _relativize(path: Path, base: Path) -> str:
+    """Convert a path to a relative POSIX path string.
+
+    Args:
+        path: Absolute or relative path to convert.
+        base: Base directory for relative path computation.
+
+    Returns:
+        A POSIX-formatted relative path string.
+    """
     try:
         return path.relative_to(base).as_posix()
     except ValueError:
@@ -353,6 +555,19 @@ def _relativize(path: Path, base: Path) -> str:
 
 
 def _process_documents(docs: list[dict[str, Any]], update: bool, repo_root: Path) -> DocumentProcessingResult:
+    """Process all documents from the index for integrity checks.
+
+    Iterate through document entries, verify JSON blocks, and
+    optionally update mismatched hashes.
+
+    Args:
+        docs: List of document metadata dictionaries from the index.
+        update: Whether to update mismatched blocks in place.
+        repo_root: Repository root for resolving relative paths.
+
+    Returns:
+        A DocumentProcessingResult with aggregate statistics.
+    """
     result = DocumentProcessingResult()
     for entry in docs:
         raw_path = str(entry.get("path", ""))
@@ -378,6 +593,18 @@ def _process_documents(docs: list[dict[str, Any]], update: bool, repo_root: Path
 
 
 def verify_all(paths: Paths, options: Options) -> VerificationOutcome:
+    """Verify all governed documents and the index file.
+
+    Load the index, process each document with a JSON block, and
+    optionally regenerate the index table.
+
+    Args:
+        paths: Path configuration.
+        options: Runtime options.
+
+    Returns:
+        A VerificationOutcome with aggregate results.
+    """
     outcome = VerificationOutcome()
     if not paths.index_path.exists():
         msg = f"Index path not found: {paths.index_path}"
@@ -435,6 +662,21 @@ def compose_payload(
     run_id: str,
     timestamp: dt.datetime,
 ) -> dict[str, Any]:
+    """Compose the complete verification report payload.
+
+    Build the report dictionary with status, summary, mismatches,
+    and metadata for artifact storage.
+
+    Args:
+        paths: Path configuration.
+        options: Runtime options.
+        outcome: Verification outcome from verify_all.
+        run_id: Unique run identifier string.
+        timestamp: Timestamp of the verification run.
+
+    Returns:
+        A dictionary containing the full verification report.
+    """
     mismatches = [
         {
             "path": _relativize(result.path, paths.repo_root),
@@ -504,6 +746,18 @@ def compose_payload(
 
 
 def compose_manifest(*, report: dict[str, Any], run_timestamp: str, inputs: dict[str, Any]) -> dict[str, Any]:
+    """Compose the manifest dictionary for the verification run.
+
+    Build a manifest with run metadata, status, and artifact catalog.
+
+    Args:
+        report: The verification report dictionary.
+        run_timestamp: Timestamp slug for the run.
+        inputs: Dictionary of input parameters.
+
+    Returns:
+        A manifest dictionary for the verification bundle.
+    """
     return {
         "schema_version": SCHEMA_VERSION,
         "viewer_slug": "producer_reports",
@@ -527,6 +781,18 @@ def compose_manifest(*, report: dict[str, Any], run_timestamp: str, inputs: dict
 
 
 def compose_telemetry(*, report: dict[str, Any], run_timestamp: str) -> dict[str, Any]:
+    """Compose the telemetry dictionary for the verification run.
+
+    Build telemetry with metrics about documents processed, blocks
+    checked, and any errors or mismatches found.
+
+    Args:
+        report: The verification report dictionary.
+        run_timestamp: Timestamp slug for the run.
+
+    Returns:
+        A telemetry dictionary with metrics and payload.
+    """
     summary = report.get("summary", {}) if isinstance(report.get("summary"), dict) else {}
     return {
         "schema_version": 1,
@@ -550,6 +816,18 @@ def compose_telemetry(*, report: dict[str, Any], run_timestamp: str) -> dict[str
 
 
 def render_summary_markdown(*, report: dict[str, Any], run_timestamp: str) -> str:
+    """Render the verification report as a markdown summary.
+
+    Format the report with status, metrics, and any errors or
+    mismatches for human readability.
+
+    Args:
+        report: The verification report dictionary.
+        run_timestamp: Timestamp slug for the run.
+
+    Returns:
+        A markdown-formatted summary string.
+    """
     summary = report.get("summary", {})
     lines = [
         "# Documentation Integrity Report\n\n",
@@ -581,6 +859,18 @@ def render_summary_markdown(*, report: dict[str, Any], run_timestamp: str) -> st
 
 
 def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
+    """Run the documentation integrity verification workflow.
+
+    Parse arguments, verify documents, compose report artifacts,
+    and write results to the output directory.
+
+    Args:
+        argv: Command-line arguments. Uses sys.argv[1:] if None.
+
+    Returns:
+        A dictionary with verification results, run metadata, and
+        paths to generated artifacts.
+    """
     args = parse_args(argv)
     configure_logging(args.log_level)
     logger = logging.getLogger(__name__)
@@ -691,6 +981,16 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
 
 
 def main(argv: Sequence[str] | None = None) -> int:
+    """CLI entry point for documentation integrity verification.
+
+    Run the verification workflow and return the exit code.
+
+    Args:
+        argv: Command-line arguments. Uses sys.argv[1:] if None.
+
+    Returns:
+        Integer exit code (0 for success).
+    """
     payload = run(argv or sys.argv[1:])
     return int(payload.get("exit_code", 0))
 

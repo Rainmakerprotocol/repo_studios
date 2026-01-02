@@ -104,14 +104,10 @@ from utilities.fault_run_analysis import (  # noqa: E402
 
 
 def _timestamp_slug() -> str:
-    """
-    Generate HOP-compliant timestamp slug.
+    """Generate HOP-compliant timestamp slug.
 
-    :returns: UTC timestamp in ``YYYYMMDD-HHMM`` format (13 characters).
-    :rtype: str
-
-    .. note::
-        Format is lexicographically sortable and matches REPORT_NAMING_STANDARDS.md.
+    Returns:
+        UTC timestamp in YYYYMMDD-HHMM format (13 characters).
     """
     return datetime.now(UTC).strftime("%Y%m%d-%H%M")
 
@@ -119,8 +115,8 @@ def _timestamp_slug() -> str:
 def _allow_legacy_runs() -> bool:
     """Check if legacy faulthandler run paths are permitted.
 
-    :returns: True if FAULT_LOGS_ALLOW_LEGACY env var is not disabled.
-    :rtype: bool
+    Returns:
+        True if FAULT_LOGS_ALLOW_LEGACY env var is not disabled.
     """
     flag = os.getenv("FAULT_LOGS_ALLOW_LEGACY", "1").strip().lower()
     return flag not in {"0", "false", "no", "off"}
@@ -129,10 +125,11 @@ def _allow_legacy_runs() -> bool:
 def _resolve_runs_base(logger: logging.Logger | None) -> Path:
     """Resolve faulthandler runs base directory using repo root.
 
-    :param logger: Logger for fallback notices.
-    :type logger: logging.Logger | None
-    :returns: Resolved runs base path.
-    :rtype: Path
+    Args:
+        logger: Logger for fallback notices.
+
+    Returns:
+        Resolved runs base path.
     """
     return _resolve_runs_base_for_repo(REPO_ROOT, logger)
 
@@ -140,12 +137,12 @@ def _resolve_runs_base(logger: logging.Logger | None) -> Path:
 def _resolve_runs_base_for_repo(repo_root: Path, logger: logging.Logger | None) -> Path:
     """Resolve faulthandler runs base directory with legacy fallback.
 
-    :param repo_root: Repository root path.
-    :type repo_root: Path
-    :param logger: Logger for fallback notices.
-    :type logger: logging.Logger | None
-    :returns: Rawview runs base or legacy fallback path.
-    :rtype: Path
+    Args:
+        repo_root: Repository root path.
+        logger: Logger for fallback notices.
+
+    Returns:
+        Rawview runs base or legacy fallback path.
     """
     rawview_runs_base = (repo_root / RAWVIEW_RUNS_BASE).resolve()
     legacy_runs_base = (repo_root / LEGACY_RUNS_BASE).resolve()
@@ -165,10 +162,11 @@ def _resolve_runs_base_for_repo(repo_root: Path, logger: logging.Logger | None) 
 def _find_latest_outdir(runs_base: Path) -> Path | None:
     """Find most recent run directory by mtime.
 
-    :param runs_base: Base directory containing run subdirectories.
-    :type runs_base: Path
-    :returns: Path to latest run directory or None.
-    :rtype: Path | None
+    Args:
+        runs_base: Base directory containing run subdirectories.
+
+    Returns:
+        Path to latest run directory or None.
     """
     try:
         if not runs_base.exists():
@@ -183,12 +181,12 @@ def _find_latest_outdir(runs_base: Path) -> Path | None:
 def _discover_outdir(explicit: str | None, runs_base: Path) -> Path | None:
     """Discover run directory from explicit arg, env, or latest scan.
 
-    :param explicit: Explicit outdir path from CLI.
-    :type explicit: str | None
-    :param runs_base: Base directory for run discovery.
-    :type runs_base: Path
-    :returns: Resolved run directory or None.
-    :rtype: Path | None
+    Args:
+        explicit: Explicit outdir path from CLI.
+        runs_base: Base directory for run discovery.
+
+    Returns:
+        Resolved run directory or None.
     """
     if explicit:
         return Path(explicit)
@@ -199,7 +197,14 @@ def _discover_outdir(explicit: str | None, runs_base: Path) -> Path | None:
 
 
 def _is_compatible_producer_report(payload: dict[str, Any]) -> bool:
-    """Return True when payload looks like the legacy producer report schema."""
+    """Check if payload matches the legacy producer report schema.
+
+    Args:
+        payload: JSON payload to validate.
+
+    Returns:
+        True when payload looks like the legacy producer report schema.
+    """
     summary = payload.get("summary")
     signatures = payload.get("signatures")
     return isinstance(summary, dict) and isinstance(signatures, list)
@@ -208,10 +213,11 @@ def _is_compatible_producer_report(payload: dict[str, Any]) -> bool:
 def _load_json(path: Path) -> dict[str, Any] | None:
     """Load JSON file into dict or return None on failure.
 
-    :param path: Path to JSON file.
-    :type path: Path
-    :returns: Parsed dict or None.
-    :rtype: dict[str, Any] | None
+    Args:
+        path: Path to JSON file.
+
+    Returns:
+        Parsed dict or None if loading fails or payload is not a dict.
     """
     try:
         payload = json.loads(path.read_text(encoding="utf-8"))
@@ -225,12 +231,13 @@ def _load_json(path: Path) -> dict[str, Any] | None:
 def _load_producer_report(explicit: Path | None, *, run_dir: Path | None) -> tuple[dict[str, Any] | None, Path | None]:
     """Load producer report if explicitly provided.
 
-    :param explicit: Explicit producer report path.
-    :type explicit: Path | None
-    :param run_dir: Run directory for context (unused but reserved).
-    :type run_dir: Path | None
-    :returns: Tuple of (payload dict, resolved path) or (None, None).
-    :rtype: tuple[dict[str, Any] | None, Path | None]
+    Args:
+        explicit: Explicit producer report path.
+        run_dir: Run directory for context (unused but reserved).
+
+    Returns:
+        Tuple of (payload dict, resolved path) or (None, None) if not found
+        or incompatible.
     """
     if explicit is not None:
         payload = _load_json(explicit)
@@ -243,8 +250,8 @@ def _load_producer_report(explicit: Path | None, *, run_dir: Path | None) -> tup
 def _top_n_from_env() -> int:
     """Get top frame count from FAULT_TOP_FRAMES_N env var.
 
-    :returns: Frame count clamped to [1, 100].
-    :rtype: int
+    Returns:
+        Frame count clamped to [1, 100].
     """
     try:
         n = int(os.getenv("FAULT_TOP_FRAMES_N", str(DEFAULT_TOP_N)) or DEFAULT_TOP_N)
@@ -256,12 +263,12 @@ def _top_n_from_env() -> int:
 def _decode_signatures(payload: dict[str, Any], *, default_top_line: int = 0) -> list[FaultSignature]:
     """Decode signatures list from producer report payload.
 
-    :param payload: Producer report dict containing 'signatures' key.
-    :type payload: dict[str, Any]
-    :param default_top_line: Default line number if missing.
-    :type default_top_line: int
-    :returns: List of FaultSignature objects sorted by count descending.
-    :rtype: list[FaultSignature]
+    Args:
+        payload: Producer report dict containing 'signatures' key.
+        default_top_line: Default line number if missing.
+
+    Returns:
+        List of FaultSignature objects sorted by count descending.
     """
     signatures: list[FaultSignature] = []
     for entry in payload.get("signatures", []):
@@ -300,10 +307,9 @@ def _decode_signatures(payload: dict[str, Any], *, default_top_line: int = 0) ->
 def _write_stacks_csv(outdir: Path, signatures: Sequence[FaultSignature]) -> None:
     """Write signatures to CSV file in run directory.
 
-    :param outdir: Run directory for output.
-    :type outdir: Path
-    :param signatures: Fault signatures to serialize.
-    :type signatures: Sequence[FaultSignature]
+    Args:
+        outdir: Run directory for output.
+        signatures: Fault signatures to serialize.
     """
     csv_path = outdir / "stacks.csv"
     try:
@@ -344,16 +350,14 @@ def _write_stacks_csv(outdir: Path, signatures: Sequence[FaultSignature]) -> Non
 def _write_summary(outdir: Path, report: dict[str, Any], signatures: Sequence[FaultSignature], dumps_dir: Path) -> str:
     """Write run-level SUMMARY.md and return content.
 
-    :param outdir: Run directory for output.
-    :type outdir: Path
-    :param report: Fault analysis report dict.
-    :type report: dict[str, Any]
-    :param signatures: Fault signatures for table.
-    :type signatures: Sequence[FaultSignature]
-    :param dumps_dir: Directory containing dump files.
-    :type dumps_dir: Path
-    :returns: Generated Markdown content.
-    :rtype: str
+    Args:
+        outdir: Run directory for output.
+        report: Fault analysis report dict.
+        signatures: Fault signatures for table.
+        dumps_dir: Directory containing dump files.
+
+    Returns:
+        Generated Markdown content.
     """
     lines: list[str] = []
     lines.append("# Fault Diagnostics Summary")
@@ -415,10 +419,11 @@ def _write_summary(outdir: Path, report: dict[str, Any], signatures: Sequence[Fa
 def _serialize_signatures(signatures: Sequence[FaultSignature]) -> list[dict[str, Any]]:
     """Convert FaultSignature objects to serializable dicts.
 
-    :param signatures: Fault signatures to serialize.
-    :type signatures: Sequence[FaultSignature]
-    :returns: List of signature dictionaries.
-    :rtype: list[dict[str, Any]]
+    Args:
+        signatures: Fault signatures to serialize.
+
+    Returns:
+        List of signature dictionaries.
     """
     return [
         {
@@ -447,36 +452,28 @@ def _write_consumer_bundle(
     source_report: Path | None,
     ts_slug: str,
 ) -> dict[str, Path]:
-    """
-    Write HOP-compliant consumer bundle to timestamped directory.
+    """Write HOP-compliant consumer bundle to timestamped directory.
 
-    :param target_root: Base output directory for consumer bundles.
-    :type target_root: Path
-    :param run_dir: Source rawview run directory.
-    :type run_dir: Path
-    :param report: Parsed fault report payload.
-    :type report: dict[str, Any]
-    :param signatures: Extracted fault signatures.
-    :type signatures: Sequence[FaultSignature]
-    :param summary_text: Pre-rendered summary markdown.
-    :type summary_text: str
-    :param source: Data source label (``"producer"`` or ``"scan"``).
-    :type source: str
-    :param source_report: Path to producer report if used.
-    :type source_report: Path | None
-    :param ts_slug: HOP timestamp slug (``YYYYMMDD-HHMM``).
-    :type ts_slug: str
-    :returns: Mapping of artifact names to paths.
-    :rtype: dict[str, Path]
+    Args:
+        target_root: Base output directory for consumer bundles.
+        run_dir: Source rawview run directory.
+        report: Parsed fault report payload.
+        signatures: Extracted fault signatures.
+        summary_text: Pre-rendered summary markdown.
+        source: Data source label (``"producer"`` or ``"scan"``).
+        source_report: Path to producer report if used.
+        ts_slug: HOP timestamp slug (``YYYYMMDD-HHMM``).
 
-    Output Structure
-    ----------------
-    ::
+    Returns:
+        Mapping of artifact names to paths.
 
-        <target_root>/<ts_slug>/
-            manifest.json
-            summary.md
-            telemetry.json
+    Note:
+        Output structure::
+
+            <target_root>/<ts_slug>/
+                manifest.json
+                summary.md
+                telemetry.json
     """
     generated_at = datetime.now(UTC)
     target_root.mkdir(parents=True, exist_ok=True)
@@ -566,19 +563,16 @@ def _write_consumer_bundle(
 
 
 def _prune_history(root: Path, keep: int | None, current: Path, *, logger: logging.Logger | None) -> list[Path]:
-    """
-    Prune old bundle directories to enforce retention budget.
+    """Prune old bundle directories to enforce retention budget.
 
-    :param root: Base directory containing timestamped bundles.
-    :type root: Path
-    :param keep: Number of bundles to retain.
-    :type keep: int | None
-    :param current: Current run directory (excluded from pruning).
-    :type current: Path
-    :param logger: Logger instance for debug output.
-    :type logger: logging.Logger | None
-    :returns: List of removed directory paths.
-    :rtype: list[Path]
+    Args:
+        root: Base directory containing timestamped bundles.
+        keep: Number of bundles to retain.
+        current: Current run directory (excluded from pruning).
+        logger: Logger instance for debug output.
+
+    Returns:
+        List of removed directory paths.
     """
     if keep is None:
         return []
@@ -602,10 +596,11 @@ def _prune_history(root: Path, keep: int | None, current: Path, *, logger: loggi
 def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
     """Parse command-line arguments for fault artifact generation.
 
-    :param argv: Command-line arguments; defaults to sys.argv[1:].
-    :type argv: Sequence[str] | None
-    :returns: Parsed argument namespace.
-    :rtype: argparse.Namespace
+    Args:
+        argv: Command-line arguments; defaults to sys.argv[1:].
+
+    Returns:
+        Parsed argument namespace.
     """
     parser = argparse.ArgumentParser(description="Generate fault artifacts for a run directory")
     parser.add_argument(
@@ -653,15 +648,16 @@ def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
 def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     """Execute fault artifact generation pipeline.
 
-    Processes rawview run directory, decodes signatures, and writes
+    Process rawview run directory, decode signatures, and write
     HOP-compliant consumer artifacts.
 
-    :param argv: Command-line arguments; defaults to sys.argv[1:].
-    :type argv: Sequence[str] | None
-    :returns: Execution result with outdir, source, signatures count, etc.
-    :rtype: dict[str, Any]
+    Args:
+        argv: Command-line arguments; defaults to sys.argv[1:].
 
-    .. note::
+    Returns:
+        Execution result with outdir, source, signatures count, etc.
+
+    Note:
         Output is written to
         ``.repo_studios/reports/healthview/consumer_reports/fault_artifacts/<YYYYMMDD-HHMM>/``.
     """
@@ -759,10 +755,11 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
 def main(argv: Sequence[str] | None = None) -> int:
     """CLI entry point for fault artifact generation.
 
-    :param argv: Command-line arguments; defaults to sys.argv[1:].
-    :type argv: Sequence[str] | None
-    :returns: Exit code (0 for success).
-    :rtype: int
+    Args:
+        argv: Command-line arguments; defaults to sys.argv[1:].
+
+    Returns:
+        Exit code (0 for success).
     """
     run(argv)
     return 0

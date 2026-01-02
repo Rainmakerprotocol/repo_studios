@@ -81,6 +81,15 @@ DEFAULT_OUTPUT_DIR = build_topic_path("producer", TOPIC_SLUG)
 
 @dataclass(frozen=True)
 class Paths:
+    """Path configuration for metrics anchor stub validation.
+
+    Attributes:
+        repo_root: Repository root directory.
+        output_dir: Directory for structured artifacts.
+        legacy_file: Path to metrics orchestrator markdown file.
+        allowlist_path: Path to JSON file with allowed anchors.
+    """
+
     repo_root: Path
     output_dir: Path
     legacy_file: Path
@@ -89,6 +98,12 @@ class Paths:
 
 @dataclass(frozen=True)
 class Options:
+    """Validation options for metrics anchor stub validation.
+
+    Attributes:
+        artifacts_to_keep: Number of historical run directories to retain.
+    """
+
     artifacts_to_keep: int
 
 
@@ -111,6 +126,14 @@ OPTIONS_CONFIG = OptionsConfig(
 
 
 def parse_args(argv: list[str] | None) -> argparse.Namespace:
+    """Parse command-line arguments for metrics anchor stub validation.
+
+    Args:
+        argv: Command-line arguments. Uses sys.argv[1:] if None.
+
+    Returns:
+        Parsed namespace with validated arguments.
+    """
     parser = argparse.ArgumentParser(
         prog="validate_metrics_anchor_stubs",
         description=__doc__,
@@ -148,28 +171,77 @@ def parse_args(argv: list[str] | None) -> argparse.Namespace:
 
 
 def configure_logging(level: str) -> None:
+    """Configure logging with the specified verbosity level.
+
+    Args:
+        level: Logging level name (DEBUG, INFO, WARNING, ERROR, CRITICAL).
+    """
     logging.basicConfig(level=getattr(logging, level.upper()), format="%(levelname)s %(message)s")
 
 
 def build_paths(args: argparse.Namespace) -> Paths:
+    """Build path configuration from parsed arguments.
+
+    Args:
+        args: Parsed command-line arguments.
+
+    Returns:
+        Paths dataclass with resolved path values.
+    """
     return cast(Paths, build_standard_paths(args, PATH_CONFIG, origin=Path(__file__)))
 
 
 def build_options(args: argparse.Namespace) -> Options:
+    """Build options configuration from parsed arguments.
+
+    Args:
+        args: Parsed command-line arguments.
+
+    Returns:
+        Options dataclass with validated option values.
+    """
     return cast(Options, build_standard_options(args, OPTIONS_CONFIG))
 
 
 def _format_run_timestamp(timestamp: dt.datetime) -> str:
+    """Format a datetime as a run timestamp slug.
+
+    Args:
+        timestamp: Datetime to format.
+
+    Returns:
+        Timestamp string in YYYYMMDD-HHMM format (UTC).
+    """
     return timestamp.astimezone(dt.timezone.utc).strftime("%Y%m%d-%H%M")
 
 
 def _normalize_anchor(text: str) -> str:
+    """Normalize text into a URL-safe anchor slug.
+
+    Strip whitespace, convert to lowercase, and remove special characters.
+
+    Args:
+        text: Raw heading or anchor text.
+
+    Returns:
+        Normalized anchor string.
+    """
     normalized = text.strip().lower().replace("`", "")
     normalized = re.sub(r"\s+", "-", normalized)
     return re.sub(r"[^a-z0-9._-]", "", normalized)
 
 
 def iter_markdown_files(repo_root: Path) -> Iterable[Path]:
+    """Iterate over markdown files in the repository.
+
+    Exclude hidden directories, vendor, and external folders.
+
+    Args:
+        repo_root: Repository root directory.
+
+    Yields:
+        Paths to markdown files.
+    """
     for path in repo_root.rglob("*.md"):
         rel = path.relative_to(repo_root)
         if any(part.startswith(".") for part in rel.parts):
@@ -180,6 +252,18 @@ def iter_markdown_files(repo_root: Path) -> Iterable[Path]:
 
 
 def collect_referenced_anchors(files: Iterable[Path], repo_root: Path) -> dict[str, list[str]]:
+    """Collect all anchors referenced in markdown link fragments.
+
+    Scan files for markdown links with fragment identifiers and build
+    a mapping of anchors to the files that reference them.
+
+    Args:
+        files: Iterable of markdown file paths.
+        repo_root: Repository root for relative path computation.
+
+    Returns:
+        Dictionary mapping anchors to lists of referencing file paths.
+    """
     anchors: dict[str, set[str]] = defaultdict(set)
     for md_file in files:
         try:
@@ -193,6 +277,17 @@ def collect_referenced_anchors(files: Iterable[Path], repo_root: Path) -> dict[s
 
 
 def collect_legacy_stub_anchors(legacy_file: Path) -> set[str]:
+    """Extract anchors defined in the legacy stub section.
+
+    Parse the legacy file for the "Legacy Anchor Compatibility" section
+    and collect all heading anchors defined therein.
+
+    Args:
+        legacy_file: Path to the metrics orchestrator markdown file.
+
+    Returns:
+        Set of normalized anchor strings from the legacy section.
+    """
     if not legacy_file.exists():
         return set()
     try:
@@ -218,6 +313,14 @@ def collect_legacy_stub_anchors(legacy_file: Path) -> set[str]:
 
 
 def load_allowlist(path: Path) -> set[str]:
+    """Load the anchor allowlist from a JSON file.
+
+    Args:
+        path: Path to JSON file with {"anchors": [...]} structure.
+
+    Returns:
+        Set of allowed anchor strings (lowercased).
+    """
     if not path.exists():
         return set()
     try:
@@ -233,6 +336,19 @@ def summarize_missing(
     legacy: set[str],
     allowlist: set[str],
 ) -> tuple[list[dict[str, Any]], int]:
+    """Identify anchors missing from legacy stubs.
+
+    Compare referenced anchors against legacy and allowlist to find
+    those that need attention.
+
+    Args:
+        referenced: Dictionary mapping anchors to referencing files.
+        legacy: Set of anchors defined in legacy stubs.
+        allowlist: Set of explicitly allowed anchors.
+
+    Returns:
+        Tuple of (missing anchor records, count of allowlisted anchors).
+    """
     missing: list[dict[str, Any]] = []
     allowlisted_count = 0
     for anchor, files in sorted(referenced.items()):
@@ -259,6 +375,27 @@ def build_report(
     markdown_count: int,
     timestamp: dt.datetime,
 ) -> dict[str, Any]:
+    """Build the validation report dictionary.
+
+    Assemble all validation results into a structured report with
+    summary metrics, missing anchors, and configuration details.
+
+    Args:
+        repo_root: Repository root directory.
+        legacy_file: Path to the legacy stub file.
+        allowlist_path: Path to the allowlist JSON file.
+        artifacts_to_keep: Number of artifacts to retain.
+        referenced: Dictionary of referenced anchors.
+        legacy: Set of legacy stub anchors.
+        allowlist: Set of allowed anchors.
+        missing: List of missing anchor records.
+        allowlisted_count: Count of allowlisted anchors.
+        markdown_count: Number of markdown files checked.
+        timestamp: Report generation timestamp.
+
+    Returns:
+        Complete validation report dictionary.
+    """
     summary = {
         "files_checked": markdown_count,
         "anchors_referenced": len(referenced),
@@ -284,6 +421,18 @@ def build_report(
 
 
 def compose_manifest(*, report: dict[str, Any], run_timestamp: str, inputs: dict[str, Any]) -> dict[str, Any]:
+    """Compose the manifest dictionary for the validation run.
+
+    Build a manifest with run metadata, status, and summary metrics.
+
+    Args:
+        report: The validation report dictionary.
+        run_timestamp: Timestamp slug for the run.
+        inputs: Dictionary of input parameters.
+
+    Returns:
+        A manifest dictionary for the validation bundle.
+    """
     summary = report.get("summary", {})
     return {
         "schema_version": 1,
@@ -309,6 +458,17 @@ def compose_manifest(*, report: dict[str, Any], run_timestamp: str, inputs: dict
 
 
 def compose_telemetry(*, report: dict[str, Any]) -> dict[str, Any]:
+    """Compose the telemetry dictionary for the validation run.
+
+    Build telemetry with metrics about files checked, anchors
+    referenced, and missing counts.
+
+    Args:
+        report: The validation report dictionary.
+
+    Returns:
+        A telemetry dictionary with metrics and payload.
+    """
     summary = report.get("summary", {})
     return {
         "schema_version": 1,
@@ -328,6 +488,18 @@ def compose_telemetry(*, report: dict[str, Any]) -> dict[str, Any]:
 
 
 def render_summary_markdown(*, report: dict[str, Any], run_timestamp: str) -> str:
+    """Render the validation report as a markdown summary.
+
+    Format the report with status, metrics, missing anchors table,
+    and next steps for human readability.
+
+    Args:
+        report: The validation report dictionary.
+        run_timestamp: Timestamp slug for the run.
+
+    Returns:
+        A markdown-formatted summary string.
+    """
     summary = report.get("summary", {})
     status = report.get("status", "ok")
     lines: list[str] = [
@@ -367,6 +539,17 @@ def prune_history(
     current_run: Path | None,
     logger: logging.Logger | None,
 ) -> list[Path]:
+    """Prune old run directories to retain a fixed history depth.
+
+    Args:
+        base_dir: Directory containing timestamped run folders.
+        keep: Number of run directories to retain.
+        current_run: Path to the current run directory (protected).
+        logger: Logger for debug output.
+
+    Returns:
+        List of paths that were removed.
+    """
     result = prune_run_directories(
         base_dir,
         keep=max(keep, 1),
@@ -377,6 +560,17 @@ def prune_history(
 
 
 def run(argv: list[str] | None = None) -> dict[str, Any]:
+    """Run the metrics anchor stub validation workflow.
+
+    Parse arguments, collect anchors, validate against legacy stubs,
+    and write results to the output directory.
+
+    Args:
+        argv: Command-line arguments. Uses sys.argv[1:] if None.
+
+    Returns:
+        A dictionary with validation results and run metadata.
+    """
     args = parse_args(argv)
     configure_logging(args.log_level)
     logger = logging.getLogger(__name__)
@@ -465,6 +659,16 @@ def run(argv: list[str] | None = None) -> dict[str, Any]:
 
 
 def main(argv: list[str] | None = None) -> int:
+    """CLI entry point for metrics anchor stub validation.
+
+    Run the validation workflow and return the exit code.
+
+    Args:
+        argv: Command-line arguments. Uses sys.argv[1:] if None.
+
+    Returns:
+        Integer exit code (0 for success, 1 for failures).
+    """
     payload = run(argv)
     return 0 if payload.get("status") == "ok" else 1
 

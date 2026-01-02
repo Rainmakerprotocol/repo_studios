@@ -1,0 +1,231 @@
+# Tier-3: diff_standards_index.py
+# Producer script that diffs two standards index YAML files and emits a report bundle.
+
+tool:
+  id: diff_standards_index
+  name: Diff Standards Index
+  description: |
+    Compares two standards index YAML snapshots (old vs new) and emits a canonical
+    HealthView bundle documenting additions, removals, and changes under:
+
+      .repo_studios/reports/healthview/producer_reports/standards_index_diff/<YYYYMMDD-HHMM>/
+
+    The bundle includes manifest.json, summary.md, and telemetry.json.
+
+    Supports fail-on policies to gate CI on specific change kinds.
+  keywords:
+    - healthview
+    - producer
+    - standards
+    - diff
+    - index
+    - telemetry
+  use_when:
+    - Need to detect changes between two standards index snapshots
+    - CI gating on standards index drift
+    - Auditing standards evolution over time
+  dont_use_when:
+    - You only need the current standards index (use generate_standards_index.py)
+    - You need gap analysis (use analyze_standards_index_gaps.py)
+
+invocation:
+  command_template: |
+    python {script_path} {old_index} {new_index} \
+      --repo-root {repo_root} \
+      --output-dir {output_dir} \
+      --artifacts-to-keep {artifacts_to_keep} \
+      --log-level {log_level}
+  script_path: .repo_studios/scripts/producers/diff_standards_index.py
+  importable: true
+  entry_function: main
+  environment:
+    requires_venv: true
+    python_version: ">=3.11"
+
+parameters:
+  - name: old
+    type: path
+    required: true
+    positional: true
+    description: Path to the old (baseline) standards index YAML file.
+    validation:
+      must_exist: true
+
+  - name: new
+    type: path
+    required: true
+    positional: true
+    description: Path to the new (current) standards index YAML file.
+    validation:
+      must_exist: true
+
+  - name: repo_root
+    type: path
+    required: false
+    default: "."
+    description: Repository root for resolving repo-relative paths.
+
+  - name: output_dir
+    type: path
+    required: false
+    default: .repo_studios/reports/healthview/producer_reports/standards_index_diff
+    description: HealthView root where bundles are written.
+    validation:
+      parent_must_exist: false
+
+  - name: timestamp
+    type: string
+    required: false
+    default: "current UTC"
+    description: ISO-8601 timestamp for seeding the run slug.
+
+  - name: run_timestamp
+    type: string
+    required: false
+    default: null
+    description: |
+      Explicit run slug in YYYYMMDD-HHMM format. Overrides --timestamp.
+
+  - name: artifacts_to_keep
+    type: int
+    required: false
+    default: 5
+    description: Number of historical run directories to retain.
+    validation:
+      min_value: 1
+
+  - name: log_level
+    type: enum
+    required: false
+    default: INFO
+    choices: [DEBUG, INFO, WARNING, ERROR, CRITICAL]
+
+  - name: json
+    type: path
+    required: false
+    default: null
+    description: Optional path to write the raw diff JSON output.
+
+  - name: fail_on
+    type: string
+    required: false
+    default: "any"
+    description: |
+      Comma-separated change kinds that trigger exit 1.
+      Use 'any' to fail on any change, 'none' or 'never' to never fail.
+      Valid kinds: added, removed, severity_changed, rationale_changed,
+      summary_changed, applies_changed, categories_changed, other_changed.
+
+outputs:
+  primary:
+    type: directory
+    format: healthview_bundle
+    path_pattern: >-
+      .repo_studios/reports/healthview/producer_reports/standards_index_diff/<YYYYMMDD-HHMM>/
+    description: HealthView bundle directory for a single run.
+    contents:
+      required:
+        - manifest.json
+        - summary.md
+        - telemetry.json
+
+  secondary:
+    - type: file
+      format: json
+      path_pattern: user-specified via --json
+      description: Optional raw diff JSON output.
+
+    - type: stdout
+      format: text
+      description: Logging output describing diff progress and results.
+
+behavior:
+  idempotent: false
+  side_effects:
+    - Reads two YAML index files
+    - Writes a timestamped HealthView bundle directory
+    - Optionally writes a raw diff JSON file
+    - Prunes older sibling run directories beyond artifacts_to_keep
+  duration_estimate: "1-5 seconds"
+  blocking: true
+  mutates_repo: false
+  mutates_filesystem: true
+
+error_handling:
+  common_errors:
+    - exit_code: 1
+      meaning: "Changes detected that match fail-on policy."
+      agent_action: "Review manifest.json and summary.md for change details."
+
+    - exit_code: 2
+      meaning: "Invalid CLI inputs or missing index files."
+      agent_action: "Fix the input validation error and retry."
+
+  stderr_patterns:
+    - pattern: "FileNotFoundError"
+      meaning: "One of the index files does not exist."
+      agent_action: "Verify paths to old and new index files."
+
+    - pattern: "run timestamp must be in YYYYMMDD-HHMM format"
+      meaning: "Invalid --run-timestamp format."
+      agent_action: "Use YYYYMMDD-HHMM format for the run timestamp."
+
+integration:
+  typical_workflow:
+    - step: 1
+      action: Generate current standards index
+      command: |
+        python .repo_studios/scripts/producers/generate_standards_index.py \
+          --repo-root . --log-level INFO
+
+    - step: 2
+      action: Diff against baseline
+      command: |
+        python .repo_studios/scripts/producers/diff_standards_index.py \
+          .repo_studios/scripts/repo_standards_index_baseline.yaml \
+          .repo_studios/scripts/repo_standards_index.yaml \
+          --repo-root . --log-level INFO
+      output: HealthView bundle under producer_reports/standards_index_diff
+
+  input_producers:
+    - .repo_studios/scripts/producers/generate_standards_index.py
+
+  output_consumers:
+    - .repo_studios/scripts/summarizers/summarize_standards.py
+    - .repo_studios/command_center/scripts/orchestrators/run_standards_integrity.py
+
+examples:
+  - description: Basic diff between two index files
+    command: |
+      python .repo_studios/scripts/producers/diff_standards_index.py \
+        baseline.yaml current.yaml --log-level INFO
+
+  - description: Fail only on removed standards
+    command: |
+      python .repo_studios/scripts/producers/diff_standards_index.py \
+        baseline.yaml current.yaml --fail-on removed --log-level INFO
+
+  - description: Never fail (report only)
+    command: |
+      python .repo_studios/scripts/producers/diff_standards_index.py \
+        baseline.yaml current.yaml --fail-on none --log-level INFO
+
+  - description: Write raw diff JSON for downstream processing
+    command: |
+      python .repo_studios/scripts/producers/diff_standards_index.py \
+        baseline.yaml current.yaml --json diff_output.json --log-level INFO
+
+metadata:
+  category: producer
+  tier: 3
+  status: draft
+  version: 0.1.0
+  author: Repo Studios Team
+  last_updated: 2026-01-02
+  dependencies_tier3: []
+  tier2_rosters:
+    - healthview_orchestration_pipeline/tier2_roster/tier2_standards_integrity_roster.md
+  tier1_pipelines:
+    - healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md
+  testing:
+    test_file: .repo_studios/tests/tests_producers/test_diff_standards_index.py

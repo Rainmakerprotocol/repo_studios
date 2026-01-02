@@ -64,6 +64,15 @@ DEFAULT_REQ_PATTERNS: tuple[str, ...] = (
 
 @dataclass
 class Issue:
+    """Represents a dependency hygiene issue found during scanning.
+
+    Attributes:
+        kind: Type of issue (unpinned, vcs_ref, editable_install, local_path, duplicate).
+        file: Relative path to the file containing the issue.
+        line: Line number where the issue was found (0 for aggregate issues).
+        spec: The dependency specification that caused the issue.
+    """
+
     kind: str
     file: str
     line: int
@@ -71,6 +80,15 @@ class Issue:
 
 
 def _rel_path(path: Path, root: Path) -> str:
+    """Convert absolute path to repo-relative string.
+
+    Args:
+        path: Path to convert.
+        root: Repository root for relative resolution.
+
+    Returns:
+        Relative path string, or absolute if not under root.
+    """
     try:
         return str(path.resolve().relative_to(root))
     except ValueError:
@@ -78,6 +96,15 @@ def _rel_path(path: Path, root: Path) -> str:
 
 
 def _iter_req_files(root: Path, patterns: Sequence[str]) -> list[Path]:
+    """Find requirements files matching glob patterns.
+
+    Args:
+        root: Repository root to search from.
+        patterns: Glob patterns for requirements files.
+
+    Returns:
+        Sorted list of matching file paths.
+    """
     files: set[Path] = set()
     for pat in patterns:
         files.update(root.glob(pat))
@@ -85,6 +112,18 @@ def _iter_req_files(root: Path, patterns: Sequence[str]) -> list[Path]:
 
 
 def _parse_requirements_file(path: Path, *, repo_root: Path) -> list[Issue]:
+    """Parse a requirements.txt file for hygiene issues.
+
+    Detect unpinned dependencies, VCS refs, editable installs,
+    local paths, and duplicate package entries.
+
+    Args:
+        path: Path to requirements file.
+        repo_root: Repository root for relative path resolution.
+
+    Returns:
+        List of Issue objects found in the file.
+    """
     issues: list[Issue] = []
     seen: dict[str, list[str]] = {}
     for i, raw in enumerate(path.read_text(encoding="utf-8", errors="replace").splitlines(), start=1):
@@ -117,6 +156,18 @@ def _parse_requirements_file(path: Path, *, repo_root: Path) -> list[Issue]:
 
 
 def _parse_pyproject(path: Path, *, repo_root: Path) -> list[Issue]:
+    """Parse pyproject.toml for dependency hygiene issues.
+
+    Scan PEP 621 or Poetry dependencies for unpinned constraints
+    and VCS references.
+
+    Args:
+        path: Path to pyproject.toml file.
+        repo_root: Repository root for relative path resolution.
+
+    Returns:
+        List of Issue objects found in the file.
+    """
     issues: list[Issue] = []
     if tomllib is None or not path.exists():
         return issues
@@ -148,6 +199,19 @@ def _collect_issues(
     patterns: Sequence[str],
     include_pyproject: bool,
 ) -> tuple[list[Issue], list[Path], Path | None]:
+    """Collect all dependency hygiene issues from repo.
+
+    Scan requirements files and optionally pyproject.toml for
+    dependency hygiene violations.
+
+    Args:
+        repo_root: Repository root directory.
+        patterns: Glob patterns for requirements files.
+        include_pyproject: Whether to scan pyproject.toml.
+
+    Returns:
+        Tuple of (issues list, requirements files scanned, pyproject path or None).
+    """
     req_files = _iter_req_files(repo_root, patterns)
     issues: list[Issue] = []
     for req in req_files:
@@ -163,6 +227,14 @@ def _collect_issues(
 
 
 def _issue_counts(issues: Iterable[Issue]) -> list[dict[str, Any]]:
+    """Aggregate issue counts by kind.
+
+    Args:
+        issues: Iterable of Issue objects.
+
+    Returns:
+        List of dicts with kind and count, sorted by count descending.
+    """
     counts: dict[str, int] = {}
     for issue in issues:
         counts[issue.kind] = counts.get(issue.kind, 0) + 1
@@ -178,6 +250,19 @@ def build_report(
     generated_ts: datetime,
     patterns: Sequence[str],
 ) -> dict[str, Any]:
+    """Build structured JSON report from collected issues.
+
+    Args:
+        issues: List of hygiene issues found.
+        repo_root: Repository root directory.
+        requirements: List of requirements files scanned.
+        pyproject: Path to pyproject.toml if scanned.
+        generated_ts: Timestamp for report generation.
+        patterns: Glob patterns used for requirements discovery.
+
+    Returns:
+        Dict containing full report structure.
+    """
     status = "failed" if issues else "passed"
     summary = {
         "status": status,
@@ -202,6 +287,14 @@ def build_report(
 
 
 def write_markdown(report: dict[str, Any]) -> str:
+    """Render report as Markdown summary.
+
+    Args:
+        report: Structured report dict from build_report().
+
+    Returns:
+        Formatted Markdown content.
+    """
     lines = [
         "# Dependency Hygiene Report",
         "",
@@ -238,6 +331,14 @@ def write_markdown(report: dict[str, Any]) -> str:
 
 
 def write_log(report: dict[str, Any]) -> str:
+    """Render report as log-style text output.
+
+    Args:
+        report: Structured report dict from build_report().
+
+    Returns:
+        Log-formatted text content.
+    """
     lines = [
         f"status={report['summary']['status']}",
         f"issue_count={report['summary']['issue_count']}",
@@ -257,6 +358,14 @@ def write_log(report: dict[str, Any]) -> str:
 
 
 def _parse_timestamp(raw: str | None) -> datetime:
+    """Parse ISO-8601 timestamp or return current UTC time.
+
+    Args:
+        raw: ISO-8601 timestamp string or None.
+
+    Returns:
+        Parsed datetime in UTC.
+    """
     if not raw:
         return datetime.now(timezone.utc)
     parsed = datetime.fromisoformat(raw)
@@ -266,11 +375,26 @@ def _parse_timestamp(raw: str | None) -> datetime:
 
 
 def configure_logging(level: str) -> None:
+    """Configure root logger with specified level.
+
+    Args:
+        level: Logging level name (e.g., "DEBUG", "INFO").
+    """
     numeric_level = getattr(logging, level.upper(), logging.INFO)
     logging.basicConfig(level=numeric_level, format="%(levelname)s: %(message)s")
 
 
 def _build_manifest(*, report: dict[str, Any], repo_root: Path, inputs: dict[str, Any]) -> dict[str, Any]:
+    """Build HOP-compliant manifest from report data.
+
+    Args:
+        report: Structured report dict.
+        repo_root: Repository root directory.
+        inputs: Input configuration for provenance.
+
+    Returns:
+        Manifest dict for manifest.json artifact.
+    """
     return {
         "schema_version": 1,
         "viewer": "healthview",
@@ -295,6 +419,14 @@ def _build_manifest(*, report: dict[str, Any], repo_root: Path, inputs: dict[str
 
 
 def main(argv: Sequence[str] | None = None) -> int:
+    """CLI entry point for dependency hygiene report generation.
+
+    Args:
+        argv: Command-line arguments; defaults to sys.argv[1:].
+
+    Returns:
+        Exit code (0 for no issues, 1 for hygiene issues detected).
+    """
     parser = argparse.ArgumentParser(description="Generate dependency hygiene report (offline)")
     parser.add_argument(
         "--repo-root",

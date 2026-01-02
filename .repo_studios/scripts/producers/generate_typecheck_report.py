@@ -68,6 +68,15 @@ DEFAULT_ARTIFACTS_TO_KEEP = get_keep("generate_typecheck_report")
 
 @dataclass
 class ErrorSample:
+    """Represents a single mypy error sample.
+
+    Attributes:
+        path: File path where the error occurred.
+        line: Line number of the error.
+        code: mypy error code (e.g., arg-type, return-value).
+        message: Error message text.
+    """
+
     path: str
     line: int
     code: str
@@ -76,6 +85,19 @@ class ErrorSample:
 
 @dataclass
 class BuildStats:
+    """Aggregated statistics from a mypy typecheck run.
+
+    Attributes:
+        status: Overall run status (ok, error, missing_tool, skipped).
+        error_count: Total number of errors found.
+        files_with_issues: Count of files with at least one error.
+        files_checked: Number of files that mypy processed.
+        paths_checked: List of target paths passed to mypy.
+        invocation: Command-line arguments used for mypy.
+        mypy_version: Version string of mypy.
+        samples: List of representative error samples.
+    """
+
     status: str
     error_count: int
     files_with_issues: int
@@ -87,6 +109,11 @@ class BuildStats:
 
 
 def _current_utc() -> datetime:
+    """Return the current UTC datetime.
+
+    Returns:
+        Timezone-aware datetime in UTC.
+    """
     try:
         return datetime.now(datetime.UTC)  # type: ignore[attr-defined]
     except AttributeError:  # pragma: no cover - python <3.11 fallback
@@ -94,10 +121,26 @@ def _current_utc() -> datetime:
 
 
 def _format_slug(moment: datetime) -> str:
+    """Generate a timestamp slug for directory naming.
+
+    Args:
+        moment: Datetime to format.
+
+    Returns:
+        Formatted string in YYYYMMDD-HHMM format.
+    """
     return moment.strftime("%Y%m%d-%H%M")
 
 
 def _load_pyproject(repo_root: Path) -> dict[str, Any]:
+    """Load and parse pyproject.toml from the repository.
+
+    Args:
+        repo_root: Repository root directory.
+
+    Returns:
+        Parsed TOML content as a dictionary, or empty dict on error.
+    """
     pyproject = repo_root / "pyproject.toml"
     if not pyproject.exists() or tomllib is None:
         return {}
@@ -108,6 +151,14 @@ def _load_pyproject(repo_root: Path) -> dict[str, Any]:
 
 
 def _read_pyproject_targets(repo_root: Path) -> list[str]:
+    """Read mypy target files from pyproject.toml.
+
+    Args:
+        repo_root: Repository root directory.
+
+    Returns:
+        List of file paths configured in [tool.mypy] files section.
+    """
     data = _load_pyproject(repo_root)
     tool = data.get("tool", {}) if isinstance(data, dict) else {}
     mypy_cfg = tool.get("mypy") if isinstance(tool, dict) else None
@@ -119,11 +170,27 @@ def _read_pyproject_targets(repo_root: Path) -> list[str]:
 
 
 def _env_bool(name: str) -> bool:
+    """Read an environment variable as a boolean.
+
+    Args:
+        name: Environment variable name.
+
+    Returns:
+        True if the variable is set to a truthy value.
+    """
     raw = os.getenv(name)
     return raw is not None and raw.lower() not in {"", "0", "false"}
 
 
 def _discover_targets(repo_root: Path) -> list[str]:
+    """Discover mypy targets from environment or pyproject.
+
+    Args:
+        repo_root: Repository root directory.
+
+    Returns:
+        List of target paths to check.
+    """
     override = os.getenv("TYPECHECK_TARGETS", "").strip()
     if override:
         return [value for value in override.split() if value]
@@ -131,6 +198,14 @@ def _discover_targets(repo_root: Path) -> list[str]:
 
 
 def _normalise_targets(targets: list[str]) -> list[str]:
+    """Normalize target strings by stripping whitespace.
+
+    Args:
+        targets: Raw target path strings.
+
+    Returns:
+        List of non-empty, stripped target paths.
+    """
     normalised: list[str] = []
     for entry in targets:
         token = entry.strip()
@@ -141,11 +216,28 @@ def _normalise_targets(targets: list[str]) -> list[str]:
 
 
 def _allow_fast_targets(repo_root: Path) -> list[str]:
+    """Return default fast-mode targets that exist in the repo.
+
+    Args:
+        repo_root: Repository root directory.
+
+    Returns:
+        List of existing default fast-mode target paths.
+    """
     defaults = ["api", "agents/core", "agents/interface/chainlit"]
     return [path for path in defaults if (repo_root / path).exists()]
 
 
 def _filter_fast_targets(repo_root: Path, targets: list[str]) -> list[str]:
+    """Filter targets to only include fast-mode allowed paths.
+
+    Args:
+        repo_root: Repository root directory.
+        targets: Full list of candidate targets.
+
+    Returns:
+        Filtered list of targets matching fast-mode prefixes.
+    """
     allow_prefixes = ["api", "agents/core", "agents/interface/chainlit"]
 
     def _allowed(entry: str) -> bool:
@@ -157,6 +249,14 @@ def _filter_fast_targets(repo_root: Path, targets: list[str]) -> list[str]:
 
 
 def _get_mypy_version(repo_root: Path) -> str:
+    """Retrieve the installed mypy version string.
+
+    Args:
+        repo_root: Repository root for working directory context.
+
+    Returns:
+        Version string from mypy, or 'unknown' on failure.
+    """
     try:
         proc = subprocess.run(
             [sys.executable, "-m", "mypy", "--version"],
@@ -171,6 +271,15 @@ def _get_mypy_version(repo_root: Path) -> str:
 
 
 def _build_invocation(strict: bool, targets: list[str]) -> list[str]:
+    """Build the mypy command-line invocation.
+
+    Args:
+        strict: Whether to enable mypy strict mode.
+        targets: List of target paths to check.
+
+    Returns:
+        Complete command-line argument list for subprocess.
+    """
     cmd = [
         sys.executable,
         "-m",
@@ -187,6 +296,15 @@ def _build_invocation(strict: bool, targets: list[str]) -> list[str]:
 
 
 def _run_mypy(repo_root: Path, invocation: list[str]) -> tuple[str, int]:
+    """Execute mypy with the given invocation.
+
+    Args:
+        repo_root: Repository root for working directory.
+        invocation: Command-line arguments for mypy.
+
+    Returns:
+        Tuple of (stdout combined with stderr, return code).
+    """
     try:
         proc = subprocess.run(
             invocation,
@@ -207,6 +325,14 @@ def _run_mypy(repo_root: Path, invocation: list[str]) -> tuple[str, int]:
 
 
 def _parse_summary(stdout: str) -> tuple[int, int, bool]:
+    """Parse mypy summary line for error counts.
+
+    Args:
+        stdout: Combined stdout/stderr from mypy execution.
+
+    Returns:
+        Tuple of (total_errors, files_with_issues, success_flag).
+    """
     ok_match = re.search(r"^Success: no issues found in (\d+) source files?", stdout, flags=re.M)
     if ok_match:
         return 0, 0, True
@@ -224,6 +350,14 @@ def _parse_summary(stdout: str) -> tuple[int, int, bool]:
 
 
 def _parse_checked_files(stdout: str) -> int | None:
+    """Extract the count of source files checked by mypy.
+
+    Args:
+        stdout: Combined stdout/stderr from mypy execution.
+
+    Returns:
+        Number of files checked, or None if not determinable.
+    """
     ok_match = re.search(r"^Success: no issues found in (\d+) source files?", stdout, flags=re.M)
     if ok_match:
         try:
@@ -240,6 +374,14 @@ def _parse_checked_files(stdout: str) -> int | None:
 
 
 def _should_exclude_relpath(relpath: Path) -> bool:
+    """Determine if a relative path should be excluded from all-mode scan.
+
+    Args:
+        relpath: Repo-relative path to check.
+
+    Returns:
+        True if the path matches exclusion patterns.
+    """
     parts = relpath.parts
     if not parts:
         return False
@@ -256,6 +398,14 @@ def _should_exclude_relpath(relpath: Path) -> bool:
 
 
 def _discover_all_python_files(repo_root: Path) -> list[str]:
+    """Discover all Python files in the repository for all-mode scanning.
+
+    Args:
+        repo_root: Repository root directory.
+
+    Returns:
+        Sorted list of repo-relative POSIX paths to Python files.
+    """
     files: list[str] = []
     for candidate in repo_root.rglob("*.py"):
         try:
@@ -270,12 +420,29 @@ def _discover_all_python_files(repo_root: Path) -> list[str]:
 
 
 def _chunk_list(items: list[str], chunk_size: int) -> list[list[str]]:
+    """Split a list into chunks of a given size.
+
+    Args:
+        items: List to split.
+        chunk_size: Maximum items per chunk.
+
+    Returns:
+        List of chunks, each containing up to chunk_size items.
+    """
     if chunk_size <= 0:
         return [items]
     return [items[i : i + chunk_size] for i in range(0, len(items), chunk_size)]
 
 
 def _partition_all_targets(all_files: list[str]) -> list[tuple[str, list[str]]]:
+    """Partition Python files into logical groups for batched processing.
+
+    Args:
+        all_files: List of repo-relative Python file paths.
+
+    Returns:
+        List of (partition_label, file_list) tuples.
+    """
     repo_files: list[str] = []
     studio_files: list[str] = []
     command_center_files: list[str] = []
@@ -299,6 +466,15 @@ def _partition_all_targets(all_files: list[str]) -> list[tuple[str, list[str]]]:
 
 
 def _parse_samples(stdout: str, limit: int = 50) -> list[ErrorSample]:
+    """Extract error samples from mypy output.
+
+    Args:
+        stdout: Combined stdout/stderr from mypy execution.
+        limit: Maximum number of samples to extract.
+
+    Returns:
+        List of ErrorSample objects representing individual errors.
+    """
     pattern = re.compile(r"^(?P<path>[^:\n]+):(?P<line>\d+):(?:\d+:)?\s+error: (?P<msg>.*?)(?: \[(?P<code>[^\]]+)\])?$")
     samples: list[ErrorSample] = []
     for line in stdout.splitlines():
@@ -323,6 +499,17 @@ def _parse_samples(stdout: str, limit: int = 50) -> list[ErrorSample]:
 
 
 def _compute_status(success: bool, total_errors: int, files_with_issues: int, return_code: int) -> str:
+    """Compute the overall status string for the typecheck run.
+
+    Args:
+        success: Whether mypy reported success.
+        total_errors: Total error count.
+        files_with_issues: Count of files with errors.
+        return_code: Process return code from mypy.
+
+    Returns:
+        Status string: 'ok', 'error', or 'missing_tool'.
+    """
     if return_code == 0 and success and total_errors == 0 and files_with_issues == 0:
         return "ok"
     if return_code == 127:
@@ -342,6 +529,22 @@ def _compose_payload(
     stats: BuildStats,
     files_checked_by_partition: dict[str, int] | None = None,
 ) -> dict[str, Any]:
+    """Compose the JSON payload for the typecheck report.
+
+    Args:
+        run_slug: Timestamp-based run identifier.
+        generated_at: Timestamp when the report was generated.
+        repo_root: Repository root directory.
+        reports_root: Root directory for reports.
+        topic_dir: Topic-specific output directory.
+        bundle_dir: Bundle directory for this run.
+        status: Overall status string.
+        stats: Aggregated build statistics.
+        files_checked_by_partition: Optional per-partition file counts.
+
+    Returns:
+        Dictionary payload suitable for JSON serialization.
+    """
     summary = {
         "error_count": stats.error_count,
         "files_with_issues": stats.files_with_issues,
@@ -379,6 +582,14 @@ def _compose_payload(
 
 
 def _render_markdown(payload: dict[str, Any]) -> str:
+    """Render the typecheck results as a Markdown report.
+
+    Args:
+        payload: JSON payload with typecheck metadata and summary.
+
+    Returns:
+        Markdown-formatted report string.
+    """
     summary = payload.get("summary", {})
     lines: list[str] = []
     lines.append("# Typecheck Report\n\n")
@@ -422,6 +633,14 @@ def _render_markdown(payload: dict[str, Any]) -> str:
 
 
 def _render_log(payload: dict[str, Any]) -> str:
+    """Render the typecheck summary as key-value log entries.
+
+    Args:
+        payload: JSON payload with typecheck metadata.
+
+    Returns:
+        Newline-separated key=value log string.
+    """
     summary = payload.get("summary", {})
     partition_checked = summary.get("files_checked_by_partition")
     extra_lines: list[str] = []
@@ -459,6 +678,19 @@ def _build_manifest(
     raw_output: str,
     rendered_log: str,
 ) -> dict[str, Any]:
+    """Build the manifest dictionary for artifact storage.
+
+    Args:
+        payload: Base JSON payload from _compose_payload.
+        strict: Whether strict mode was enabled.
+        fast: Whether fast mode was enabled.
+        return_code: Process return code from mypy.
+        raw_output: Raw stdout/stderr from mypy.
+        rendered_log: Pre-rendered log string.
+
+    Returns:
+        Manifest dictionary with additional run metadata.
+    """
     manifest: dict[str, Any] = dict(payload)
     manifest.update(
         {
@@ -479,6 +711,17 @@ def _build_telemetry(
     fast: bool,
     return_code: int,
 ) -> dict[str, Any]:
+    """Build telemetry payload for observability export.
+
+    Args:
+        payload: Base JSON payload from _compose_payload.
+        strict: Whether strict mode was enabled.
+        fast: Whether fast mode was enabled.
+        return_code: Process return code from mypy.
+
+    Returns:
+        Telemetry dictionary with viewer, topic, and metrics.
+    """
     summary = payload.get("summary", {})
     files_checked_by_partition = summary.get("files_checked_by_partition")
     extra_metrics: dict[str, int] = {}
@@ -513,10 +756,20 @@ def _build_telemetry(
 
 
 def configure_logging(level: str) -> None:
+    """Configure the root logger with the specified level.
+
+    Args:
+        level: Logging level name (DEBUG, INFO, WARNING, ERROR, CRITICAL).
+    """
     logging.basicConfig(level=getattr(logging, level.upper(), logging.INFO), format="%(levelname)s: %(message)s")
 
 
 def build_parser() -> argparse.ArgumentParser:
+    """Build the argument parser for typecheck reporting.
+
+    Returns:
+        Configured ArgumentParser instance.
+    """
     parser = argparse.ArgumentParser(
         description="Run mypy and emit structured artifacts for typecheck monitoring",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
@@ -546,11 +799,26 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 class Paths(NamedTuple):
+    """Resolved path configuration for typecheck reporting.
+
+    Attributes:
+        repo_root: Repository root directory.
+        output_dir: Output directory for report artifacts.
+    """
+
     repo_root: Path
     output_dir: Path
 
 
 class Options(NamedTuple):
+    """CLI options container for typecheck reporting.
+
+    Attributes:
+        artifacts_to_keep: Number of historical run artifacts to retain.
+        timestamp: ISO8601 timestamp to seed the run directory.
+        log_level: Logging verbosity level.
+    """
+
     artifacts_to_keep: int
     timestamp: str | None = None
     log_level: str = "INFO"
@@ -580,10 +848,26 @@ OPTIONS_CONFIG = OptionsConfig(
 
 
 def build_paths(args: argparse.Namespace) -> Paths:
+    """Build path configuration from parsed arguments.
+
+    Args:
+        args: Parsed command-line arguments.
+
+    Returns:
+        Resolved Paths namedtuple with repo_root and output_dir.
+    """
     return cast(Paths, build_standard_paths(args, PATH_CONFIG, origin=Path(__file__)))
 
 
 def build_options(args: argparse.Namespace) -> Options:
+    """Build options configuration from parsed arguments.
+
+    Args:
+        args: Parsed command-line arguments.
+
+    Returns:
+        Resolved Options namedtuple with all CLI options.
+    """
     base_options = cast(Options, build_standard_options(args, OPTIONS_CONFIG))
     return cast(
         Options,
@@ -595,6 +879,14 @@ def build_options(args: argparse.Namespace) -> Options:
 
 
 def main(argv: list[str] | None = None) -> int:
+    """CLI entry point for typecheck report generation.
+
+    Args:
+        argv: Command-line arguments, defaults to sys.argv if None.
+
+    Returns:
+        Exit code (0 for success).
+    """
     parser = build_parser()
     args = parser.parse_args(argv)
     paths = build_paths(args)

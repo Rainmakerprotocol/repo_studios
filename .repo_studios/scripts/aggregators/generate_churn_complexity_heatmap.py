@@ -50,6 +50,15 @@ PY_EXT = ".py"
 
 @dataclass(frozen=True)
 class MetricRecord:
+    """Immutable record holding churn, complexity, and failure metrics for a file.
+
+    Attributes:
+        file: Relative path to the source file.
+        churn: Number of commits touching this file in the analysis window.
+        complexity: Cyclomatic complexity score.
+        failures: Number of test failures associated with this file.
+    """
+
     file: str
     churn: int
     complexity: int
@@ -57,6 +66,14 @@ class MetricRecord:
 
 
 def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
+    """Parse command-line arguments for the heatmap generator.
+
+    Args:
+        argv: Command-line arguments (defaults to sys.argv[1:]).
+
+    Returns:
+        Parsed argument namespace with repo_root, window, output paths, etc.
+    """
     parser = argparse.ArgumentParser(
         description="Aggregate churn, complexity, and failure density into a trend heatmap"
     )
@@ -77,12 +94,31 @@ def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
     return parser.parse_args(argv)
 
 def _configure_logging(level: str, verbose: bool) -> logging.Logger:
+    """Configure logging for the heatmap generator.
+
+    Args:
+        level: Log level string (DEBUG, INFO, WARNING, etc.).
+        verbose: If True, override level to DEBUG.
+
+    Returns:
+        Configured logger instance for this module.
+    """
     resolved = logging.DEBUG if verbose else getattr(logging, level.upper(), logging.INFO)
     logging.basicConfig(level=resolved, format="[%(levelname)s] %(message)s", force=True)
     return logging.getLogger("generate_churn_complexity_heatmap")
 
 
 def _ensure_run_dir(base: Path) -> Path:
+    """Create and return a timestamped run directory.
+
+    Use HOP-compliant timestamp-only naming (YYYYMMDD-HHMM).
+
+    Args:
+        base: Base output directory path.
+
+    Returns:
+        Path to the created run directory.
+    """
     # HOP-compliant: timestamp-only directory naming (YYYYMMDD-HHMM)
     timestamp = datetime.now(UTC).strftime("%Y%m%d-%H%M")
     run_dir = base / timestamp
@@ -91,6 +127,17 @@ def _ensure_run_dir(base: Path) -> Path:
 
 
 def _discover_summary_path(candidate: Path, logger: logging.Logger) -> Path | None:
+    """Discover the consumer bundle summary file from a candidate path.
+
+    Search the candidate or its subdirectories for bundle_summary.json.
+
+    Args:
+        candidate: Path to a file, directory, or parent of run directories.
+        logger: Logger for debug output.
+
+    Returns:
+        Path to bundle_summary.json or None if not found.
+    """
     if candidate.exists() and candidate.is_file():
         return candidate
     if candidate.exists() and candidate.is_dir():
@@ -114,6 +161,15 @@ def _discover_summary_path(candidate: Path, logger: logging.Logger) -> Path | No
 
 
 def _read_json(path: Path, logger: logging.Logger) -> dict[str, Any] | None:
+    """Read and parse a JSON file.
+
+    Args:
+        path: Path to the JSON file.
+        logger: Logger for warning output on failure.
+
+    Returns:
+        Parsed dictionary or None on failure.
+    """
     try:
         payload = json.loads(path.read_text(encoding="utf-8"))
     except Exception as exc:
@@ -123,6 +179,15 @@ def _read_json(path: Path, logger: logging.Logger) -> dict[str, Any] | None:
 
 
 def _load_metrics_from_source(path: Path, logger: logging.Logger) -> list[MetricRecord]:
+    """Load precomputed metrics from a JSON source file.
+
+    Args:
+        path: Path to the metrics JSON file.
+        logger: Logger for warning output.
+
+    Returns:
+        List of MetricRecord objects or empty list on failure.
+    """
     payload = _read_json(path, logger)
     if not payload:
         return []
@@ -145,6 +210,14 @@ def _load_metrics_from_source(path: Path, logger: logging.Logger) -> list[Metric
 
 
 def _scan_python_files(root: Path) -> Iterable[Path]:
+    """Scan a directory tree for Python files, excluding common ignored directories.
+
+    Args:
+        root: Root directory to scan.
+
+    Yields:
+        Path objects for each Python file found.
+    """
     ignores = {".git", ".venv", "__pycache__", "node_modules"}
     for path in root.rglob("*.py"):
         if any(part in ignores for part in path.parts):
@@ -153,6 +226,18 @@ def _scan_python_files(root: Path) -> Iterable[Path]:
 
 
 def _collect_git_churn(root: Path, window: int, logger: logging.Logger) -> Counter[str]:
+    """Collect file churn counts from git log history.
+
+    Count how many times each Python file was changed in recent commits.
+
+    Args:
+        root: Repository root directory.
+        window: Number of recent commits to analyze.
+        logger: Logger for warning output.
+
+    Returns:
+        Counter mapping file paths to commit counts.
+    """
     cmd = ["git", "--no-pager", "log", f"-n{window}", "--name-only", "--pretty=format:"]
     try:
         result = subprocess.run(
@@ -177,6 +262,16 @@ def _collect_git_churn(root: Path, window: int, logger: logging.Logger) -> Count
 
 
 def _complexity_score(path: Path) -> int:
+    """Calculate a simple cyclomatic complexity score for a Python file.
+
+    Count branching nodes (if, for, while, try, with, etc.) in the AST.
+
+    Args:
+        path: Path to the Python source file.
+
+    Returns:
+        Integer complexity score (0 if parsing fails).
+    """
     import ast
 
     try:
@@ -208,6 +303,17 @@ def _prepare_metrics(
     window: int,
     logger: logging.Logger,
 ) -> tuple[list[MetricRecord], list[str]]:
+    """Prepare metric records from preloaded source or by scanning the repo.
+
+    Args:
+        repo_root: Repository root directory.
+        metrics_source: Optional path to precomputed metrics JSON.
+        window: Number of commits for git churn analysis.
+        logger: Logger for debug output.
+
+    Returns:
+        Tuple of (list of MetricRecord objects, list of processing notes).
+    """
     notes: list[str] = []
     if metrics_source is not None and metrics_source.exists():
         preloaded_metrics = _load_metrics_from_source(metrics_source, logger)
@@ -232,6 +338,17 @@ def _prepare_metrics(
 
 
 def _normalize_relative(path: Path, base: Path) -> str:
+    """Convert a path to a base-relative POSIX string.
+
+    Fall back to absolute POSIX path if path is outside base.
+
+    Args:
+        path: Path to convert.
+        base: Base directory for relative calculation.
+
+    Returns:
+        POSIX-formatted relative or absolute path string.
+    """
     try:
         return path.resolve().relative_to(base.resolve()).as_posix()
     except ValueError:
@@ -239,6 +356,16 @@ def _normalize_relative(path: Path, base: Path) -> str:
 
 
 def _load_junit_failures(path: Path | None, repo_root: Path, logger: logging.Logger) -> Counter[str]:
+    """Parse JUnit XML to extract failure counts per source file.
+
+    Args:
+        path: Path to the JUnit XML file (None to skip).
+        repo_root: Repository root for relative path calculation.
+        logger: Logger for warning output.
+
+    Returns:
+        Counter mapping file paths to failure counts.
+    """
     if path is None or not path.exists():
         return Counter()
     try:
@@ -277,6 +404,16 @@ def _discover_junit_from_summary(
     report: dict[str, Any] | None,
     logger: logging.Logger,
 ) -> Path | None:
+    """Extract JUnit path from consumer bundle summary or report metadata.
+
+    Args:
+        summary: Bundle summary dictionary (reserved for future use).
+        report: Report dictionary containing meta.junit path.
+        logger: Logger for debug output.
+
+    Returns:
+        Path to JUnit XML file or None if not found.
+    """
     _ = summary  # preserved for future metadata expansion
     if report:
         meta = report.get("meta")
@@ -293,6 +430,15 @@ def _load_consumer_bundle(
     summary_path: Path | None,
     logger: logging.Logger,
 ) -> tuple[dict[str, Any] | None, dict[str, Any] | None, list[str]]:
+    """Load consumer bundle summary and associated report.
+
+    Args:
+        summary_path: Path to bundle_summary.json.
+        logger: Logger for warning output.
+
+    Returns:
+        Tuple of (summary dict, report dict, list of processing notes).
+    """
     notes: list[str] = []
     if summary_path is None:
         return None, None, notes
@@ -312,6 +458,14 @@ def _load_consumer_bundle(
 
 
 def _discover_logs_junit(logs_dir: Path) -> Path | None:
+    """Find the most recent JUnit XML file in a logs directory.
+
+    Args:
+        logs_dir: Directory to search for junit_*.xml files.
+
+    Returns:
+        Path to the most recent JUnit file or None.
+    """
     if not logs_dir.exists():
         return None
     junit_candidates = sorted(
@@ -323,11 +477,30 @@ def _discover_logs_junit(logs_dir: Path) -> Path | None:
 
 
 def _allow_legacy_logs() -> bool:
+    """Check whether legacy logs directory fallback is enabled.
+
+    Controlled by CHURN_HEATMAP_ALLOW_LEGACY environment variable.
+
+    Returns:
+        True if legacy fallback is allowed, False otherwise.
+    """
     flag = os.environ.get("CHURN_HEATMAP_ALLOW_LEGACY", "1").strip().lower()
     return flag not in {"0", "false", "no", "off"}
 
 
 def _choose_logs_dir(repo_root: Path, candidate: Path, logger: logging.Logger) -> tuple[Path, Path | None]:
+    """Select the logs directory and discover JUnit file.
+
+    Fall back to legacy logs directory if enabled and candidate lacks JUnit.
+
+    Args:
+        repo_root: Repository root directory.
+        candidate: Primary logs directory candidate.
+        logger: Logger for info output.
+
+    Returns:
+        Tuple of (selected logs directory, JUnit path or None).
+    """
     junit = _discover_logs_junit(candidate)
     if junit is not None or not _allow_legacy_logs():
         return candidate, junit
@@ -346,6 +519,15 @@ def _choose_logs_dir(repo_root: Path, candidate: Path, logger: logging.Logger) -
 
 
 def _git_head(repo_root: Path, logger: logging.Logger) -> str | None:
+    """Get the current git HEAD commit SHA.
+
+    Args:
+        repo_root: Repository root directory.
+        logger: Logger for debug output.
+
+    Returns:
+        Git HEAD SHA string or None if unavailable.
+    """
     try:
         result = subprocess.run(
             ["git", "rev-parse", "HEAD"],
@@ -368,6 +550,15 @@ def _annotate_failures(
     metrics: list[MetricRecord],
     failures: Counter[str],
 ) -> list[MetricRecord]:
+    """Annotate metric records with failure counts from JUnit data.
+
+    Args:
+        metrics: List of MetricRecord objects.
+        failures: Counter mapping file paths to failure counts.
+
+    Returns:
+        New list of MetricRecord objects with failure counts populated.
+    """
     annotated: list[MetricRecord] = []
     for record in metrics:
         annotated.append(
@@ -382,6 +573,16 @@ def _annotate_failures(
 
 
 def _score_metrics(metrics: list[MetricRecord]) -> list[dict[str, Any]]:
+    """Calculate composite scores for metrics and sort by priority.
+
+    Score formula: log1p(churn) * log1p(complexity) * (1 + failures).
+
+    Args:
+        metrics: List of MetricRecord objects.
+
+    Returns:
+        List of scored dictionaries sorted by score descending.
+    """
     scored: list[dict[str, Any]] = []
     for record in metrics:
         churn = max(record.churn, 0)
@@ -412,6 +613,21 @@ def _render_markdown(
     notes: list[str],
     sources: dict[str, str | None],
 ) -> str:
+    """Render the heatmap data as a Markdown report.
+
+    Args:
+        generated_at: Timestamp for the report.
+        repo_root: Repository root path.
+        window: Number of commits analyzed.
+        git_sha: Current git HEAD SHA.
+        mode: Analysis mode (consumer or logs_fallback).
+        records: Scored metric records.
+        notes: Processing notes to include.
+        sources: Input source paths for reference section.
+
+    Returns:
+        Markdown-formatted report as a single string.
+    """
     lines: list[str] = ["# Churn × Complexity Heatmap", ""]
     lines.append(f"Generated (UTC): {generated_at.isoformat(timespec='seconds')}")
     lines.append(f"Repo Root: `{repo_root}`")
@@ -451,11 +667,31 @@ def _render_markdown(
 
 
 def _write_json(path: Path, payload: dict[str, Any]) -> Path:
+    """Write a dictionary to a JSON file with indentation.
+
+    Args:
+        path: Output file path.
+        payload: Dictionary to serialize.
+
+    Returns:
+        Path to the written file.
+    """
     path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
     return path
 
 
 def _prune_history(base: Path, current: Path, keep: int, *, logger: logging.Logger | None) -> list[Path]:
+    """Remove old run directories beyond the retention threshold.
+
+    Args:
+        base: Base output directory containing run subdirectories.
+        current: Current run directory to preserve.
+        keep: Number of runs to retain (minimum 1).
+        logger: Logger for debug output.
+
+    Returns:
+        List of removed directory paths.
+    """
     try:
         keep_count = int(keep)
     except Exception:
@@ -474,6 +710,19 @@ def _prune_history(base: Path, current: Path, keep: int, *, logger: logging.Logg
 
 
 def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
+    """Execute the churn complexity heatmap generation pipeline.
+
+    Parse arguments, collect metrics, annotate failures, and write artifacts.
+
+    Args:
+        argv: Command-line arguments (defaults to sys.argv[1:]).
+
+    Returns:
+        Dictionary containing output paths and metadata.
+
+    Raises:
+        FileNotFoundError: If no Python files are found for analysis.
+    """
     args = _parse_args(argv)
     logger = _configure_logging(args.log_level, args.verbose)
 
@@ -618,6 +867,16 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
 
 
 def main(argv: Sequence[str] | None = None) -> int:
+    """Entry point for the churn complexity heatmap script.
+
+    Execute run() and handle FileNotFoundError gracefully.
+
+    Args:
+        argv: Command-line arguments (defaults to sys.argv[1:]).
+
+    Returns:
+        Exit code (0 for success, 1 on error).
+    """
     try:
         run(argv)
     except FileNotFoundError as exc:

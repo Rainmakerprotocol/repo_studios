@@ -76,6 +76,18 @@ DEFAULT_HEALTHVIEW_ROOT = build_topic_path("orchestrator", "monkey_patch_oversig
 
 @dataclass(frozen=True)
 class Paths:
+    """Resolved path configuration for the orchestrator.
+
+    Attributes:
+        repo_root: Repository root directory.
+        scan_root: Root directory to scan for monkey patches.
+        producer_output_dir: Output directory for producer artifacts.
+        consumer_output_dir: Output directory for consumer artifacts.
+        aggregator_output_dir: Output directory for aggregator artifacts.
+        summarizer_output_dir: Output directory for summarizer artifacts.
+        healthview_root: Output directory for healthview bundles.
+    """
+
     repo_root: Path
     scan_root: Path
     producer_output_dir: Path
@@ -111,6 +123,16 @@ PATHS_CONFIG = PathsConfig(
 
 @dataclass(frozen=True)
 class KeepParameters:
+    """Retention configuration values for each tier.
+
+    Attributes:
+        artifacts_to_keep: Orchestrator manifest bundle retention.
+        producer_keep: Producer artifact retention count.
+        consumer_keep: Consumer artifact retention count.
+        aggregator_keep: Aggregator artifact retention count.
+        summarizer_keep: Summarizer artifact retention count.
+    """
+
     artifacts_to_keep: int
     producer_keep: int
     consumer_keep: int
@@ -132,6 +154,30 @@ OPTIONS_CONFIG = OptionsConfig(
 
 @dataclass(frozen=True)
 class Options:
+    """Runtime options for the orchestrator.
+
+    Attributes:
+        log_level: Logging verbosity level.
+        artifacts_to_keep: Orchestrator manifest bundle retention.
+        producer_keep: Producer artifact retention count.
+        consumer_keep: Consumer artifact retention count.
+        aggregator_keep: Aggregator artifact retention count.
+        summarizer_keep: Summarizer artifact retention count.
+        trend_max_runs: Maximum trend runs to blend.
+        producer_context_lines: Context lines for findings.
+        producer_with_git: Enable git blame enrichment.
+        producer_strict: Enable strict parse mode.
+        producer_project_packages: Project package names.
+        producer_exclude_dirs: Directories to exclude from scan.
+        producer_exclude_globs: Glob patterns to exclude.
+        skip_producer: Skip producer step if True.
+        skip_consumer: Skip consumer step if True.
+        skip_aggregator: Skip aggregator step if True.
+        skip_summarizer: Skip summarizer step if True.
+        duplicate_matrix: Optional duplicate matrix path.
+        run_timestamp: Timestamp for artifact generation.
+    """
+
     log_level: str
     artifacts_to_keep: int
     producer_keep: int
@@ -155,6 +201,18 @@ class Options:
 
 @dataclass(frozen=True)
 class ProducerOutcome:
+    """Result of producer step execution.
+
+    Attributes:
+        payload: Raw payload dictionary from producer.
+        run_dir: Producer run directory path.
+        report_path: Path to report.json if available.
+        matches_path: Path to matches.json if available.
+        status: Producer status string.
+        total_findings: Total findings count.
+        run_id: Run identifier string.
+    """
+
     payload: dict[str, Any]
     run_dir: Path | None
     report_path: Path | None
@@ -166,6 +224,17 @@ class ProducerOutcome:
 
 @dataclass(frozen=True)
 class ConsumerOutcome:
+    """Result of consumer step execution.
+
+    Attributes:
+        payload: Raw payload dictionary from consumer.
+        bundle_dir: Consumer bundle directory path.
+        bundle_summary: Path to bundle_summary.json.
+        summary_json: Path to summary.json.
+        summary_markdown: Path to SUMMARY.md.
+        source: Source type indicator.
+    """
+
     payload: dict[str, Any]
     bundle_dir: Path | None
     bundle_summary: Path | None
@@ -176,6 +245,18 @@ class ConsumerOutcome:
 
 @dataclass(frozen=True)
 class AggregatorOutcome:
+    """Result of aggregator step execution.
+
+    Attributes:
+        payload: Raw payload dictionary from aggregator.
+        trend_dir: Aggregator trend directory path.
+        trend_json: Path to trend.json.
+        trend_markdown: Path to trend.md.
+        bundle_summary: Path to bundle_summary.json.
+        consumer_snapshot: Path to consumer snapshot copy.
+        mode: Aggregator mode (consumer or producer_fallback).
+    """
+
     payload: dict[str, Any]
     trend_dir: Path | None
     trend_json: Path | None
@@ -187,6 +268,15 @@ class AggregatorOutcome:
 
 @dataclass(frozen=True)
 class SummarizerOutcome:
+    """Result of summarizer step execution.
+
+    Attributes:
+        payload: Raw payload dictionary from summarizer.
+        run_dir: Summarizer run directory path.
+        artifacts: Dictionary mapping artifact names to paths.
+        slug: Summarizer artifact slug.
+    """
+
     payload: dict[str, Any]
     run_dir: Path | None
     artifacts: dict[str, Path]
@@ -194,6 +284,16 @@ class SummarizerOutcome:
 
 
 def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
+    """Parse command-line arguments.
+
+    Configure the argument parser with all orchestrator options.
+
+    Args:
+        argv: Command-line arguments or None for sys.argv.
+
+    Returns:
+        Parsed namespace with configuration options.
+    """
     parser = argparse.ArgumentParser(description=__doc__ or "")
     parser.add_argument("--repo-root", help="Repository root override")
     parser.add_argument("--scan-root", default=str(DEFAULT_SCAN_ROOT))
@@ -234,6 +334,19 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
 
 
 def _parse_timestamp(raw: str | None) -> datetime:
+    """Parse an optional timestamp string to datetime.
+
+    Parse ISO-8601 format timestamp, defaulting to current UTC time.
+
+    Args:
+        raw: ISO-8601 timestamp string or None.
+
+    Returns:
+        Parsed datetime in UTC timezone.
+
+    Raises:
+        SystemExit: If timestamp format is invalid.
+    """
     if not raw:
         return datetime.now(timezone.utc)
     try:
@@ -246,6 +359,17 @@ def _parse_timestamp(raw: str | None) -> datetime:
 
 
 def _resolve_optional_path(repo_root: Path, raw: str | None) -> Path | None:
+    """Resolve an optional path string to an absolute path.
+
+    Expand user home and resolve relative paths against repo root.
+
+    Args:
+        repo_root: Repository root for relative path resolution.
+        raw: Path string or None.
+
+    Returns:
+        Resolved absolute Path or None if raw is empty.
+    """
     if not raw:
         return None
     candidate = Path(raw).expanduser()
@@ -255,10 +379,31 @@ def _resolve_optional_path(repo_root: Path, raw: str | None) -> Path | None:
 
 
 def build_paths(args: argparse.Namespace) -> Paths:
+    """Build resolved path configuration from CLI arguments.
+
+    Use the standard path builder with the orchestrator's path configuration.
+
+    Args:
+        args: Parsed command-line arguments.
+
+    Returns:
+        Resolved Paths dataclass.
+    """
     return cast(Paths, build_standard_paths(args, PATHS_CONFIG, origin=Path(__file__)))
 
 
 def build_options(args: argparse.Namespace, *, paths: Paths) -> Options:
+    """Build runtime options from CLI arguments.
+
+    Resolve all retention values and producer configuration.
+
+    Args:
+        args: Parsed command-line arguments.
+        paths: Resolved path configuration.
+
+    Returns:
+        Populated Options dataclass.
+    """
     keep_values = build_standard_options(args, OPTIONS_CONFIG)
     project_packages = tuple(getattr(args, "producer_project_packages", []) or ())
     exclude_dirs = tuple(getattr(args, "producer_exclude_dirs", []) or ())
@@ -287,10 +432,33 @@ def build_options(args: argparse.Namespace, *, paths: Paths) -> Options:
 
 
 def configure_logging(level: str) -> None:
+    """Configure the logging subsystem.
+
+    Set up basic logging with the specified verbosity level.
+
+    Args:
+        level: Logging level name (DEBUG, INFO, WARNING, ERROR, CRITICAL).
+    """
     logging.basicConfig(level=getattr(logging, level.upper(), logging.INFO), format="%(levelname)s %(message)s")
 
 
 def _load_callable(script_path: Path, module_name: str, attribute: str) -> Callable[[Sequence[str] | None], Any]:
+    """Dynamically load a callable from a script module.
+
+    Import the module from the script path and retrieve the named callable.
+
+    Args:
+        script_path: Path to the Python script file.
+        module_name: Module name for sys.modules registration.
+        attribute: Name of the callable attribute to retrieve.
+
+    Returns:
+        The loaded callable.
+
+    Raises:
+        ImportError: If module cannot be loaded.
+        AttributeError: If callable is not found.
+    """
     script_path = script_path.resolve()
     if module_name in sys.modules:
         module = sys.modules[module_name]
@@ -308,6 +476,17 @@ def _load_callable(script_path: Path, module_name: str, attribute: str) -> Calla
 
 
 def _relativize(path: Path | None, repo_root: Path) -> str | None:
+    """Convert a path to a POSIX relative path string.
+
+    Attempt to make the path relative to repo_root, fall back to absolute.
+
+    Args:
+        path: Path to relativize or None.
+        repo_root: Repository root for relative path computation.
+
+    Returns:
+        POSIX path string or None if path is None.
+    """
     if path is None:
         return None
     try:
@@ -317,6 +496,20 @@ def _relativize(path: Path | None, repo_root: Path) -> str | None:
 
 
 def _execute_producer(paths: Paths, options: Options) -> ProducerOutcome:
+    """Execute the monkey patch scanner producer.
+
+    Load and run the producer script with configured options.
+
+    Args:
+        paths: Resolved path configuration.
+        options: Runtime options.
+
+    Returns:
+        ProducerOutcome with scan results and artifact paths.
+
+    Raises:
+        RuntimeError: If producer returns unexpected payload.
+    """
     run_callable = _load_callable(paths.repo_root / PRODUCER_SCRIPT, PRODUCER_MODULE, "run")
     argv: list[str] = [
         "--repo-root",
@@ -375,6 +568,21 @@ def _execute_producer(paths: Paths, options: Options) -> ProducerOutcome:
 
 
 def _execute_consumer(paths: Paths, options: Options, producer: ProducerOutcome | None) -> ConsumerOutcome:
+    """Execute the monkey patch classifier consumer.
+
+    Load and run the consumer script, optionally using producer output.
+
+    Args:
+        paths: Resolved path configuration.
+        options: Runtime options.
+        producer: Producer outcome for scan directory, or None.
+
+    Returns:
+        ConsumerOutcome with classification results and artifact paths.
+
+    Raises:
+        RuntimeError: If consumer returns unexpected payload.
+    """
     run_callable = _load_callable(paths.repo_root / CONSUMER_SCRIPT, CONSUMER_MODULE, "run")
     argv: list[str] = [
         "--base-dir",
@@ -415,6 +623,21 @@ def _execute_consumer(paths: Paths, options: Options, producer: ProducerOutcome 
 
 
 def _execute_aggregator(paths: Paths, options: Options, consumer: ConsumerOutcome | None) -> AggregatorOutcome:
+    """Execute the monkey patch trend aggregator.
+
+    Load and run the aggregator script, optionally using consumer output.
+
+    Args:
+        paths: Resolved path configuration.
+        options: Runtime options.
+        consumer: Consumer outcome for summary path, or None.
+
+    Returns:
+        AggregatorOutcome with trend results and artifact paths.
+
+    Raises:
+        RuntimeError: If aggregator returns unexpected payload.
+    """
     run_callable = _load_callable(paths.repo_root / AGGREGATOR_SCRIPT, AGGREGATOR_MODULE, "run")
     argv: list[str] = [
         "--consumer-base",
@@ -469,6 +692,23 @@ def _execute_summarizer(
     consumer: ConsumerOutcome | None,
     aggregator: AggregatorOutcome | None,
 ) -> SummarizerOutcome:
+    """Execute the monkey patch overview summarizer.
+
+    Load and run the summarizer script with upstream artifacts.
+
+    Args:
+        paths: Resolved path configuration.
+        options: Runtime options.
+        producer: Producer outcome for report paths, or None.
+        consumer: Consumer outcome for summary paths, or None.
+        aggregator: Aggregator outcome for trend paths, or None.
+
+    Returns:
+        SummarizerOutcome with overview artifacts.
+
+    Raises:
+        RuntimeError: If summarizer fails or returns unexpected payload.
+    """
     run_callable = _load_callable(paths.repo_root / SUMMARIZER_SCRIPT, SUMMARIZER_MODULE, "run")
     argv: list[str] = [
         "--repo-root",
@@ -528,6 +768,14 @@ def _execute_summarizer(
 
 
 def _register_scripts(registry: CatalogRegistry) -> None:
+    """Register all topic scripts in the catalog.
+
+    Add producer, consumer, aggregator, summarizer, utility, and
+    orchestrator scripts to the catalog registry.
+
+    Args:
+        registry: CatalogRegistry to register scripts with.
+    """
     registry.register(script_path=str(PRODUCER_SCRIPT), topic=TOPIC_SLUG, role="producer")
     registry.register(script_path=str(CONSUMER_SCRIPT), topic=TOPIC_SLUG, role="consumer")
     registry.register(script_path=str(AGGREGATOR_SCRIPT), topic=TOPIC_SLUG, role="aggregator")
@@ -537,6 +785,16 @@ def _register_scripts(registry: CatalogRegistry) -> None:
 
 
 def _summarize_steps(result_steps: Sequence[Any]) -> str:
+    """Generate a markdown summary of pipeline step results.
+
+    Format each step's name, status, and detail into a bullet list.
+
+    Args:
+        result_steps: Sequence of step result objects.
+
+    Returns:
+        Markdown-formatted summary string.
+    """
     lines = ["# Monkey Patch Oversight Run", ""]
     for step in result_steps:
         detail = f" ({step.detail})" if step.detail else ""
@@ -545,6 +803,17 @@ def _summarize_steps(result_steps: Sequence[Any]) -> str:
 
 
 def run(argv: Sequence[str] | None = None) -> int:
+    """Execute the monkey patch oversight orchestrator.
+
+    Run the full pipeline: producer, consumer, aggregator, and summarizer.
+    Write manifest, summary, and telemetry artifacts to healthview root.
+
+    Args:
+        argv: Command-line arguments or None for sys.argv.
+
+    Returns:
+        Exit code: 0 on success, 1 on pipeline failure.
+    """
     args = parse_args(argv)
     paths = build_paths(args)
     options = build_options(args, paths=paths)
@@ -734,6 +1003,13 @@ def run(argv: Sequence[str] | None = None) -> int:
 
 
 def main(argv: Sequence[str] | None = None) -> None:
+    """CLI entry point for the monkey patch oversight orchestrator.
+
+    Run the orchestrator and exit with appropriate status code.
+
+    Args:
+        argv: Command-line arguments or None for sys.argv.
+    """
     raise SystemExit(run(argv))
 
 

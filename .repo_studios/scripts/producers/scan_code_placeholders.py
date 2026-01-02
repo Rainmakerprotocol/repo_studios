@@ -75,6 +75,14 @@ DEFAULT_ARTIFACTS_TO_KEEP = get_keep("scan_code_placeholders")
 
 @dataclass(frozen=True)
 class Paths:
+    """Resolved path configuration for placeholder scanning.
+
+    Attributes:
+        repo_root: Repository root directory.
+        scan_root: Directory to scan for placeholders.
+        output_dir: Output directory for report artifacts.
+    """
+
     repo_root: Path
     scan_root: Path
     output_dir: Path
@@ -82,6 +90,18 @@ class Paths:
 
 @dataclass(frozen=True)
 class ScanOptions:
+    """Configuration options for placeholder scanning.
+
+    Attributes:
+        extensions: File extensions to include in scan.
+        patterns: Placeholder tokens to search for (e.g., TODO, FIXME).
+        allowlist: Set of (path, line) tuples to ignore.
+        artifacts_to_keep: Number of historical runs to retain.
+        exclude_prefixes: Relative directory prefixes to skip.
+        exclude_segments: Directory name segments to skip anywhere in path.
+        default_exclusions_applied: Whether default exclusions were used.
+    """
+
     extensions: tuple[str, ...]
     patterns: tuple[str, ...]
     allowlist: set[tuple[str, int]]
@@ -92,6 +112,12 @@ class ScanOptions:
 
 
 class Options(NamedTuple):
+    """CLI options container for placeholder scanning.
+
+    Attributes:
+        artifacts_to_keep: Number of historical run artifacts to retain.
+    """
+
     artifacts_to_keep: int
 
 
@@ -125,6 +151,16 @@ OPTIONS_CONFIG = OptionsConfig(
 
 @dataclass
 class PlaceholderRecord:
+    """Represents a single placeholder match found during scanning.
+
+    Attributes:
+        relative_path: Repo-relative path to the file.
+        absolute_path: Absolute path to the file.
+        line_number: Line number where the placeholder was found.
+        pattern: The matched placeholder token (e.g., TODO).
+        line_text: Full text of the matching line.
+    """
+
     relative_path: str
     absolute_path: str
     line_number: int
@@ -132,6 +168,11 @@ class PlaceholderRecord:
     line_text: str
 
     def to_dict(self) -> dict[str, str | int]:
+        """Convert the record to a dictionary representation.
+
+        Returns:
+            Dictionary with path, absolute_path, line, pattern, and text keys.
+        """
         return {
             "path": self.relative_path,
             "absolute_path": self.absolute_path,
@@ -142,6 +183,14 @@ class PlaceholderRecord:
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
+    """Parse command-line arguments for placeholder scanning.
+
+    Args:
+        argv: Command-line arguments, defaults to sys.argv if None.
+
+    Returns:
+        Parsed namespace containing all CLI options.
+    """
     parser = argparse.ArgumentParser(description="Scan for placeholder comments and emit structured artifacts")
     parser.add_argument(
         "--repo-root",
@@ -199,10 +248,27 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 
 
 def build_paths(args: argparse.Namespace) -> Paths:
+    """Build path configuration from parsed arguments.
+
+    Args:
+        args: Parsed command-line arguments.
+
+    Returns:
+        Resolved Paths dataclass with repo_root, scan_root, and output_dir.
+    """
     return cast(Paths, build_standard_paths(args, PATH_CONFIG, origin=Path(__file__)))
 
 
 def load_allowlist(path: str | None, repo_root: Path) -> set[tuple[str, int]]:
+    """Load allowlist entries from a file.
+
+    Args:
+        path: Path to allowlist file, or None to skip loading.
+        repo_root: Repository root for resolving relative paths.
+
+    Returns:
+        Set of (relative_path, line_number) tuples to ignore during scanning.
+    """
     if not path:
         return set()
     allowlist_path = Path(path)
@@ -227,6 +293,14 @@ def load_allowlist(path: str | None, repo_root: Path) -> set[tuple[str, int]]:
 
 
 def normalize_patterns(raw: Iterable[str] | None) -> tuple[str, ...]:
+    """Normalize and deduplicate placeholder patterns.
+
+    Args:
+        raw: Iterable of pattern strings, or None to use defaults.
+
+    Returns:
+        Sorted tuple of uppercase pattern tokens.
+    """
     values = tuple(str(p).strip() for p in (raw or DEFAULT_PATTERNS) if str(p).strip())
     if not values:
         return DEFAULT_PATTERNS
@@ -234,6 +308,14 @@ def normalize_patterns(raw: Iterable[str] | None) -> tuple[str, ...]:
 
 
 def normalize_extensions(raw: Iterable[str] | None) -> tuple[str, ...]:
+    """Normalize file extensions to dotted lowercase format.
+
+    Args:
+        raw: Iterable of extension strings, or None to use defaults.
+
+    Returns:
+        Sorted tuple of normalized extensions (e.g., '.py', '.md').
+    """
     values = tuple(str(ext).strip().lower() for ext in (raw or DEFAULT_EXTENSIONS) if str(ext).strip())
     if not values:
         return DEFAULT_EXTENSIONS
@@ -244,6 +326,14 @@ def normalize_extensions(raw: Iterable[str] | None) -> tuple[str, ...]:
 
 
 def normalize_exclude_prefixes(raw: Iterable[str] | None) -> tuple[tuple[str, ...], tuple[str, ...]]:
+    """Normalize exclusion patterns into prefixes and segment filters.
+
+    Args:
+        raw: Iterable of exclusion patterns, or None for no exclusions.
+
+    Returns:
+        Tuple of (prefix_tuple, segment_tuple) for path filtering.
+    """
     prefixes: set[str] = set()
     segments: set[str] = set()
     for entry in raw or ():
@@ -270,6 +360,14 @@ def normalize_exclude_prefixes(raw: Iterable[str] | None) -> tuple[tuple[str, ..
 
 
 def compile_pattern_regex(patterns: tuple[str, ...]) -> dict[str, re.Pattern[str]]:
+    """Compile placeholder patterns into regex objects.
+
+    Args:
+        patterns: Tuple of placeholder tokens to compile.
+
+    Returns:
+        Dictionary mapping each token to its compiled regex pattern.
+    """
     compiled: dict[str, re.Pattern[str]] = {}
     for token in patterns:
         compiled[token] = re.compile(rf"\b{re.escape(token)}\b", re.IGNORECASE)
@@ -281,6 +379,16 @@ def scan_placeholders(
     options: ScanOptions,
     compiled_patterns: dict[str, re.Pattern[str]],
 ) -> list[PlaceholderRecord]:
+    """Scan files for placeholder comments.
+
+    Args:
+        paths: Path configuration with scan and repo roots.
+        options: Scan options including extensions and patterns.
+        compiled_patterns: Pre-compiled regex patterns for matching.
+
+    Returns:
+        List of PlaceholderRecord objects for each match found.
+    """
     results: list[PlaceholderRecord] = []
     for file_path in sorted(paths.scan_root.rglob("*")):
         if not file_path.is_file() or file_path.suffix.lower() not in options.extensions:
@@ -316,6 +424,14 @@ def scan_placeholders(
 
 
 def _looks_like_comment(line: str) -> bool:
+    """Check if a line appears to be a code comment.
+
+    Args:
+        line: Source code line to examine.
+
+    Returns:
+        True if the line starts with a known comment anchor.
+    """
     stripped = line.strip()
     if not stripped:
         return False
@@ -324,11 +440,28 @@ def _looks_like_comment(line: str) -> bool:
 
 
 def _is_uppercase_match(token: str) -> bool:
+    """Check if the matched token is fully uppercase.
+
+    Args:
+        token: Matched placeholder token.
+
+    Returns:
+        True if token is non-empty and fully uppercase.
+    """
     stripped = token.strip()
     return bool(stripped) and stripped.isupper()
 
 
 def _should_exclude(rel_display: str, options: ScanOptions) -> bool:
+    """Determine if a file path should be excluded from scanning.
+
+    Args:
+        rel_display: Relative path to the file (POSIX format).
+        options: Scan options containing exclusion rules.
+
+    Returns:
+        True if the path matches any exclusion prefix or segment.
+    """
     normalized = rel_display.replace("\\", "/")
     for prefix in options.exclude_prefixes:
         if normalized.startswith(prefix):
@@ -350,6 +483,19 @@ def compose_payload(
     generated_at: datetime,
     bundle_dir: Path,
 ) -> dict[str, Any]:
+    """Compose the JSON payload for the scan report.
+
+    Args:
+        paths: Path configuration for the scan.
+        options: Scan options with patterns and extensions.
+        records: List of placeholder matches found.
+        run_slug: Timestamp-based run identifier.
+        generated_at: Timestamp when the scan was generated.
+        bundle_dir: Directory where artifacts are stored.
+
+    Returns:
+        Dictionary payload suitable for JSON serialization.
+    """
     rel_scan_root = str(paths.scan_root.resolve().relative_to(paths.repo_root))
     by_pattern: Counter[str] = Counter(record.pattern for record in records)
     by_extension: Counter[str] = Counter(Path(record.relative_path).suffix.lower() for record in records)
@@ -382,6 +528,15 @@ def compose_payload(
 
 
 def render_markdown_report(payload: dict[str, Any], records: list[PlaceholderRecord]) -> str:
+    """Render the scan results as a Markdown report.
+
+    Args:
+        payload: JSON payload with scan metadata and summary.
+        records: List of placeholder matches to include.
+
+    Returns:
+        Markdown-formatted report string.
+    """
     lines = [
         "# Placeholder Scan Report\n\n",
         f"- Status: `{payload['status']}`\n",
@@ -412,6 +567,14 @@ def render_markdown_report(payload: dict[str, Any], records: list[PlaceholderRec
 
 
 def render_log(payload: dict[str, Any]) -> str:
+    """Render the scan summary as key-value log entries.
+
+    Args:
+        payload: JSON payload with scan metadata.
+
+    Returns:
+        Newline-separated key=value log string.
+    """
     summary = payload.get("summary", {}) if isinstance(payload.get("summary"), dict) else {}
     entries = [
         f"status={payload['status']}",
@@ -428,6 +591,17 @@ def render_log(payload: dict[str, Any]) -> str:
 
 
 def _parse_timestamp(raw: str | None) -> datetime:
+    """Parse an ISO8601 timestamp string.
+
+    Args:
+        raw: ISO8601 timestamp string, or None for current UTC time.
+
+    Returns:
+        Timezone-aware datetime in UTC.
+
+    Raises:
+        SystemExit: If the timestamp format is invalid.
+    """
     if not raw:
         return datetime.now(timezone.utc)
     try:
@@ -440,12 +614,29 @@ def _parse_timestamp(raw: str | None) -> datetime:
 
 
 def _timestamp_slug(moment: datetime) -> str:
+    """Generate a timestamp slug for directory naming.
+
+    Args:
+        moment: Datetime to format.
+
+    Returns:
+        Formatted string in YYYYMMDD-HHMM format.
+    """
     if moment.tzinfo is None:
         moment = moment.replace(tzinfo=timezone.utc)
     return moment.astimezone(timezone.utc).strftime("%Y%m%d-%H%M")
 
 
 def _relativize(path: Path, repo_root: Path) -> str:
+    """Compute a repo-relative path string.
+
+    Args:
+        path: Path to relativize.
+        repo_root: Repository root directory.
+
+    Returns:
+        POSIX-style relative path, or absolute path if outside repo.
+    """
     try:
         return path.resolve().relative_to(repo_root.resolve()).as_posix()
     except ValueError:
@@ -459,6 +650,17 @@ def _build_manifest(
     records: list[PlaceholderRecord],
     sample_limit: int = 200,
 ) -> dict[str, Any]:
+    """Build the manifest dictionary for artifact storage.
+
+    Args:
+        payload: Base JSON payload from compose_payload.
+        rendered_log: Pre-rendered log string.
+        records: Full list of placeholder matches.
+        sample_limit: Maximum number of records to include.
+
+    Returns:
+        Manifest dictionary with log and sample matches embedded.
+    """
     manifest: dict[str, Any] = dict(payload)
     manifest["log"] = rendered_log
     manifest["matches_total"] = int(payload.get("total_matches", 0) or 0)
@@ -472,6 +674,14 @@ def _build_telemetry(
     *,
     payload: dict[str, Any],
 ) -> dict[str, Any]:
+    """Build telemetry payload for observability export.
+
+    Args:
+        payload: Base JSON payload from compose_payload.
+
+    Returns:
+        Telemetry dictionary with viewer, topic, and metrics.
+    """
     total_matches = int(payload.get("total_matches", 0) or 0)
     allowlist_size = int(payload.get("allowlist_size", 0) or 0)
     return {
@@ -490,10 +700,23 @@ def _build_telemetry(
 
 
 def configure_logging(level: str) -> None:
+    """Configure the root logger with the specified level.
+
+    Args:
+        level: Logging level name (DEBUG, INFO, WARNING, ERROR, CRITICAL).
+    """
     logging.basicConfig(level=getattr(logging, level), format="%(levelname)s %(message)s")
 
 
 def run(argv: list[str] | None = None) -> dict[str, Any]:
+    """Execute the placeholder scanning workflow.
+
+    Args:
+        argv: Command-line arguments, defaults to sys.argv if None.
+
+    Returns:
+        Payload dictionary with scan results and metadata.
+    """
     args = parse_args(argv)
     configure_logging(args.log_level)
     logger = logging.getLogger(__name__)
@@ -569,6 +792,14 @@ def run(argv: list[str] | None = None) -> dict[str, Any]:
 
 
 def main(argv: list[str] | None = None) -> int:
+    """CLI entry point for placeholder scanning.
+
+    Args:
+        argv: Command-line arguments, defaults to sys.argv if None.
+
+    Returns:
+        Exit code (0 for success).
+    """
     run(argv)
     return 0
 

@@ -64,6 +64,16 @@ DEFAULT_OUTPUT_DIR = build_topic_path("producer", TOPIC_SLUG)
 
 @dataclass(frozen=True)
 class Paths:
+    """Path configuration for undocumented logic report generation.
+
+    Attributes:
+        repo_root: Repository root directory.
+        output_dir: Directory for report artifacts.
+        doc_index: Path to latest doc index JSON.
+        anchor_inventory: Path to anchor inventory input.
+        allowlist: Path to allowlist file.
+    """
+
     repo_root: Path
     output_dir: Path
     doc_index: Path
@@ -73,6 +83,12 @@ class Paths:
 
 @dataclass(frozen=True)
 class Options:
+    """Options for undocumented logic report generation.
+
+    Attributes:
+        artifacts_to_keep: Number of historical run directories to retain.
+    """
+
     artifacts_to_keep: int
 
 
@@ -117,6 +133,16 @@ OPTIONS_CONFIG = OptionsConfig(
 
 @dataclass
 class EntityFinding:
+    """A finding for an undocumented code entity.
+
+    Attributes:
+        kind: Entity type (function, class, method).
+        name: Simple name of the entity.
+        qualified_name: Fully-qualified name including module.
+        line: Source line number.
+        reason: Description of the finding.
+    """
+
     kind: str
     name: str
     qualified_name: str
@@ -126,12 +152,22 @@ class EntityFinding:
 
 @dataclass
 class ModuleScan:
+    """Scan results for a single Python module.
+
+    Attributes:
+        module_path: Relative path to the module.
+        module_name: Dotted module name.
+        total_entities: Count of public entities scanned.
+        findings: List of undocumented entity findings.
+    """
+
     module_path: str
     module_name: str
     total_entities: int
     findings: list[EntityFinding] = field(default_factory=list)
 
     def coverage(self) -> float | None:
+        """Calculate docstring coverage percentage for this module."""
         if self.total_entities == 0:
             return None
         documented = self.total_entities - len(self.findings)
@@ -142,6 +178,14 @@ Allowlist = dict[str, set[str]]
 
 
 def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
+    """Parse command-line arguments for undocumented logic report.
+
+    Args:
+        argv: Command-line arguments. Uses sys.argv[1:] if None.
+
+    Returns:
+        Parsed namespace with validated arguments.
+    """
     parser = argparse.ArgumentParser(description=__doc__ or "")
     parser.add_argument("--repo-root", help="Repository root override")
     parser.add_argument("--output-dir", help="Directory for report artifacts")
@@ -176,12 +220,28 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
 
 
 def _configure_logging(level: str) -> None:
+    """Configure logging with the specified verbosity level.
+
+    Args:
+        level: Logging level name (DEBUG, INFO, WARNING, ERROR, CRITICAL).
+    """
     logging.basicConfig(
         level=getattr(logging, level.upper()), format="%(levelname)s %(message)s"
     )
 
 
 def _read_allowlist(path: Path) -> Allowlist:
+    """Read the module/entity allowlist from a text file.
+
+    Parse a file with module::entity patterns to skip during scanning.
+    Lines starting with # are comments.
+
+    Args:
+        path: Path to allowlist file.
+
+    Returns:
+        Dictionary mapping module keys to sets of entity patterns.
+    """
     if not path.exists():
         return {}
     entries: Allowlist = {}
@@ -200,10 +260,28 @@ def _read_allowlist(path: Path) -> Allowlist:
 
 
 def _is_private(name: str) -> bool:
+    """Check if an entity name is private (underscore-prefixed).
+
+    Args:
+        name: Entity name to check.
+
+    Returns:
+        True if the name is private (but not __init__).
+    """
     return name.startswith("_") and not name.startswith("__init__")
 
 
 def _should_skip(module_key: str, qualified_name: str, allowlist: Allowlist) -> bool:
+    """Check if an entity should be skipped based on the allowlist.
+
+    Args:
+        module_key: Module path key.
+        qualified_name: Fully-qualified entity name.
+        allowlist: Allowlist dictionary.
+
+    Returns:
+        True if the entity is allowlisted.
+    """
     module_entries = allowlist.get(module_key)
     if module_entries and ("*" in module_entries or qualified_name in module_entries):
         return True
@@ -211,6 +289,16 @@ def _should_skip(module_key: str, qualified_name: str, allowlist: Allowlist) -> 
 
 
 def _iter_code_files(code_roots: list[Path]) -> Iterable[Path]:
+    """Iterate over Python files in the given code roots.
+
+    Recursively search for .py files, excluding __pycache__ directories.
+
+    Args:
+        code_roots: List of directories to search.
+
+    Yields:
+        Paths to Python files (deduplicated).
+    """
     seen: set[Path] = set()
     for root in code_roots:
         if not root.exists():
@@ -225,10 +313,28 @@ def _iter_code_files(code_roots: list[Path]) -> Iterable[Path]:
 
 
 def _module_key(path: Path, repo_root: Path) -> str:
+    """Derive a module key from a file path.
+
+    Args:
+        path: Absolute path to the file.
+        repo_root: Repository root directory.
+
+    Returns:
+        Relative path as a POSIX string.
+    """
     return path.relative_to(repo_root).as_posix()
 
 
 def _module_name(path: Path, repo_root: Path) -> str:
+    """Derive a dotted module name from a file path.
+
+    Args:
+        path: Absolute path to the file.
+        repo_root: Repository root directory.
+
+    Returns:
+        Dotted module name string.
+    """
     relative = path.relative_to(repo_root).with_suffix("")
     return ".".join(part for part in relative.parts if part)
 
@@ -237,6 +343,14 @@ DocstringNode = ast.Module | ast.ClassDef | ast.FunctionDef | ast.AsyncFunctionD
 
 
 def _get_docstring(node: DocstringNode) -> str | None:
+    """Extract the docstring from an AST node.
+
+    Args:
+        node: AST node (Module, ClassDef, FunctionDef, AsyncFunctionDef).
+
+    Returns:
+        Stripped docstring text or None if missing/empty.
+    """
     doc = ast.get_docstring(node, clean=False)
     if doc is None:
         return None
@@ -245,6 +359,19 @@ def _get_docstring(node: DocstringNode) -> str | None:
 
 
 def _scan_ast(path: Path, repo_root: Path, allowlist: Allowlist) -> ModuleScan | None:
+    """Scan a Python file for undocumented public entities.
+
+    Parse the file AST and check top-level functions, classes,
+    and methods for missing docstrings.
+
+    Args:
+        path: Path to the Python file.
+        repo_root: Repository root directory.
+        allowlist: Allowlist dictionary for skipping entities.
+
+    Returns:
+        ModuleScan result or None if the file cannot be parsed.
+    """
     try:
         source = path.read_text(encoding="utf-8")
     except OSError:
@@ -324,6 +451,14 @@ def _scan_ast(path: Path, repo_root: Path, allowlist: Allowlist) -> ModuleScan |
 
 
 def _latest_run_dir(topic_dir: Path) -> Path | None:
+    """Find the most recent run directory in a topic folder.
+
+    Args:
+        topic_dir: Directory containing timestamped run folders.
+
+    Returns:
+        Path to the latest run directory, or None if empty.
+    """
     if not topic_dir.exists() or not topic_dir.is_dir():
         return None
     runs = [node for node in topic_dir.iterdir() if node.is_dir()]
@@ -334,6 +469,17 @@ def _latest_run_dir(topic_dir: Path) -> Path | None:
 
 
 def _load_json(path: Path) -> Any | None:
+    """Load JSON data from a file or topic directory.
+
+    If path is a directory, load from the latest run's telemetry.json.
+    Extract payload if present.
+
+    Args:
+        path: Path to JSON file or topic directory.
+
+    Returns:
+        Parsed JSON data or None if unavailable.
+    """
     if not path.exists():
         return None
 
@@ -359,6 +505,14 @@ def _load_json(path: Path) -> Any | None:
 
 
 def _build_doc_lookup(doc_index: Any) -> list[dict[str, Any]]:
+    """Extract document records from a doc index payload.
+
+    Args:
+        doc_index: Parsed doc index JSON data.
+
+    Returns:
+        List of document dictionaries.
+    """
     if not isinstance(doc_index, dict):
         return []
     docs = doc_index.get("documents")
@@ -372,10 +526,26 @@ def _build_doc_lookup(doc_index: Any) -> list[dict[str, Any]]:
 
 
 def _normalize_doc_path(path: str) -> str:
+    """Normalize a documentation path to POSIX format.
+
+    Args:
+        path: Raw path string.
+
+    Returns:
+        POSIX-normalized path string.
+    """
     return Path(path).as_posix()
 
 
 def _build_anchor_lookup(anchor_inventory: Any) -> dict[str, dict[str, Any]]:
+    """Build a lookup from document paths to anchor inventory entries.
+
+    Args:
+        anchor_inventory: Parsed anchor inventory JSON data.
+
+    Returns:
+        Dictionary mapping normalized paths to document entries.
+    """
     if not isinstance(anchor_inventory, dict):
         return {}
     docs = anchor_inventory.get("documents")
@@ -393,6 +563,17 @@ def _build_anchor_lookup(anchor_inventory: Any) -> dict[str, dict[str, Any]]:
 
 
 def _score_doc_candidate(module_base: str, doc: dict[str, Any]) -> tuple[int, str]:
+    """Score a document as a candidate for a module.
+
+    Lower scores indicate better matches based on filename and slug.
+
+    Args:
+        module_base: Base name of the module (stem).
+        doc: Document dictionary with filename/path and slug.
+
+    Returns:
+        Tuple of (score, filename).
+    """
     filename = str(doc.get("filename") or doc.get("path") or "")
     slug = str(doc.get("slug") or "")
     name_score = 2
@@ -411,6 +592,19 @@ def _doc_candidates_for_module(
     doc_index: list[dict[str, Any]],
     anchor_lookup: dict[str, dict[str, Any]],
 ) -> list[dict[str, Any]]:
+    """Find candidate documentation files for a module.
+
+    Score all documents against the module and return the top matches
+    with anchor count and owner information.
+
+    Args:
+        module_path: Path to the module file.
+        doc_index: List of document records.
+        anchor_lookup: Dictionary mapping paths to anchor entries.
+
+    Returns:
+        List of candidate documents (up to 5) with metadata.
+    """
     module_base = Path(module_path).stem
     matches: list[tuple[int, dict[str, Any]]] = []
     for doc in doc_index:
@@ -437,6 +631,16 @@ def _doc_candidates_for_module(
 
 
 def _summarize(scans: list[ModuleScan]) -> dict[str, Any]:
+    """Summarize scan results across all modules.
+
+    Aggregate counts and compute overall docstring coverage.
+
+    Args:
+        scans: List of module scan results.
+
+    Returns:
+        Summary dictionary with counts and coverage percentage.
+    """
     modules_scanned = len(scans)
     modules_with_findings = sum(1 for scan in scans if scan.findings)
     total_entities = sum(scan.total_entities for scan in scans)
@@ -467,6 +671,24 @@ def _build_report(
     anchor_inventory_path: Path,
     code_roots: list[Path],
 ) -> dict[str, Any]:
+    """Build the undocumented logic report dictionary.
+
+    Assemble scan results into a structured report with summary,
+    module details, and doc candidate suggestions.
+
+    Args:
+        scans: List of module scan results.
+        doc_index: List of document records.
+        anchor_lookup: Dictionary mapping paths to anchor entries.
+        repo_root: Repository root directory.
+        generated_ts: Report generation timestamp.
+        doc_index_path: Path to doc index source.
+        anchor_inventory_path: Path to anchor inventory source.
+        code_roots: List of code root directories scanned.
+
+    Returns:
+        Complete report dictionary.
+    """
     summary = _summarize(scans)
     modules_payload: list[dict[str, Any]] = []
     for scan in scans:
@@ -501,6 +723,17 @@ def _build_report(
 
 
 def _render_markdown(report: dict[str, Any]) -> str:
+    """Render the undocumented logic report as markdown.
+
+    Format the report with summary, module findings, and doc
+    candidate suggestions for human readability.
+
+    Args:
+        report: The report dictionary.
+
+    Returns:
+        A markdown-formatted summary string.
+    """
     summary = report.get("summary", {})
     lines = ["# Undocumented Logic Report", ""]
     lines.append("## Summary")
@@ -554,6 +787,14 @@ def _render_markdown(report: dict[str, Any]) -> str:
 
 
 def _render_tsv(modules: list[dict[str, Any]]) -> str:
+    """Render module findings as a tab-separated values string.
+
+    Args:
+        modules: List of module dictionaries with findings.
+
+    Returns:
+        TSV-formatted string with header and data rows.
+    """
     rows = ["module\tentity_type\tqualified_name\tline\treason"]
     for module in modules:
         for finding in module.get("findings", []):
@@ -572,6 +813,14 @@ def _render_tsv(modules: list[dict[str, Any]]) -> str:
 
 
 def _bundle_summary(report: dict[str, Any]) -> dict[str, Any]:
+    """Extract summary metrics from a report for manifest bundling.
+
+    Args:
+        report: The report dictionary.
+
+    Returns:
+        Dictionary with key summary metrics.
+    """
     summary = report.get("summary", {})
     return {
         "modules_scanned": summary.get("modules_scanned", 0),
@@ -582,6 +831,17 @@ def _bundle_summary(report: dict[str, Any]) -> dict[str, Any]:
 
 
 def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
+    """Run the undocumented logic report generation workflow.
+
+    Parse arguments, scan code files, analyze docstring coverage,
+    and write results to the output directory.
+
+    Args:
+        argv: Command-line arguments. Uses sys.argv[1:] if None.
+
+    Returns:
+        A dictionary with report results and paths to artifacts.
+    """
     args = parse_args(argv)
     _configure_logging(args.log_level)
 
@@ -729,6 +989,16 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
 
 
 def main(argv: Sequence[str] | None = None) -> int:
+    """CLI entry point for undocumented logic report generation.
+
+    Run the report generation workflow and return the exit code.
+
+    Args:
+        argv: Command-line arguments. Uses sys.argv[1:] if None.
+
+    Returns:
+        Integer exit code (0 for success).
+    """
     run(argv)
     return 0
 

@@ -87,6 +87,21 @@ HARDENING_TOPIC_SLUG = "test_hardening"
 
 @dataclass(frozen=True)
 class Paths:
+    """Path configuration for the test execution telemetry orchestrator.
+
+    Attributes:
+        repo_root: Repository root path.
+        logs_dir: Directory containing pytest log artifacts.
+        test_log_reports_dir: Output directory for test log reports.
+        test_log_health_dir: Output directory for health reports.
+        coverage_output_dir: Output directory for coverage inventory.
+        coverage_xml: Path to coverage.xml source file.
+        heatmap_output_dir: Output directory for churn heatmap.
+        hardening_output_dir: Output directory for hardening analysis.
+        healthview_root: Root directory for healthview bundles.
+        summarizer_output_dir: Output directory for summarizer artifacts.
+    """
+
     repo_root: Path
     logs_dir: Path
     test_log_reports_dir: Path
@@ -134,6 +149,17 @@ PATHS_CONFIG = PathsConfig(
 
 @dataclass(frozen=True)
 class KeepParameters:
+    """Retention policy parameters for various artifact types.
+
+    Attributes:
+        artifacts_to_keep: General artifact retention count.
+        collector_keep: Retention count for collector reports.
+        health_keep: Retention count for health reports.
+        coverage_keep: Retention count for coverage inventory.
+        heatmap_keep: Retention count for heatmap runs.
+        hardening_keep: Retention count for hardening analysis.
+    """
+
     artifacts_to_keep: int
     collector_keep: int
     health_keep: int
@@ -157,6 +183,21 @@ OPTIONS_CONFIG = OptionsConfig(
 
 @dataclass(frozen=True)
 class Options:
+    """Runtime options for the orchestrator.
+
+    Attributes:
+        log_level: Logging verbosity level.
+        artifacts_to_keep: General artifact retention count.
+        collector_keep: Retention count for collector reports.
+        health_keep: Retention count for health reports.
+        coverage_keep: Retention count for coverage inventory.
+        heatmap_keep: Retention count for heatmap runs.
+        hardening_keep: Retention count for hardening analysis.
+        heatmap_window: Number of commits for heatmap analysis.
+        metrics_source: Optional path to precomputed metrics.
+        run_timestamp: Timestamp for this orchestrator run.
+    """
+
     log_level: str
     artifacts_to_keep: int
     collector_keep: int
@@ -171,6 +212,16 @@ class Options:
 
 @dataclass(frozen=True)
 class CollectOutcome:
+    """Result of the collect step execution.
+
+    Attributes:
+        report_dir: Directory containing the collected report.
+        producer_bundle_dir: Directory containing producer bundle.
+        warnings_total: Total warning count from test logs.
+        slow_tests: Count of slow tests detected.
+        payload: Full payload dictionary from the collector.
+    """
+
     report_dir: Path | None
     producer_bundle_dir: Path | None
     warnings_total: int | None
@@ -180,30 +231,67 @@ class CollectOutcome:
 
 @dataclass(frozen=True)
 class CoverageOutcome:
+    """Result of the coverage inventory execution.
+
+    Attributes:
+        report_dir: Directory containing coverage reports.
+        summary: Coverage summary dictionary.
+    """
+
     report_dir: Path | None
     summary: dict[str, Any] | None
 
 
 @dataclass(frozen=True)
 class HeatmapOutcome:
+    """Result of the churn complexity heatmap execution.
+
+    Attributes:
+        run_dir: Directory containing heatmap artifacts.
+        payload: Full payload dictionary from the heatmap generator.
+    """
+
     run_dir: Path | None
     payload: dict[str, Any]
 
 
 @dataclass(frozen=True)
 class HardeningOutcome:
+    """Result of the test hardening analysis execution.
+
+    Attributes:
+        run_dir: Directory containing hardening reports.
+        payload: Full payload dictionary from the hardening analyzer.
+    """
+
     run_dir: Path | None
     payload: dict[str, Any]
 
 
 @dataclass(frozen=True)
 class HealthReportOutcome:
+    """Result of the health report generation.
+
+    Attributes:
+        run_dir: Directory containing health report artifacts.
+        bundle_summary: Path to the bundle_summary.json file.
+        payload: Full payload dictionary from the health reporter.
+    """
+
     run_dir: Path | None
     bundle_summary: Path | None
     payload: dict[str, Any]
 
 
 def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
+    """Parse command-line arguments for the orchestrator.
+
+    Args:
+        argv: Command-line arguments (defaults to sys.argv[1:]).
+
+    Returns:
+        Parsed argument namespace with paths, retention settings, and options.
+    """
     parser = argparse.ArgumentParser(description=__doc__ or "")
     parser.add_argument("--repo-root", help="Repository root override")
     parser.add_argument("--logs-dir", default=str(DEFAULT_LOGS_DIR))
@@ -246,6 +334,17 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
 
 
 def _parse_timestamp(raw: str | None) -> datetime:
+    """Parse an ISO timestamp string or return current UTC time.
+
+    Args:
+        raw: ISO datetime string or None.
+
+    Returns:
+        Parsed datetime in UTC.
+
+    Raises:
+        SystemExit: If the timestamp format is invalid.
+    """
     if not raw:
         return datetime.now(timezone.utc)
     try:
@@ -258,10 +357,26 @@ def _parse_timestamp(raw: str | None) -> datetime:
 
 
 def build_paths(args: argparse.Namespace) -> Paths:
+    """Build Paths configuration from parsed arguments.
+
+    Args:
+        args: Parsed command-line arguments.
+
+    Returns:
+        Paths dataclass with resolved file paths.
+    """
     return cast(Paths, build_standard_paths(args, PATHS_CONFIG, origin=Path(__file__)))
 
 
 def build_options(args: argparse.Namespace) -> Options:
+    """Build Options configuration from parsed arguments.
+
+    Args:
+        args: Parsed command-line arguments.
+
+    Returns:
+        Options dataclass with runtime settings.
+    """
     keep_values = build_standard_options(args, OPTIONS_CONFIG)
     metrics_source = None
     if args.heatmap_metrics_source:
@@ -281,10 +396,28 @@ def build_options(args: argparse.Namespace) -> Options:
 
 
 def configure_logging(level: str) -> None:
+    """Configure basic logging with the specified level.
+
+    Args:
+        level: Log level string (DEBUG, INFO, WARNING, etc.).
+    """
     logging.basicConfig(level=getattr(logging, level.upper(), logging.INFO), format="%(levelname)s %(message)s")
 
 
 def _load_run_callable(script_path: Path, module_name: str):
+    """Dynamically load a module and return its run() callable.
+
+    Args:
+        script_path: Path to the Python script.
+        module_name: Module name for sys.modules registration.
+
+    Returns:
+        The run() callable from the loaded module.
+
+    Raises:
+        ImportError: If the module cannot be loaded.
+        AttributeError: If the module lacks a callable run() function.
+    """
     script_path = script_path.resolve()
     if module_name in sys.modules:
         return getattr(sys.modules[module_name], "run")
@@ -301,6 +434,15 @@ def _load_run_callable(script_path: Path, module_name: str):
 
 
 def _latest_directory(base: Path, prefix: str) -> Path | None:
+    """Find the most recent directory matching a prefix.
+
+    Args:
+        base: Base directory to search.
+        prefix: Prefix to filter directories.
+
+    Returns:
+        Path to the latest matching directory or None.
+    """
     if not base.exists():
         return None
     candidates = [child for child in base.iterdir() if child.is_dir() and child.name.startswith(prefix)]
@@ -310,6 +452,14 @@ def _latest_directory(base: Path, prefix: str) -> Path | None:
 
 
 def _read_json(path: Path) -> dict[str, Any] | None:
+    """Read and parse a JSON file.
+
+    Args:
+        path: Path to the JSON file.
+
+    Returns:
+        Parsed dictionary or None if file missing or invalid.
+    """
     try:
         payload = json.loads(path.read_text(encoding="utf-8"))
     except (FileNotFoundError, json.JSONDecodeError):
@@ -318,6 +468,15 @@ def _read_json(path: Path) -> dict[str, Any] | None:
 
 
 def _relativize(path: Path | None, repo_root: Path) -> str | None:
+    """Convert a path to a repo-relative POSIX string.
+
+    Args:
+        path: Path to convert (or None).
+        repo_root: Repository root for relative calculation.
+
+    Returns:
+        POSIX-formatted relative or absolute path string, or None.
+    """
     if path is None:
         return None
     try:
@@ -327,6 +486,18 @@ def _relativize(path: Path | None, repo_root: Path) -> str | None:
 
 
 def _execute_coverage(paths: Paths, options: Options) -> CoverageOutcome:
+    """Execute the coverage inventory producer script.
+
+    Args:
+        paths: Paths configuration.
+        options: Options configuration.
+
+    Returns:
+        CoverageOutcome with report directory and summary.
+
+    Raises:
+        RuntimeError: If the script returns non-zero exit code.
+    """
     run_callable = _load_run_callable(paths.repo_root / COVERAGE_SCRIPT, COVERAGE_MODULE)
     run_slug = options.run_timestamp.strftime("%Y%m%d-%H%M")
     argv = [
@@ -364,6 +535,18 @@ def _execute_coverage(paths: Paths, options: Options) -> CoverageOutcome:
 
 
 def _execute_collect(paths: Paths, options: Options) -> CollectOutcome:
+    """Execute the test log collection producer script.
+
+    Args:
+        paths: Paths configuration.
+        options: Options configuration.
+
+    Returns:
+        CollectOutcome with report directory and metrics.
+
+    Raises:
+        RuntimeError: If the script returns unexpected payload.
+    """
     run_callable = _load_run_callable(paths.repo_root / COLLECT_SCRIPT, COLLECT_MODULE)
     run_slug = options.run_timestamp.strftime("%Y%m%d-%H%M")
     argv = [
@@ -398,6 +581,18 @@ def _execute_collect(paths: Paths, options: Options) -> CollectOutcome:
 
 
 def _execute_heatmap(paths: Paths, options: Options) -> HeatmapOutcome:
+    """Execute the churn complexity heatmap aggregator script.
+
+    Args:
+        paths: Paths configuration.
+        options: Options configuration.
+
+    Returns:
+        HeatmapOutcome with run directory and payload.
+
+    Raises:
+        RuntimeError: If the script returns unexpected payload.
+    """
     run_callable = _load_run_callable(paths.repo_root / HEATMAP_SCRIPT, HEATMAP_MODULE)
     argv = [
         "--repo-root",
@@ -423,6 +618,18 @@ def _execute_heatmap(paths: Paths, options: Options) -> HeatmapOutcome:
 
 
 def _execute_hardening(paths: Paths, options: Options) -> HardeningOutcome:
+    """Execute the test hardening analysis producer script.
+
+    Args:
+        paths: Paths configuration.
+        options: Options configuration.
+
+    Returns:
+        HardeningOutcome with run directory and payload.
+
+    Raises:
+        RuntimeError: If the script returns unexpected payload.
+    """
     run_callable = _load_run_callable(paths.repo_root / HARDENING_SCRIPT, HARDENING_MODULE)
     argv = [
         "--repo-root",
@@ -473,6 +680,19 @@ def _execute_health_report(
     *,
     producer_bundle_dir: Path | None,
 ) -> HealthReportOutcome:
+    """Execute the test log health report consumer script.
+
+    Args:
+        paths: Paths configuration.
+        options: Options configuration.
+        producer_bundle_dir: Path to producer bundle for input.
+
+    Returns:
+        HealthReportOutcome with run directory and payload.
+
+    Raises:
+        RuntimeError: If the script returns unexpected payload.
+    """
     run_callable = _load_run_callable(paths.repo_root / HEALTH_REPORT_SCRIPT, HEALTH_MODULE)
     argv = [
         "--logs-dir",
@@ -501,6 +721,11 @@ def _execute_health_report(
 
 
 def _register_scripts(registry: CatalogRegistry) -> None:
+    """Register all pipeline scripts in the catalog registry.
+
+    Args:
+        registry: CatalogRegistry instance to populate.
+    """
     registry.register(
         script_path=str(Path(".repo_studios/command_center/scripts/orchestrators/run_test_execution_telemetry.py")),
         topic=TOPIC_SLUG,
@@ -515,6 +740,14 @@ def _register_scripts(registry: CatalogRegistry) -> None:
 
 
 def _summarize_steps(result_steps: Sequence[Any]) -> str:
+    """Generate a simple Markdown summary of pipeline steps.
+
+    Args:
+        result_steps: Sequence of step result objects.
+
+    Returns:
+        Markdown-formatted step summary.
+    """
     lines = ["# Test Execution Telemetry Run", ""]
     for step in result_steps:
         detail = f" ({step.detail})" if step.detail else ""
@@ -523,10 +756,26 @@ def _summarize_steps(result_steps: Sequence[Any]) -> str:
 
 
 def _status_icon(status: str) -> str:
+    """Return an emoji icon for a step status.
+
+    Args:
+        status: Step status string (success, skipped, or failed).
+
+    Returns:
+        Emoji icon corresponding to the status.
+    """
     return "✅" if status == "success" else "⚠️" if status == "skipped" else "❌"
 
 
 def _section_pipeline_status(result_steps: Sequence[Any]) -> list[str]:
+    """Render the pipeline status section as Markdown lines.
+
+    Args:
+        result_steps: Sequence of step result objects.
+
+    Returns:
+        List of Markdown lines for the pipeline status table.
+    """
     lines = [
         "## Pipeline Status",
         "",
@@ -546,6 +795,16 @@ def _section_test_results(
     artifact_path: str | None,
     telemetry: dict[str, Any],
 ) -> list[str]:
+    """Render the test results section as Markdown lines.
+
+    Args:
+        collect_outcome: CollectOutcome from the collect step.
+        artifact_path: Relative path to the artifact directory.
+        telemetry: Telemetry data loaded from artifact.
+
+    Returns:
+        List of Markdown lines for the test results section.
+    """
     lines = ["## Test Results", ""]
     if artifact_path:
         lines.append(f"**Artifact:** `{artifact_path}`")
@@ -592,6 +851,16 @@ def _section_coverage(
     artifact_path: str | None,
     telemetry: dict[str, Any],
 ) -> list[str]:
+    """Render the coverage analysis section as Markdown lines.
+
+    Args:
+        coverage_outcome: CoverageOutcome from the coverage step.
+        artifact_path: Relative path to the artifact directory.
+        telemetry: Telemetry data loaded from artifact.
+
+    Returns:
+        List of Markdown lines for the coverage section.
+    """
     lines = ["## Coverage Analysis", ""]
     if artifact_path:
         lines.append(f"**Artifact:** `{artifact_path}`")
@@ -634,6 +903,16 @@ def _section_hardening(
     artifact_path: str | None,
     telemetry: dict[str, Any],
 ) -> list[str]:
+    """Render the test hardening section as Markdown lines.
+
+    Args:
+        hardening_outcome: HardeningOutcome from the hardening step.
+        artifact_path: Relative path to the artifact directory.
+        telemetry: Telemetry data loaded from artifact.
+
+    Returns:
+        List of Markdown lines for the hardening section.
+    """
     lines = ["## Test Hardening", ""]
     if artifact_path:
         lines.append(f"**Artifact:** `{artifact_path}`")
@@ -673,6 +952,16 @@ def _section_hotspots(
     artifact_path: str | None,
     heatmap_records: list[dict[str, Any]],
 ) -> list[str]:
+    """Render the churn × complexity hotspots section as Markdown lines.
+
+    Args:
+        heatmap_outcome: HeatmapOutcome from the heatmap step.
+        artifact_path: Relative path to the artifact directory.
+        heatmap_records: List of file metric records from heatmap.json.
+
+    Returns:
+        List of Markdown lines for the hotspots section.
+    """
     lines = ["## Churn × Complexity Hotspots", ""]
     if artifact_path:
         lines.append(f"**Artifact:** `{artifact_path}`")
@@ -715,6 +1004,16 @@ def _section_trend(
     artifact_path: str | None,
     comparisons: dict[str, Any],
 ) -> list[str]:
+    """Render the pass rate trend section as Markdown lines.
+
+    Args:
+        health_outcome: HealthReportOutcome from the health step, or None.
+        artifact_path: Relative path to the artifact directory.
+        comparisons: Comparison data from bundle_summary.json.
+
+    Returns:
+        List of Markdown lines for the trend section.
+    """
     lines = ["## Pass Rate Trend", ""]
     if artifact_path:
         lines.append(f"**Artifact:** `{artifact_path}`")
@@ -761,6 +1060,21 @@ def _section_trend(
 
 @dataclass
 class EnhancedSummaryContext:
+    """Context bundle for building the enhanced summary report.
+
+    Attributes:
+        run_slug: Timestamp-based identifier for this run.
+        completed_at: UTC datetime when the run completed.
+        result_steps: Sequence of pipeline step results.
+        collect_outcome: CollectOutcome from the collect step.
+        coverage_outcome: CoverageOutcome from the coverage step.
+        heatmap_outcome: HeatmapOutcome from the heatmap step.
+        hardening_outcome: HardeningOutcome from the hardening step.
+        health_outcome: HealthReportOutcome from health step, or None.
+        artifacts_section: Mapping of artifact names to relative paths.
+        repo_root: Repository root path for resolving artifacts.
+    """
+
     run_slug: str
     completed_at: datetime
     result_steps: Sequence[Any]
@@ -774,6 +1088,14 @@ class EnhancedSummaryContext:
 
 
 def _load_artifact_telemetry(artifact_dir: Path | None) -> dict[str, Any]:
+    """Load telemetry.json from an artifact directory.
+
+    Args:
+        artifact_dir: Path to the artifact directory, or None.
+
+    Returns:
+        Parsed telemetry dictionary, or empty dict if unavailable.
+    """
     if artifact_dir is None or not artifact_dir.exists():
         return {}
     telemetry_path = artifact_dir / "telemetry.json"
@@ -781,6 +1103,14 @@ def _load_artifact_telemetry(artifact_dir: Path | None) -> dict[str, Any]:
 
 
 def _load_heatmap_data(heatmap_dir: Path | None) -> list[dict[str, Any]]:
+    """Load file metric records from heatmap.json.
+
+    Args:
+        heatmap_dir: Path to the heatmap artifact directory, or None.
+
+    Returns:
+        List of file metric records, or empty list if unavailable.
+    """
     if heatmap_dir is None or not heatmap_dir.exists():
         return []
     heatmap_json = heatmap_dir / "heatmap.json"
@@ -793,6 +1123,14 @@ def _load_heatmap_data(heatmap_dir: Path | None) -> list[dict[str, Any]]:
 
 
 def _load_health_comparisons(health_dir: Path | None) -> dict[str, Any]:
+    """Load comparison data from bundle_summary.json.
+
+    Args:
+        health_dir: Path to the health report directory, or None.
+
+    Returns:
+        Comparisons dictionary, or empty dict if unavailable.
+    """
     if health_dir is None or not health_dir.exists():
         return {}
     bundle_path = health_dir / "bundle_summary.json"
@@ -802,6 +1140,14 @@ def _load_health_comparisons(health_dir: Path | None) -> dict[str, Any]:
 
 
 def _build_enhanced_summary(ctx: EnhancedSummaryContext) -> str:
+    """Build the enhanced Markdown summary from context.
+
+    Args:
+        ctx: EnhancedSummaryContext with all run data and outcomes.
+
+    Returns:
+        Complete Markdown summary string.
+    """
     lines: list[str] = []
 
     lines.append("# Test Execution Telemetry Run")
@@ -868,6 +1214,17 @@ def _build_enhanced_summary(ctx: EnhancedSummaryContext) -> str:
 
 
 def run(argv: Sequence[str] | None = None) -> int:
+    """Execute the test execution telemetry orchestrator.
+
+    Parse arguments, run the three-phase pipeline (collect, analyse,
+    summarize), and write report artifacts.
+
+    Args:
+        argv: Command-line arguments, or None to use sys.argv.
+
+    Returns:
+        Exit code (0 for success, non-zero for failure).
+    """
     args = parse_args(argv)
     paths = build_paths(args)
     options = build_options(args)
@@ -1089,6 +1446,14 @@ def run(argv: Sequence[str] | None = None) -> int:
 
 
 def main(argv: Sequence[str] | None = None) -> None:
+    """CLI entry point for the test execution telemetry orchestrator.
+
+    Args:
+        argv: Command-line arguments, or None to use sys.argv.
+
+    Raises:
+        SystemExit: With run() return code.
+    """
     raise SystemExit(run(argv))
 
 

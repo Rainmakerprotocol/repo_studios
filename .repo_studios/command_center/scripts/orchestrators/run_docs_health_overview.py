@@ -110,6 +110,23 @@ METRICS_STUB_TOPIC = "metrics_anchor_stub_validation"
 
 @dataclass(frozen=True)
 class Paths:
+    """Immutable path configuration for the docs health orchestrator.
+
+    Attributes:
+        repo_root: Repository root directory.
+        doc_index_output_dir: Output directory for doc index artifacts.
+        anchor_inventory_output_dir: Output directory for anchor inventory.
+        anchor_validation_output_dir: Output directory for anchor validation.
+        docs_integrity_output_dir: Output directory for docs integrity.
+        metrics_stub_output_dir: Output directory for metrics stub validation.
+        churn_output_dir: Output directory for code-doc churn report.
+        undocumented_output_dir: Output directory for undocumented logic report.
+        placeholder_output_dir: Output directory for placeholder scan.
+        monkey_patch_output_dir: Output directory for monkey patch scan.
+        aggregator_output_dir: Output directory for aggregated signals.
+        healthview_root: Root directory for healthview exports.
+    """
+
     repo_root: Path
     doc_index_output_dir: Path
     anchor_inventory_output_dir: Path
@@ -200,6 +217,20 @@ PATHS_CONFIG = PathsConfig(
 
 @dataclass(frozen=True)
 class KeepParameters:
+    """Retention settings for per-stage artifact pruning.
+
+    Attributes:
+        artifacts_to_keep: Default artifact retention count.
+        doc_index_keep: Retention count for doc index runs.
+        anchor_inventory_keep: Retention count for anchor inventory runs.
+        anchor_validation_keep: Retention count for anchor validation runs.
+        docs_integrity_keep: Retention count for docs integrity runs.
+        metrics_stub_keep: Retention count for metrics stub runs.
+        churn_keep: Retention count for churn report runs.
+        undocumented_keep: Retention count for undocumented logic runs.
+        aggregator_keep: Retention count for aggregator runs.
+    """
+
     artifacts_to_keep: int
     doc_index_keep: int
     anchor_inventory_keep: int
@@ -239,6 +270,31 @@ OPTIONS_CONFIG = OptionsConfig(
 
 @dataclass(frozen=True)
 class Options:
+    """Runtime options for the docs health orchestrator.
+
+    Attributes:
+        log_level: Logging verbosity level.
+        artifacts_to_keep: Default artifact retention count.
+        doc_index_keep: Retention count for doc index.
+        anchor_inventory_keep: Retention count for anchor inventory.
+        anchor_validation_keep: Retention count for anchor validation.
+        docs_integrity_keep: Retention count for docs integrity.
+        metrics_stub_keep: Retention count for metrics stub.
+        churn_keep: Retention count for churn report.
+        undocumented_keep: Retention count for undocumented logic.
+        aggregator_keep: Retention count for aggregator.
+        skip_doc_index: Skip doc index generation.
+        skip_anchor_inventory: Skip anchor inventory generation.
+        skip_anchor_validation: Skip anchor validation.
+        skip_docs_integrity: Skip docs integrity validation.
+        skip_metrics_stub: Skip metrics stub validation.
+        skip_churn: Skip churn report generation.
+        skip_undocumented: Skip undocumented logic report.
+        skip_aggregator: Skip aggregator stage.
+        skip_hygiene_signals: Skip hygiene signal inputs.
+        run_timestamp: Shared timestamp for this pipeline run.
+    """
+
     log_level: str
     artifacts_to_keep: int
     doc_index_keep: int
@@ -263,6 +319,17 @@ class Options:
 
 @dataclass(frozen=True)
 class DocIndexOutcome:
+    """Result of the doc index generation stage.
+
+    Attributes:
+        run_dir: Timestamped output directory.
+        slug: Run timestamp slug.
+        documents: Number of documents indexed.
+        headings: Number of headings found.
+        links: Number of links catalogued.
+        artifacts: Mapping of artifact names to paths.
+    """
+
     run_dir: Path | None
     slug: str | None
     documents: int | None
@@ -273,6 +340,16 @@ class DocIndexOutcome:
 
 @dataclass(frozen=True)
 class AnchorInventoryOutcome:
+    """Result of the anchor inventory generation stage.
+
+    Attributes:
+        run_dir: Timestamped output directory.
+        slug: Run timestamp slug.
+        total_slugs: Total anchor slugs inventoried.
+        duplicates: Number of duplicate anchors.
+        artifacts: Mapping of artifact names to paths.
+    """
+
     run_dir: Path | None
     slug: str | None
     total_slugs: int | None
@@ -282,6 +359,15 @@ class AnchorInventoryOutcome:
 
 @dataclass(frozen=True)
 class AnchorValidationOutcome:
+    """Result of the anchor validation stage.
+
+    Attributes:
+        run_dir: Timestamped output directory.
+        status: Validation status (ok or error).
+        issue_count: Number of broken anchor issues.
+        report_path: Path to the validation report.
+    """
+
     run_dir: Path | None
     status: str | None
     issue_count: int | None
@@ -290,6 +376,15 @@ class AnchorValidationOutcome:
 
 @dataclass(frozen=True)
 class DocsIntegrityOutcome:
+    """Result of the docs integrity validation stage.
+
+    Attributes:
+        run_dir: Timestamped output directory.
+        status: Integrity check status.
+        mismatched_blocks: Number of mismatched JSON blocks.
+        payload: Full telemetry payload from the producer.
+    """
+
     run_dir: Path | None
     status: str | None
     mismatched_blocks: int | None
@@ -298,6 +393,15 @@ class DocsIntegrityOutcome:
 
 @dataclass(frozen=True)
 class MetricsStubOutcome:
+    """Result of the metrics stub validation stage.
+
+    Attributes:
+        run_dir: Timestamped output directory.
+        status: Validation status.
+        missing_count: Number of missing anchor stubs.
+        payload: Full telemetry payload from the producer.
+    """
+
     run_dir: Path | None
     status: str | None
     missing_count: int | None
@@ -306,6 +410,14 @@ class MetricsStubOutcome:
 
 @dataclass(frozen=True)
 class ChurnOutcome:
+    """Result of the code-doc churn report stage.
+
+    Attributes:
+        run_dir: Timestamped output directory.
+        summary: Summary metrics from churn analysis.
+        artifacts: Mapping of artifact names to paths.
+    """
+
     run_dir: Path | None
     summary: dict[str, Any] | None
     artifacts: dict[str, Path]
@@ -313,6 +425,14 @@ class ChurnOutcome:
 
 @dataclass(frozen=True)
 class UndocumentedOutcome:
+    """Result of the undocumented logic report stage.
+
+    Attributes:
+        run_dir: Timestamped output directory.
+        summary: Summary metrics from undocumented logic scan.
+        artifacts: Mapping of artifact names to paths.
+    """
+
     run_dir: Path | None
     summary: dict[str, Any] | None
     artifacts: dict[str, Path]
@@ -320,6 +440,18 @@ class UndocumentedOutcome:
 
 @dataclass(frozen=True)
 class AggregatorOutcome:
+    """Result of the docs health signals aggregator stage.
+
+    Attributes:
+        run_dir: Timestamped output directory.
+        report_json: Path to the JSON report.
+        report_md: Path to the Markdown summary.
+        signals_tsv: Path to the TSV export.
+        signals_csv: Path to the CSV export.
+        bundle_summary: Path to the bundle summary JSON.
+        summary: Summary metrics from aggregation.
+    """
+
     run_dir: Path | None
     report_json: Path | None
     report_md: Path | None
@@ -330,6 +462,14 @@ class AggregatorOutcome:
 
 
 def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
+    """Parse command-line arguments for the docs health orchestrator.
+
+    Args:
+        argv: Command-line arguments. Defaults to sys.argv if None.
+
+    Returns:
+        Parsed argument namespace.
+    """
     parser = argparse.ArgumentParser(description=__doc__ or "")
     parser.add_argument("--repo-root", help="Repository root override")
     parser.add_argument("--doc-index-output-dir", default=str(DEFAULT_DOC_INDEX_OUTPUT))
@@ -395,6 +535,17 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
 
 
 def _parse_timestamp(raw: str | None) -> datetime:
+    """Parse an ISO-8601 timestamp string to a UTC datetime.
+
+    Args:
+        raw: Timestamp string or None for current time.
+
+    Returns:
+        Parsed datetime in UTC timezone.
+
+    Raises:
+        SystemExit: If the timestamp format is invalid.
+    """
     if not raw:
         return datetime.now(timezone.utc)
     try:
@@ -407,10 +558,26 @@ def _parse_timestamp(raw: str | None) -> datetime:
 
 
 def build_paths(args: argparse.Namespace) -> Paths:
+    """Build Paths instance from parsed arguments.
+
+    Args:
+        args: Parsed argument namespace.
+
+    Returns:
+        Configured Paths dataclass.
+    """
     return cast(Paths, build_standard_paths(args, PATHS_CONFIG, origin=Path(__file__)))
 
 
 def build_options(args: argparse.Namespace) -> Options:
+    """Build Options instance from parsed arguments.
+
+    Args:
+        args: Parsed argument namespace.
+
+    Returns:
+        Configured Options dataclass.
+    """
     keep_values = build_standard_options(args, OPTIONS_CONFIG)
     return Options(
         log_level=str(args.log_level),
@@ -437,6 +604,11 @@ def build_options(args: argparse.Namespace) -> Options:
 
 
 def configure_logging(level: str) -> None:
+    """Configure root logger with specified verbosity level.
+
+    Args:
+        level: Logging level name (DEBUG, INFO, WARNING, etc.).
+    """
     logging.basicConfig(
         level=getattr(logging, level.upper(), logging.INFO),
         format="%(levelname)s %(message)s",
@@ -446,6 +618,20 @@ def configure_logging(level: str) -> None:
 def _load_callable(
     script_path: Path, module_name: str, attribute: str
 ) -> Callable[[Sequence[str] | None], object]:
+    """Dynamically load a callable from a Python script.
+
+    Args:
+        script_path: Path to the Python script file.
+        module_name: Module name for sys.modules registration.
+        attribute: Name of the callable to retrieve.
+
+    Returns:
+        The loaded callable.
+
+    Raises:
+        ImportError: If the module cannot be loaded.
+        AttributeError: If the callable is missing.
+    """
     script_abs = script_path.resolve()
     if module_name in sys.modules:
         module = sys.modules[module_name]
@@ -463,6 +649,15 @@ def _load_callable(
 
 
 def _relativize(path: Path | None, repo_root: Path) -> str | None:
+    """Convert a path to a repo-relative POSIX string.
+
+    Args:
+        path: Absolute or relative path to convert.
+        repo_root: Repository root for relative calculation.
+
+    Returns:
+        POSIX-style relative path, or None if path is None.
+    """
     if path is None:
         return None
     try:
@@ -472,6 +667,14 @@ def _relativize(path: Path | None, repo_root: Path) -> str | None:
 
 
 def _read_json(path: Path) -> dict[str, Any] | None:
+    """Read and parse a JSON file.
+
+    Args:
+        path: Path to the JSON file.
+
+    Returns:
+        Parsed dictionary, or None if file is missing or invalid.
+    """
     try:
         data = json.loads(path.read_text(encoding="utf-8"))
     except (FileNotFoundError, json.JSONDecodeError):
@@ -480,6 +683,14 @@ def _read_json(path: Path) -> dict[str, Any] | None:
 
 
 def _filter_artifacts(artifacts: dict[str, Path]) -> dict[str, Path]:
+    """Filter artifact mapping to only existing paths.
+
+    Args:
+        artifacts: Mapping of artifact names to paths.
+
+    Returns:
+        Filtered mapping containing only existing files.
+    """
     usable: dict[str, Path] = {}
     for name, value in artifacts.items():
         if value.exists():
@@ -488,6 +699,18 @@ def _filter_artifacts(artifacts: dict[str, Path]) -> dict[str, Path]:
 
 
 def _execute_doc_index(paths: Paths, options: Options) -> DocIndexOutcome:
+    """Execute the doc index generation producer.
+
+    Args:
+        paths: Orchestrator path configuration.
+        options: Orchestrator runtime options.
+
+    Returns:
+        DocIndexOutcome with artifacts and summary metrics.
+
+    Raises:
+        RuntimeError: If the producer returns an unexpected payload.
+    """
     run_callable = _load_callable(
         paths.repo_root / DOC_INDEX_SCRIPT, DOC_INDEX_MODULE, "run"
     )
@@ -533,6 +756,18 @@ def _execute_doc_index(paths: Paths, options: Options) -> DocIndexOutcome:
 
 
 def _execute_anchor_inventory(paths: Paths, options: Options) -> AnchorInventoryOutcome:
+    """Execute the anchor inventory generation producer.
+
+    Args:
+        paths: Orchestrator path configuration.
+        options: Orchestrator runtime options.
+
+    Returns:
+        AnchorInventoryOutcome with artifacts and summary metrics.
+
+    Raises:
+        RuntimeError: If the producer returns an unexpected payload.
+    """
     run_callable = _load_callable(
         paths.repo_root / ANCHOR_INVENTORY_SCRIPT, ANCHOR_INVENTORY_MODULE, "run"
     )
@@ -582,6 +817,18 @@ def _execute_anchor_inventory(paths: Paths, options: Options) -> AnchorInventory
 def _execute_anchor_validation(
     paths: Paths, options: Options
 ) -> AnchorValidationOutcome:
+    """Execute the markdown anchor validation producer.
+
+    Args:
+        paths: Orchestrator path configuration.
+        options: Orchestrator runtime options.
+
+    Returns:
+        AnchorValidationOutcome with status and issue count.
+
+    Raises:
+        RuntimeError: If the producer exits with non-zero status.
+    """
     run_callable = _load_callable(
         paths.repo_root / ANCHOR_VALIDATION_SCRIPT, ANCHOR_VALIDATION_MODULE, "main"
     )
@@ -653,6 +900,18 @@ def _execute_anchor_validation(
 
 
 def _execute_docs_integrity(paths: Paths, options: Options) -> DocsIntegrityOutcome:
+    """Execute the docs integrity validation producer.
+
+    Args:
+        paths: Orchestrator path configuration.
+        options: Orchestrator runtime options.
+
+    Returns:
+        DocsIntegrityOutcome with status and mismatch count.
+
+    Raises:
+        RuntimeError: If the producer returns an unexpected payload.
+    """
     run_callable = _load_callable(
         paths.repo_root / DOCS_INTEGRITY_SCRIPT, DOCS_INTEGRITY_MODULE, "run"
     )
@@ -696,6 +955,18 @@ def _execute_docs_integrity(paths: Paths, options: Options) -> DocsIntegrityOutc
 
 
 def _execute_metrics_stub(paths: Paths, options: Options) -> MetricsStubOutcome:
+    """Execute the metrics stub validation producer.
+
+    Args:
+        paths: Orchestrator path configuration.
+        options: Orchestrator runtime options.
+
+    Returns:
+        MetricsStubOutcome with status and missing count.
+
+    Raises:
+        RuntimeError: If the producer returns an unexpected payload.
+    """
     run_callable = _load_callable(
         paths.repo_root / METRICS_STUB_SCRIPT, METRICS_STUB_MODULE, "run"
     )
@@ -736,6 +1007,18 @@ def _execute_metrics_stub(paths: Paths, options: Options) -> MetricsStubOutcome:
 
 
 def _execute_churn(paths: Paths, options: Options) -> ChurnOutcome:
+    """Execute the code-doc churn report producer.
+
+    Args:
+        paths: Orchestrator path configuration.
+        options: Orchestrator runtime options.
+
+    Returns:
+        ChurnOutcome with summary and artifacts.
+
+    Raises:
+        RuntimeError: If the producer returns an unexpected payload.
+    """
     run_callable = _load_callable(paths.repo_root / CHURN_SCRIPT, CHURN_MODULE, "run")
     argv = [
         "--repo-root",
@@ -773,6 +1056,18 @@ def _execute_churn(paths: Paths, options: Options) -> ChurnOutcome:
 
 
 def _execute_undocumented(paths: Paths, options: Options) -> UndocumentedOutcome:
+    """Execute the undocumented logic report producer.
+
+    Args:
+        paths: Orchestrator path configuration.
+        options: Orchestrator runtime options.
+
+    Returns:
+        UndocumentedOutcome with summary and artifacts.
+
+    Raises:
+        RuntimeError: If the producer returns an unexpected payload.
+    """
     run_callable = _load_callable(
         paths.repo_root / UNDOCUMENTED_SCRIPT, UNDOCUMENTED_MODULE, "run"
     )
@@ -815,48 +1110,133 @@ def _execute_undocumented(paths: Paths, options: Options) -> UndocumentedOutcome
 
 
 def _latest_pointer(paths: Paths, *, name: str) -> Path:
+    """Return a pointer path under the doc index output directory.
+
+    Args:
+        paths: Orchestrator path configuration.
+        name: Pointer file or subdirectory name.
+
+    Returns:
+        Path to the named pointer location.
+    """
     return paths.doc_index_output_dir / name
 
 
 def _latest_anchor_inventory(paths: Paths) -> Path:
+    """Return the anchor inventory output directory.
+
+    Args:
+        paths: Orchestrator path configuration.
+
+    Returns:
+        Path to the anchor inventory output directory.
+    """
     # Output dir already contains full topic path via report_paths
     return paths.anchor_inventory_output_dir
 
 
 def _latest_anchor_validation(paths: Paths) -> Path:
+    """Return the anchor validation output directory.
+
+    Args:
+        paths: Orchestrator path configuration.
+
+    Returns:
+        Path to the anchor validation output directory.
+    """
     # Output dir already contains full topic path via report_paths
     return paths.anchor_validation_output_dir
 
 
 def _latest_docs_integrity(paths: Paths) -> Path:
+    """Return the docs integrity output directory.
+
+    Args:
+        paths: Orchestrator path configuration.
+
+    Returns:
+        Path to the docs integrity output directory.
+    """
     # Output dir already contains full topic path via report_paths
     return paths.docs_integrity_output_dir
 
 
 def _latest_metrics_stub(paths: Paths) -> Path:
+    """Return the metrics stub output directory.
+
+    Args:
+        paths: Orchestrator path configuration.
+
+    Returns:
+        Path to the metrics stub output directory.
+    """
     # Output dir already contains full topic path via report_paths
     return paths.metrics_stub_output_dir
 
 
 def _latest_churn(paths: Paths) -> Path:
+    """Return the churn report output directory.
+
+    Args:
+        paths: Orchestrator path configuration.
+
+    Returns:
+        Path to the churn report output directory.
+    """
     # Output dir already contains full topic path via report_paths
     return paths.churn_output_dir
 
 
 def _latest_undocumented(paths: Paths) -> Path:
+    """Return the undocumented logic output directory.
+
+    Args:
+        paths: Orchestrator path configuration.
+
+    Returns:
+        Path to the undocumented logic output directory.
+    """
     # Output dir already contains full topic path via report_paths
     return paths.undocumented_output_dir
 
 
 def _latest_placeholder(paths: Paths) -> Path:
+    """Return the placeholder scan output directory.
+
+    Args:
+        paths: Orchestrator path configuration.
+
+    Returns:
+        Path to the placeholder scan output directory.
+    """
     return paths.placeholder_output_dir
 
 
 def _latest_monkey_patch(paths: Paths) -> Path:
+    """Return the monkey patch scan output directory.
+
+    Args:
+        paths: Orchestrator path configuration.
+
+    Returns:
+        Path to the monkey patch scan output directory.
+    """
     return paths.monkey_patch_output_dir
 
 
 def _execute_aggregator(paths: Paths, options: Options) -> AggregatorOutcome:
+    """Execute the docs health signals aggregator.
+
+    Args:
+        paths: Orchestrator path configuration.
+        options: Orchestrator runtime options.
+
+    Returns:
+        AggregatorOutcome with report paths and summary.
+
+    Raises:
+        RuntimeError: If the aggregator returns an unexpected payload.
+    """
     run_callable = _load_callable(
         paths.repo_root / AGGREGATOR_SCRIPT, AGGREGATOR_MODULE, "run"
     )
@@ -939,6 +1319,11 @@ def _execute_aggregator(paths: Paths, options: Options) -> AggregatorOutcome:
 
 
 def _register_catalog(registry: CatalogRegistry) -> None:
+    """Register producer and aggregator scripts with the catalog.
+
+    Args:
+        registry: CatalogRegistry instance for script registration.
+    """
     registry.register(
         script_path=str(DOC_INDEX_SCRIPT), topic=TOPIC_SLUG, role="producer"
     )
@@ -967,6 +1352,14 @@ def _register_catalog(registry: CatalogRegistry) -> None:
 
 
 def _summarize_steps(steps: Sequence[Any]) -> str:
+    """Render step outcomes as a Markdown summary.
+
+    Args:
+        steps: Sequence of TopicStep instances.
+
+    Returns:
+        Markdown-formatted summary string.
+    """
     lines = ["# Docs Health Run", ""]
     for step in steps:
         detail = f" ({step.detail})" if step.detail else ""
@@ -975,6 +1368,16 @@ def _summarize_steps(steps: Sequence[Any]) -> str:
 
 
 def run(argv: Sequence[str] | None = None) -> int:
+    """Execute the docs health orchestrator pipeline.
+
+    Coordinate producers and aggregator stages for the docs health topic.
+
+    Args:
+        argv: Command-line arguments. Defaults to sys.argv if None.
+
+    Returns:
+        Exit code (0 on success).
+    """
     args = parse_args(argv)
     paths = build_paths(args)
     options = build_options(args)
@@ -1390,6 +1793,14 @@ def run(argv: Sequence[str] | None = None) -> int:
 
 
 def main(argv: Sequence[str] | None = None) -> None:
+    """Entry point for CLI invocation.
+
+    Args:
+        argv: Command-line arguments. Defaults to sys.argv if None.
+
+    Raises:
+        SystemExit: Always raises with the run exit code.
+    """
     raise SystemExit(run(argv))
 
 

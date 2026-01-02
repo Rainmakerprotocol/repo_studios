@@ -76,6 +76,14 @@ SCHEMA_VERSION = 1
 
 @dataclass(frozen=True)
 class Paths:
+    """Path configuration for test coverage inventory generation.
+
+    Attributes:
+        repo_root: Repository root directory.
+        coverage_xml: Path to the Coverage.py XML report file.
+        output_dir: Output directory for generated report bundles.
+    """
+
     repo_root: Path
     coverage_xml: Path
     output_dir: Path
@@ -83,11 +91,24 @@ class Paths:
 
 @dataclass(frozen=True)
 class Options:
+    """Runtime options for test coverage inventory generation.
+
+    Attributes:
+        artifacts_to_keep: Number of historical run directories to retain.
+    """
+
     artifacts_to_keep: int
 
 
 @dataclass(frozen=True)
 class RefreshResult:
+    """Result from refreshing coverage XML via pytest execution.
+
+    Attributes:
+        exit_code: Combined exit code from pytest runs (0 = all passed).
+        suite_results: Per-suite execution results with exit codes.
+    """
+
     exit_code: int
     suite_results: list[dict[str, Any]]
 
@@ -121,6 +142,14 @@ OPTIONS_CONFIG = OptionsConfig(
 
 @dataclass(frozen=True)
 class FunctionStat:
+    """Statistics for a single function extracted from source code.
+
+    Attributes:
+        name: Fully qualified function name (including class scope).
+        start_line: Starting line number in the source file.
+        end_line: Ending line number in the source file.
+    """
+
     name: str
     start_line: int
     end_line: int
@@ -128,16 +157,37 @@ class FunctionStat:
 
 @dataclass(frozen=True)
 class FileCoverage:
+    """Coverage data for a single source file.
+
+    Attributes:
+        path: Absolute path to the source file.
+        functions: List of functions extracted from the file.
+        line_hits: Mapping of line numbers to execution hit counts.
+    """
+
     path: Path
     functions: list[FunctionStat]
     line_hits: dict[int, int]
 
 
 def _current_utc() -> datetime:
+    """Return the current UTC datetime with timezone info.
+
+    Returns:
+        Current datetime in UTC timezone.
+    """
     return datetime.now(timezone.utc)
 
 
 def _parse_timestamp(raw: str | None) -> datetime:
+    """Parse an ISO 8601 timestamp string or return current UTC time.
+
+    Args:
+        raw: ISO 8601 timestamp string, or None for current time.
+
+    Returns:
+        Parsed datetime with UTC timezone.
+    """
     if not raw:
         return _current_utc()
     parsed = datetime.fromisoformat(raw)
@@ -145,10 +195,26 @@ def _parse_timestamp(raw: str | None) -> datetime:
 
 
 def _timestamp_slug(timestamp: datetime) -> str:
+    """Convert a datetime to a YYYYMMDD-HHMM slug string.
+
+    Args:
+        timestamp: Datetime to convert.
+
+    Returns:
+        Formatted slug string in YYYYMMDD-HHMM format (UTC).
+    """
     return timestamp.astimezone(timezone.utc).strftime("%Y%m%d-%H%M")
 
 
 def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
+    """Parse command-line arguments for coverage inventory generation.
+
+    Args:
+        argv: Command-line arguments. Uses sys.argv if None.
+
+    Returns:
+        Parsed argument namespace with all CLI options.
+    """
     parser = argparse.ArgumentParser(description="Summarise function-level test coverage from Coverage.py XML outputs.")
     parser.add_argument("--repo-root", help="Override repository root resolution")
     parser.add_argument(
@@ -248,6 +314,22 @@ def _refresh_coverage_xml(
     extra_pytest_args: Sequence[str] | None,
     omit_tests: bool,
 ) -> RefreshResult:
+    """Refresh coverage XML by running pytest suites with Coverage.py.
+
+    Executes each test suite with coverage collection, merges results,
+    and generates a combined XML report.
+
+    Args:
+        repo_root: Repository root directory.
+        coverage_xml: Path where the combined coverage XML will be written.
+        tests: Test paths to pass to pytest.
+        cov_targets: Coverage targets for pytest-cov --cov= arguments.
+        extra_pytest_args: Additional arguments to pass to pytest.
+        omit_tests: Whether to omit */tests/* paths from coverage.
+
+    Returns:
+        RefreshResult with combined exit code and per-suite results.
+    """
     coverage_xml.parent.mkdir(parents=True, exist_ok=True)
 
     resolved_cov_targets = list(cov_targets) if cov_targets else [".repo_studios"]
@@ -325,6 +407,15 @@ def _refresh_coverage_xml(
 
 
 def _within_repo(path: Path, repo_root: Path) -> bool:
+    """Check if a path is within the repository root.
+
+    Args:
+        path: Path to check.
+        repo_root: Repository root directory.
+
+    Returns:
+        True if path is under repo_root, False otherwise.
+    """
     try:
         path.relative_to(repo_root)
     except ValueError:
@@ -338,6 +429,19 @@ def _resolve_filename(
     repo_root: Path,
     sources: list[Path],
 ) -> Path:
+    """Resolve a coverage XML filename to an absolute path.
+
+    Attempts to find the file by checking source directories first,
+    then falling back to the repository root.
+
+    Args:
+        filename: Filename from coverage XML (may be relative).
+        repo_root: Repository root directory.
+        sources: List of source directories from coverage XML.
+
+    Returns:
+        Resolved absolute path to the source file.
+    """
     candidate = Path(filename)
     if candidate.is_absolute():
         return candidate.resolve()
@@ -353,6 +457,18 @@ def _load_coverage_lines(
     *,
     repo_root: Path,
 ) -> dict[Path, dict[int, int]]:
+    """Load line hit counts from a Coverage.py XML report.
+
+    Parses the coverage XML and extracts per-file line hit data,
+    resolving filenames to absolute paths.
+
+    Args:
+        coverage_xml: Path to the Coverage.py XML report.
+        repo_root: Repository root for relative path resolution.
+
+    Returns:
+        Mapping of file paths to line number hit count dictionaries.
+    """
     tree = ET.parse(coverage_xml)
     root = tree.getroot()
     sources = [
@@ -384,24 +500,54 @@ def _load_coverage_lines(
 
 
 class _FunctionCollector(ast.NodeVisitor):
+    """AST visitor that collects function and method definitions.
+
+    Walks the AST tree and extracts function statistics including
+    fully qualified names (with class scope) and line ranges.
+
+    Attributes:
+        functions: List of collected FunctionStat objects.
+    """
+
     def __init__(self) -> None:
+        """Initialize the collector with empty state."""
         self._scopes: list[str] = []
         self.functions: list[FunctionStat] = []
 
     def visit_ClassDef(self, node: ast.ClassDef) -> None:  # noqa: N802
+        """Visit a class definition and track its scope.
+
+        Args:
+            node: AST class definition node.
+        """
         self._scopes.append(node.name)
         self.generic_visit(node)
         self._scopes.pop()
 
     def visit_FunctionDef(self, node: ast.FunctionDef) -> None:  # noqa: N802
+        """Visit a function definition and record its statistics.
+
+        Args:
+            node: AST function definition node.
+        """
         self._add_function(node)
         self.generic_visit(node)
 
     def visit_AsyncFunctionDef(self, node: ast.AsyncFunctionDef) -> None:  # noqa: N802
+        """Visit an async function definition and record its statistics.
+
+        Args:
+            node: AST async function definition node.
+        """
         self._add_function(node)
         self.generic_visit(node)
 
     def _add_function(self, node: ast.AST) -> None:
+        """Add a function to the collected statistics.
+
+        Args:
+            node: AST node for a function or async function.
+        """
         name = getattr(node, "name", "<anonymous>")
         parts = [*self._scopes, str(name)]
         start = getattr(node, "lineno", 1)
@@ -412,6 +558,17 @@ class _FunctionCollector(ast.NodeVisitor):
 
 
 def _collect_functions(path: Path) -> list[FunctionStat]:
+    """Collect function statistics from a Python source file.
+
+    Parses the file and extracts all function and method definitions
+    with their line ranges.
+
+    Args:
+        path: Path to the Python source file.
+
+    Returns:
+        List of FunctionStat objects, empty if parsing fails.
+    """
     try:
         text = path.read_text(encoding="utf-8")
     except OSError:
@@ -426,6 +583,18 @@ def _collect_functions(path: Path) -> list[FunctionStat]:
 
 
 def _is_function_covered(function: FunctionStat, hits: dict[int, int]) -> bool:
+    """Determine if a function has any line coverage.
+
+    A function is considered covered if at least one line within
+    its range has a hit count greater than zero.
+
+    Args:
+        function: Function statistics with line range.
+        hits: Line number to hit count mapping.
+
+    Returns:
+        True if any line in the function range was executed.
+    """
     for line in range(function.start_line, function.end_line + 1):
         if hits.get(line, 0) > 0:
             return True
@@ -433,6 +602,15 @@ def _is_function_covered(function: FunctionStat, hits: dict[int, int]) -> bool:
 
 
 def _round_pct(covered: int, total: int) -> float:
+    """Calculate and round a coverage percentage.
+
+    Args:
+        covered: Number of covered items.
+        total: Total number of items.
+
+    Returns:
+        Percentage as float rounded to 2 decimal places, or 0.0 if total is 0.
+    """
     if total == 0:
         return 0.0
     pct = (covered / total) * 100
@@ -445,6 +623,16 @@ def _summarize_file(
     repo_root: Path,
     include_empty: bool,
 ) -> dict[str, Any] | None:
+    """Generate a coverage summary for a single file.
+
+    Args:
+        report: FileCoverage data for the file.
+        repo_root: Repository root for relative path calculation.
+        include_empty: Whether to include files with zero functions.
+
+    Returns:
+        Dictionary with file coverage statistics, or None if excluded.
+    """
     functions = report.functions
     if not functions and not include_empty:
         return None
@@ -468,6 +656,15 @@ def _summarize_file(
 
 
 def _relative_path(path: Path, repo_root: Path) -> str:
+    """Convert an absolute path to a repository-relative POSIX string.
+
+    Args:
+        path: Absolute path to convert.
+        repo_root: Repository root directory.
+
+    Returns:
+        POSIX-style relative path, or absolute POSIX path if outside repo.
+    """
     try:
         return path.relative_to(repo_root).as_posix()
     except ValueError:
@@ -483,6 +680,22 @@ def _build_payload(
     include_empty: bool,
     min_coverage: float | None,
 ) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+    """Build the complete coverage inventory payload.
+
+    Aggregates file-level coverage data into a structured payload
+    with summary statistics and threshold validation.
+
+    Args:
+        files: Iterable of file summary dictionaries (may contain None).
+        repo_root: Repository root directory.
+        coverage_source: Path to the coverage XML source.
+        generated_at: Timestamp for the report generation.
+        include_empty: Whether empty files were included.
+        min_coverage: Minimum coverage threshold percentage, or None.
+
+    Returns:
+        Tuple of (payload dict, ordered file entries list).
+    """
     file_entries: list[dict[str, Any]] = [entry for entry in files if entry is not None]
     file_entries.sort(key=lambda item: (float(item.get("coverage_pct", 0.0)), str(item.get("path", ""))))
     total_functions = sum(int(item.get("function_count", 0) or 0) for item in file_entries)
@@ -535,6 +748,18 @@ def _build_payload(
 
 
 def _render_summary_markdown(*, timestamp_slug: str, payload: dict[str, Any]) -> str:
+    """Render the coverage inventory as a Markdown summary.
+
+    Generates a human-readable Markdown report with metadata header
+    and a table of per-file coverage statistics.
+
+    Args:
+        timestamp_slug: YYYYMMDD-HHMM timestamp string for the report.
+        payload: Complete coverage inventory payload dictionary.
+
+    Returns:
+        Formatted Markdown string.
+    """
     summary = payload.get("summary", {}) if isinstance(payload.get("summary", {}), dict) else {}
     files = payload.get("files", []) if isinstance(payload.get("files", []), list) else []
     lines: list[str] = [
@@ -577,6 +802,18 @@ def _render_summary_markdown(*, timestamp_slug: str, payload: dict[str, Any]) ->
 
 
 def run(argv: Sequence[str] | None = None) -> int:
+    """Execute the test coverage inventory generation workflow.
+
+    Parses CLI arguments, optionally refreshes coverage data via pytest,
+    analyzes function-level coverage from Coverage.py XML, and writes
+    a timestamped report bundle with manifest, summary, and telemetry.
+
+    Args:
+        argv: Command-line arguments. Uses sys.argv if None.
+
+    Returns:
+        Exit code: 0 on success, 1 on threshold failure, 2 on validation error.
+    """
     args = parse_args(argv)
     logging.basicConfig(
         level=getattr(logging, args.log_level.upper(), logging.INFO),
@@ -777,6 +1014,14 @@ def run(argv: Sequence[str] | None = None) -> int:
 
 
 def main(argv: Sequence[str] | None = None) -> int:
+    """CLI entry point for test coverage inventory generation.
+
+    Args:
+        argv: Command-line arguments. Uses sys.argv if None.
+
+    Returns:
+        Exit code from run().
+    """
     return run(argv)
 
 

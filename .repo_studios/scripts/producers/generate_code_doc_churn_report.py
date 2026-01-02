@@ -78,6 +78,16 @@ DEFAULT_OUTPUT_DIR = build_topic_path("producer", TOPIC_SLUG)
 
 @dataclass(frozen=True)
 class Paths:
+    """Path configuration for code/doc churn report generation.
+
+    Attributes:
+        repo_root: Repository root directory.
+        output_dir: Directory for report artifacts.
+        doc_index: Path to latest doc index JSON.
+        anchor_inventory: Path to latest anchor inventory JSON.
+        allowlist: Path to module allowlist file.
+    """
+
     repo_root: Path
     output_dir: Path
     doc_index: Path
@@ -87,6 +97,12 @@ class Paths:
 
 @dataclass(frozen=True)
 class Options:
+    """Options for code/doc churn report generation.
+
+    Attributes:
+        artifacts_to_keep: Number of historical run directories to retain.
+    """
+
     artifacts_to_keep: int
 
 
@@ -132,6 +148,17 @@ OPTIONS_CONFIG = OptionsConfig(dataclass_type=Options, keep_specs=KEEP_SPECS)
 
 @dataclass
 class ModuleActivity:
+    """Track activity for a single module across commits.
+
+    Attributes:
+        module: Module identifier string.
+        code_paths: Set of code file paths modified.
+        doc_paths: Set of documentation paths modified.
+        commit_hashes: Set of commit hashes affecting this module.
+        authors: Set of commit authors.
+        last_commit_utc: Datetime of the most recent commit.
+    """
+
     module: str
     code_paths: set[str] = field(default_factory=set)
     doc_paths: set[str] = field(default_factory=set)
@@ -140,6 +167,7 @@ class ModuleActivity:
     last_commit_utc: datetime | None = None
 
     def to_payload(self, *, doc_candidates: list[dict[str, Any]]) -> dict[str, Any]:
+        """Convert activity to a JSON-serializable dictionary."""
         return {
             "module": self.module,
             "code_paths": sorted(self.code_paths),
@@ -153,12 +181,22 @@ class ModuleActivity:
 
 @dataclass
 class GitMetadata:
+    """Metadata about the git history analysis.
+
+    Attributes:
+        commits_examined: Number of commits analyzed.
+        authors: Set of distinct commit authors.
+        head_commit: Current HEAD commit hash.
+        window: Git log time window (--since value).
+    """
+
     commits_examined: int
     authors: set[str]
     head_commit: str | None
     window: str
 
     def to_payload(self) -> dict[str, Any]:
+        """Convert metadata to a JSON-serializable dictionary."""
         return {
             "window": self.window,
             "commits_examined": self.commits_examined,
@@ -169,6 +207,14 @@ class GitMetadata:
 
 
 def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
+    """Parse command-line arguments for code/doc churn report.
+
+    Args:
+        argv: Command-line arguments. Uses sys.argv[1:] if None.
+
+    Returns:
+        Parsed namespace with validated arguments.
+    """
     parser = argparse.ArgumentParser(description="Generate code/doc churn discrepancy report")
     parser.add_argument("--repo-root", help="Repository root override")
     parser.add_argument("--output-dir", help="Directory for report artifacts")
@@ -199,6 +245,14 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
 
 
 def _read_allowlist(path: Path) -> set[str]:
+    """Read module allowlist from a text file.
+
+    Args:
+        path: Path to allowlist file (one module per line).
+
+    Returns:
+        Set of allowed module names.
+    """
     if not path.exists():
         return set()
     entries = {line.strip() for line in path.read_text(encoding="utf-8", errors="ignore").splitlines()}
@@ -206,6 +260,15 @@ def _read_allowlist(path: Path) -> set[str]:
 
 
 def _git(args: Sequence[str], *, repo_root: Path) -> subprocess.CompletedProcess:
+    """Run a git command in the specified repository.
+
+    Args:
+        args: Git command arguments (without 'git' prefix).
+        repo_root: Repository root directory.
+
+    Returns:
+        CompletedProcess with stdout, stderr, and returncode.
+    """
     return subprocess.run(
         ["git", "--no-pager", *args],
         cwd=repo_root,
@@ -216,6 +279,18 @@ def _git(args: Sequence[str], *, repo_root: Path) -> subprocess.CompletedProcess
 
 
 def _collect_commits(repo_root: Path, *, window: str, until: str | None) -> tuple[list[dict[str, Any]], set[str]]:
+    """Collect commits from git history within the specified window.
+
+    Parse git log output to extract commit metadata and file changes.
+
+    Args:
+        repo_root: Repository root directory.
+        window: Git --since value for time window.
+        until: Optional git --until value to cap the window.
+
+    Returns:
+        Tuple of (list of commit dicts, set of author names).
+    """
     base_args = ["log", f"--since={window}", "--date=iso", "--name-status", "--pretty=format:%H\x01%an\x01%ad"]
     if until:
         base_args.append(f"--until={until}")
@@ -261,6 +336,17 @@ def _collect_commits(repo_root: Path, *, window: str, until: str | None) -> tupl
 
 
 def _module_key(path: str) -> str:
+    """Derive a module identifier from a file path.
+
+    Extract the top-level module or directory name from the path,
+    with special handling for docs and .repo_studios directories.
+
+    Args:
+        path: File path relative to repository root.
+
+    Returns:
+        Module identifier string.
+    """
     path = path.strip().lstrip("./")
     if not path:
         return "root"
@@ -281,6 +367,14 @@ def _module_key(path: str) -> str:
 
 
 def _is_doc_path(path: str) -> bool:
+    """Check if a path represents a documentation file.
+
+    Args:
+        path: File path to check.
+
+    Returns:
+        True if the path is a documentation file.
+    """
     normalized = path.lower()
     if normalized.startswith("docs/"):
         return True
@@ -290,6 +384,14 @@ def _is_doc_path(path: str) -> bool:
 
 
 def _is_code_path(path: str) -> bool:
+    """Check if a path represents a code file.
+
+    Args:
+        path: File path to check.
+
+    Returns:
+        True if the path is a code file with an allowed extension.
+    """
     if _is_doc_path(path):
         return False
     suffix = Path(path).suffix.lower()
@@ -297,6 +399,14 @@ def _is_code_path(path: str) -> bool:
 
 
 def _parse_datetime(raw: str) -> datetime | None:
+    """Parse an ISO datetime string.
+
+    Args:
+        raw: ISO-formatted datetime string.
+
+    Returns:
+        Parsed datetime or None if parsing fails.
+    """
     try:
         return datetime.fromisoformat(raw)
     except ValueError:
@@ -304,6 +414,14 @@ def _parse_datetime(raw: str) -> datetime | None:
 
 
 def _latest_run_dir(topic_dir: Path) -> Path | None:
+    """Find the most recent run directory in a topic folder.
+
+    Args:
+        topic_dir: Directory containing timestamped run folders.
+
+    Returns:
+        Path to the latest run directory, or None if empty.
+    """
     if not topic_dir.exists() or not topic_dir.is_dir():
         return None
     runs = [node for node in topic_dir.iterdir() if node.is_dir()]
@@ -314,6 +432,17 @@ def _latest_run_dir(topic_dir: Path) -> Path | None:
 
 
 def _load_doc_index(path: Path) -> dict[str, list[dict[str, Any]]]:
+    """Load the documentation index and group by module.
+
+    Read telemetry from a doc index directory or JSON file and
+    organize documents by their derived module key.
+
+    Args:
+        path: Path to doc index directory or JSON file.
+
+    Returns:
+        Dictionary mapping module names to document records.
+    """
     if not path.exists():
         return {}
 
@@ -358,6 +487,18 @@ def _build_module_activity(
     *,
     allowlist: set[str],
 ) -> tuple[list[ModuleActivity], list[ModuleActivity]]:
+    """Build module activity from commit data.
+
+    Aggregate code and doc path changes by module and classify
+    into flagged (code-only) and doc-updated modules.
+
+    Args:
+        commits: Iterable of commit dictionaries.
+        allowlist: Set of module names to exclude from flagging.
+
+    Returns:
+        Tuple of (flagged modules, doc-updated modules).
+    """
     activity: dict[str, ModuleActivity] = {}
     for commit in commits:
         commit_hash = commit.get("hash")
@@ -413,6 +554,28 @@ def build_report(
     doc_index_path: Path,
     anchor_inventory_path: Path,
 ) -> dict[str, Any]:
+    """Build the churn report dictionary.
+
+    Assemble all analysis results into a structured report with
+    git metadata, module activity, and summary metrics.
+
+    Args:
+        repo_root: Repository root directory.
+        window: Git log time window.
+        commits: List of commit dictionaries.
+        authors: Set of commit authors.
+        flagged: Modules with code changes but no doc updates.
+        doc_updated: Modules with both code and doc updates.
+        allowlist: Set of allowed module names.
+        doc_index: Documentation index grouped by module.
+        generated_ts: Report generation timestamp.
+        head_commit: Current HEAD commit hash.
+        doc_index_path: Path to doc index source.
+        anchor_inventory_path: Path to anchor inventory source.
+
+    Returns:
+        Complete churn report dictionary.
+    """
     git_meta = GitMetadata(
         commits_examined=len(commits),
         authors=authors,
@@ -441,6 +604,17 @@ def build_report(
 
 
 def render_markdown(report: dict[str, Any]) -> str:
+    """Render the churn report as a markdown summary.
+
+    Format the report with status, metrics, module tables,
+    and references for human readability.
+
+    Args:
+        report: The churn report dictionary.
+
+    Returns:
+        A markdown-formatted summary string.
+    """
     summary = report.get("summary", {})
     git_meta = report.get("git", {})
     modules = report.get("modules_missing_docs", [])
@@ -505,6 +679,14 @@ def render_markdown(report: dict[str, Any]) -> str:
 
 
 def render_tsv(modules: list[dict[str, Any]]) -> str:
+    """Render module activity as a tab-separated values string.
+
+    Args:
+        modules: List of module activity dictionaries.
+
+    Returns:
+        TSV-formatted string with header and data rows.
+    """
     lines = ["module\tcode_paths\tdoc_paths\tcommit_hashes\tauthors\tlast_commit_utc"]
     for module in modules:
         lines.append(
@@ -523,6 +705,14 @@ def render_tsv(modules: list[dict[str, Any]]) -> str:
 
 
 def _bundle_summary(report: dict[str, Any]) -> dict[str, Any]:
+    """Extract summary metrics from a report for manifest bundling.
+
+    Args:
+        report: The churn report dictionary.
+
+    Returns:
+        Dictionary with key summary metrics.
+    """
     summary = report.get("summary", {})
     git_meta = report.get("git", {})
     return {
@@ -535,6 +725,14 @@ def _bundle_summary(report: dict[str, Any]) -> dict[str, Any]:
 
 
 def _git_head(repo_root: Path) -> str | None:
+    """Get the current HEAD commit hash.
+
+    Args:
+        repo_root: Repository root directory.
+
+    Returns:
+        Commit hash string or None if unavailable.
+    """
     result = _git(["rev-parse", "HEAD"], repo_root=repo_root)
     if result.returncode == 0:
         return result.stdout.strip() or None
@@ -542,6 +740,17 @@ def _git_head(repo_root: Path) -> str | None:
 
 
 def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
+    """Run the code/doc churn report generation workflow.
+
+    Parse arguments, analyze git history, detect churn discrepancies,
+    and write results to the output directory.
+
+    Args:
+        argv: Command-line arguments. Uses sys.argv[1:] if None.
+
+    Returns:
+        A dictionary with report results and paths to artifacts.
+    """
     args = parse_args(argv)
     logging.basicConfig(
         level=getattr(logging, args.log_level.upper(), logging.INFO),
@@ -669,6 +878,16 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
 
 
 def main(argv: Sequence[str] | None = None) -> int:
+    """CLI entry point for code/doc churn report generation.
+
+    Run the report generation workflow and return the exit code.
+
+    Args:
+        argv: Command-line arguments. Uses sys.argv[1:] if None.
+
+    Returns:
+        Integer exit code (0 for success).
+    """
     run(argv)
     return 0
 

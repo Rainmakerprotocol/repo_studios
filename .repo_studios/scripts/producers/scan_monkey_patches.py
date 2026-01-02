@@ -146,6 +146,14 @@ INTENT_UNSPECIFIED = "unspecified monkey patch"
 
 @dataclass(frozen=True)
 class Paths:
+    """Resolved path configuration for monkey patch scanning.
+
+    Attributes:
+        repo_root: Repository root directory.
+        scan_root: Directory to scan for Python files.
+        output_dir: Directory for output artifacts.
+    """
+
     repo_root: Path
     scan_root: Path
     output_dir: Path
@@ -153,11 +161,29 @@ class Paths:
 
 @dataclass(frozen=True)
 class Options:
+    """Retention options for artifact management.
+
+    Attributes:
+        keep: Number of artifact bundles to retain.
+    """
+
     keep: int
 
 
 @dataclass(frozen=True)
 class ScanOptions:
+    """Configuration options for monkey patch scanning.
+
+    Attributes:
+        project_packages: Set of package names considered project-owned.
+        exclude_dirs: Directory names to skip during traversal.
+        exclude_globs: Glob patterns for files/directories to exclude.
+        context_lines: Number of context lines to capture around findings.
+        with_git: Whether to augment findings with git blame metadata.
+        strict: Disable regex fallback; fail on parse errors.
+        keep: Number of artifact bundles to retain.
+    """
+
     project_packages: set[str]
     exclude_dirs: set[str]
     exclude_globs: set[str]
@@ -169,6 +195,26 @@ class ScanOptions:
 
 @dataclass
 class Finding:
+    """Represents a detected monkey patch occurrence.
+
+    Attributes:
+        file: Relative file path where patch was found.
+        line: Line number of the patch.
+        code: Source code line containing the patch.
+        category: Classification category of the patch.
+        intent: Inferred intent of the patch.
+        import_base: Base module being patched.
+        is_test: Whether the patch is in test code.
+        is_module_scope: Whether the patch is at module scope.
+        function: Enclosing function name if any.
+        class_name: Enclosing class name if any.
+        nearby_comment: Comment near the patch for context.
+        context: Surrounding source code lines.
+        git_author: Git author of the patch line.
+        git_commit: Git commit hash for the patch.
+        git_commit_date: Date of the git commit.
+    """
+
     file: str
     line: int
     code: str
@@ -186,6 +232,11 @@ class Finding:
     git_commit_date: str | None = None
 
     def to_dict(self) -> dict[str, object]:
+        """Convert finding to dictionary representation.
+
+        Returns:
+            Dictionary containing all finding attributes.
+        """
         return asdict(self)
 
 
@@ -216,14 +267,29 @@ OPTIONS_CONFIG = OptionsConfig(
 
 
 class ImportResolver(ast.NodeVisitor):
-    """Collect import aliases → modules and objects."""
+    """Collect import aliases → modules and objects.
+
+    Attributes:
+        alias_to_module: Mapping of import aliases to full module paths.
+        alias_is_from_object: Mapping of aliases to (module, object) tuples.
+        import_lines: Set of line numbers containing import statements.
+    """
 
     def __init__(self) -> None:
+        """Initialize empty alias and import line tracking."""
         self.alias_to_module: dict[str, str] = {}
         self.alias_is_from_object: dict[str, tuple[str, str]] = {}
         self.import_lines: set[int] = set()
 
     def visit_Import(self, node: ast.Import) -> Any:
+        """Process import statements and record aliases.
+
+        Args:
+            node: AST Import node.
+
+        Returns:
+            Result of generic_visit for continued traversal.
+        """
         self.import_lines.add(getattr(node, "lineno", -1))
         for alias in node.names:
             mod = alias.name  # full module path
@@ -232,6 +298,14 @@ class ImportResolver(ast.NodeVisitor):
         return self.generic_visit(node)
 
     def visit_ImportFrom(self, node: ast.ImportFrom) -> Any:
+        """Process from-import statements and record aliases.
+
+        Args:
+            node: AST ImportFrom node.
+
+        Returns:
+            Result of generic_visit for continued traversal.
+        """
         self.import_lines.add(getattr(node, "lineno", -1))
         module = node.module or ""
         for alias in node.names:
@@ -243,12 +317,22 @@ class ImportResolver(ast.NodeVisitor):
 
 
 class ScopeTracker(ast.NodeVisitor):
-    """Track current function/class scope while scanning."""
+    """Track current function/class scope while scanning.
+
+    Attributes:
+        stack: Stack of (type, name) tuples representing current scope.
+    """
 
     def __init__(self) -> None:
+        """Initialize empty scope stack."""
         self.stack: list[tuple[str, str]] = []  # (type, name)
 
     def current(self) -> tuple[bool, str | None, str | None]:
+        """Return current scope information.
+
+        Returns:
+            Tuple of (is_module_scope, function_name, class_name).
+        """
         fn = None
         cl = None
         for t, n in reversed(self.stack):
@@ -259,22 +343,45 @@ class ScopeTracker(ast.NodeVisitor):
         return (len(self.stack) == 0, fn, cl)
 
     def visit_FunctionDef(self, node: ast.FunctionDef) -> Any:
+        """Enter function scope and traverse children.
+
+        Args:
+            node: AST FunctionDef node.
+        """
         self.stack.append(("function", node.name))
         self.generic_visit(node)
         self.stack.pop()
 
     def visit_AsyncFunctionDef(self, node: ast.AsyncFunctionDef) -> Any:
+        """Enter async function scope and traverse children.
+
+        Args:
+            node: AST AsyncFunctionDef node.
+        """
         self.stack.append(("function", node.name))
         self.generic_visit(node)
         self.stack.pop()
 
     def visit_ClassDef(self, node: ast.ClassDef) -> Any:
+        """Enter class scope and traverse children.
+
+        Args:
+            node: AST ClassDef node.
+        """
         self.stack.append(("class", node.name))
         self.generic_visit(node)
         self.stack.pop()
 
 
 def read_lines(path: Path) -> list[str]:
+    """Read file contents and return as list of lines.
+
+    Args:
+        path: Path to file to read.
+
+    Returns:
+        List of lines, empty if reading fails.
+    """
     try:
         return path.read_text(encoding="utf-8", errors="replace").splitlines()
     except Exception:
@@ -282,6 +389,16 @@ def read_lines(path: Path) -> list[str]:
 
 
 def get_context(lines: list[str], lineno: int, n: int) -> str:
+    """Extract context lines around a given line number.
+
+    Args:
+        lines: Source file lines.
+        lineno: Target line number (1-based).
+        n: Number of context lines before and after.
+
+    Returns:
+        Formatted string with line numbers and content.
+    """
     i = max(1, lineno - n)
     j = min(len(lines), lineno + n)
     segment = lines[i - 1 : j]
@@ -289,6 +406,16 @@ def get_context(lines: list[str], lineno: int, n: int) -> str:
 
 
 def get_nearby_comment(lines: list[str], lineno: int, lookback: int = 5) -> str | None:
+    """Find comment lines preceding a given line.
+
+    Args:
+        lines: Source file lines.
+        lineno: Target line number (1-based).
+        lookback: Maximum lines to search backward.
+
+    Returns:
+        Contiguous comment text or None if not found.
+    """
     start = max(0, lineno - 2 - lookback)
     window = lines[start : max(0, lineno - 1)]
     # collect contiguous trailing comments from the bottom
@@ -308,6 +435,15 @@ def get_nearby_comment(lines: list[str], lineno: int, lookback: int = 5) -> str 
 
 
 def is_path_in_tests(repo_root: Path, file_path: Path) -> bool:
+    """Check if file path is within a tests directory.
+
+    Args:
+        repo_root: Repository root for relative path computation.
+        file_path: Path to check.
+
+    Returns:
+        True if path contains 'tests' component.
+    """
     try:
         rel = file_path.relative_to(repo_root)
         parts = rel.parts
@@ -317,6 +453,14 @@ def is_path_in_tests(repo_root: Path, file_path: Path) -> bool:
 
 
 def top_level_packages_default(repo_root: Path) -> set[str]:
+    """Discover project packages by scanning repo root.
+
+    Args:
+        repo_root: Repository root directory.
+
+    Returns:
+        Set of package names found at top level.
+    """
     pkgs: set[str] = set()
     for p in repo_root.iterdir():
         if not p.is_dir():
@@ -336,12 +480,28 @@ def top_level_packages_default(repo_root: Path) -> set[str]:
 
 
 def base_module_name(mod: str | None) -> str | None:
+    """Extract top-level module name from dotted path.
+
+    Args:
+        mod: Dotted module path or None.
+
+    Returns:
+        First component of the path or None.
+    """
     if not mod:
         return None
     return mod.split(".")[0]
 
 
 def dotted_name_from_attribute(attr: ast.AST) -> str | None:
+    """Build dotted name string from AST attribute chain.
+
+    Args:
+        attr: AST Attribute node.
+
+    Returns:
+        Dotted name string or None if not resolvable.
+    """
     parts: list[str] = []
     cur: ast.AST | None = attr
     while isinstance(cur, ast.Attribute):
@@ -355,6 +515,16 @@ def dotted_name_from_attribute(attr: ast.AST) -> str | None:
 
 
 def is_alias_external(alias: str, resolver: ImportResolver, project_pkgs: set[str]) -> tuple[bool, str | None]:
+    """Determine if an alias refers to an external module.
+
+    Args:
+        alias: Import alias name.
+        resolver: ImportResolver with alias mappings.
+        project_pkgs: Set of project-owned package names.
+
+    Returns:
+        Tuple of (is_external, base_module_name).
+    """
     # Determine the import base for an alias and whether it's external
     mod = resolver.alias_to_module.get(alias)
     if not mod:
@@ -364,6 +534,16 @@ def is_alias_external(alias: str, resolver: ImportResolver, project_pkgs: set[st
 
 
 def classify_intent(category: str, import_base: str | None, is_test: bool) -> str:
+    """Infer intent of a monkey patch based on classification.
+
+    Args:
+        category: Patch category classification.
+        import_base: Base module being patched.
+        is_test: Whether patch is in test code.
+
+    Returns:
+        Intent string describing the patch purpose.
+    """
     if category == CATEGORY_SYS_MODULES:
         return INTENT_MODULE_INJECTION
     if category == CATEGORY_BUILTINS:
@@ -382,6 +562,16 @@ def classify_intent(category: str, import_base: str | None, is_test: bool) -> st
 
 
 def add_git_blame(repo_root: Path, file_path: Path, lineno: int) -> tuple[str | None, str | None, str | None]:
+    """Retrieve git blame metadata for a specific line.
+
+    Args:
+        repo_root: Repository root for git commands.
+        file_path: Path to file being blamed.
+        lineno: Line number to blame.
+
+    Returns:
+        Tuple of (author, commit_hash, commit_date) or Nones on failure.
+    """
     try:
         rel = file_path.relative_to(repo_root)
     except Exception:
@@ -420,6 +610,19 @@ def add_git_blame(repo_root: Path, file_path: Path, lineno: int) -> tuple[str | 
 
 
 class MonkeyPatchScanner(ast.NodeVisitor):
+    """AST visitor that detects monkey patch patterns.
+
+    Attributes:
+        repo_root: Repository root directory.
+        file_path: Path to file being scanned.
+        lines: Source lines of the file.
+        resolver: ImportResolver with alias mappings.
+        project_pkgs: Set of project-owned package names.
+        context_lines: Number of context lines to capture.
+        scope: ScopeTracker for current scope.
+        findings: List of detected monkey patch findings.
+    """
+
     def __init__(
         self,
         repo_root: Path,
@@ -685,6 +888,14 @@ class MonkeyPatchScanner(ast.NodeVisitor):
 
 
 def _is_sys_modules(sub: ast.Subscript) -> bool:
+    """Check if subscript is sys.modules access.
+
+    Args:
+        sub: AST Subscript node.
+
+    Returns:
+        True if subscript is sys.modules[...].
+    """
     # sys.modules[...] pattern
     if isinstance(sub.value, ast.Attribute) and isinstance(sub.value.value, ast.Name):
         return sub.value.value.id == "sys" and sub.value.attr == "modules"
@@ -692,16 +903,43 @@ def _is_sys_modules(sub: ast.Subscript) -> bool:
 
 
 def _is_os_environ(sub: ast.Subscript) -> bool:
+    """Check if subscript is os.environ access.
+
+    Args:
+        sub: AST Subscript node.
+
+    Returns:
+        True if subscript is os.environ[...].
+    """
     if isinstance(sub.value, ast.Attribute) and isinstance(sub.value.value, ast.Name):
         return sub.value.value.id == "os" and sub.value.attr == "environ"
     return False
 
 
 def _near_import(lineno: int, import_lines: set[int], window: int = 5) -> bool:
+    """Check if line number is near an import statement.
+
+    Args:
+        lineno: Line number to check.
+        import_lines: Set of import line numbers.
+        window: Proximity window size.
+
+    Returns:
+        True if lineno is within window of any import.
+    """
     return any(abs(lineno - li) <= window for li in import_lines)
 
 
 def _is_patch_name(name: str, resolver: ImportResolver) -> bool:
+    """Check if name refers to unittest.mock.patch.
+
+    Args:
+        name: Name to check.
+        resolver: ImportResolver with alias mappings.
+
+    Returns:
+        True if name resolves to patch function.
+    """
     # Check if alias maps to unittest.mock.patch (best-effort)
     mapped = resolver.alias_to_module.get(name)
     if not mapped:
@@ -710,6 +948,15 @@ def _is_patch_name(name: str, resolver: ImportResolver) -> bool:
 
 
 def _is_patch_call(node: ast.Call, resolver: ImportResolver) -> bool:
+    """Check if call is to unittest.mock.patch.
+
+    Args:
+        node: AST Call node.
+        resolver: ImportResolver with alias mappings.
+
+    Returns:
+        True if call is to patch function.
+    """
     if isinstance(node.func, ast.Name):
         return _is_patch_name(node.func.id, resolver)
     if isinstance(node.func, ast.Attribute):
@@ -719,6 +966,15 @@ def _is_patch_call(node: ast.Call, resolver: ImportResolver) -> bool:
 
 
 def _is_patch_decorator(dec: ast.AST, resolver: ImportResolver) -> bool:
+    """Check if decorator is unittest.mock.patch.
+
+    Args:
+        dec: AST decorator node.
+        resolver: ImportResolver with alias mappings.
+
+    Returns:
+        True if decorator is patch.
+    """
     if isinstance(dec, ast.Call):
         return _is_patch_call(dec, resolver)
     if isinstance(dec, ast.Name):
@@ -730,6 +986,14 @@ def _is_patch_decorator(dec: ast.AST, resolver: ImportResolver) -> bool:
 
 
 def regex_fallback(lines: list[str]) -> list[tuple[int, str]]:
+    """Scan lines with regex for monkey patch patterns.
+
+    Args:
+        lines: Source file lines.
+
+    Returns:
+        List of (line_number, matched_code) tuples.
+    """
     """Return (lineno, category) pairs for simple regex patterns not caught by AST.
     Conservative to avoid noise.
     """
@@ -756,6 +1020,21 @@ def scan_file(
     context_lines: int,
     strict: bool = False,
 ) -> list[Finding]:
+    """Scan a single Python file for monkey patch patterns.
+
+    Parse the file into an AST and scan for monkey patches using both
+    AST-based detection and regex fallback patterns.
+
+    Args:
+        repo_root: Repository root path for relative path computation.
+        file_path: Path to the Python file to scan.
+        project_pkgs: Set of project package names for external detection.
+        context_lines: Number of surrounding lines to capture.
+        strict: If True, re-raise parse errors and skip regex fallback.
+
+    Returns:
+        List of Finding objects for detected monkey patches.
+    """
     text_lines = read_lines(file_path)
     try:
         tree = ast.parse("\n".join(text_lines))
@@ -814,6 +1093,20 @@ def iter_python_files(
     exclude_dirs: set[str],
     exclude_globs: set[str] | None = None,
 ) -> Iterable[Path]:
+    """Iterate over Python files in a directory tree.
+
+    Recursively find all .py files under scan_root, filtering out
+    excluded directories and glob patterns.
+
+    Args:
+        scan_root: Root directory to start scanning from.
+        repo_root: Repository root for relative path computation.
+        exclude_dirs: Directory names to skip (matched against path parts).
+        exclude_globs: Glob patterns for paths to exclude.
+
+    Yields:
+        Path objects for each Python file found.
+    """
     patterns = exclude_globs or set()
     for path in scan_root.rglob("*.py"):
         try:
@@ -835,6 +1128,16 @@ def iter_python_files(
 
 
 def augment_findings_with_git(findings: list[Finding], repo_root: Path, with_git: bool) -> None:
+    """Add git blame metadata to findings.
+
+    Update each finding in place with author, commit hash, and date
+    from git blame for the finding's line.
+
+    Args:
+        findings: List of Finding objects to augment.
+        repo_root: Repository root for git operations.
+        with_git: If False, skip git augmentation entirely.
+    """
     if not with_git:
         return
     for finding in findings:
@@ -853,6 +1156,18 @@ def augment_findings_with_git(findings: list[Finding], repo_root: Path, with_git
 def summarize_findings(
     findings: list[Finding], top_n: int = 10
 ) -> tuple[Counter[str], Counter[str], list[tuple[str, int]]]:
+    """Compute summary statistics from findings.
+
+    Aggregate findings by category and intent, and identify the most
+    affected files.
+
+    Args:
+        findings: List of Finding objects to summarize.
+        top_n: Number of top files to include in ranking.
+
+    Returns:
+        Tuple of (category counts, intent counts, top files with counts).
+    """
     by_category: Counter[str] = Counter(f.category for f in findings)
     by_import_base: Counter[str] = Counter(f.import_base for f in findings if f.import_base is not None)
     by_file_counter: Counter[str] = Counter(f.file for f in findings)
@@ -861,6 +1176,15 @@ def summarize_findings(
 
 
 def _relativize(path: Path, repo_root: Path) -> str:
+    """Convert path to POSIX string relative to repo root.
+
+    Args:
+        path: Path to relativize.
+        repo_root: Repository root for relative path computation.
+
+    Returns:
+        POSIX-style relative path string, or absolute if not relative.
+    """
     try:
         return path.resolve().relative_to(repo_root.resolve()).as_posix()
     except Exception:
@@ -868,6 +1192,21 @@ def _relativize(path: Path, repo_root: Path) -> str:
 
 
 def _resolve_run_timestamp(*, override: str | None, now: dt.datetime) -> str:
+    """Resolve the run timestamp for artifact naming.
+
+    Validate and return the override timestamp if provided, otherwise
+    format the current datetime.
+
+    Args:
+        override: User-provided timestamp string or None.
+        now: Current datetime for default timestamp.
+
+    Returns:
+        Timestamp string in YYYYMMDD-HHMM format.
+
+    Raises:
+        ValueError: If override is not in YYYYMMDD-HHMM format.
+    """
     if override:
         candidate = override.strip()
         # Expected: YYYYMMDD-HHMM (13 chars)
@@ -892,6 +1231,26 @@ def compose_manifest(
     parse_errors: int,
     duration_ms: int,
 ) -> dict[str, object]:
+    """Compose the manifest JSON for the scan bundle.
+
+    Build a complete manifest dictionary with metadata, inputs,
+    summary statistics, and all findings.
+
+    Args:
+        paths: Resolved path configuration.
+        options: Scan options used for this run.
+        findings: List of detected monkey patch findings.
+        timestamp: Scan execution datetime.
+        run_timestamp: Formatted timestamp for artifact naming.
+        generated_at: ISO-format generation timestamp.
+        bundle_dir: Output directory for the bundle.
+        files_scanned: Total number of files processed.
+        parse_errors: Count of files that failed to parse.
+        duration_ms: Scan duration in milliseconds.
+
+    Returns:
+        Complete manifest dictionary ready for JSON serialization.
+    """
     by_category, by_import_base, top_files = summarize_findings(findings)
     files_with_findings = len({f.file for f in findings})
     status = "ok"
@@ -961,6 +1320,19 @@ def compose_telemetry(
     run_timestamp: str,
     generated_at: str,
 ) -> dict[str, object]:
+    """Compose telemetry JSON from manifest data.
+
+    Extract key metrics from the manifest for lightweight telemetry
+    reporting.
+
+    Args:
+        manifest: Complete manifest dictionary from compose_manifest.
+        run_timestamp: Formatted timestamp for artifact naming.
+        generated_at: ISO-format generation timestamp.
+
+    Returns:
+        Telemetry dictionary with extracted metrics.
+    """
     payload_obj = cast(dict[str, Any], manifest.get("payload")) if isinstance(manifest.get("payload"), dict) else {}
     summary = cast(dict[str, Any], payload_obj.get("summary")) if isinstance(payload_obj.get("summary"), dict) else {}
     by_category = cast(dict[str, Any], summary.get("by_category")) if isinstance(summary.get("by_category"), dict) else {}
@@ -985,6 +1357,17 @@ def compose_telemetry(
 
 
 def render_summary_markdown(manifest: dict[str, object]) -> str:
+    """Render a markdown summary from the manifest.
+
+    Generate a human-readable report with findings breakdown,
+    top affected files, and recommended next steps.
+
+    Args:
+        manifest: Complete manifest dictionary from compose_manifest.
+
+    Returns:
+        Markdown-formatted summary string.
+    """
     payload_obj = cast(dict[str, Any], manifest.get("payload")) if isinstance(manifest.get("payload"), dict) else {}
     summary = cast(dict[str, Any], payload_obj.get("summary")) if isinstance(payload_obj.get("summary"), dict) else {}
     by_category = cast(dict[str, Any], summary.get("by_category")) if isinstance(summary.get("by_category"), dict) else {}
@@ -1043,6 +1426,23 @@ def write_bundle(
     keep: int,
     logger: logging.Logger,
 ) -> Path:
+    """Write scan bundle artifacts to disk.
+
+    Create the timestamped output directory and write manifest,
+    telemetry, and summary files. Prune old run directories.
+
+    Args:
+        output_dir: Base output directory for bundles.
+        run_timestamp: Formatted timestamp for directory naming.
+        manifest: Complete manifest dictionary.
+        telemetry: Telemetry dictionary for metrics.
+        summary_markdown: Rendered markdown summary.
+        keep: Number of run directories to retain.
+        logger: Logger for pruning messages.
+
+    Returns:
+        Path to the created bundle directory.
+    """
     storage = create_storage(output_dir, "", "", timestamp=run_timestamp)
     bundle_dir = output_dir / run_timestamp
 
@@ -1065,6 +1465,18 @@ def write_bundle(
 
 
 def scan_repository(paths: Paths, options: ScanOptions) -> tuple[list[Finding], int, int]:
+    """Scan all Python files in the repository for monkey patches.
+
+    Iterate over files, scan each one, and aggregate findings.
+    Skip the scanner script itself to avoid self-detection.
+
+    Args:
+        paths: Resolved path configuration.
+        options: Scan options controlling behavior.
+
+    Returns:
+        Tuple of (findings list, files scanned count, parse error count).
+    """
     findings: list[Finding] = []
     parse_errors = 0
     files_scanned = 0
@@ -1093,6 +1505,17 @@ def scan_repository(paths: Paths, options: ScanOptions) -> tuple[list[Finding], 
 
 
 def run_self_test(verbose: bool = False) -> int:
+    """Run internal self-test to validate scanner detection.
+
+    Create temporary sample files covering major monkey patch
+    categories and verify the scanner detects each one.
+
+    Args:
+        verbose: If True, log detailed self-test progress.
+
+    Returns:
+        Exit code: 0 on success, 2 if expected categories are missing.
+    """
     import tempfile
 
     sample_files = {
@@ -1164,6 +1587,17 @@ mx.feature_flag = True
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
+    """Parse command-line arguments.
+
+    Configure the argument parser with all scanner options and
+    parse the provided argument list.
+
+    Args:
+        argv: Command-line arguments or None for sys.argv.
+
+    Returns:
+        Parsed namespace with all configuration options.
+    """
     parser = argparse.ArgumentParser(
         description="Scan repository sources for monkey patches and emit structured artifacts."
     )
@@ -1235,14 +1669,42 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 
 
 def configure_logging(level: str) -> None:
+    """Configure the logging subsystem.
+
+    Set up basic logging with the specified verbosity level.
+
+    Args:
+        level: Logging level name (DEBUG, INFO, WARNING, ERROR, CRITICAL).
+    """
     logging.basicConfig(level=getattr(logging, level), format="%(levelname)s %(message)s")
 
 
 def build_paths(args: argparse.Namespace) -> Paths:
+    """Build resolved path configuration from CLI arguments.
+
+    Use the standard path builder with the scanner's path configuration.
+
+    Args:
+        args: Parsed command-line arguments.
+
+    Returns:
+        Resolved Paths dataclass with repo root, scan root, and output dir.
+    """
     return cast(Paths, build_standard_paths(args, PATH_CONFIG, origin=Path(__file__)))
 
 
 def run(argv: list[str] | None = None) -> dict[str, object]:
+    """Execute the monkey patch scanner and produce artifacts.
+
+    Parse arguments, run the scan, compose artifacts, and write
+    the output bundle to disk.
+
+    Args:
+        argv: Command-line arguments or None for sys.argv.
+
+    Returns:
+        Result dictionary with status, run timestamp, and findings count.
+    """
     args = parse_args(argv)
     configure_logging(args.log_level)
 
@@ -1339,6 +1801,17 @@ def run(argv: list[str] | None = None) -> dict[str, object]:
 
 
 def main(argv: list[str] | None = None) -> int:
+    """CLI entry point for the monkey patch scanner.
+
+    Run the scanner and return an appropriate exit code based
+    on the result status.
+
+    Args:
+        argv: Command-line arguments or None for sys.argv.
+
+    Returns:
+        Exit code: 0 on success, 1 on error, or self-test result code.
+    """
     payload: dict[str, object] = run(argv)
     status = payload.get("status")
     if status in {"self-test", "self-test-failed"}:

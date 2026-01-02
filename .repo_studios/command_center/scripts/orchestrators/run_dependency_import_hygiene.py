@@ -87,6 +87,20 @@ MYPY_BASELINES_RUN_PREFIX = "mypy_baselines"
 
 @dataclass(frozen=True)
 class Paths:
+    """Resolved path configuration for the hygiene orchestrator.
+
+    Attributes:
+        repo_root: Repository root directory.
+        dependency_output_dir: Output directory for dependency hygiene reports.
+        import_graph_output_dir: Output directory for import graph reports.
+        placeholder_output_dir: Output directory for placeholder scan reports.
+        placeholder_allowlist: Path to placeholder allowlist file.
+        batch_cleanup_output_base: Base directory for batch cleanup outputs.
+        typecheck_output_dir: Output directory for typecheck reports.
+        mypy_baselines_output_dir: Output directory for mypy baseline files.
+        healthview_root: Root directory for healthview reports.
+    """
+
     repo_root: Path
     dependency_output_dir: Path
     import_graph_output_dir: Path
@@ -135,6 +149,18 @@ PATHS_CONFIG = PathsConfig(
 
 @dataclass(frozen=True)
 class KeepParameters:
+    """Retention parameters for artifact pruning.
+
+    Attributes:
+        artifacts_to_keep: Orchestrator run retention count.
+        dependency_keep: Dependency hygiene retention count.
+        import_graph_keep: Import graph retention count.
+        placeholder_keep: Placeholder scan retention count.
+        cleanup_keep: Batch cleanup retention count.
+        typecheck_keep: Typecheck report retention count.
+        baseline_keep: Mypy baseline retention count.
+    """
+
     artifacts_to_keep: int
     dependency_keep: int
     import_graph_keep: int
@@ -160,6 +186,30 @@ OPTIONS_CONFIG = OptionsConfig(
 
 @dataclass(frozen=True)
 class Options:
+    """CLI options container for the hygiene orchestrator.
+
+    Attributes:
+        log_level: Logging verbosity level.
+        artifacts_to_keep: Orchestrator run retention count.
+        dependency_keep: Dependency hygiene retention count.
+        import_graph_keep: Import graph retention count.
+        placeholder_keep: Placeholder scan retention count.
+        cleanup_keep: Batch cleanup retention count.
+        typecheck_keep: Typecheck report retention count.
+        baseline_keep: Mypy baseline retention count.
+        run_timestamp: Timestamp for the orchestration run.
+        skip_import_graph: Whether to skip import graph step.
+        skip_typecheck: Whether to skip typecheck step.
+        trigger_batch_cleanup: Whether to execute batch cleanup.
+        refresh_mypy_baselines: Whether to refresh mypy baselines.
+        dependency_patterns: Glob patterns for dependency scanning.
+        dependency_skip_pyproject: Whether to skip pyproject.toml.
+        import_owned: Owned packages for import graph.
+        placeholder_extensions: File extensions for placeholder scanning.
+        placeholder_patterns: Placeholder tokens to search for.
+        placeholder_exclude_prefixes: Prefixes to exclude from scanning.
+    """
+
     log_level: str
     artifacts_to_keep: int
     dependency_keep: int
@@ -183,6 +233,17 @@ class Options:
 
 @dataclass(frozen=True)
 class DependencyOutcome:
+    """Result of running the dependency hygiene producer.
+
+    Attributes:
+        run_dir: Directory containing run artifacts.
+        report_json: Path to the JSON report file.
+        report_md: Path to the Markdown report file.
+        log_path: Path to the log file.
+        payload: Parsed telemetry payload.
+        exit_code: Process exit code.
+    """
+
     run_dir: Path | None
     report_json: Path | None
     report_md: Path | None
@@ -193,6 +254,16 @@ class DependencyOutcome:
 
 @dataclass(frozen=True)
 class ImportGraphOutcome:
+    """Result of running the import graph producer.
+
+    Attributes:
+        run_dir: Directory containing run artifacts.
+        report_json: Path to the JSON report file.
+        graph_path: Path to the graph data file.
+        log_path: Path to the log file.
+        payload: Parsed telemetry payload.
+    """
+
     run_dir: Path | None
     report_json: Path | None
     graph_path: Path | None
@@ -202,6 +273,16 @@ class ImportGraphOutcome:
 
 @dataclass(frozen=True)
 class PlaceholderOutcome:
+    """Result of running the placeholder scan producer.
+
+    Attributes:
+        run_dir: Directory containing run artifacts.
+        report_json: Path to the report JSON file.
+        matches_json: Path to the matches JSON file.
+        log_path: Path to the log file.
+        payload: Parsed payload from the producer.
+    """
+
     run_dir: Path | None
     report_json: Path | None
     matches_json: Path | None
@@ -211,6 +292,16 @@ class PlaceholderOutcome:
 
 @dataclass(frozen=True)
 class BatchCleanupOutcome:
+    """Result of running the batch cleanup step.
+
+    Attributes:
+        bundle_dir: Directory containing cleanup artifacts.
+        summary_path: Path to the cleanup summary JSON.
+        log_path: Path to the cleanup log file.
+        bundle_summary: Path to the bundle summary JSON.
+        status: Cleanup execution status.
+    """
+
     bundle_dir: Path | None
     summary_path: Path | None
     log_path: Path | None
@@ -220,6 +311,17 @@ class BatchCleanupOutcome:
 
 @dataclass(frozen=True)
 class TypecheckOutcome:
+    """Result of running the typecheck producer.
+
+    Attributes:
+        run_dir: Directory containing run artifacts.
+        report_json: Path to the JSON report file.
+        report_md: Path to the Markdown report file.
+        log_path: Path to the log file.
+        raw_output: Path to raw mypy output.
+        payload: Parsed telemetry payload.
+    """
+
     run_dir: Path | None
     report_json: Path | None
     report_md: Path | None
@@ -230,6 +332,15 @@ class TypecheckOutcome:
 
 @dataclass(frozen=True)
 class BaselineOutcome:
+    """Result of running the mypy baseline refresh.
+
+    Attributes:
+        run_dir: Directory containing baseline artifacts.
+        summary_path: Path to the summary JSON file.
+        status: Baseline refresh status.
+        payload: Parsed payload from the refresh.
+    """
+
     run_dir: Path | None
     summary_path: Path | None
     status: str | None
@@ -237,6 +348,14 @@ class BaselineOutcome:
 
 
 def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
+    """Parse command-line arguments for the hygiene orchestrator.
+
+    Args:
+        argv: Command-line arguments, defaults to sys.argv if None.
+
+    Returns:
+        Parsed namespace containing all CLI options.
+    """
     parser = argparse.ArgumentParser(description=__doc__ or "")
     parser.add_argument("--repo-root", help="Repository root override")
     parser.add_argument("--dependency-output-dir", default=str(DEFAULT_DEPENDENCY_OUTPUT_DIR))
@@ -312,6 +431,17 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
 
 
 def _parse_timestamp(raw: str | None) -> datetime:
+    """Parse an ISO8601 timestamp string.
+
+    Args:
+        raw: ISO8601 timestamp string, or None for current UTC time.
+
+    Returns:
+        Timezone-aware datetime in UTC.
+
+    Raises:
+        SystemExit: If the timestamp format is invalid.
+    """
     if not raw:
         return datetime.now(timezone.utc)
     try:
@@ -324,16 +454,40 @@ def _parse_timestamp(raw: str | None) -> datetime:
 
 
 def build_paths(args: argparse.Namespace) -> Paths:
+    """Build path configuration from parsed arguments.
+
+    Args:
+        args: Parsed command-line arguments.
+
+    Returns:
+        Resolved Paths dataclass with all directory paths.
+    """
     return cast(Paths, build_standard_paths(args, PATHS_CONFIG, origin=Path(__file__)))
 
 
 def _normalize_sequence(values: Iterable[str] | None) -> tuple[str, ...]:
+    """Normalize and deduplicate a sequence of strings.
+
+    Args:
+        values: Iterable of strings, or None.
+
+    Returns:
+        Deduplicated tuple of non-empty strings.
+    """
     if not values:
         return tuple()
     return tuple(dict.fromkeys(str(value) for value in values if str(value)))
 
 
 def build_options(args: argparse.Namespace) -> Options:
+    """Build options configuration from parsed arguments.
+
+    Args:
+        args: Parsed command-line arguments.
+
+    Returns:
+        Resolved Options dataclass with all CLI options.
+    """
     keep_values = build_standard_options(args, OPTIONS_CONFIG)
     run_timestamp = _parse_timestamp(getattr(args, "timestamp", None))
     dependency_patterns = _normalize_sequence(getattr(args, "dependency_patterns", None))
@@ -365,10 +519,29 @@ def build_options(args: argparse.Namespace) -> Options:
 
 
 def configure_logging(level: str) -> None:
+    """Configure the root logger with the specified level.
+
+    Args:
+        level: Logging level name (DEBUG, INFO, WARNING, ERROR, CRITICAL).
+    """
     logging.basicConfig(level=getattr(logging, level.upper(), logging.INFO), format="%(levelname)s %(message)s")
 
 
 def _load_callable(script_path: Path, module_name: str, attribute: str) -> Callable[..., Any]:
+    """Dynamically load a callable from a Python script.
+
+    Args:
+        script_path: Path to the Python script.
+        module_name: Module name for caching.
+        attribute: Name of the callable to retrieve.
+
+    Returns:
+        The loaded callable.
+
+    Raises:
+        ImportError: If the module cannot be loaded.
+        AttributeError: If the callable is not found.
+    """
     script_path = script_path.resolve()
     if module_name in sys.modules:
         module = sys.modules[module_name]
@@ -386,6 +559,15 @@ def _load_callable(script_path: Path, module_name: str, attribute: str) -> Calla
 
 
 def _invoke_main(func: Callable[..., Any], argv: Sequence[str]) -> int:
+    """Invoke a main-like callable and capture its return code.
+
+    Args:
+        func: Callable to invoke with argv.
+        argv: Command-line arguments.
+
+    Returns:
+        Exit code from the callable.
+    """
     try:
         result = func(list(argv))
     except SystemExit as exc:  # pragma: no cover - defensive guard for argparse exits
@@ -402,6 +584,14 @@ def _invoke_main(func: Callable[..., Any], argv: Sequence[str]) -> int:
 
 
 def _read_json(path: Path) -> dict[str, Any] | None:
+    """Read and parse a JSON file.
+
+    Args:
+        path: Path to the JSON file.
+
+    Returns:
+        Parsed dictionary, or None if file is missing or invalid.
+    """
     try:
         payload = json.loads(path.read_text(encoding="utf-8"))
     except (FileNotFoundError, json.JSONDecodeError):
@@ -410,6 +600,15 @@ def _read_json(path: Path) -> dict[str, Any] | None:
 
 
 def _relativize(path: Path | None, repo_root: Path) -> str | None:
+    """Compute a repo-relative path string.
+
+    Args:
+        path: Path to relativize, or None.
+        repo_root: Repository root directory.
+
+    Returns:
+        POSIX-style relative path, or absolute path if outside repo.
+    """
     if path is None:
         return None
     try:
@@ -419,10 +618,29 @@ def _relativize(path: Path | None, repo_root: Path) -> str | None:
 
 
 def _timestamp_to_slug(moment: datetime) -> str:
+    """Generate a timestamp slug for directory naming.
+
+    Args:
+        moment: Datetime to format.
+
+    Returns:
+        Formatted string in YYYYMMDD-HHMM format.
+    """
     return moment.astimezone(timezone.utc).strftime("%Y%m%d-%H%M")
 
 
 def _iso_to_run_dir(prefix: str, output_dir: Path, raw: str | None, *, separator: str = "_") -> Path | None:
+    """Convert an ISO timestamp to a run directory path.
+
+    Args:
+        prefix: Directory name prefix.
+        output_dir: Parent directory for runs.
+        raw: ISO8601 timestamp string, or None.
+        separator: Separator character for slug formatting.
+
+    Returns:
+        Resolved path if directory exists, None otherwise.
+    """
     if not raw:
         return None
     try:
@@ -437,6 +655,15 @@ def _iso_to_run_dir(prefix: str, output_dir: Path, raw: str | None, *, separator
 
 
 def _dependency_report(paths: Paths, options: Options) -> DependencyOutcome:
+    """Execute the dependency hygiene producer.
+
+    Args:
+        paths: Resolved path configuration.
+        options: Orchestrator options.
+
+    Returns:
+        DependencyOutcome with execution results.
+    """
     LOGGER.info("Running dependency hygiene producer")
     main_callable = _load_callable(paths.repo_root / DEPENDENCY_SCRIPT, DEPENDENCY_MODULE, "main")
     argv = [
@@ -477,6 +704,15 @@ def _dependency_report(paths: Paths, options: Options) -> DependencyOutcome:
 
 
 def _import_graph_report(paths: Paths, options: Options) -> ImportGraphOutcome:
+    """Execute the import graph producer.
+
+    Args:
+        paths: Resolved path configuration.
+        options: Orchestrator options.
+
+    Returns:
+        ImportGraphOutcome with execution results.
+    """
     LOGGER.info("Running import graph producer")
     main_callable = _load_callable(paths.repo_root / IMPORT_GRAPH_SCRIPT, IMPORT_GRAPH_MODULE, "main")
     argv = [
@@ -516,6 +752,15 @@ def _import_graph_report(paths: Paths, options: Options) -> ImportGraphOutcome:
 
 
 def _placeholder_scan(paths: Paths, options: Options) -> PlaceholderOutcome:
+    """Execute the placeholder scan producer.
+
+    Args:
+        paths: Resolved path configuration.
+        options: Orchestrator options.
+
+    Returns:
+        PlaceholderOutcome with execution results.
+    """
     LOGGER.info("Running placeholder scan producer")
     run_callable = _load_callable(paths.repo_root / PLACEHOLDER_SCRIPT, PLACEHOLDER_MODULE, "run")
     argv = [
@@ -559,6 +804,14 @@ def _placeholder_scan(paths: Paths, options: Options) -> PlaceholderOutcome:
 
 
 def _cleanup_step_commands(repo_root: Path) -> list[tuple[str, list[str]]]:
+    """Build the list of cleanup step commands.
+
+    Args:
+        repo_root: Repository root directory.
+
+    Returns:
+        List of (label, command) tuples for cleanup steps.
+    """
     resolved_root = repo_root.resolve()
     ruff_config = resolved_root / ".repo_studios" / "ruff_clean.toml"
     markdown_config = resolved_root / ".markdownlint.json"
@@ -597,6 +850,12 @@ def _cleanup_step_commands(repo_root: Path) -> list[tuple[str, list[str]]]:
 
 
 def _update_cleanup_latest(bundle_dir: Path, output_base: Path) -> None:
+    """Update latest pointer files for cleanup artifacts.
+
+    Args:
+        bundle_dir: Directory containing current cleanup artifacts.
+        output_base: Base output directory for pointers.
+    """
     mapping = {
         "cleanup_summary.json": output_base / "latest_cleanup_summary.json",
         "cleanup_log.txt": output_base / "latest_cleanup_log.txt",
@@ -616,6 +875,16 @@ def _update_cleanup_latest(bundle_dir: Path, output_base: Path) -> None:
 
 
 def _prune_cleanup_history(output_base: Path, current_dir: Path, keep: int) -> list[str]:
+    """Prune old cleanup bundle directories.
+
+    Args:
+        output_base: Base directory containing cleanup bundles.
+        current_dir: Current run directory to preserve.
+        keep: Number of bundles to retain.
+
+    Returns:
+        List of pruned directory paths.
+    """
     if keep <= 0 or not output_base.exists():
         return []
     bundles = sorted(
@@ -633,6 +902,15 @@ def _prune_cleanup_history(output_base: Path, current_dir: Path, keep: int) -> l
 
 
 def _batch_cleanup(paths: Paths, options: Options) -> BatchCleanupOutcome:
+    """Execute the batch cleanup dry-run step.
+
+    Args:
+        paths: Resolved path configuration.
+        options: Orchestrator options.
+
+    Returns:
+        BatchCleanupOutcome with plan and artifact paths.
+    """
     LOGGER.info("Recording batch cleanup dry-run plan")
     timestamp = options.run_timestamp.astimezone(timezone.utc)
     slug = timestamp.strftime("%Y-%m-%d_%H%M%S")
@@ -728,6 +1006,15 @@ def _batch_cleanup(paths: Paths, options: Options) -> BatchCleanupOutcome:
 
 
 def _typecheck_report(paths: Paths, options: Options) -> TypecheckOutcome:
+    """Execute the typecheck producer.
+
+    Args:
+        paths: Resolved path configuration.
+        options: Orchestrator options.
+
+    Returns:
+        TypecheckOutcome with execution results.
+    """
     LOGGER.info("Running typecheck producer")
     main_callable = _load_callable(paths.repo_root / TYPECHECK_SCRIPT, TYPECHECK_MODULE, "main")
     argv = [
@@ -762,6 +1049,15 @@ def _typecheck_report(paths: Paths, options: Options) -> TypecheckOutcome:
 
 
 def _refresh_baselines(paths: Paths, options: Options) -> BaselineOutcome:
+    """Execute the mypy baseline refresh utility.
+
+    Args:
+        paths: Resolved path configuration.
+        options: Orchestrator options.
+
+    Returns:
+        BaselineOutcome with refresh results.
+    """
     LOGGER.info("Refreshing mypy baselines")
     run_callable = _load_callable(paths.repo_root / REFRESH_BASELINES_SCRIPT, REFRESH_BASELINES_MODULE, "run")
     argv = [
@@ -804,6 +1100,11 @@ def _refresh_baselines(paths: Paths, options: Options) -> BaselineOutcome:
 
 
 def _register_scripts(registry: CatalogRegistry) -> None:
+    """Register all scripts involved in the hygiene orchestration.
+
+    Args:
+        registry: Catalog registry to populate.
+    """
     registry.register(
         script_path=str(Path(".repo_studios/command_center/scripts/orchestrators/run_dependency_import_hygiene.py")),
         topic=TOPIC_SLUG,
@@ -828,6 +1129,22 @@ def _summarize_markdown(
     baselines: BaselineOutcome | None,
     step_reports: Iterable[tuple[str, str, str | None]],
 ) -> str:
+    """Render the orchestration results as a Markdown summary.
+
+    Args:
+        slug: Run slug identifier.
+        telemetry_success: Whether the pipeline succeeded.
+        dependency: Dependency step outcome.
+        import_graph: Import graph step outcome, or None if skipped.
+        placeholder: Placeholder step outcome.
+        cleanup: Cleanup step outcome, or None if skipped.
+        typecheck: Typecheck step outcome, or None if skipped.
+        baselines: Baseline step outcome, or None if skipped.
+        step_reports: Iterable of (name, status, detail) tuples.
+
+    Returns:
+        Markdown-formatted summary string.
+    """
     dependency_summary = dependency.payload.get("summary") if dependency.payload else {}
     dep_status = dependency_summary.get("status") if isinstance(dependency_summary, dict) else None
     dep_issue_count = dependency_summary.get("issue_count") if isinstance(dependency_summary, dict) else None
@@ -887,6 +1204,14 @@ def _summarize_markdown(
 
 
 def run(argv: Sequence[str] | None = None) -> int:
+    """Execute the dependency and import hygiene orchestration workflow.
+
+    Args:
+        argv: Command-line arguments, defaults to sys.argv if None.
+
+    Returns:
+        Exit code (0 for success, 1 for failure).
+    """
     args = parse_args(argv)
     paths = build_paths(args)
     options = build_options(args)
@@ -1121,6 +1446,14 @@ def run(argv: Sequence[str] | None = None) -> int:
 
 
 def main(argv: Sequence[str] | None = None) -> None:
+    """CLI entry point for the hygiene orchestrator.
+
+    Args:
+        argv: Command-line arguments, defaults to sys.argv if None.
+
+    Raises:
+        SystemExit: With the run result code.
+    """
     raise SystemExit(run(argv))
 
 

@@ -1,0 +1,138 @@
+# Tier-3 YAML — summarize_standards.py
+# Schema: tier3_script_v1
+# Stage: 6.1 Standards Integrity
+# Record: S61R-006
+
+tool:
+  name: "summarize_standards"
+  version: "1.0.0"
+  category: "summarizer"
+  path: ".repo_studios/scripts/summarizers/summarize_standards.py"
+  description: >
+    Generates a HealthView-ready summary of the standards index, including rule counts,
+    extraction metrics, pending file status, and markdown rule samples. Produces JSON
+    and Markdown artifacts for dashboards and reporting.
+
+invocation:
+  entrypoint: "run(argv)"
+  python_module: ".repo_studios.scripts.summarizers.summarize_standards"
+  cli_example: |
+    python .repo_studios/scripts/summarizers/summarize_standards.py \
+      --repo-root . \
+      --index-path .repo_studios/scripts/repo_standards_index.yaml \
+      --pending-path .repo_studios/scripts/repo_standards_pending.yaml \
+      --output-dir .repo_studios/command_center/reports/healthview/standards_overview \
+      --label "nightly" \
+      --artifacts-to-keep 5 \
+      --log-level INFO
+
+parameters:
+  positional: []
+  flags:
+    - name: "--repo-root"
+      type: "Path"
+      required: false
+      default: "auto-detected (5 levels up from script)"
+      description: "Repository root directory."
+    - name: "--index-path"
+      type: "Path"
+      required: false
+      default: ".repo_studios/scripts/repo_standards_index.yaml"
+      description: "Path to the standards index YAML."
+    - name: "--pending-path"
+      type: "Path"
+      required: false
+      default: ".repo_studios/scripts/repo_standards_pending.yaml"
+      description: "Path to the pending standards file."
+    - name: "--output-dir"
+      type: "Path"
+      required: false
+      default: ".repo_studios/command_center/reports/healthview/standards_overview"
+      description: "Output directory for summary artifacts."
+    - name: "--label"
+      type: "str"
+      required: false
+      default: "standards_overview"
+      description: "Label for the summary run (e.g., 'nightly', 'manual')."
+    - name: "--timestamp"
+      type: "str"
+      required: false
+      default: "null (auto-generated UTC)"
+      description: "ISO8601 timestamp to seed run slug generation."
+    - name: "--artifacts-to-keep"
+      type: "int"
+      required: false
+      default: 5
+      description: "Number of timestamped run directories to retain."
+    - name: "--log-level"
+      type: "str"
+      required: false
+      default: "WARNING"
+      description: "Logging verbosity (DEBUG, INFO, WARNING, ERROR)."
+
+outputs:
+  root: ".repo_studios/command_center/reports/healthview/standards_overview/<YYYYMMDD-HHMM>/"
+  artifacts:
+    - name: "standards_overview.json"
+      description: "Structured summary with metrics, samples, and artifact paths."
+    - name: "standards_overview.md"
+      description: "Human-readable markdown summary with metrics table and notes."
+
+behavior:
+  steps:
+    - step: 1
+      action: "Load standards index"
+      description: "Read repo_standards_index.yaml; fallback to legacy path if missing."
+    - step: 2
+      action: "Extract metrics"
+      description: "Count rules, markdown rules, extraction status, and pending lines."
+    - step: 3
+      action: "Sample markdown rules"
+      description: "Extract up to 5 markdown-sourced rules for preview."
+    - step: 4
+      action: "Build summary payload"
+      description: "Compose JSON payload with metrics, samples, artifacts, and notes."
+    - step: 5
+      action: "Render markdown"
+      description: "Generate human-readable summary with metrics table."
+    - step: 6
+      action: "Write artifacts"
+      description: "Emit JSON and Markdown via write_report_artifacts with pruning."
+
+error_handling:
+  missing_index: "Adds note and continues with empty metrics (does not fail)."
+  missing_pending: "Adds note and sets pending_lines to null (does not fail)."
+  yaml_import_error: "Logs error at module import; run will fail gracefully."
+
+integration:
+  upstream:
+    - script: "generate_standards_index.py"
+      relationship: "Consumes repo_standards_index.yaml and optional pending file."
+  downstream:
+    - script: "run_standards_integrity.py"
+      relationship: "Orchestrator delegates to this summarizer as final step."
+  db_integration:
+    gated_by: "N/A"
+    marker: "N/A"
+    behavior: "No DB integration in this summarizer."
+
+examples:
+  basic_run: |
+    python .repo_studios/scripts/summarizers/summarize_standards.py \
+      --repo-root .
+  with_label: |
+    python .repo_studios/scripts/summarizers/summarize_standards.py \
+      --repo-root . --label nightly
+  custom_paths: |
+    python .repo_studios/scripts/summarizers/summarize_standards.py \
+      --repo-root . \
+      --index-path custom/index.yaml \
+      --output-dir reports/overview
+
+metadata:
+  tier: 3
+  stage: "6.1"
+  record_id: "S61R-006"
+  created: "2026-01-02"
+  last_updated: "2026-01-02"
+  template_version: "v1"

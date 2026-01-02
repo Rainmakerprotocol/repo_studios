@@ -1,0 +1,293 @@
+# Tier-3 Script Specification — run_standards_integrity.py
+# Template version: v1
+# Generated: 2026-01-02
+# Last validated: 2026-01-02
+
+tool:
+  name: run_standards_integrity
+  category: orchestrator
+  purpose: |
+    Topic orchestrator for standards integrity. Publishes consolidated manifest, summary, and 
+    telemetry files to the healthview output tree. Supersedes both run_standards_gap_suite.py 
+    and run_standards_index_cli.py. The pipeline regenerates the standards index, performs gap 
+    analysis and diffing, seeds prompt packs, and invokes the summarizer so HealthView and 
+    CommandView stay aligned. Runtime typically lands between five and eight minutes.
+  path: .repo_studios/command_center/scripts/orchestrators/run_standards_integrity.py
+  tier2_record_ref: tier2_roster/tier2_standards_integrity_roster.md#s61r-001-standards-integrity-orchestrator
+  stage: "6.1"
+  status: complete
+
+invocation:
+  entrypoint: run(argv)
+  cli_pattern: |
+    python .repo_studios/command_center/scripts/orchestrators/run_standards_integrity.py \
+      --repo-root . \
+      [--index-output-dir <dir>] \
+      [--gap-output-dir <dir>] \
+      [--diff-output-dir <dir>] \
+      [--prompt-output-dir <dir>] \
+      [--healthview-root <dir>] \
+      [--diff-old-index <yaml>] \
+      [--diff-fail-on any|none|breaking] \
+      [--prompt-include-warn] \
+      [--prompt-formats text yaml json] \
+      [--artifacts-to-keep <n>] \
+      [--index-artifacts-to-keep <n>] \
+      [--gap-artifacts-to-keep <n>] \
+      [--diff-artifacts-to-keep <n>] \
+      [--prompt-artifacts-to-keep <n>] \
+      [--timestamp <ISO8601>] \
+      [--log-level DEBUG|INFO|WARNING|ERROR|CRITICAL]
+  required_flags:
+    - --repo-root
+  optional_flags:
+    - --index-output-dir
+    - --index-path
+    - --categories-path
+    - --gap-output-dir
+    - --diff-output-dir
+    - --prompt-output-dir
+    - --pending-path
+    - --healthview-root
+    - --diff-old-index
+    - --diff-fail-on
+    - --gap-max-show
+    - --prompt-include-warn
+    - --prompt-formats
+    - --artifacts-to-keep
+    - --index-artifacts-to-keep
+    - --gap-artifacts-to-keep
+    - --diff-artifacts-to-keep
+    - --prompt-artifacts-to-keep
+    - --timestamp
+    - --log-level
+
+parameters:
+  inputs:
+    - name: repo_root
+      type: Path
+      description: Repository root for input scanning and output placement
+      required: true
+      default: null
+    - name: index_output_dir
+      type: Path
+      description: Output directory for standards index producer
+      required: false
+      default: .repo_studios/reports/producer_reports
+    - name: index_path
+      type: Path
+      description: Path to the standards index YAML
+      required: false
+      default: .repo_studios/scripts/repo_standards_index.yaml
+    - name: categories_path
+      type: Path
+      description: Path to the standards categories YAML
+      required: false
+      default: .repo_studios/scripts/.repo_studios/standards_categories.yaml
+    - name: gap_output_dir
+      type: Path
+      description: Output directory for gap analysis producer
+      required: false
+      default: .repo_studios/command_center/reports
+    - name: diff_output_dir
+      type: Path
+      description: Output directory for diff producer
+      required: false
+      default: .repo_studios/reports/producer_reports/standards_index_diff_reports
+    - name: prompt_output_dir
+      type: Path
+      description: Output directory for prompt seed producer
+      required: false
+      default: .repo_studios/reports/producer_reports/standards_prompt_seeds
+    - name: pending_path
+      type: Path
+      description: Path to the pending standards YAML
+      required: false
+      default: .repo_studios/scripts/repo_standards_pending.yaml
+    - name: healthview_root
+      type: Path
+      description: Output root for orchestrator healthview bundle
+      required: false
+      default: build_topic_path("orchestrator", "standards_integrity")
+    - name: diff_old_index
+      type: Path | None
+      description: Baseline index YAML for diff step (optional)
+      required: false
+      default: null
+    - name: diff_fail_on
+      type: str
+      description: Fail policy forwarded to diff script (any|none|breaking)
+      required: false
+      default: any
+    - name: gap_max_show
+      type: int
+      description: Maximum gap candidates to log per source
+      required: false
+      default: 8
+    - name: prompt_include_warn
+      type: bool
+      description: Include warn severity rules in seed
+      required: false
+      default: false
+    - name: prompt_formats
+      type: list[str] | None
+      description: Artifact formats to materialize for the prompt seed (text, yaml, json)
+      required: false
+      default: null
+    - name: artifacts_to_keep
+      type: int
+      description: Retention budget for orchestrator topic artifacts
+      required: false
+      default: 3
+    - name: index_artifacts_to_keep
+      type: int
+      description: Retention budget for standards index runs
+      required: false
+      default: 5
+    - name: gap_artifacts_to_keep
+      type: int
+      description: Retention budget for gap analysis runs
+      required: false
+      default: 5
+    - name: diff_artifacts_to_keep
+      type: int
+      description: Retention budget for diff runs
+      required: false
+      default: 10
+    - name: prompt_artifacts_to_keep
+      type: int
+      description: Retention budget for prompt seed runs
+      required: false
+      default: 5
+    - name: timestamp
+      type: str | None
+      description: ISO8601 timestamp for delegated scripts
+      required: false
+      default: null
+    - name: log_level
+      type: str
+      description: Logging verbosity (DEBUG|INFO|WARNING|ERROR|CRITICAL)
+      required: false
+      default: INFO
+
+outputs:
+  artifacts:
+    - name: manifest.json
+      description: Orchestrator manifest with all step outcomes, artifacts, and inputs
+      path_pattern: "{healthview_root}/{YYYYMMDD-HHMM}/manifest.json"
+    - name: summary.md
+      description: Human-readable summary of the orchestrator run
+      path_pattern: "{healthview_root}/{YYYYMMDD-HHMM}/summary.md"
+    - name: telemetry.json
+      description: Pipeline telemetry with step results and metrics
+      path_pattern: "{healthview_root}/{YYYYMMDD-HHMM}/telemetry.json"
+  retention:
+    mechanism: write_report_artifacts (includes prune_run_directories)
+    target: "{healthview_root}/"
+    keep_parameter: artifacts_to_keep
+    default_keep: 3
+  delegated_outputs:
+    - step: index
+      producer: generate_standards_index.py
+      retention_param: index_artifacts_to_keep
+    - step: gap
+      producer: analyze_standards_index_gaps.py
+      retention_param: gap_artifacts_to_keep
+    - step: diff
+      producer: diff_standards_index.py
+      retention_param: diff_artifacts_to_keep
+    - step: prompts
+      producer: seed_standards_prompts.py
+      retention_param: prompt_artifacts_to_keep
+
+behavior:
+  pipeline_steps:
+    - name: index
+      description: Regenerate the standards index
+      producer: generate_standards_index.py
+      continue_on_failure: false
+    - name: gap
+      description: Analyze gaps in the standards index
+      producer: analyze_standards_index_gaps.py
+      continue_on_failure: true
+    - name: diff
+      description: Diff against baseline index (if provided)
+      producer: diff_standards_index.py
+      continue_on_failure: true
+    - name: prompts
+      description: Seed prompt packs from the index
+      producer: seed_standards_prompts.py
+      continue_on_failure: true
+    - name: summary
+      description: Generate standards overview summary
+      producer: summarize_standards.py
+      continue_on_failure: false
+  hop_compliance:
+    output_root: build_topic_path("orchestrator", "standards_integrity")
+    code_evidence: L72
+  idempotency: true
+  side_effects:
+    - Writes consolidated manifest/summary/telemetry to healthview tree
+    - Delegates to five sub-producers, each with their own retention
+    - No pointer file creation (HOP-compliant)
+
+error_handling:
+  exit_codes:
+    0: Pipeline completed successfully
+    1: Pipeline failed (at least one critical step failed)
+  exceptions:
+    - RuntimeError: Raised on producer load failure or step failure
+  failure_behavior: |
+    Critical steps (index, summary) abort pipeline on failure.
+    Non-critical steps (gap, diff, prompts) record failure but continue.
+    Final pipeline result raises RuntimeError if any critical step failed.
+
+integration:
+  db_integration:
+    gated_by: null
+    marker_required: false
+  dependencies:
+    - generate_standards_index.py
+    - analyze_standards_index_gaps.py
+    - diff_standards_index.py
+    - seed_standards_prompts.py
+    - summarize_standards.py
+  consumers:
+    - HealthView dashboard
+    - CommandView status reports
+    - Standards governance workflows
+
+examples:
+  basic:
+    description: Run full standards integrity pipeline
+    command: |
+      python .repo_studios/command_center/scripts/orchestrators/run_standards_integrity.py \
+        --repo-root .
+  with_diff_baseline:
+    description: Run with baseline diff comparison
+    command: |
+      python .repo_studios/command_center/scripts/orchestrators/run_standards_integrity.py \
+        --repo-root . \
+        --diff-old-index .repo_studios/scripts/repo_standards_index_baseline.yaml
+  custom_retention:
+    description: Run with custom retention budgets
+    command: |
+      python .repo_studios/command_center/scripts/orchestrators/run_standards_integrity.py \
+        --repo-root . \
+        --artifacts-to-keep 5 \
+        --gap-artifacts-to-keep 10
+
+metadata:
+  qa:
+    pytest: "2 passed in 0.18s (2026-01-02)"
+    mypy: "7 errors (nested closures for pipeline steps — acceptable)"
+    coverage: "N/A"
+  evidence:
+    code_refs:
+      - .repo_studios/command_center/scripts/orchestrators/run_standards_integrity.py#L72
+      - .repo_studios/command_center/scripts/orchestrators/run_standards_integrity.py#L793-L801
+    tests:
+      - .repo_studios/tests/tests_command_center/standards_integrity/test_run_standards_integrity.py
+  created: "2026-01-02"
+  last_updated: "2026-01-02"
+  template_version: v1

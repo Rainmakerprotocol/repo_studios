@@ -60,6 +60,14 @@ DEFAULT_ARTIFACTS_TO_KEEP = get_keep("generate_anchor_inventory")
 
 @dataclass(frozen=True)
 class Paths:
+    """Path configuration for the anchor inventory generator.
+
+    Attributes:
+        repo_root: Repository root directory.
+        docs_root: Documentation root directory to scan.
+        output_dir: Output directory for generated artifacts.
+    """
+
     repo_root: Path
     docs_root: Path
     output_dir: Path
@@ -67,6 +75,12 @@ class Paths:
 
 @dataclass(frozen=True)
 class Options:
+    """Runtime options for the anchor inventory generator.
+
+    Attributes:
+        artifacts_to_keep: Number of historical artifact bundles to retain.
+    """
+
     artifacts_to_keep: int
 
 
@@ -94,6 +108,17 @@ OPTIONS_CONFIG = OptionsConfig(dataclass_type=Options, keep_specs=KEEP_SPECS)
 
 
 def slugify(raw: str) -> str:
+    """Convert a heading title into a URL-friendly slug.
+
+    Normalize a heading by lowercasing, removing backticks and special
+    characters, and converting spaces to hyphens.
+
+    Args:
+        raw: The raw heading text.
+
+    Returns:
+        A normalized slug suitable for anchor links.
+    """
     s = raw.strip().lower()
     s = re.sub(r"`+", "", s)
     s = re.sub(r"[^a-z0-9\- ]", "", s)
@@ -103,6 +128,16 @@ def slugify(raw: str) -> str:
 
 
 def iter_markdown_files(root: Path) -> Iterable[Path]:
+    """Yield markdown file paths under the given root directory.
+
+    Recursively find all .md files, excluding coverage_history directories.
+
+    Args:
+        root: Root directory to search.
+
+    Yields:
+        Path objects for each markdown file found.
+    """
     for md in root.rglob("*.md"):
         if any(part in md.parts for part in ("coverage_history",)):
             continue
@@ -111,6 +146,16 @@ def iter_markdown_files(root: Path) -> Iterable[Path]:
 
 @dataclass
 class SlugStat:
+    """Statistics for a heading slug across documents.
+
+    Attributes:
+        slug: The normalized heading slug.
+        count: Total occurrences across all files.
+        file_count: Number of distinct files containing the slug.
+        files: List of file paths containing the slug.
+        locations: List of location strings (path:line) for each occurrence.
+    """
+
     slug: str
     count: int
     file_count: int
@@ -123,28 +168,54 @@ GENERIC_ALLOWED = {"overview", "introduction", "faq", "notes"}
 
 @dataclass
 class DocumentSummary:
+    """Summary of heading structure for a single document.
+
+    Attributes:
+        path: Relative path to the document.
+        slug_counts: Mapping of slugs to their occurrence counts.
+        h1_count: Number of H1 headings in the document.
+        h2_count: Number of H2 headings in the document.
+    """
+
     path: str
     slug_counts: dict[str, int]
     h1_count: int
     h2_count: int
 
     def heading_count(self) -> int:
+        """Return the total number of H1 and H2 headings."""
         return self.h1_count + self.h2_count
 
     def unique_slugs(self) -> int:
+        """Return the count of unique slugs in the document."""
         return len(self.slug_counts)
 
     def duplicate_slugs(self) -> list[str]:
+        """Return a sorted list of slugs that appear more than once."""
         return sorted(slug for slug, count in self.slug_counts.items() if count > 1)
 
     def missing_h1(self) -> bool:
+        """Return True if the document has no H1 headings."""
         return self.h1_count == 0
 
     def missing_h2(self) -> bool:
+        """Return True if the document has H1 but no H2 headings."""
         return self.h1_count > 0 and self.h2_count == 0
 
 
 def _compose_display_path(prefix: Path | None, relative_path: Path) -> PurePosixPath:
+    """Compose a display path by prepending an optional prefix.
+
+    Combine a prefix path with a relative path, filtering out current
+    directory markers.
+
+    Args:
+        prefix: Optional prefix path to prepend.
+        relative_path: Relative path to the file.
+
+    Returns:
+        A PurePosixPath representing the combined display path.
+    """
     parts: list[str] = []
     if prefix is not None:
         parts.extend(part for part in prefix.parts if part not in (".",))
@@ -153,6 +224,16 @@ def _compose_display_path(prefix: Path | None, relative_path: Path) -> PurePosix
 
 
 def _document_root_key(path: str) -> str:
+    """Extract the top-level directory from a path string.
+
+    Return the first path component, or "." for root-level files.
+
+    Args:
+        path: A forward-slash-separated path string.
+
+    Returns:
+        The first directory component, or "." if at root.
+    """
     parts = path.split("/")
     if not parts or not parts[0]:
         return "."
@@ -162,11 +243,35 @@ def _document_root_key(path: str) -> str:
 
 
 def _compose_location(prefix: Path | None, relative_path: Path, line_number: int) -> str:
+    """Compose a location string with path and line number.
+
+    Args:
+        prefix: Optional prefix path to prepend.
+        relative_path: Relative path to the file.
+        line_number: Line number of the heading.
+
+    Returns:
+        A string in the format "path:line".
+    """
     display_path = _compose_display_path(prefix, relative_path)
     return f"{display_path}:{line_number}"
 
 
 def _collect_from_root(root: Path, prefix: Path | None) -> tuple[dict[str, list[str]], list[DocumentSummary]]:
+    """Collect heading slugs and document summaries from a directory tree.
+
+    Scan all markdown files under root, extract H1/H2 headings, and
+    build location mappings and document summaries.
+
+    Args:
+        root: Root directory to scan.
+        prefix: Optional prefix for display paths.
+
+    Returns:
+        A tuple of (slug_locations, document_summaries) where slug_locations
+        maps slugs to location strings and document_summaries contains
+        per-document heading statistics.
+    """
     slug_locations: dict[str, list[str]] = defaultdict(list)
     document_summaries: list[DocumentSummary] = []
     for md in iter_markdown_files(root):
@@ -201,6 +306,18 @@ def _collect_from_root(root: Path, prefix: Path | None) -> tuple[dict[str, list[
 
 
 def _compute_display_prefix(repo_root: Path, doc_root: Path) -> Path | None:
+    """Compute a display prefix for paths relative to the repo root.
+
+    Determine the relative path between the doc root and repo root
+    to use as a prefix for display purposes.
+
+    Args:
+        repo_root: Repository root directory.
+        doc_root: Documentation root directory.
+
+    Returns:
+        A Path representing the relative prefix, or None if at repo root.
+    """
     try:
         relative = doc_root.resolve().relative_to(repo_root.resolve())
     except ValueError:
@@ -211,6 +328,18 @@ def _compute_display_prefix(repo_root: Path, doc_root: Path) -> Path | None:
 
 
 def collect(doc_roots: Iterable[tuple[Path, Path | None]]) -> tuple[dict[str, SlugStat], list[DocumentSummary]]:
+    """Collect slug statistics and document summaries from multiple roots.
+
+    Aggregate heading data from multiple documentation trees, merging
+    statistics for documents that appear in multiple roots.
+
+    Args:
+        doc_roots: Iterable of (root_path, prefix) tuples to scan.
+
+    Returns:
+        A tuple of (slug_stats, documents) where slug_stats maps slugs
+        to SlugStat objects and documents is a list of DocumentSummary.
+    """
     slug_locations: dict[str, list[str]] = defaultdict(list)
     documents: dict[str, DocumentSummary] = {}
     for root, prefix in doc_roots:
@@ -241,6 +370,17 @@ def collect(doc_roots: Iterable[tuple[Path, Path | None]]) -> tuple[dict[str, Sl
 
 
 def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
+    """Parse command-line arguments for the anchor inventory generator.
+
+    Configure and parse CLI arguments including repo root, docs root,
+    output directory, and allowlist options.
+
+    Args:
+        argv: Command-line arguments to parse, or None for sys.argv.
+
+    Returns:
+        A Namespace object with parsed argument values.
+    """
     parser = argparse.ArgumentParser(description="Generate anchor inventory artifacts")
     parser.add_argument("--repo-root", help="Repository root override (defaults to script-relative resolution)")
     parser.add_argument("--docs-root", type=Path, default=Path("docs"), help="Docs directory to scan")
@@ -279,6 +419,17 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
 
 
 def extract_test_allowlist_size(test_file: Path) -> int | None:
+    """Extract the size of the ALLOWED set from a test file.
+
+    Parse the test_global_anchors.py file to count entries in the
+    ALLOWED constant for baseline comparison.
+
+    Args:
+        test_file: Path to the test file containing the ALLOWED set.
+
+    Returns:
+        The count of allowed entries, or None if file is missing.
+    """
     if not test_file or not test_file.exists():
         return None
     text = test_file.read_text(encoding="utf-8", errors="replace")
@@ -306,6 +457,22 @@ def build_summary(
     documents: Sequence[DocumentSummary],
     cross_file_membership: dict[str, list[str]],
 ) -> dict[str, Any]:
+    """Build a summary dictionary with aggregate statistics.
+
+    Compute totals and breakdowns for slugs, duplicates, documents,
+    and cross-file membership.
+
+    Args:
+        stats: Mapping of slugs to SlugStat objects.
+        duplicates: List of cross-file duplicate SlugStat objects.
+        allow_set: Set of allowed generic slugs.
+        allowlist_size: Size of the test allowlist, or None.
+        documents: Sequence of DocumentSummary objects.
+        cross_file_membership: Mapping of paths to duplicate slugs.
+
+    Returns:
+        A dictionary containing aggregate summary statistics.
+    """
     cross_file_members = set(cross_file_membership.keys())
     missing_h1 = sum(1 for doc in documents if doc.missing_h1())
     missing_h2 = sum(1 for doc in documents if doc.missing_h2())
@@ -330,12 +497,34 @@ def build_summary(
 
 
 def build_cross_file_duplicates(stats: dict[str, SlugStat], allow_set: set[str]) -> list[SlugStat]:
+    """Build a sorted list of cross-file duplicate slugs.
+
+    Filter slugs that appear in multiple files and are not in the
+    allow set, sorted by occurrence frequency.
+
+    Args:
+        stats: Mapping of slugs to SlugStat objects.
+        allow_set: Set of allowed generic slugs to exclude.
+
+    Returns:
+        A list of SlugStat objects for cross-file duplicates.
+    """
     duplicates = [st for st in stats.values() if st.file_count > 1 and st.slug not in allow_set]
     duplicates.sort(key=lambda item: (-item.file_count, -item.count, item.slug))
     return duplicates
 
 
 def build_cross_file_membership(duplicates: Sequence[SlugStat]) -> dict[str, list[str]]:
+    """Build a mapping of files to their duplicate slugs.
+
+    Invert the duplicate list to show which slugs each file contains.
+
+    Args:
+        duplicates: Sequence of SlugStat objects for duplicates.
+
+    Returns:
+        A dictionary mapping file paths to lists of duplicate slugs.
+    """
     membership: dict[str, list[str]] = defaultdict(list)
     for entry in duplicates:
         for path in entry.files:
@@ -350,6 +539,19 @@ def build_document_payload(
     allow_set: set[str],
     cross_file_membership: dict[str, list[str]],
 ) -> list[dict[str, Any]]:
+    """Build a payload list with per-document heading details.
+
+    Transform document summaries into serializable dictionaries with
+    slug counts, duplicates, and allowlist membership.
+
+    Args:
+        documents: Sequence of DocumentSummary objects.
+        allow_set: Set of allowed generic slugs.
+        cross_file_membership: Mapping of paths to cross-file duplicates.
+
+    Returns:
+        A list of dictionaries with per-document heading data.
+    """
     payload: list[dict[str, Any]] = []
     for doc in documents:
         slug_counts = {slug: doc.slug_counts[slug] for slug in sorted(doc.slug_counts)}
@@ -381,6 +583,24 @@ def build_report(
     scanned_roots: Sequence[Path],
     generated_ts: datetime,
 ) -> tuple[dict[str, Any], list[SlugStat], list[dict[str, Any]]]:
+    """Build the complete anchor inventory report.
+
+    Assemble all collected data into a structured report suitable
+    for serialization.
+
+    Args:
+        docs_root: Primary documentation root directory.
+        stats: Mapping of slugs to SlugStat objects.
+        documents: Sequence of DocumentSummary objects.
+        duplicates: List of cross-file duplicate SlugStat objects.
+        allow_set: Set of allowed generic slugs.
+        allowlist_size: Size of the test allowlist, or None.
+        scanned_roots: List of all scanned root directories.
+        generated_ts: Timestamp when the report was generated.
+
+    Returns:
+        A tuple of (report_dict, ordered_slugs, documents_payload).
+    """
     ordered_slugs = sorted(stats.values(), key=lambda item: (-item.file_count, -item.count, item.slug))
     cross_file_membership = build_cross_file_membership(duplicates)
     documents_payload = build_document_payload(documents, allow_set, cross_file_membership)
@@ -401,6 +621,18 @@ def build_report(
 
 
 def render_markdown(report: dict[str, Any], ordered_slugs: list[SlugStat]) -> str:
+    """Render the anchor inventory report as markdown.
+
+    Format the report dictionary into a human-readable markdown
+    document with sections for summary, duplicates, and documents.
+
+    Args:
+        report: The complete report dictionary.
+        ordered_slugs: List of SlugStat objects sorted by frequency.
+
+    Returns:
+        A markdown-formatted report string.
+    """
     summary = report["summary"]
     lines: list[str] = [
         "# Anchor Inventory Report",
@@ -508,6 +740,18 @@ def emit_summary_log(
     summary: dict[str, Any],
     documents: Sequence[dict[str, Any]],
 ) -> None:
+    """Emit a summary of the anchor inventory to the logger.
+
+    Log document counts, top slugs, and duplicate information at
+    INFO level for visibility.
+
+    Args:
+        logger: Logger instance for output.
+        ordered_slugs: List of SlugStat objects sorted by frequency.
+        duplicates: List of cross-file duplicate SlugStat objects.
+        summary: Summary statistics dictionary.
+        documents: Sequence of document payload dictionaries.
+    """
     logger.info(
         "Documents scanned=%s missing_h1=%s missing_h2=%s repeated=%s cross_file_members=%s",
         summary.get("total_documents"),
@@ -546,6 +790,17 @@ def emit_summary_log(
 
 
 def load_allow_set(defaults: set[str], allow_file: Path | None) -> set[str]:
+    """Load the generic slug allowlist from defaults and optional file.
+
+    Combine built-in defaults with slugs from an optional file.
+
+    Args:
+        defaults: Default set of allowed generic slugs.
+        allow_file: Optional path to a file with additional slugs.
+
+    Returns:
+        A combined set of allowed slugs.
+    """
     allow_set = set(defaults)
     if allow_file and allow_file.exists():
         for line in allow_file.read_text(encoding="utf-8", errors="ignore").splitlines():
@@ -556,6 +811,17 @@ def load_allow_set(defaults: set[str], allow_file: Path | None) -> set[str]:
 
 
 def _parse_timestamp(raw: str | None) -> datetime:
+    """Parse a timestamp string or return current UTC time.
+
+    Args:
+        raw: ISO 8601 timestamp string, or None.
+
+    Returns:
+        A datetime object (possibly naive).
+
+    Raises:
+        SystemExit: If the timestamp string is malformed.
+    """
     if raw is None:
         return datetime.now(timezone.utc)
     try:
@@ -565,16 +831,41 @@ def _parse_timestamp(raw: str | None) -> datetime:
 
 
 def _normalize_timestamp(moment: datetime) -> datetime:
+    """Normalize a datetime to UTC timezone.
+
+    Args:
+        moment: A datetime object, possibly naive.
+
+    Returns:
+        A timezone-aware datetime in UTC.
+    """
     if moment.tzinfo is None:
         return moment.replace(tzinfo=timezone.utc)
     return moment.astimezone(timezone.utc)
 
 
 def _timestamp_slug(moment: datetime) -> str:
+    """Format a datetime as a timestamp slug for directory naming.
+
+    Args:
+        moment: A datetime object.
+
+    Returns:
+        A string in YYYYMMDD-HHMM format.
+    """
     return _normalize_timestamp(moment).strftime("%Y%m%d-%H%M")
 
 
 def _rel_to_repo(path: Path, repo_root: Path) -> str:
+    """Compute a path relative to the repository root.
+
+    Args:
+        path: Absolute or relative path to convert.
+        repo_root: Repository root directory.
+
+    Returns:
+        A string path relative to repo_root, or absolute if outside.
+    """
     try:
         return str(path.resolve().relative_to(repo_root.resolve()))
     except ValueError:
@@ -582,6 +873,15 @@ def _rel_to_repo(path: Path, repo_root: Path) -> str:
 
 
 def maybe_write_legacy_json(path: Path | None, payload: dict[str, Any], logger: logging.Logger) -> None:
+    """Optionally write a legacy JSON file for backward compatibility.
+
+    If a path is provided, serialize the payload and write it.
+
+    Args:
+        path: Optional path for the JSON output, or None to skip.
+        payload: Dictionary to serialize.
+        logger: Logger instance for status messages.
+    """
     if not path:
         return
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -590,6 +890,21 @@ def maybe_write_legacy_json(path: Path | None, payload: dict[str, Any], logger: 
 
 
 def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
+    """Execute the anchor inventory generator.
+
+    Parse arguments, collect heading slugs, compute duplicates, and
+    write inventory artifacts including manifest, summary, and telemetry.
+
+    Args:
+        argv: Command-line arguments to parse, or None for sys.argv.
+
+    Returns:
+        A dictionary with run metadata including output directory, slug,
+        artifact paths, and statistics.
+
+    Raises:
+        SystemExit: If the docs directory does not exist.
+    """
     args = parse_args(argv)
     logging.basicConfig(
         level=getattr(logging, args.log_level.upper(), logging.INFO),
@@ -752,6 +1067,16 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
 
 
 def main(argv: Sequence[str] | None = None) -> int:
+    """CLI entrypoint for the anchor inventory generator.
+
+    Execute the anchor inventory workflow and return an exit code.
+
+    Args:
+        argv: Command-line arguments to parse, or None for sys.argv.
+
+    Returns:
+        Exit code 0 on success.
+    """
     run(argv)
     return 0
 

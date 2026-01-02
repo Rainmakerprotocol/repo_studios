@@ -140,11 +140,28 @@ def parse_imports(path: Path) -> list[ImportEdge]:
 
 
 def parse_imports_simple(path: Path) -> set[str]:
-    """Parse import statements and return just the module names (legacy compatibility)."""
+    """Parse import statements and return just the module names.
+
+    Legacy compatibility wrapper around parse_imports().
+
+    Args:
+        path: Path to the Python file.
+
+    Returns:
+        Set of imported module names.
+    """
     return {edge.target_module for edge in parse_imports(path)}
 
 
 def _module_identifier(rel: Path) -> str:
+    """Extract module identifier from relative path.
+
+    Args:
+        rel: Relative path to Python file.
+
+    Returns:
+        Module identifier string (e.g., package name or path).
+    """
     parts = rel.parts
     if not parts:
         return ""
@@ -157,6 +174,14 @@ def _module_identifier(rel: Path) -> str:
 
 
 def _alias_candidates(module_id: str) -> set[str]:
+    """Generate alias candidates for module matching.
+
+    Args:
+        module_id: Module identifier string.
+
+    Returns:
+        Set of possible alias names for import matching.
+    """
     module_id = module_id.replace("\\", "/")
     parts = module_id.split("/")
     aliases: set[str] = {module_id}
@@ -171,7 +196,13 @@ def _alias_candidates(module_id: str) -> set[str]:
 
 @dataclass
 class GraphResult:
-    """Result of building the import graph with provenance tracking."""
+    """Result of building the import graph with provenance tracking.
+
+    Attributes:
+        graph: Module dependency graph mapping source to targets.
+        edge_provenance: File/line provenance for each edge.
+        files_scanned: Total number of Python files scanned.
+    """
 
     graph: dict[str, set[str]]
     edge_provenance: dict[tuple[str, str], list[dict[str, Any]]]
@@ -238,6 +269,14 @@ def build_graph(
 
 
 def fan_metrics(graph: dict[str, set[str]]) -> tuple[dict[str, int], dict[str, int]]:
+    """Calculate fan-in and fan-out metrics for graph nodes.
+
+    Args:
+        graph: Module dependency graph.
+
+    Returns:
+        Tuple of (fan_in dict, fan_out dict) with counts per module.
+    """
     fan_out = {name: len(neighbors) for name, neighbors in graph.items()}
     fan_in: dict[str, int] = defaultdict(int)
     for _, neighbors in graph.items():
@@ -247,6 +286,14 @@ def fan_metrics(graph: dict[str, set[str]]) -> tuple[dict[str, int], dict[str, i
 
 
 def find_cycles(graph: dict[str, set[str]]) -> list[list[str]]:
+    """Detect import cycles in the dependency graph.
+
+    Args:
+        graph: Module dependency graph.
+
+    Returns:
+        List of cycles, each as a list of module names forming the cycle.
+    """
     cycles: list[list[str]] = []
     nodes = list(graph.keys())
     for start in nodes:
@@ -280,6 +327,14 @@ def find_cycles(graph: dict[str, set[str]]) -> list[list[str]]:
 
 
 def _parse_timestamp(raw: str | None) -> datetime:
+    """Parse ISO-8601 timestamp or return current UTC time.
+
+    Args:
+        raw: ISO-8601 timestamp string or None.
+
+    Returns:
+        Parsed datetime in UTC.
+    """
     if not raw:
         return datetime.now(timezone.utc)
     parsed = datetime.fromisoformat(raw)
@@ -289,6 +344,14 @@ def _parse_timestamp(raw: str | None) -> datetime:
 
 
 def _serialize_graph(graph: dict[str, set[str]]) -> dict[str, list[str]]:
+    """Convert graph sets to sorted lists for JSON serialization.
+
+    Args:
+        graph: Module dependency graph with set values.
+
+    Returns:
+        Graph with sorted list values suitable for JSON.
+    """
     return {name: sorted(neighbors) for name, neighbors in sorted(graph.items())}
 
 
@@ -404,6 +467,16 @@ def build_report(
 
 
 def _build_manifest(*, report: dict[str, Any], repo_root: Path, inputs: dict[str, Any]) -> dict[str, Any]:
+    """Build HOP-compliant manifest from report data.
+
+    Args:
+        report: Structured report dict.
+        repo_root: Repository root directory.
+        inputs: Input configuration for provenance.
+
+    Returns:
+        Manifest dict for manifest.json artifact.
+    """
     summary = report.get("summary", {})
     status = summary.get("status") if isinstance(summary, dict) else None
     return {
@@ -516,11 +589,24 @@ def write_markdown(report: dict[str, Any]) -> str:
 
 
 def configure_logging(level: str) -> None:
+    """Configure root logger with specified level.
+
+    Args:
+        level: Logging level name (e.g., "DEBUG", "INFO").
+    """
     numeric = getattr(logging, level.upper(), logging.INFO)
     logging.basicConfig(level=numeric, format="%(levelname)s: %(message)s")
 
 
 def main(argv: Sequence[str] | None = None) -> int:
+    """CLI entry point for import graph report generation.
+
+    Args:
+        argv: Command-line arguments; defaults to sys.argv[1:].
+
+    Returns:
+        Exit code (0 for success).
+    """
     parser = argparse.ArgumentParser(
         description="Generate import graph report with cycle provenance tracking"
     )

@@ -60,6 +60,14 @@ DEFAULT_TIMESTAMP_FORMAT = "%Y%m%d-%H%M"
 
 
 def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
+    """Parse command-line arguments for the test log health report.
+
+    Args:
+        argv: Command-line arguments (defaults to sys.argv[1:]).
+
+    Returns:
+        Parsed argument namespace with repo_root, logs_dir, output_base, etc.
+    """
     parser = argparse.ArgumentParser(description="Generate test log health report")
     parser.add_argument(
         "--repo-root",
@@ -106,6 +114,14 @@ def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
 
 
 def _timestamp_slug_from_iso(value: str) -> str | None:
+    """Convert an ISO8601 timestamp string to a YYYYmmdd-HHMM slug.
+
+    Args:
+        value: ISO8601 formatted timestamp string.
+
+    Returns:
+        Formatted slug string or None if parsing fails.
+    """
     try:
         parsed = datetime.fromisoformat(value)
     except ValueError:
@@ -116,6 +132,14 @@ def _timestamp_slug_from_iso(value: str) -> str | None:
 
 
 def _run_slug(args: argparse.Namespace) -> str:
+    """Derive the run directory slug from arguments or current time.
+
+    Args:
+        args: Parsed command-line arguments.
+
+    Returns:
+        Formatted timestamp slug for the output directory.
+    """
     if args.timestamp:
         slug = _timestamp_slug_from_iso(str(args.timestamp))
         if slug:
@@ -124,12 +148,29 @@ def _run_slug(args: argparse.Namespace) -> str:
 
 
 def _ensure_out(base: Path, *, run_slug: str) -> Path:
+    """Create and return the output directory for a run.
+
+    Args:
+        base: Base output directory path.
+        run_slug: Timestamp slug for subdirectory naming.
+
+    Returns:
+        Path to the created run directory.
+    """
     out_dir = base / run_slug
     out_dir.mkdir(parents=True, exist_ok=True)
     return out_dir
 
 
 def _iter_previous_runs(base: Path) -> list[Path]:
+    """List previous run directories sorted by name descending.
+
+    Args:
+        base: Base output directory to scan.
+
+    Returns:
+        List of run directory paths, newest first.
+    """
     if not base.exists():
         return []
     runs = [child for child in base.iterdir() if child.is_dir()]
@@ -138,6 +179,16 @@ def _iter_previous_runs(base: Path) -> list[Path]:
 
 
 def _load_previous_summary(base: Path) -> tuple[dict[str, Any] | None, Path | None]:
+    """Load the most recent previous run summary for comparison.
+
+    Scan previous run directories for bundle_summary.json or report.json.
+
+    Args:
+        base: Base output directory containing run subdirectories.
+
+    Returns:
+        Tuple of (summary dict, source directory path) or (None, None).
+    """
     for run_dir in _iter_previous_runs(base):
         summary_path = run_dir / "bundle_summary.json"
         if summary_path.exists():
@@ -163,6 +214,14 @@ def _load_previous_summary(base: Path) -> tuple[dict[str, Any] | None, Path | No
 
 
 def _pass_rate(summary: dict[str, Any] | None) -> float | None:
+    """Calculate pass rate percentage from a summary dictionary.
+
+    Args:
+        summary: Summary dict with total and passed counts.
+
+    Returns:
+        Pass rate as percentage (0-100) or None if unavailable.
+    """
     if not summary:
         return None
     total = summary.get("total")
@@ -179,6 +238,16 @@ def _build_comparisons(
     previous_summary: dict[str, Any] | None,
     previous_dir: Path | None,
 ) -> dict[str, Any]:
+    """Build pass rate comparison data between current and previous runs.
+
+    Args:
+        current_summary: Summary dict from current run.
+        previous_summary: Summary dict from previous run.
+        previous_dir: Path to previous run directory.
+
+    Returns:
+        Comparison dictionary with pass rates and delta.
+    """
     current_rate = _pass_rate(current_summary)
     previous_rate = _pass_rate(previous_summary)
     if current_rate is not None:
@@ -203,6 +272,14 @@ def _build_comparisons(
 
 
 def _load_producer_report(path: Path) -> dict[str, Any] | None:
+    """Load a legacy producer report JSON file.
+
+    Args:
+        path: Path to the report.json file.
+
+    Returns:
+        Parsed report dictionary or None if loading fails.
+    """
     try:
         payload = json.loads(path.read_text(encoding="utf-8"))
     except Exception:
@@ -211,6 +288,14 @@ def _load_producer_report(path: Path) -> dict[str, Any] | None:
 
 
 def _is_timestamp_slug(name: str) -> bool:
+    """Check whether a directory name matches the YYYYmmdd-HHMM format.
+
+    Args:
+        name: Directory name to validate.
+
+    Returns:
+        True if name is a valid timestamp slug, False otherwise.
+    """
     if len(name) != 13 or name[8] != "-":
         return False
     digits = name[:8] + name[9:]
@@ -218,6 +303,16 @@ def _is_timestamp_slug(name: str) -> bool:
 
 
 def _select_latest_bundle_dir(root: Path) -> Path | None:
+    """Select the most recent producer bundle directory.
+
+    Find timestamped subdirectories and return the latest one.
+
+    Args:
+        root: Root directory containing timestamped bundle subdirectories.
+
+    Returns:
+        Path to the latest bundle directory or None if none found.
+    """
     if not root.exists() or not root.is_dir():
         return None
     candidates = [child for child in root.iterdir() if child.is_dir() and _is_timestamp_slug(child.name)]
@@ -227,6 +322,16 @@ def _select_latest_bundle_dir(root: Path) -> Path | None:
 
 
 def _load_producer_bundle(bundle_dir: Path) -> tuple[dict[str, Any] | None, Path | None]:
+    """Load report data from a producer bundle directory.
+
+    Read telemetry.json and extract the payload for health report generation.
+
+    Args:
+        bundle_dir: Path to the producer bundle directory.
+
+    Returns:
+        Tuple of (report dict, telemetry path) or (None, path) on failure.
+    """
     telemetry_path = bundle_dir / "telemetry.json"
     if not telemetry_path.exists():
         return None, None
@@ -255,6 +360,14 @@ def _load_producer_bundle(bundle_dir: Path) -> tuple[dict[str, Any] | None, Path
 
 
 def _has_log_artifacts(directory: Path) -> bool:
+    """Check whether a directory contains pytest or junit log files.
+
+    Args:
+        directory: Directory path to inspect.
+
+    Returns:
+        True if pytest/junit artifacts are found, False otherwise.
+    """
     try:
         for entry in directory.iterdir():
             if not entry.is_file():
@@ -270,6 +383,16 @@ def _has_log_artifacts(directory: Path) -> bool:
 
 
 def _discover_log_runs(base: Path) -> list[Path]:
+    """Discover all directories containing log artifacts under a base path.
+
+    Recursively scan for directories with pytest/junit files.
+
+    Args:
+        base: Base directory to search.
+
+    Returns:
+        List of directories with log artifacts, sorted by mtime descending.
+    """
     if not base.exists():
         return []
     seen: set[Path] = set()
@@ -296,6 +419,16 @@ def _discover_log_runs(base: Path) -> list[Path]:
 
 
 def _select_logs_dir(logs_dir: Path) -> Path | None:
+    """Select the most relevant log directory from a base path.
+
+    Return the base if it has artifacts, otherwise discover subdirectories.
+
+    Args:
+        logs_dir: Base log directory path.
+
+    Returns:
+        Path to directory with log artifacts or None.
+    """
     if _has_log_artifacts(logs_dir):
         return logs_dir
     runs = _discover_log_runs(logs_dir)
@@ -303,11 +436,26 @@ def _select_logs_dir(logs_dir: Path) -> Path | None:
 
 
 def _allow_legacy_logs() -> bool:
+    """Check whether legacy log directory fallback is enabled.
+
+    Controlled by TEST_LOG_HEALTH_ALLOW_LEGACY environment variable.
+
+    Returns:
+        True if legacy fallback is allowed, False otherwise.
+    """
     flag = os.environ.get("TEST_LOG_HEALTH_ALLOW_LEGACY", "1").strip().lower()
     return flag not in {"0", "false", "no", "off"}
 
 
 def _resolve_legacy_logs_base(repo_root: Path) -> Path:
+    """Resolve the legacy pytest logs directory path.
+
+    Args:
+        repo_root: Repository root path.
+
+    Returns:
+        Absolute path to the legacy logs directory.
+    """
     base = Path(LEGACY_LOGS_DIR)
     if not base.is_absolute():
         base = (repo_root / base).resolve()
@@ -315,6 +463,14 @@ def _resolve_legacy_logs_base(repo_root: Path) -> Path:
 
 
 def _empty_report(logs_dir: Path) -> dict[str, Any]:
+    """Create an empty report structure when no logs are available.
+
+    Args:
+        logs_dir: Path to the logs directory for metadata.
+
+    Returns:
+        Dictionary with zero-value summary and empty collections.
+    """
     generated = datetime.now(UTC).isoformat()
     return {
         "schema_version": 1,
@@ -343,6 +499,15 @@ def _empty_report(logs_dir: Path) -> dict[str, Any]:
 
 
 def _append_delta_markdown(markdown: str, comparisons: dict[str, Any]) -> str:
+    """Append pass rate delta section to markdown report.
+
+    Args:
+        markdown: Existing markdown content.
+        comparisons: Comparison data with pass rate deltas.
+
+    Returns:
+        Updated markdown with delta section appended.
+    """
     lines = markdown.rstrip("\n").splitlines()
     lines.append("")
     lines.append("## Pass Rate Delta")
@@ -367,6 +532,16 @@ def _append_delta_markdown(markdown: str, comparisons: dict[str, Any]) -> str:
 
 
 def _inject_markdownlint_exception(markdown: str) -> str:
+    """Prepend markdownlint disable comment to markdown content.
+
+    Disable MD013 (line length) for generated reports.
+
+    Args:
+        markdown: Markdown content to modify.
+
+    Returns:
+        Markdown with lint exception comment at the top.
+    """
     prefix = "<!-- markdownlint-disable MD013 -->"
     stripped = markdown.lstrip()
     if markdown.startswith(prefix):
@@ -379,6 +554,18 @@ def _inject_markdownlint_exception(markdown: str) -> str:
 
 
 def _write_csv(out_dir: Path, payload: dict[str, Any], comparisons: dict[str, Any]) -> Path:
+    """Write report data to a CSV file.
+
+    Export summary metrics, pass rates, and slow test details.
+
+    Args:
+        out_dir: Output directory for the CSV file.
+        payload: Report payload with summary and slow_tests.
+        comparisons: Comparison data with pass rates.
+
+    Returns:
+        Path to the written CSV file.
+    """
     summary = payload.get("summary") or {}
     pass_rate = comparisons.get("previous_run", {}).get("pass_rate", {})
     slow_tests = payload.get("slow_tests") or []
@@ -415,6 +602,19 @@ def _write_artifacts(
     *,
     comparisons: dict[str, Any],
 ) -> Path:
+    """Write all report artifacts to the output directory.
+
+    Generate report.json, report.md, and report.csv files.
+
+    Args:
+        out_dir: Output directory for artifacts.
+        payload: Report payload dictionary.
+        markdown: Markdown report content.
+        comparisons: Comparison data for delta section.
+
+    Returns:
+        Path to the written CSV file.
+    """
     out_dir.mkdir(parents=True, exist_ok=True)
     out_json = out_dir / "report.json"
     out_json.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
@@ -437,6 +637,22 @@ def _write_metadata(
     summary: dict[str, Any] | None,
     comparisons: dict[str, Any],
 ) -> Path:
+    """Write bundle summary metadata and update markdown with source references.
+
+    Args:
+        out_dir: Output directory for metadata.
+        source: Data source type (producer or logs).
+        producer_bundle_dir: Path to producer bundle if used.
+        producer_telemetry: Path to telemetry.json if used.
+        producer_report: Path to legacy report.json if used.
+        logs_dir: Configured logs directory.
+        logs_source: Actual logs source directory.
+        summary: Report summary dictionary.
+        comparisons: Comparison data.
+
+    Returns:
+        Path to the written bundle_summary.json file.
+    """
     generated = datetime.now(UTC)
     metadata = {
         "schema_version": 1,
@@ -482,6 +698,17 @@ def _write_metadata(
 
 
 def _prune_history(base: Path, keep: int | None, current: Path, *, logger: logging.Logger | None) -> list[Path]:
+    """Remove old run directories beyond the retention threshold.
+
+    Args:
+        base: Base output directory containing run subdirectories.
+        keep: Number of runs to retain (minimum 1).
+        current: Current run directory to preserve.
+        logger: Logger for debug output.
+
+    Returns:
+        List of removed directory paths.
+    """
     if keep is None:
         return []
     try:
@@ -501,6 +728,16 @@ def _prune_history(base: Path, keep: int | None, current: Path, *, logger: loggi
 
 
 def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
+    """Execute the test log health report generation pipeline.
+
+    Parse arguments, load or analyze logs, build comparisons, and write artifacts.
+
+    Args:
+        argv: Command-line arguments (defaults to sys.argv[1:]).
+
+    Returns:
+        Dictionary containing output paths and metadata.
+    """
     args = _parse_args(argv)
     logging.basicConfig(
         level=getattr(logging, args.log_level.upper(), logging.INFO),
@@ -624,6 +861,16 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
 
 
 def main(argv: Sequence[str] | None = None) -> int:
+    """Entry point for the test log health report script.
+
+    Execute run() and return success exit code.
+
+    Args:
+        argv: Command-line arguments (defaults to sys.argv[1:]).
+
+    Returns:
+        Exit code (always 0 on success).
+    """
     run(argv)
     return 0
 

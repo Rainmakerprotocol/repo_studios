@@ -71,6 +71,17 @@ DEFAULT_ORCHESTRATOR_OUTPUT = build_topic_path("orchestrator", TOPIC_SLUG)
 
 @dataclass(frozen=True)
 class Paths:
+    """Resolved path configuration for orchestrator execution.
+
+    Attributes:
+        repo_root: Repository root directory.
+        runs_dir: Directory containing faulthandler run outputs.
+        producer_output_dir: Producer report output location.
+        consumer_output_dir: Consumer artifact output location.
+        summarizer_output_dir: Summarizer output location.
+        orchestrator_output_dir: Orchestrator manifest output location.
+    """
+
     repo_root: Path
     runs_dir: Path
     producer_output_dir: Path
@@ -102,6 +113,15 @@ PATHS_CONFIG = PathsConfig(
 
 @dataclass(frozen=True)
 class KeepValues:
+    """Retention budget values extracted from CLI arguments.
+
+    Attributes:
+        artifacts_to_keep: Number of orchestrator artifact bundles to retain.
+        producer_keep: Retention budget for producer reports.
+        consumer_keep: Retention budget for consumer artifacts.
+        summarizer_keep: Retention budget for summarizer bundles.
+    """
+
     artifacts_to_keep: int
     producer_keep: int
     consumer_keep: int
@@ -121,6 +141,23 @@ OPTIONS_CONFIG = OptionsConfig(
 
 @dataclass(frozen=True)
 class Options:
+    """Runtime options for orchestrator execution.
+
+    Attributes:
+        log_level: Logging verbosity level.
+        artifacts_to_keep: Number of orchestrator artifact bundles to retain.
+        producer_keep: Retention budget for producer reports.
+        consumer_keep: Retention budget for consumer artifacts.
+        summarizer_keep: Retention budget for summarizer bundles.
+        skip_producer: Skip producer step if True.
+        skip_consumer: Skip consumer step if True.
+        skip_summarizer: Skip summarizer step if True.
+        run_dir: Explicit faulthandler run directory override.
+        reuse_report: Explicit producer report to reuse.
+        producer_top_frames: Override producer top frame depth.
+        run_timestamp: UTC timestamp for artifact generation.
+    """
+
     log_level: str
     artifacts_to_keep: int
     producer_keep: int
@@ -138,10 +175,11 @@ class Options:
 def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     """Parse command-line arguments for orchestrator.
 
-    :param argv: Command-line arguments; defaults to sys.argv[1:].
-    :type argv: Sequence[str] | None
-    :returns: Parsed argument namespace.
-    :rtype: argparse.Namespace
+    Args:
+        argv: Command-line arguments; defaults to sys.argv[1:].
+
+    Returns:
+        Parsed argument namespace.
     """
     parser = argparse.ArgumentParser(description=__doc__ or "")
     parser.add_argument("--repo-root", help="Repository root override")
@@ -173,11 +211,14 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
 def _parse_timestamp(raw: str | None) -> datetime:
     """Parse ISO-8601 timestamp or return current UTC time.
 
-    :param raw: ISO-8601 timestamp string or None.
-    :type raw: str | None
-    :returns: Parsed datetime in UTC.
-    :rtype: datetime
-    :raises SystemExit: If timestamp format is invalid.
+    Args:
+        raw: ISO-8601 timestamp string or None.
+
+    Returns:
+        Parsed datetime in UTC.
+
+    Raises:
+        SystemExit: If timestamp format is invalid.
     """
     if not raw:
         return datetime.now(timezone.utc)
@@ -193,12 +234,12 @@ def _parse_timestamp(raw: str | None) -> datetime:
 def _resolve_path(repo_root: Path, raw: str | None) -> Path | None:
     """Resolve optional path relative to repo root.
 
-    :param repo_root: Repository root for relative resolution.
-    :type repo_root: Path
-    :param raw: Raw path string or None.
-    :type raw: str | None
-    :returns: Resolved Path or None.
-    :rtype: Path | None
+    Args:
+        repo_root: Repository root for relative resolution.
+        raw: Raw path string or None.
+
+    Returns:
+        Resolved Path or None.
     """
     if not raw:
         return None
@@ -211,10 +252,11 @@ def _resolve_path(repo_root: Path, raw: str | None) -> Path | None:
 def build_paths(args: argparse.Namespace) -> Paths:
     """Construct Paths dataclass from parsed CLI arguments.
 
-    :param args: Parsed argument namespace from parse_args().
-    :type args: argparse.Namespace
-    :returns: Resolved path configuration.
-    :rtype: Paths
+    Args:
+        args: Parsed argument namespace from parse_args().
+
+    Returns:
+        Resolved path configuration.
     """
     result = build_standard_paths(args, PATHS_CONFIG, origin=Path(__file__))
     return Paths(**{f.name: getattr(result, f.name) for f in result.__dataclass_fields__.values()})
@@ -223,12 +265,12 @@ def build_paths(args: argparse.Namespace) -> Paths:
 def build_options(args: argparse.Namespace, *, paths: Paths) -> Options:
     """Construct Options from parsed CLI arguments.
 
-    :param args: Parsed argument namespace from parse_args().
-    :type args: argparse.Namespace
-    :param paths: Resolved Paths instance.
-    :type paths: Paths
-    :returns: Fully resolved Options instance.
-    :rtype: Options
+    Args:
+        args: Parsed argument namespace from parse_args().
+        paths: Resolved Paths instance.
+
+    Returns:
+        Fully resolved Options instance.
     """
     keep_values = build_standard_options(args, OPTIONS_CONFIG)
     return Options(
@@ -250,8 +292,8 @@ def build_options(args: argparse.Namespace, *, paths: Paths) -> Options:
 def configure_logging(level: str) -> None:
     """Configure root logger with specified level.
 
-    :param level: Logging level name (e.g., "DEBUG", "INFO").
-    :type level: str
+    Args:
+        level: Logging level name (e.g., "DEBUG", "INFO").
     """
     logging.basicConfig(level=getattr(logging, level.upper(), logging.INFO), format="%(levelname)s %(message)s")
 
@@ -259,16 +301,17 @@ def configure_logging(level: str) -> None:
 def _load_callable(script_path: Path, module_name: str, attribute: str) -> Callable[[Sequence[str] | None], Any]:
     """Dynamically load a callable from a script module.
 
-    :param script_path: Path to the Python script.
-    :type script_path: Path
-    :param module_name: Module name for sys.modules registration.
-    :type module_name: str
-    :param attribute: Name of the callable attribute to retrieve.
-    :type attribute: str
-    :returns: Loaded callable.
-    :rtype: Callable[[Sequence[str] | None], Any]
-    :raises ImportError: If module cannot be loaded.
-    :raises AttributeError: If callable not found.
+    Args:
+        script_path: Path to the Python script.
+        module_name: Module name for sys.modules registration.
+        attribute: Name of the callable attribute to retrieve.
+
+    Returns:
+        Loaded callable.
+
+    Raises:
+        ImportError: If module cannot be loaded.
+        AttributeError: If callable not found.
     """
     script_abs = script_path.resolve()
     if module_name in sys.modules:
@@ -289,12 +332,12 @@ def _load_callable(script_path: Path, module_name: str, attribute: str) -> Calla
 def _relativize(path: Path | None, repo_root: Path) -> str | None:
     """Convert path to repo-relative POSIX string.
 
-    :param path: Path to relativize or None.
-    :type path: Path | None
-    :param repo_root: Repository root for relative resolution.
-    :type repo_root: Path
-    :returns: Relative POSIX path string or None.
-    :rtype: str | None
+    Args:
+        path: Path to relativize or None.
+        repo_root: Repository root for relative resolution.
+
+    Returns:
+        Relative POSIX path string or None.
     """
     if path is None:
         return None
@@ -306,6 +349,16 @@ def _relativize(path: Path | None, repo_root: Path) -> str | None:
 
 @dataclass(frozen=True)
 class ProducerOutcome:
+    """Result from producer step execution.
+
+    Attributes:
+        payload: Raw return dict from producer run().
+        run_dir: Faulthandler run directory processed.
+        report_path: Path to generated producer report.
+        repeat_offender: Count of repeat offender signatures.
+        signatures: Total signature count.
+    """
+
     payload: dict[str, Any]
     run_dir: Path | None
     report_path: Path | None
@@ -315,6 +368,18 @@ class ProducerOutcome:
 
 @dataclass(frozen=True)
 class ConsumerOutcome:
+    """Result from consumer step execution.
+
+    Attributes:
+        payload: Raw return dict from consumer run().
+        bundle_dir: Path to generated consumer bundle directory.
+        bundle_summary: Path to bundle summary artifact.
+        summary_json: Path to summary.json within bundle.
+        summary_markdown: Path to SUMMARY.md within bundle.
+        repeat_offender: Count of repeat offender signatures.
+        signatures: Total signature count.
+    """
+
     payload: dict[str, Any]
     bundle_dir: Path | None
     bundle_summary: Path | None
@@ -326,6 +391,15 @@ class ConsumerOutcome:
 
 @dataclass(frozen=True)
 class SummarizerOutcome:
+    """Result from summarizer step execution.
+
+    Attributes:
+        payload: Raw return dict from summarizer run().
+        run_dir: Path to generated summarizer output directory.
+        artifacts: Mapping of artifact names to paths.
+        slug: Timestamp slug for the output bundle.
+    """
+
     payload: dict[str, Any]
     run_dir: Path | None
     artifacts: dict[str, Path]
@@ -335,13 +409,15 @@ class SummarizerOutcome:
 def _execute_producer(paths: Paths, options: Options) -> ProducerOutcome:
     """Execute faulthandler report producer step.
 
-    :param paths: Resolved path configuration.
-    :type paths: Paths
-    :param options: Runtime options.
-    :type options: Options
-    :returns: Producer execution outcome.
-    :rtype: ProducerOutcome
-    :raises RuntimeError: If producer returns unexpected payload.
+    Args:
+        paths: Resolved path configuration.
+        options: Runtime options.
+
+    Returns:
+        Producer execution outcome.
+
+    Raises:
+        RuntimeError: If producer returns unexpected payload.
     """
     run_callable = _load_callable(paths.repo_root / PRODUCER_SCRIPT, PRODUCER_MODULE, "run")
     argv: list[str] = [
@@ -387,15 +463,16 @@ def _execute_producer(paths: Paths, options: Options) -> ProducerOutcome:
 def _execute_consumer(paths: Paths, options: Options, producer: ProducerOutcome | None) -> ConsumerOutcome:
     """Execute fault artifact consumer step.
 
-    :param paths: Resolved path configuration.
-    :type paths: Paths
-    :param options: Runtime options.
-    :type options: Options
-    :param producer: Producer outcome for chaining, or None.
-    :type producer: ProducerOutcome | None
-    :returns: Consumer execution outcome.
-    :rtype: ConsumerOutcome
-    :raises RuntimeError: If consumer returns unexpected payload.
+    Args:
+        paths: Resolved path configuration.
+        options: Runtime options.
+        producer: Producer outcome for chaining, or None.
+
+    Returns:
+        Consumer execution outcome.
+
+    Raises:
+        RuntimeError: If consumer returns unexpected payload.
     """
     run_callable = _load_callable(paths.repo_root / CONSUMER_SCRIPT, CONSUMER_MODULE, "run")
     argv: list[str] = [
@@ -457,17 +534,17 @@ def _execute_summarizer(
 ) -> SummarizerOutcome:
     """Execute fault diagnostics summarizer step.
 
-    :param paths: Resolved path configuration.
-    :type paths: Paths
-    :param options: Runtime options.
-    :type options: Options
-    :param producer: Producer outcome for artifact references, or None.
-    :type producer: ProducerOutcome | None
-    :param consumer: Consumer outcome for artifact references, or None.
-    :type consumer: ConsumerOutcome | None
-    :returns: Summarizer execution outcome.
-    :rtype: SummarizerOutcome
-    :raises RuntimeError: If summarizer returns unexpected payload or fails.
+    Args:
+        paths: Resolved path configuration.
+        options: Runtime options.
+        producer: Producer outcome for artifact references, or None.
+        consumer: Consumer outcome for artifact references, or None.
+
+    Returns:
+        Summarizer execution outcome.
+
+    Raises:
+        RuntimeError: If summarizer returns unexpected payload or fails.
     """
     run_callable = _load_callable(paths.repo_root / SUMMARIZER_SCRIPT, SUMMARIZER_MODULE, "run")
     argv: list[str] = [
@@ -515,8 +592,8 @@ def _execute_summarizer(
 def _register_scripts(registry: CatalogRegistry) -> None:
     """Register topic scripts in catalog registry.
 
-    :param registry: CatalogRegistry instance to populate.
-    :type registry: CatalogRegistry
+    Args:
+        registry: CatalogRegistry instance to populate.
     """
     registry.register(script_path=str(PRODUCER_SCRIPT), topic=TOPIC_SLUG, role="producer")
     registry.register(script_path=str(CONSUMER_SCRIPT), topic=TOPIC_SLUG, role="consumer")
@@ -527,10 +604,11 @@ def _register_scripts(registry: CatalogRegistry) -> None:
 def _summarize_steps(result_steps: Sequence[Any]) -> str:
     """Generate Markdown summary of pipeline step results.
 
-    :param result_steps: Sequence of step result objects.
-    :type result_steps: Sequence[Any]
-    :returns: Markdown summary content.
-    :rtype: str
+    Args:
+        result_steps: Sequence of step result objects.
+
+    Returns:
+        Markdown summary content.
     """
     lines = ["# Fault Diagnostics Run", ""]
     for step in result_steps:
@@ -542,15 +620,16 @@ def _summarize_steps(result_steps: Sequence[Any]) -> str:
 def run(argv: Sequence[str] | None = None) -> int:
     """Execute fault diagnostics orchestrator pipeline.
 
-    Chains producer → consumer → summarizer steps and writes
+    Chain producer → consumer → summarizer steps and write
     HOP-compliant orchestrator artifacts.
 
-    :param argv: Command-line arguments; defaults to sys.argv[1:].
-    :type argv: Sequence[str] | None
-    :returns: Exit code (0 for success, 1 for failure).
-    :rtype: int
+    Args:
+        argv: Command-line arguments; defaults to sys.argv[1:].
 
-    .. note::
+    Returns:
+        Exit code (0 for success, 1 for failure).
+
+    Note:
         Output is written to
         ``.repo_studios/reports/healthview/orchestrator_reports/fault_diagnostics_overview/<YYYYMMDD-HHMM>/``.
     """
@@ -718,8 +797,8 @@ def run(argv: Sequence[str] | None = None) -> int:
 def main(argv: Sequence[str] | None = None) -> None:
     """CLI entry point for fault diagnostics orchestrator.
 
-    :param argv: Command-line arguments; defaults to sys.argv[1:].
-    :type argv: Sequence[str] | None
+    Args:
+        argv: Command-line arguments; defaults to sys.argv[1:].
     """
     raise SystemExit(run(argv))
 

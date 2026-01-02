@@ -1,25 +1,25 @@
 version: 1.0.0
-generated_at: '2026-01-02T14:06:26.584722+00:00'
+generated_at: '2026-01-02T20:55:29.549921+00:00'
 generator_version: 1.0.0
 repository:
   name: repo_studios
   root: C:\Users\genet\repo_studios
   branch: main
 statistics:
-  total_scripts: 28
+  total_scripts: 33
   categories:
-    producer: 12
+    producer: 13
     utility: 1
     unknown: 7
-    aggregator: 2
-    orchestrator: 3
-    summarizer: 2
-    consumer: 1
+    aggregator: 3
+    orchestrator: 4
+    summarizer: 3
+    consumer: 2
   status:
-    active: 15
+    active: 16
     template: 1
     unknown: 8
-    draft: 4
+    draft: 8
 scripts:
 - script_id: generate_commandview_inventory
   name: Generate CommandView Inventory
@@ -453,6 +453,102 @@ scripts:
   status: unknown
   entry_point: run
   importable: true
+- script_id: analyze_monkey_patch_trends
+  name: Analyze Monkey Patch Trends
+  category: aggregator
+  tier3_file: healthview_orchestration_pipeline\tier3_scripts\monkey_patch_oversight\tier3_analyze_monkey_patch_trends.yaml
+  script_path: .repo_studios/scripts/aggregators/analyze_monkey_patch_trends.py
+  summary: "Aggregates monkey-patch classification results from consumer bundles (or falls back to\nproducer\
+    \ reports) and computes trend deltas across historical runs.\n\nEmits a canonical HealthView bundle\
+    \ under:\n\n  .repo_studios/reports/healthview/aggregator_reports/monkey_patch_trends/<YYYYMMDD-HHMM>/\n\
+    \nThe bundle includes trend.json, trend.md, and bundle_summary.json.\nAlso copies trend snapshot into\
+    \ the latest consumer bundle as TREND_SNAPSHOT.md.\n"
+  keywords:
+  - healthview
+  - aggregator
+  - monkey-patch
+  - trends
+  - telemetry
+  status: draft
+  entry_point: run
+  importable: true
+- script_id: classify_monkey_patches
+  name: Classify Monkey Patches
+  category: consumer
+  tier3_file: healthview_orchestration_pipeline\tier3_scripts\monkey_patch_oversight\tier3_classify_monkey_patches.yaml
+  script_path: .repo_studios/scripts/consumers/classify_monkey_patches.py
+  summary: "Consumes monkey-patch scan results from the producer and classifies each finding\nby risk\
+    \ level (HIGH, MODERATE, SAFE) based on category, scope, and test context.\n\nEmits a canonical HealthView\
+    \ bundle under:\n\n  .repo_studios/reports/healthview/consumer_reports/monkey_patch_risk/<YYYYMMDD-HHMM>/\n\
+    \nThe bundle includes summary.json, SUMMARY.md, and bundle_summary.json.\n"
+  keywords:
+  - healthview
+  - consumer
+  - monkey-patch
+  - risk-classification
+  - telemetry
+  status: draft
+  entry_point: run
+  importable: true
+- script_id: run_monkey_patch_oversight
+  name: Run Monkey Patch Oversight Pipeline
+  category: orchestrator
+  tier3_file: healthview_orchestration_pipeline\tier3_scripts\monkey_patch_oversight\tier3_run_monkey_patch_oversight.yaml
+  script_path: .repo_studios/command_center/scripts/orchestrators/run_monkey_patch_oversight.py
+  summary: "Orchestrates the full Stage 5.1 Monkey Patch Oversight pipeline by sequentially\ninvoking\
+    \ the producer, consumer, aggregator, and summarizer scripts, then emitting\na unified HealthView\
+    \ bundle under:\n\n  .repo_studios/reports/healthview/orchestrator_reports/monkey_patch_oversight/<YYYYMMDD-HHMM>/\n\
+    \nEach step emits its own HealthView bundle, and the orchestrator consolidates\noutcomes into a final\
+    \ manifest.json, summary.md, and telemetry.json.\n\nThe orchestrator supports skip flags for partial\
+    \ runs and per-step artifact\nretention controls.\n"
+  keywords:
+  - healthview
+  - orchestrator
+  - monkey-patch
+  - pipeline
+  - telemetry
+  - stage-5.1
+  status: draft
+  entry_point: run
+  importable: true
+- script_id: scan_monkey_patches
+  name: Scan Monkey Patches
+  category: producer
+  tier3_file: healthview_orchestration_pipeline\tier3_scripts\monkey_patch_oversight\tier3_scan_monkey_patches.yaml
+  script_path: .repo_studios/scripts/producers/scan_monkey_patches.py
+  summary: "Scans Python source files for monkey-patching patterns (setattr on modules/classes,\nattribute\
+    \ reassignments, wrapt decorators, unittest.mock usage, etc.) and emits\na canonical HealthView bundle\
+    \ under:\n\n  .repo_studios/reports/healthview/producer_reports/monkey_patches/<YYYYMMDD-HHMM>/\n\n\
+    The bundle includes manifest.json, summary.md, and telemetry.json.\n\nOptional git enrichment adds\
+    \ blame and recent-commit metadata to each finding.\n"
+  keywords:
+  - healthview
+  - producer
+  - monkey-patch
+  - telemetry
+  - inventory
+  - static-analysis
+  status: draft
+  entry_point: run
+  importable: true
+- script_id: summarize_monkey_patch_overview
+  name: Summarize Monkey Patch Overview
+  category: summarizer
+  tier3_file: healthview_orchestration_pipeline\tier3_scripts\monkey_patch_oversight\tier3_summarize_monkey_patch_overview.yaml
+  script_path: .repo_studios/command_center/scripts/summarizers/summarize_monkey_patch_overview.py
+  summary: "Renders a compact markdown + JSON summary for a Stage 5.1 Monkey Patch Oversight pipeline\
+    \ run.\n\nThe summarizer consumes upstream producer, consumer, and aggregator outputs and emits overview\n\
+    artifacts under:\n\n  .repo_studios/reports/healthview/summarizer_reports/monkey_patch_overview/<YYYYMMDD-HHMM>/\n\
+    \nThe run directory includes:\n  - monkey_patch_overview.json\n  - monkey_patch_overview.md\n"
+  keywords:
+  - healthview
+  - summarizer
+  - monkey-patch
+  - oversight
+  - stage-5.1
+  status: active
+  entry_point: run
+  importable: true
 - script_id: analyze_test_hardening
   name: Analyze Test Hardening
   category: producer
@@ -606,20 +702,25 @@ by_category:
   - validate_markdown_anchors
   - validate_metrics_anchor_stubs
   - verify_docs_integrity
+  - scan_monkey_patches
   - analyze_test_hardening
   - collect_test_log_reports
   - generate_test_coverage_inventory
   consumer:
+  - classify_monkey_patches
   - generate_test_log_health_report
   aggregator:
   - aggregate_docs_health_signals
+  - analyze_monkey_patch_trends
   - generate_churn_complexity_heatmap
   orchestrator:
   - run_docs_health_overview
   - run_fault_diagnostics_overview
+  - run_monkey_patch_oversight
   - run_test_execution_telemetry
   summarizer:
   - summarize_fault_diagnostics_overview
+  - summarize_monkey_patch_overview
   - summarize_test_execution_telemetry
   utility:
   - healthview_onboarding_template

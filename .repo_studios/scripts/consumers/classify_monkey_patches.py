@@ -74,6 +74,17 @@ class NoScansFoundError(FileNotFoundError):
 
 
 def _is_scan_dir(path: Path) -> bool:
+    """Check if a directory contains valid scan artifacts.
+
+    Validate that the path is a directory containing either structured
+    matches or a legacy report file.
+
+    Args:
+        path: Directory path to check.
+
+    Returns:
+        True if the directory contains recognizable scan artifacts.
+    """
     if not path.is_dir():
         return False
     if path.name.startswith("latest"):
@@ -91,6 +102,16 @@ def _is_scan_dir(path: Path) -> bool:
 
 
 def _scan_dirs(base_dir: Path) -> list[Path]:
+    """List valid scan directories under a base path.
+
+    Find all subdirectories containing scan artifacts, sorted by name.
+
+    Args:
+        base_dir: Parent directory to search.
+
+    Returns:
+        Sorted list of valid scan directory paths.
+    """
     if not base_dir.exists():
         return []
     candidates = [child for child in base_dir.iterdir() if _is_scan_dir(child)]
@@ -104,6 +125,23 @@ def _resolve_latest_scan(
     base_dir: Path | None,
     default_roots: Sequence[Path],
 ) -> Path:
+    """Resolve the scan directory to process.
+
+    Return the explicit scan if provided, otherwise find the latest
+    scan in the base directory or default roots.
+
+    Args:
+        explicit_scan: User-specified scan directory or None.
+        base_dir: Override for scan root directory or None.
+        default_roots: Fallback directories to search.
+
+    Returns:
+        Path to the resolved scan directory.
+
+    Raises:
+        FileNotFoundError: If explicit_scan is invalid.
+        NoScansFoundError: If no scans are found in any location.
+    """
     if explicit_scan is not None:
         if not _is_scan_dir(explicit_scan):
             raise FileNotFoundError(f"Scan directory {explicit_scan} is missing expected artifacts")
@@ -130,6 +168,17 @@ def _resolve_latest_scan(
 
 @dataclass(frozen=True)
 class Finding:
+    """Immutable representation of a monkey patch finding.
+
+    Attributes:
+        file: Relative file path where the patch was found.
+        line: Line number of the patch.
+        category: Classification category of the patch.
+        is_test: Whether the patch is in test code.
+        is_module_scope: Whether the patch occurs at module scope.
+        import_base: Base module being patched, if known.
+    """
+
     file: str
     line: int
     category: str
@@ -139,6 +188,14 @@ class Finding:
 
     @staticmethod
     def from_obj(o: dict[str, Any]) -> Finding:
+        """Construct a Finding from a dictionary.
+
+        Args:
+            o: Dictionary with finding attributes.
+
+        Returns:
+            Finding instance with extracted values.
+        """
         return Finding(
             file=o.get("file", ""),
             line=int(o.get("line", 0)),
@@ -150,6 +207,19 @@ class Finding:
 
 
 def _load_structured_findings(run_dir: Path) -> tuple[list[Finding], dict[str, Any] | None]:
+    """Load findings from structured scan artifacts.
+
+    Read matches.json and optionally report.json for metadata.
+
+    Args:
+        run_dir: Scan run directory containing artifacts.
+
+    Returns:
+        Tuple of (findings list, optional metadata dict).
+
+    Raises:
+        ValueError: If matches.json does not contain a list.
+    """
     matches_path = run_dir / STRUCTURED_MATCHES_NAME
     if not matches_path.exists():
         return [], None
@@ -169,6 +239,19 @@ def _load_structured_findings(run_dir: Path) -> tuple[list[Finding], dict[str, A
 
 
 def _load_legacy_findings(report_path: Path) -> list[Finding]:
+    """Load findings from a legacy report file.
+
+    Parse the JSON array of findings from the legacy format.
+
+    Args:
+        report_path: Path to the legacy report.json file.
+
+    Returns:
+        List of Finding instances.
+
+    Raises:
+        ValueError: If the file does not contain a list.
+    """
     data = json.loads(report_path.read_text(encoding="utf-8"))
     if not isinstance(data, list):
         raise ValueError("Legacy report.json must contain a list of findings")
@@ -176,6 +259,16 @@ def _load_legacy_findings(report_path: Path) -> list[Finding]:
 
 
 def classify(f: Finding) -> str:
+    """Classify a finding's risk level.
+
+    Delegate to the shared classification utility based on finding signals.
+
+    Args:
+        f: Finding to classify.
+
+    Returns:
+        Risk level string (HIGH, MODERATE, or SAFE).
+    """
     return classify_monkey_patch_from_signals(
         FindingSignals(
             category=f.category,
@@ -186,6 +279,18 @@ def classify(f: Finding) -> str:
 
 
 def aggregate(findings: Iterable[Finding], metadata: dict[str, Any] | None = None) -> dict[str, Any]:
+    """Aggregate findings into a risk summary.
+
+    Bucket findings by risk level and compute statistics including
+    top files and category breakdowns.
+
+    Args:
+        findings: Iterable of Finding objects to aggregate.
+        metadata: Optional metadata from the scan run.
+
+    Returns:
+        Summary dictionary with counts, top files, and categories.
+    """
     findings_list = list(findings)
     buckets: dict[str, list[Finding]] = defaultdict(list)
     for f in findings_list:
@@ -211,10 +316,27 @@ def aggregate(findings: Iterable[Finding], metadata: dict[str, Any] | None = Non
 
 
 def _utcnow() -> datetime:
+    """Return the current UTC datetime.
+
+    Returns:
+        Current datetime with UTC timezone.
+    """
     return datetime.now(UTC)
 
 
 def _render_markdown(agg: dict[str, Any], *, generated: datetime | None = None) -> str:
+    """Render the aggregated summary as markdown.
+
+    Format the risk counts, top files, and categories into a
+    human-readable markdown report.
+
+    Args:
+        agg: Aggregated summary dictionary from aggregate().
+        generated: Optional generation timestamp to include.
+
+    Returns:
+        Markdown-formatted summary string.
+    """
     md: list[str] = ["# Monkey-Patch Risk Summary", ""]
     if generated is not None:
         md.append(f"Generated (UTC): {generated.isoformat(timespec='seconds')}")
@@ -249,6 +371,14 @@ def _render_markdown(agg: dict[str, Any], *, generated: datetime | None = None) 
 
 
 def _write_legacy_outputs(scan_dir: Path, agg: dict[str, Any]) -> None:
+    """Write legacy RISK_SUMMARY artifacts to the scan directory.
+
+    Emit both JSON and markdown summary files in the original format.
+
+    Args:
+        scan_dir: Scan directory to write artifacts into.
+        agg: Aggregated summary dictionary.
+    """
     scan_dir.mkdir(parents=True, exist_ok=True)
     (scan_dir / "RISK_SUMMARY.json").write_text(json.dumps(agg, indent=2) + "\n", encoding="utf-8")
     (scan_dir / "RISK_SUMMARY.md").write_text(_render_markdown(agg), encoding="utf-8")
@@ -264,6 +394,23 @@ def _write_consumer_bundle(
     keep: int,
     logger: logging.Logger | None,
 ) -> tuple[Path, Path, list[Path]]:
+    """Write the structured consumer bundle artifacts.
+
+    Create a timestamped bundle directory with summary JSON, markdown,
+    and bundle metadata. Prune old bundles according to retention policy.
+
+    Args:
+        scan_dir: Source scan directory path.
+        agg: Aggregated summary dictionary.
+        output_base: Base directory for consumer bundles.
+        source: Source type indicator (structured or legacy).
+        producer_report: Path to producer report if available.
+        keep: Number of bundles to retain.
+        logger: Logger for pruning messages.
+
+    Returns:
+        Tuple of (bundle directory, summary path, list of pruned paths).
+    """
     output_base.mkdir(parents=True, exist_ok=True)
     ts = _utcnow()
     bundle_dir = output_base / f"{BUNDLE_PREFIX}{ts.strftime('%Y-%m-%d_%H%M%S')}"
@@ -304,24 +451,25 @@ def _write_consumer_bundle(
     bundle_summary_path = bundle_dir / "bundle_summary.json"
     bundle_summary_path.write_text(json.dumps(bundle_summary, indent=2) + "\n", encoding="utf-8")
 
-    # HOP compliance: no pointer files - removed _update_latest call
+    # HOP compliance: no pointer files
     pruned = _prune_history(output_base, keep=keep, current=bundle_dir, logger=logger)
     return bundle_dir, bundle_summary_path, pruned
 
 
-def _update_latest(base: Path, bundle_dir: Path, filenames: list[str]) -> None:
-    for name in filenames:
-        src = bundle_dir / name
-        dest = base / f"latest_{name}"
-        try:
-            if dest.exists() or dest.is_symlink():
-                dest.unlink()
-            dest.hardlink_to(src)
-        except Exception:
-            dest.write_bytes(src.read_bytes())
-
-
 def _prune_history(base: Path, *, keep: int | None, current: Path, logger: logging.Logger | None) -> list[Path]:
+    """Prune old consumer bundle directories.
+
+    Remove older bundles beyond the retention limit, keeping the current run.
+
+    Args:
+        base: Base directory containing bundle directories.
+        keep: Number of bundles to retain (None to skip pruning).
+        current: Current bundle directory to preserve.
+        logger: Logger for pruning messages.
+
+    Returns:
+        List of removed directory paths.
+    """
     if keep is None:
         return []
     try:
@@ -342,6 +490,16 @@ def _prune_history(base: Path, *, keep: int | None, current: Path, logger: loggi
 
 
 def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
+    """Parse command-line arguments.
+
+    Configure the argument parser with all classifier options.
+
+    Args:
+        argv: Command-line arguments or None for sys.argv.
+
+    Returns:
+        Parsed namespace with configuration options.
+    """
     parser = argparse.ArgumentParser(description="Classify monkey patch risk levels.")
     parser.add_argument(
         "--repo-root",
@@ -386,6 +544,17 @@ def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
 
 
 def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
+    """Execute the monkey patch classifier.
+
+    Load findings from the latest or specified scan, classify risk,
+    aggregate results, and write output bundles.
+
+    Args:
+        argv: Command-line arguments or None for sys.argv.
+
+    Returns:
+        Result dictionary with paths and processing metadata.
+    """
     args = _parse_args(argv)
     log_level = logging.DEBUG if args.verbose else getattr(logging, str(args.log_level).upper(), logging.INFO)
     logging.basicConfig(level=log_level, format="[%(levelname)s] %(message)s", force=True)
@@ -460,6 +629,16 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
 
 
 def main(argv: Sequence[str] | None = None) -> int:
+    """CLI entry point for the monkey patch classifier.
+
+    Run the classifier and print results to stdout.
+
+    Args:
+        argv: Command-line arguments or None for sys.argv.
+
+    Returns:
+        Exit code: 0 on success, 1 on error.
+    """
     try:
         result = run(argv)
     except NoScansFoundError as exc:

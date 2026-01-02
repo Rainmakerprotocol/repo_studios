@@ -89,6 +89,16 @@ DEFAULT_PATTERNS = [
 
 
 class Issue(NamedTuple):
+    """Representation of a validation issue for a broken anchor.
+
+    Attributes:
+        file: Path to the file containing the issue.
+        line: Line number where the issue occurs.
+        kind: Type of issue (e.g., 'missing_target', 'missing_anchor').
+        target: The target path or anchor that failed validation.
+        message: Human-readable description of the issue.
+    """
+
     file: Path
     line: int
     kind: str
@@ -97,12 +107,29 @@ class Issue(NamedTuple):
 
 
 class Paths(NamedTuple):
+    """Path configuration for the markdown anchor validator.
+
+    Attributes:
+        repo_root: Repository root directory.
+        scan_root: Root directory to scan for markdown files.
+        output_dir: Output directory for generated artifacts.
+    """
+
     repo_root: Path
     scan_root: Path
     output_dir: Path
 
 
 class Options(NamedTuple):
+    """Runtime options for the markdown anchor validator.
+
+    Attributes:
+        artifacts_to_keep: Number of historical artifact bundles to retain.
+        patterns: Glob patterns to match markdown files.
+        timestamp: Optional override timestamp in ISO 8601 format.
+        log_level: Logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL).
+    """
+
     artifacts_to_keep: int
     patterns: tuple[str, ...] = ()
     timestamp: str | None = None
@@ -136,6 +163,15 @@ OPTIONS_CONFIG = OptionsConfig(
 
 
 def _relativize(path: Path, root: Path) -> str:
+    """Convert an absolute path to a relative POSIX path string.
+
+    Args:
+        path: Absolute path to convert.
+        root: Root directory to compute relative path from.
+
+    Returns:
+        A POSIX-formatted relative path string.
+    """
     try:
         return path.relative_to(root).as_posix()
     except ValueError:  # pragma: no cover - defensive
@@ -150,6 +186,21 @@ def build_report(
     scanned_files: list[Path],
     ts: datetime,
 ) -> dict:
+    """Build the validation report from collected issues.
+
+    Assemble issue data and scanned file list into a structured
+    report dictionary.
+
+    Args:
+        root: Root directory used for path relativization.
+        patterns: Glob patterns used to find files.
+        issues: List of validation Issue objects.
+        scanned_files: List of files that were scanned.
+        ts: Timestamp when the validation was run.
+
+    Returns:
+        A dictionary containing the complete validation report.
+    """
     issue_payload = [
         {
             "file": _relativize(issue.file, root),
@@ -173,10 +224,31 @@ def build_report(
 
 
 def _format_run_slug(ts: datetime) -> str:
+    """Format a datetime as a run slug for directory naming.
+
+    Args:
+        ts: A datetime object.
+
+    Returns:
+        A string in YYYYMMDD-HHMM format in UTC.
+    """
     return ts.astimezone(timezone.utc).strftime("%Y%m%d-%H%M")
 
 
 def _parse_timestamp(raw: str | None) -> datetime:
+    """Parse a timestamp string or return current UTC time.
+
+    Support both ISO 8601 and YYYYMMDD-HHMM slug formats.
+
+    Args:
+        raw: Timestamp string, or None for current time.
+
+    Returns:
+        A timezone-aware datetime in UTC.
+
+    Raises:
+        SystemExit: If the timestamp string is malformed.
+    """
     if raw is None:
         return datetime.now(timezone.utc)
 
@@ -194,6 +266,18 @@ def _parse_timestamp(raw: str | None) -> datetime:
 
 
 def compose_manifest(*, report: dict, run_timestamp: str, inputs: dict) -> dict:
+    """Compose the manifest dictionary for the validation run.
+
+    Build a manifest with run metadata, status, and summary information.
+
+    Args:
+        report: The validation report dictionary.
+        run_timestamp: Timestamp slug for the run.
+        inputs: Dictionary of input parameters.
+
+    Returns:
+        A manifest dictionary for the validation bundle.
+    """
     status = report.get("status", "ok")
     return {
         "schema_version": 1,
@@ -216,6 +300,18 @@ def compose_manifest(*, report: dict, run_timestamp: str, inputs: dict) -> dict:
 
 
 def compose_telemetry(*, report: dict, links_checked: int) -> dict:
+    """Compose the telemetry dictionary for the validation run.
+
+    Build telemetry with metrics about files scanned, links checked,
+    and issue breakdowns.
+
+    Args:
+        report: The validation report dictionary.
+        links_checked: Total number of links that were checked.
+
+    Returns:
+        A telemetry dictionary with metrics and payload.
+    """
     issues = report.get("issues", [])
     missing_file_count = sum(1 for issue in issues if issue.get("kind") == "file")
     missing_anchor_count = sum(1 for issue in issues if issue.get("kind") == "anchor")
@@ -237,6 +333,17 @@ def compose_telemetry(*, report: dict, links_checked: int) -> dict:
 
 
 def render_summary_markdown(*, report: dict) -> str:
+    """Render the validation report as a markdown summary.
+
+    Format the report with header information and issue details
+    for human readability.
+
+    Args:
+        report: The validation report dictionary.
+
+    Returns:
+        A markdown-formatted summary string.
+    """
     lines = [
         "# Markdown Anchor Validation Report",
         "",
@@ -260,6 +367,17 @@ def render_summary_markdown(*, report: dict) -> str:
 
 
 def slugify(raw: str) -> str:
+    """Convert a heading title into a URL-friendly slug.
+
+    Normalize by lowercasing, removing backticks and special characters,
+    and converting spaces to hyphens.
+
+    Args:
+        raw: The raw heading text.
+
+    Returns:
+        A normalized slug suitable for anchor links.
+    """
     s = raw.strip().lower()
     # remove code spans/backticks
     s = re.sub(r"`+", "", s)
@@ -271,6 +389,16 @@ def slugify(raw: str) -> str:
 
 
 def collect_anchors(text: str) -> set[str]:
+    """Collect all anchor slugs from headings in markdown text.
+
+    Parse the text for heading lines and convert each to a slug.
+
+    Args:
+        text: The markdown content to parse.
+
+    Returns:
+        A set of anchor slugs found in the text.
+    """
     anchors: set[str] = set()
     for line in text.splitlines():
         m = HEADING_RE.match(line)
@@ -281,6 +409,17 @@ def collect_anchors(text: str) -> set[str]:
 
 
 def iter_files(patterns: Iterable[str], root: Path) -> Iterable[Path]:
+    """Yield unique markdown file paths matching the given patterns.
+
+    Glob each pattern and yield distinct .md files.
+
+    Args:
+        patterns: Glob patterns to match files.
+        root: Root directory for glob resolution.
+
+    Yields:
+        Path objects for each unique matching markdown file.
+    """
     seen: set[Path] = set()
     for pat in patterns:
         for path in root.glob(pat):
@@ -290,12 +429,33 @@ def iter_files(patterns: Iterable[str], root: Path) -> Iterable[Path]:
 
 
 def parse_links(text: str) -> Iterable[tuple[int, str]]:
+    """Extract markdown links with their line numbers from text.
+
+    Args:
+        text: The markdown content to parse.
+
+    Yields:
+        Tuples of (line_number, link_target) for each link found.
+    """
     for idx, line in enumerate(text.splitlines(), start=1):
         for m in LINK_RE.finditer(line):
             yield idx, m.group(1)
 
 
 def check_file(path: Path, root: Path, anchors_cache: dict[Path, set[str]]) -> tuple[list[Issue], int]:
+    """Check a markdown file for broken anchor links.
+
+    Validate all internal links, checking that target files exist and
+    referenced anchors are present in those files.
+
+    Args:
+        path: Path to the markdown file to check.
+        root: Root directory for resolving relative paths.
+        anchors_cache: Cache of already-parsed anchor sets by file path.
+
+    Returns:
+        A tuple of (issues_list, links_checked_count).
+    """
     issues: list[Issue] = []
     text = path.read_text(encoding="utf-8", errors="replace")
     links_checked = 0
@@ -349,10 +509,28 @@ def check_file(path: Path, root: Path, anchors_cache: dict[Path, set[str]]) -> t
 
 
 def build_paths(args: argparse.Namespace) -> Paths:
+    """Build the Paths configuration from parsed arguments.
+
+    Args:
+        args: Parsed command-line arguments.
+
+    Returns:
+        A Paths named tuple with resolved paths.
+    """
     return cast(Paths, build_standard_paths(args, PATH_CONFIG, origin=Path(__file__)))
 
 
 def build_options(args: argparse.Namespace) -> Options:
+    """Build the Options configuration from parsed arguments.
+
+    Merge CLI arguments with defaults to produce the runtime options.
+
+    Args:
+        args: Parsed command-line arguments.
+
+    Returns:
+        An Options named tuple with runtime configuration.
+    """
     patterns = list(args.globs) if args.globs else list(DEFAULT_PATTERNS)
     base_options = build_standard_options(args, OPTIONS_CONFIG)
     return Options(
@@ -364,6 +542,17 @@ def build_options(args: argparse.Namespace) -> Options:
 
 
 def main(argv: list[str] | None = None) -> int:
+    """CLI entrypoint for the markdown anchor validator.
+
+    Parse arguments, scan files, validate anchors, and write report
+    artifacts. Returns 1 if any issues are found, 0 otherwise.
+
+    Args:
+        argv: Command-line arguments to parse, or None for sys.argv.
+
+    Returns:
+        Exit code 1 if issues found, 0 otherwise.
+    """
     parser = argparse.ArgumentParser(description="Check markdown internal links & anchors")
     parser.add_argument("--repo-root", help="Repository root (defaults to project root)")
     parser.add_argument("--root", default=".")

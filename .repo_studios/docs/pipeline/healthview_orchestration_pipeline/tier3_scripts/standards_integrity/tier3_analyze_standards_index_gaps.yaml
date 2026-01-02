@@ -1,0 +1,153 @@
+# Tier-3 YAML — analyze_standards_index_gaps.py
+# Schema: tier3_script_v1
+# Stage: 6.1 Standards Integrity
+# Record: S61R-003
+
+tool:
+  name: "analyze_standards_index_gaps"
+  version: "1.0.0"
+  category: "producer"
+  path: ".repo_studios/command_center/scripts/producers/analyze_standards_index_gaps.py"
+  description: >
+    Scans markdown sources for imperative statements (avoid, ensure, prefer, use, never, etc.)
+    that may represent standards directives not yet captured in the repo standards index.
+    Produces a gap report identifying candidate lines that should be reviewed for inclusion.
+
+invocation:
+  entrypoint: "run(argv)"
+  python_module: ".repo_studios.command_center.scripts.producers.analyze_standards_index_gaps"
+  cli_example: |
+    python .repo_studios/command_center/scripts/producers/analyze_standards_index_gaps.py \
+      --repo-root . \
+      --output-dir .repo_studios/command_center/reports/commandview/standards_index_gaps \
+      --index-path .repo_studios/scripts/repo_standards_index.yaml \
+      --categories-path .repo_studios/scripts/.repo_studios/standards_categories.yaml \
+      --max 10 \
+      --artifacts-to-keep 5 \
+      --log-level INFO
+
+parameters:
+  positional: []
+  flags:
+    - name: "--repo-root"
+      type: "Path"
+      required: false
+      default: "auto-detected (4 levels up from script)"
+      description: "Repository root directory."
+    - name: "--output-dir"
+      type: "Path"
+      required: false
+      default: ".repo_studios/command_center/reports/commandview/standards_index_gaps"
+      description: "Output directory for gap analysis reports."
+    - name: "--index-path"
+      type: "Path"
+      required: false
+      default: ".repo_studios/scripts/repo_standards_index.yaml"
+      description: "Path to the standards index YAML."
+    - name: "--categories-path"
+      type: "Path"
+      required: false
+      default: ".repo_studios/scripts/.repo_studios/standards_categories.yaml"
+      description: "Path to the standards categories configuration."
+    - name: "--json"
+      type: "flag"
+      required: false
+      default: false
+      description: "Output JSON to stdout instead of markdown."
+    - name: "--max"
+      type: "int"
+      required: false
+      default: 8
+      description: "Maximum sources to display in console output."
+    - name: "--timestamp"
+      type: "str"
+      required: false
+      default: "null (auto-generated UTC)"
+      description: "ISO8601 timestamp to seed run slug generation."
+    - name: "--artifacts-to-keep"
+      type: "int"
+      required: false
+      default: 5
+      description: "Number of timestamped run directories to retain."
+    - name: "--log-level"
+      type: "str"
+      required: false
+      default: "WARNING"
+      description: "Logging verbosity (DEBUG, INFO, WARNING, ERROR)."
+
+outputs:
+  root: ".repo_studios/command_center/reports/commandview/standards_index_gaps/<YYYYMMDD-HHMM>/"
+  artifacts:
+    - name: "manifest.json"
+      description: "Run metadata including viewer, topic, git SHA, and provenance."
+    - name: "summary.md"
+      description: "Human-readable gap report with candidate lines per source."
+    - name: "telemetry.json"
+      description: "Metrics including total candidates, sources scanned, and top sources."
+
+behavior:
+  steps:
+    - step: 1
+      action: "Load standards index"
+      description: "Read repo_standards_index.yaml; fallback to legacy path if primary missing."
+    - step: 2
+      action: "Load source categories"
+      description: "Parse standards_categories.yaml to identify markdown files to scan."
+    - step: 3
+      action: "Build existing tokens"
+      description: "Extract normalized tokens from indexed standards for deduplication."
+    - step: 4
+      action: "Scan sources for gaps"
+      description: "Find imperative statements not substantially overlapping existing index."
+    - step: 5
+      action: "Build report"
+      description: "Aggregate gap candidates with summary statistics and top sources."
+    - step: 6
+      action: "Write artifacts"
+      description: "Emit manifest.json, summary.md, and telemetry.json to timestamped run dir."
+    - step: 7
+      action: "Prune old runs"
+      description: "Remove excess run directories per --artifacts-to-keep threshold."
+    - step: 8
+      action: "DB integration (optional)"
+      description: "Persist telemetry if REPO_STUDIOS_DB_ENABLED is set."
+
+error_handling:
+  missing_index: "Raises RuntimeError if index file not found at primary or legacy path."
+  invalid_index: "Raises RuntimeError if index YAML is not a mapping."
+  file_read_errors: "Logs warning and skips unreadable source files."
+  db_failures: "Logs warning but does not fail the run (best-effort persistence)."
+
+integration:
+  upstream:
+    - script: "generate_standards_index.py"
+      relationship: "Consumes repo_standards_index.yaml produced by index generator."
+  downstream:
+    - script: "run_standards_integrity.py"
+      relationship: "Orchestrator delegates to this producer for gap analysis step."
+  db_integration:
+    gated_by: "REPO_STUDIOS_DB_ENABLED"
+    marker: "DB_INTEGRATION_MARKER:"
+    behavior: "Warn-only on failure; does not block run completion."
+
+examples:
+  basic_run: |
+    python .repo_studios/command_center/scripts/producers/analyze_standards_index_gaps.py \
+      --repo-root .
+  json_output: |
+    python .repo_studios/command_center/scripts/producers/analyze_standards_index_gaps.py \
+      --repo-root . --json
+  custom_paths: |
+    python .repo_studios/command_center/scripts/producers/analyze_standards_index_gaps.py \
+      --repo-root . \
+      --index-path custom/index.yaml \
+      --categories-path custom/categories.yaml \
+      --output-dir reports/gaps
+
+metadata:
+  tier: 3
+  stage: "6.1"
+  record_id: "S61R-003"
+  created: "2026-01-02"
+  last_updated: "2026-01-02"
+  template_version: "v1"

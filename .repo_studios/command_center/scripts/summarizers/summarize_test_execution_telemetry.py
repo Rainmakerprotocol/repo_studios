@@ -68,6 +68,15 @@ class StepRecord:
 
 @dataclass(frozen=True)
 class CollectSummary:
+    """Summary data from the collect step.
+
+    Attributes:
+        report_dir: Directory containing collected reports.
+        producer_report: Path to the producer report.json.
+        warnings_total: Total warning count from test logs.
+        slow_tests_over_threshold: Count of tests exceeding duration threshold.
+    """
+
     report_dir: Path | None
     producer_report: Path | None
     warnings_total: int | None
@@ -76,24 +85,53 @@ class CollectSummary:
 
 @dataclass(frozen=True)
 class CoverageSummary:
+    """Summary data from test coverage analysis.
+
+    Attributes:
+        report_dir: Directory containing coverage reports.
+        summary: Coverage metrics dictionary.
+    """
+
     report_dir: Path | None
     summary: Mapping[str, Any] | None
 
 
 @dataclass(frozen=True)
 class HeatmapSummary:
+    """Summary data from churn complexity heatmap generation.
+
+    Attributes:
+        run_dir: Directory containing heatmap artifacts.
+        payload: Heatmap bundle payload dictionary.
+    """
+
     run_dir: Path | None
     payload: Mapping[str, Any] | None
 
 
 @dataclass(frozen=True)
 class HardeningSummary:
+    """Summary data from test hardening analysis.
+
+    Attributes:
+        run_dir: Directory containing hardening reports.
+        payload: Hardening analysis payload dictionary.
+    """
+
     run_dir: Path | None
     payload: Mapping[str, Any] | None
 
 
 @dataclass(frozen=True)
 class HealthSummary:
+    """Summary data from test log health report.
+
+    Attributes:
+        run_dir: Directory containing health report artifacts.
+        bundle_summary: Path to the bundle_summary.json file.
+        payload: Health report payload dictionary.
+    """
+
     run_dir: Path | None
     bundle_summary: Path | None
     payload: Mapping[str, Any] | None
@@ -101,6 +139,22 @@ class HealthSummary:
 
 @dataclass(frozen=True)
 class SummaryInputs:
+    """Aggregated inputs for summary generation.
+
+    Attributes:
+        repo_root: Repository root path.
+        run_slug: Timestamp slug identifying the pipeline run.
+        pipeline_success: Whether the overall pipeline succeeded.
+        completed_at: Completion timestamp.
+        artifacts: Mapping of artifact names to paths.
+        steps: Sequence of StepRecord objects from the pipeline.
+        collect: Summary from the collect step.
+        coverage: Summary from coverage analysis.
+        heatmap: Summary from heatmap generation.
+        hardening: Summary from hardening analysis.
+        health: Summary from health report generation.
+    """
+
     repo_root: Path
     run_slug: str
     pipeline_success: bool
@@ -116,12 +170,28 @@ class SummaryInputs:
 
 @dataclass(frozen=True)
 class SummaryResult:
+    """Result of summary generation containing JSON and Markdown outputs.
+
+    Attributes:
+        json_payload: Structured summary data as a dictionary.
+        markdown: Rendered Markdown summary content.
+    """
+
     json_payload: Mapping[str, Any]
     markdown: str
 
 
 @dataclass(frozen=True)
 class Paths:
+    """Path configuration for the summarizer script.
+
+    Attributes:
+        repo_root: Repository root path.
+        manifest_path: Path to the orchestrator manifest.json.
+        telemetry_path: Path to the orchestrator telemetry.json.
+        output_dir: Directory for generated summary artifacts.
+    """
+
     repo_root: Path
     manifest_path: Path
     telemetry_path: Path
@@ -141,12 +211,25 @@ PATHS_CONFIG = PathsConfig(
 
 @dataclass(frozen=True)
 class Options:
+    """Runtime options for the summarizer script.
+
+    Attributes:
+        log_level: Logging verbosity level.
+        artifacts_to_keep: Number of artifact runs to retain.
+    """
+
     log_level: str
     artifacts_to_keep: int
 
 
 @dataclass(frozen=True)
 class KeepValues:
+    """Retention policy values from CLI options.
+
+    Attributes:
+        artifacts_to_keep: Number of artifact runs to retain.
+    """
+
     artifacts_to_keep: int
 
 
@@ -157,6 +240,14 @@ OPTIONS_CONFIG = OptionsConfig(
 
 
 def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
+    """Parse command-line arguments for the summarizer.
+
+    Args:
+        argv: Command-line arguments (defaults to sys.argv[1:]).
+
+    Returns:
+        Parsed argument namespace with manifest, telemetry, output_dir, etc.
+    """
     parser = argparse.ArgumentParser(description=__doc__ or "")
     parser.add_argument("--repo-root", help="Repository root override")
     parser.add_argument("--manifest", required=True, help="Path to orchestrator manifest.json")
@@ -182,20 +273,50 @@ def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
 
 
 def configure_logging(level: str) -> None:
+    """Configure basic logging with the specified level.
+
+    Args:
+        level: Log level string (DEBUG, INFO, WARNING, etc.).
+    """
     logging.basicConfig(level=getattr(logging, level.upper(), logging.INFO), format="%(levelname)s %(message)s")
 
 
 def build_paths(args: argparse.Namespace) -> Paths:
+    """Build Paths configuration from parsed arguments.
+
+    Args:
+        args: Parsed command-line arguments.
+
+    Returns:
+        Paths dataclass with resolved file paths.
+    """
     return cast(Paths, build_standard_paths(args, PATHS_CONFIG, origin=Path(__file__)))
 
 
 def build_options(args: argparse.Namespace) -> Options:
+    """Build Options configuration from parsed arguments.
+
+    Args:
+        args: Parsed command-line arguments.
+
+    Returns:
+        Options dataclass with log_level and artifacts_to_keep.
+    """
     keep_values = build_standard_options(args, OPTIONS_CONFIG)
     artifacts_to_keep = max(int(getattr(keep_values, "artifacts_to_keep", get_keep("summarize_test_execution_telemetry"))), 1)
     return Options(log_level=str(args.log_level), artifacts_to_keep=artifacts_to_keep)
 
 
 def _normalize_relative(path: Path | None, repo_root: Path) -> str | None:
+    """Convert a path to a repo-relative POSIX string.
+
+    Args:
+        path: Path to convert (or None).
+        repo_root: Repository root for relative calculation.
+
+    Returns:
+        POSIX-formatted relative or absolute path string, or None.
+    """
     if path is None:
         return None
     try:
@@ -205,10 +326,26 @@ def _normalize_relative(path: Path | None, repo_root: Path) -> str | None:
 
 
 def _escape_table_cell(value: str) -> str:
+    """Escape special characters for Markdown table cells.
+
+    Args:
+        value: String to escape.
+
+    Returns:
+        Escaped string safe for Markdown tables.
+    """
     return value.replace("|", "\\|").replace("\n", " ")
 
 
 def _summarize_failure_detail(step: StepRecord) -> str:
+    """Format a concise failure summary for a step.
+
+    Args:
+        step: StepRecord with failure information.
+
+    Returns:
+        Formatted string like "step_name: failure detail".
+    """
     detail = (step.detail or "failed").strip()
     if not detail:
         detail = "failed"
@@ -216,6 +353,14 @@ def _summarize_failure_detail(step: StepRecord) -> str:
 
 
 def _extract_hardening_high(payload: Mapping[str, Any] | None) -> int | None:
+    """Extract high-severity issue count from hardening payload.
+
+    Args:
+        payload: Hardening analysis payload dictionary.
+
+    Returns:
+        High-severity issue count or None if unavailable.
+    """
     if not isinstance(payload, Mapping):
         return None
     summary = payload.get("summary")
@@ -229,6 +374,15 @@ def _extract_hardening_high(payload: Mapping[str, Any] | None) -> int | None:
 
 
 def _timestamp_from_slug(run_slug: str, *, fallback: datetime) -> datetime:
+    """Parse a timestamp from a run slug string.
+
+    Args:
+        run_slug: Slug in YYYYmmdd-HHMM format.
+        fallback: Fallback datetime if parsing fails.
+
+    Returns:
+        Parsed datetime in UTC or fallback.
+    """
     try:
         parsed = datetime.strptime(run_slug, "%Y%m%d-%H%M")
         return parsed.replace(tzinfo=timezone.utc)
@@ -237,6 +391,16 @@ def _timestamp_from_slug(run_slug: str, *, fallback: datetime) -> datetime:
 
 
 def build_summary(inputs: SummaryInputs) -> SummaryResult:
+    """Build the summary payload and Markdown from aggregated inputs.
+
+    Compose JSON payload and Markdown report from pipeline step data.
+
+    Args:
+        inputs: SummaryInputs containing all pipeline data.
+
+    Returns:
+        SummaryResult with json_payload and markdown.
+    """
     repo_root = inputs.repo_root
     warnings_total = inputs.collect.warnings_total
     slow_tests = inputs.collect.slow_tests_over_threshold
@@ -427,6 +591,14 @@ def build_summary(inputs: SummaryInputs) -> SummaryResult:
 
 
 def _read_json(path: Path) -> Mapping[str, Any] | None:
+    """Read and parse a JSON file.
+
+    Args:
+        path: Path to the JSON file.
+
+    Returns:
+        Parsed dictionary or None if file missing or invalid.
+    """
     if not path.exists():
         return None
     try:
@@ -437,6 +609,15 @@ def _read_json(path: Path) -> Mapping[str, Any] | None:
 
 
 def _resolve_artifact(raw: str | None, repo_root: Path) -> Path | None:
+    """Resolve an artifact path relative to repo root.
+
+    Args:
+        raw: Raw path string or None.
+        repo_root: Repository root for relative paths.
+
+    Returns:
+        Resolved absolute Path or None.
+    """
     if not raw:
         return None
     candidate = Path(raw)
@@ -446,6 +627,14 @@ def _resolve_artifact(raw: str | None, repo_root: Path) -> Path | None:
 
 
 def _parse_datetime(value: str | None) -> datetime:
+    """Parse an ISO datetime string to a datetime object.
+
+    Args:
+        value: ISO datetime string or None.
+
+    Returns:
+        Parsed datetime in UTC or current UTC time on failure.
+    """
     if not value:
         return datetime.now(timezone.utc)
     try:
@@ -458,6 +647,14 @@ def _parse_datetime(value: str | None) -> datetime:
 
 
 def _load_step_records(steps_data: Sequence[Mapping[str, Any]]) -> list[StepRecord]:
+    """Parse step data from telemetry into StepRecord objects.
+
+    Args:
+        steps_data: Sequence of step dictionaries from telemetry.json.
+
+    Returns:
+        List of StepRecord objects.
+    """
     records: list[StepRecord] = []
     for entry in steps_data:
         try:
@@ -484,6 +681,19 @@ def _load_step_records(steps_data: Sequence[Mapping[str, Any]]) -> list[StepReco
 
 
 def _build_inputs_from_files(paths: Paths) -> SummaryInputs:
+    """Build SummaryInputs by reading manifest and telemetry files.
+
+    Parse orchestrator outputs and component data to populate all summaries.
+
+    Args:
+        paths: Paths configuration with manifest_path and telemetry_path.
+
+    Returns:
+        SummaryInputs with all component summaries populated.
+
+    Raises:
+        FileNotFoundError: If manifest or telemetry files are unreadable.
+    """
     repo_root = paths.repo_root
     manifest_data = _read_json(paths.manifest_path)
     telemetry_data = _read_json(paths.telemetry_path)
@@ -620,6 +830,16 @@ def _build_inputs_from_files(paths: Paths) -> SummaryInputs:
 
 
 def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
+    """Execute the test execution telemetry summarization pipeline.
+
+    Parse arguments, build inputs from files, generate summary, and write artifacts.
+
+    Args:
+        argv: Command-line arguments (defaults to sys.argv[1:]).
+
+    Returns:
+        Dictionary containing status, run_dir, slug, and artifact paths.
+    """
     args = _parse_args(argv)
     paths = build_paths(args)
     options = build_options(args)
@@ -655,6 +875,13 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
 
 
 def main(argv: Sequence[str] | None = None) -> None:
+    """Entry point for the test execution telemetry summarizer.
+
+    Execute run() and exit with appropriate status code.
+
+    Args:
+        argv: Command-line arguments (defaults to sys.argv[1:]).
+    """
     outcome = run(argv)
     raise SystemExit(0 if outcome.get("status") == "ok" else 1)
 

@@ -1,0 +1,353 @@
+# Tier-3: run_monkey_patch_oversight.py
+# Orchestrator script that runs the full Stage 5.1 Monkey Patch Oversight pipeline.
+
+tool:
+  id: run_monkey_patch_oversight
+  name: Run Monkey Patch Oversight Pipeline
+  description: |
+    Orchestrates the full Stage 5.1 Monkey Patch Oversight pipeline by sequentially
+    invoking the producer, consumer, aggregator, and summarizer scripts, then emitting
+    a unified HealthView bundle under:
+
+      .repo_studios/reports/healthview/orchestrator_reports/monkey_patch_oversight/<YYYYMMDD-HHMM>/
+
+    Each step emits its own HealthView bundle, and the orchestrator consolidates
+    outcomes into a final manifest.json, summary.md, and telemetry.json.
+
+    The orchestrator supports skip flags for partial runs and per-step artifact
+    retention controls.
+  keywords:
+    - healthview
+    - orchestrator
+    - monkey-patch
+    - pipeline
+    - telemetry
+    - stage-5.1
+  use_when:
+    - Running the full monkey-patch oversight pipeline end-to-end
+    - Producing consolidated telemetry for Stage 5.1 healthview reports
+    - Automating monkey-patch scans in CI or scheduled jobs
+  dont_use_when:
+    - You only need to run a single step (use the individual producer/consumer/etc.)
+    - Debugging a specific step in isolation
+
+invocation:
+  command_template: |
+    python {script_path} \
+      --repo-root {repo_root} \
+      --log-level {log_level}
+  make_target: studio-orchestrate-monkey-patch-oversight
+  script_path: .repo_studios/command_center/scripts/orchestrators/run_monkey_patch_oversight.py
+  importable: true
+  entry_function: run
+  environment:
+    requires_venv: true
+    python_version: ">=3.11"
+    notes:
+      - "Delegates to scan_monkey_patches.py, classify_monkey_patches.py, analyze_monkey_patch_trends.py, summarize_monkey_patch_overview.py."
+      - "Uses dynamic module loading via importlib."
+
+parameters:
+  - name: repo_root
+    type: path
+    required: false
+    default: "."
+    description: Repository root for resolving repo-relative paths.
+
+  - name: scan_root
+    type: path
+    required: false
+    default: null
+    description: |
+      Scan root directory for the producer step. If omitted, defaults to repo_root.
+    validation:
+      must_exist: true
+      must_be_directory: true
+
+  - name: producer_output_dir
+    type: path
+    required: false
+    default: .repo_studios/reports/producer_reports/monkey_patch_scans
+    description: Output directory for producer HealthView bundles.
+
+  - name: consumer_output_dir
+    type: path
+    required: false
+    default: .repo_studios/reports/consumer_reports/monkey_patch_risk
+    description: Output directory for consumer HealthView bundles.
+
+  - name: aggregator_output_dir
+    type: path
+    required: false
+    default: .repo_studios/reports/aggregator_reports/monkey_patch_trends
+    description: Output directory for aggregator HealthView bundles.
+
+  - name: summarizer_output_dir
+    type: path
+    required: false
+    default: .repo_studios/reports/summarizer_reports/monkey_patch_overview
+    description: Output directory for summarizer HealthView bundles.
+
+  - name: healthview_root
+    type: path
+    required: false
+    default: .repo_studios/reports/healthview/orchestrator_reports/monkey_patch_oversight
+    description: HealthView root where the orchestrator bundle is written.
+
+  - name: artifacts_to_keep
+    type: int
+    required: false
+    default: 5
+    description: Number of orchestrator run directories to retain.
+    validation:
+      min_value: 1
+
+  - name: producer_artifacts_to_keep
+    type: int
+    required: false
+    default: 5
+    description: Number of producer run directories to retain.
+
+  - name: consumer_artifacts_to_keep
+    type: int
+    required: false
+    default: 5
+    description: Number of consumer run directories to retain.
+
+  - name: aggregator_artifacts_to_keep
+    type: int
+    required: false
+    default: 5
+    description: Number of aggregator run directories to retain.
+
+  - name: summarizer_artifacts_to_keep
+    type: int
+    required: false
+    default: 5
+    description: Number of summarizer run directories to retain.
+
+  - name: trend_max_runs
+    type: int
+    required: false
+    default: 30
+    description: Maximum historical runs for the aggregator to analyze.
+
+  - name: producer_context_lines
+    type: int
+    required: false
+    default: 3
+    description: Number of source context lines for producer findings.
+
+  - name: producer_with_git
+    type: bool
+    required: false
+    default: false
+    description: Enrich producer findings with git blame and commit metadata.
+
+  - name: producer_strict
+    type: bool
+    required: false
+    default: false
+    description: Exit non-zero if producer detects findings.
+
+  - name: producer_project_packages
+    type: string
+    required: false
+    default: null
+    description: Comma-separated package prefixes for internal vs external classification.
+
+  - name: producer_exclude_dirs
+    type: string
+    required: false
+    default: null
+    description: Additional directory names to exclude from scanning.
+
+  - name: producer_exclude_globs
+    type: string
+    required: false
+    default: null
+    description: Glob patterns to exclude files from scanning.
+
+  - name: duplicate_matrix
+    type: bool
+    required: false
+    default: false
+    description: Include duplicate matrix analysis in the summarizer step.
+
+  - name: skip_producer
+    type: bool
+    required: false
+    default: false
+    description: Skip the producer step (use existing producer artifacts).
+
+  - name: skip_consumer
+    type: bool
+    required: false
+    default: false
+    description: Skip the consumer step.
+
+  - name: skip_aggregator
+    type: bool
+    required: false
+    default: false
+    description: Skip the aggregator step.
+
+  - name: skip_summarizer
+    type: bool
+    required: false
+    default: false
+    description: Skip the summarizer step.
+
+  - name: timestamp
+    type: string
+    required: false
+    default: "current UTC"
+    description: ISO-8601 timestamp for the run slug.
+
+  - name: log_level
+    type: enum
+    required: false
+    default: INFO
+    choices: [DEBUG, INFO, WARNING, ERROR, CRITICAL]
+
+outputs:
+  primary:
+    type: directory
+    format: healthview_bundle
+    path_pattern: >-
+      .repo_studios/reports/healthview/orchestrator_reports/monkey_patch_oversight/<YYYYMMDD-HHMM>/
+    description: HealthView bundle directory for the orchestrator run.
+    contents:
+      required:
+        - manifest.json
+        - summary.md
+        - telemetry.json
+
+  secondary:
+    - type: directory
+      format: healthview_bundle
+      path_pattern: >-
+        .repo_studios/reports/producer_reports/monkey_patch_scans/<YYYYMMDD-HHMM>/
+      description: Producer step HealthView bundle.
+
+    - type: directory
+      format: healthview_bundle
+      path_pattern: >-
+        .repo_studios/reports/consumer_reports/monkey_patch_risk/<YYYYMMDD-HHMM>/
+      description: Consumer step HealthView bundle.
+
+    - type: directory
+      format: healthview_bundle
+      path_pattern: >-
+        .repo_studios/reports/aggregator_reports/monkey_patch_trends/<YYYYMMDD-HHMM>/
+      description: Aggregator step HealthView bundle.
+
+    - type: directory
+      format: healthview_bundle
+      path_pattern: >-
+        .repo_studios/reports/summarizer_reports/monkey_patch_overview/<YYYYMMDD-HHMM>/
+      description: Summarizer step HealthView bundle.
+
+    - type: stdout
+      format: text
+      description: Logging output describing pipeline progress and step outcomes.
+
+behavior:
+  idempotent: false
+  side_effects:
+    - Invokes producer, consumer, aggregator, and summarizer scripts
+    - Writes timestamped HealthView bundles for each step
+    - Writes a consolidated orchestrator HealthView bundle
+    - Prunes older run directories per step based on keep parameters
+  duration_estimate: "30-120 seconds depending on repo size and steps enabled"
+  blocking: true
+  mutates_repo: false
+  mutates_filesystem: true
+
+error_handling:
+  common_errors:
+    - exit_code: 1
+      meaning: "One or more pipeline steps failed."
+      agent_action: "Review telemetry.json for step_outcomes and identify the failing step."
+
+    - exit_code: 2
+      meaning: "Invalid CLI inputs."
+      agent_action: "Fix the input validation error and retry."
+
+  stderr_patterns:
+    - pattern: "Step .* failed"
+      meaning: "A pipeline step returned a non-zero exit code."
+      agent_action: "Check the step's individual HealthView bundle for details."
+
+    - pattern: "ModuleNotFoundError"
+      meaning: "A delegated script could not be imported."
+      agent_action: "Verify PYTHONPATH includes .repo_studios and all scripts exist."
+
+integration:
+  typical_workflow:
+    - step: 1
+      action: Run the full monkey patch oversight pipeline
+      command: |
+        make -C .repo_studios studio-orchestrate-monkey-patch-oversight \
+          PYTHON=.venv/Scripts/python.exe LOG_LEVEL=INFO
+      output: HealthView bundles for all steps plus consolidated orchestrator bundle
+
+    - step: 2
+      action: Review the orchestrator summary
+      command: |
+        cat .repo_studios/reports/healthview/orchestrator_reports/monkey_patch_oversight/<latest>/summary.md
+
+  input_producers:
+    - Python source files in the repository (via scan_monkey_patches.py)
+
+  output_consumers:
+    - HealthView dashboards and status pages
+    - CI/CD status checks
+    - Tier-2 roster update workflows
+
+examples:
+  - description: Standard run via make target
+    command: |
+      make -C .repo_studios studio-orchestrate-monkey-patch-oversight \
+        PYTHON=.venv/Scripts/python.exe LOG_LEVEL=INFO
+
+  - description: Direct invocation with git enrichment
+    command: |
+      python .repo_studios/command_center/scripts/orchestrators/run_monkey_patch_oversight.py \
+        --repo-root . \
+        --producer-with-git \
+        --log-level INFO
+
+  - description: Partial run skipping producer (reuse existing scan)
+    command: |
+      python .repo_studios/command_center/scripts/orchestrators/run_monkey_patch_oversight.py \
+        --repo-root . \
+        --skip-producer \
+        --log-level INFO
+
+  - description: Custom retention settings
+    command: |
+      python .repo_studios/command_center/scripts/orchestrators/run_monkey_patch_oversight.py \
+        --repo-root . \
+        --artifacts-to-keep 10 \
+        --producer-artifacts-to-keep 3 \
+        --log-level INFO
+
+metadata:
+  category: orchestrator
+  tier: 3
+  status: draft
+  version: 0.1.0
+  author: Repo Studios Team
+  last_updated: 2026-01-02
+  dependencies_tier3:
+    - tier3_scan_monkey_patches.yaml
+    - tier3_classify_monkey_patches.yaml
+    - tier3_analyze_monkey_patch_trends.yaml
+    - tier3_summarize_monkey_patch_overview.yaml
+  tier2_rosters:
+    - healthview_orchestration_pipeline/tier2_roster/tier2_monkey_patch_oversight_roster.md
+  tier1_pipelines:
+    - healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md
+  testing:
+    test_file: .repo_studios/tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py

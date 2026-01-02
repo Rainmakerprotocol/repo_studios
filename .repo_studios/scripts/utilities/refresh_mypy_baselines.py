@@ -57,6 +57,14 @@ DEFAULT_ARTIFACTS_TO_KEEP = get_keep("refresh_mypy_baselines")
 
 @dataclass(frozen=True)
 class TargetSpec:
+    """Specification for a mypy baseline target.
+
+    Attributes:
+        label: Human-readable label for the target.
+        mypy_arg: Path argument to pass to mypy.
+        filename: Output filename for the baseline.
+    """
+
     label: str
     mypy_arg: str
     filename: str
@@ -69,11 +77,28 @@ DEFAULT_TARGETS: tuple[TargetSpec, ...] = (
 
 
 class Paths(NamedTuple):
+    """Resolved path configuration for baseline refresh.
+
+    Attributes:
+        repo_root: Repository root directory.
+        output_dir: Output directory for baseline artifacts.
+    """
+
     repo_root: Path
     output_dir: Path
 
 
 class Options(NamedTuple):
+    """CLI options container for baseline refresh.
+
+    Attributes:
+        artifacts_to_keep: Number of historical runs to retain.
+        append_timestamp: Whether to append timestamps to baseline files.
+        log_level: Logging verbosity level.
+        timestamp: ISO8601 timestamp for the run.
+        targets: Tuple of target specifications to process.
+    """
+
     artifacts_to_keep: int
     append_timestamp: bool
     log_level: str
@@ -99,6 +124,12 @@ PATH_CONFIG = PathsConfig(
 
 
 class _KeepOptions(NamedTuple):
+    """Internal options container for retention configuration.
+
+    Attributes:
+        artifacts_to_keep: Number of historical runs to retain.
+    """
+
     artifacts_to_keep: int
 
 
@@ -109,6 +140,16 @@ OPTIONS_CONFIG = OptionsConfig(
 
 
 class TargetOutcome(NamedTuple):
+    """Result of running mypy on a single target.
+
+    Attributes:
+        spec: The target specification that was executed.
+        command: Full command-line used to invoke mypy.
+        output: Combined stdout/stderr from mypy.
+        exit_code: Process return code.
+        duration_seconds: Execution time in seconds.
+    """
+
     spec: TargetSpec
     command: list[str]
     output: str
@@ -117,10 +158,16 @@ class TargetOutcome(NamedTuple):
 
     @property
     def succeeded(self) -> bool:
+        """Return True if the mypy run succeeded."""
         return self.exit_code == 0
 
 
 def _utc_now() -> datetime:
+    """Return the current UTC datetime.
+
+    Returns:
+        Timezone-aware datetime in UTC.
+    """
     try:
         return datetime.now(datetime.UTC)  # type: ignore[attr-defined]
     except AttributeError:  # pragma: no cover - Python <3.11
@@ -128,6 +175,17 @@ def _utc_now() -> datetime:
 
 
 def _parse_timestamp(raw: str | None) -> datetime:
+    """Parse an ISO8601 timestamp string.
+
+    Args:
+        raw: ISO8601 timestamp string, or None for current UTC time.
+
+    Returns:
+        Timezone-aware datetime in UTC.
+
+    Raises:
+        SystemExit: If the timestamp format is invalid.
+    """
     if not raw:
         return _utc_now()
     try:
@@ -140,6 +198,17 @@ def _parse_timestamp(raw: str | None) -> datetime:
 
 
 def _parse_target_override(raw: str) -> TargetSpec:
+    """Parse a target override string into a TargetSpec.
+
+    Args:
+        raw: Target string in format 'label=path[:filename]'.
+
+    Returns:
+        Parsed TargetSpec with label, mypy_arg, and filename.
+
+    Raises:
+        SystemExit: If the format is invalid.
+    """
     if "=" not in raw:
         raise SystemExit("--target must be formatted as label=path[:filename]")
     label, remainder = raw.split("=", 1)
@@ -159,6 +228,14 @@ def _parse_target_override(raw: str) -> TargetSpec:
 
 
 def _parse_targets(raw_values: Iterable[str] | None) -> tuple[TargetSpec, ...]:
+    """Parse target override strings into TargetSpec tuples.
+
+    Args:
+        raw_values: Iterable of target override strings, or None.
+
+    Returns:
+        Tuple of parsed TargetSpec objects, or defaults if empty.
+    """
     if not raw_values:
         return DEFAULT_TARGETS
     parsed = tuple(_parse_target_override(value.strip()) for value in raw_values if value.strip())
@@ -168,6 +245,11 @@ def _parse_targets(raw_values: Iterable[str] | None) -> tuple[TargetSpec, ...]:
 
 
 def build_parser() -> argparse.ArgumentParser:
+    """Build the argument parser for baseline refresh.
+
+    Returns:
+        Configured ArgumentParser instance.
+    """
     parser = argparse.ArgumentParser(
         description="Refresh mypy baselines and emit structured artifacts",
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
@@ -215,10 +297,26 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def build_paths(args: argparse.Namespace) -> Paths:
+    """Build path configuration from parsed arguments.
+
+    Args:
+        args: Parsed command-line arguments.
+
+    Returns:
+        Resolved Paths namedtuple with repo_root and output_dir.
+    """
     return cast(Paths, build_standard_paths(args, PATH_CONFIG, origin=Path(__file__)))
 
 
 def build_options(args: argparse.Namespace) -> Options:
+    """Build options configuration from parsed arguments.
+
+    Args:
+        args: Parsed command-line arguments.
+
+    Returns:
+        Resolved Options namedtuple with all CLI options.
+    """
     base_keep = build_standard_options(args, OPTIONS_CONFIG)
     artifacts_to_keep = getattr(base_keep, "artifacts_to_keep", DEFAULT_ARTIFACTS_TO_KEEP)
     targets = _parse_targets(getattr(args, "target", None))
@@ -235,6 +333,14 @@ def build_options(args: argparse.Namespace) -> Options:
 
 
 def _build_invocation(target: TargetSpec) -> list[str]:
+    """Build the mypy command-line invocation for a target.
+
+    Args:
+        target: Target specification to invoke.
+
+    Returns:
+        Complete command-line argument list for subprocess.
+    """
     cmd = [
         sys.executable,
         "-m",
@@ -247,6 +353,15 @@ def _build_invocation(target: TargetSpec) -> list[str]:
 
 
 def _invoke_mypy(repo_root: Path, command: Sequence[str]) -> tuple[str, int]:
+    """Execute mypy with the given command.
+
+    Args:
+        repo_root: Repository root for working directory.
+        command: Command-line arguments for mypy.
+
+    Returns:
+        Tuple of (combined stdout/stderr, return code).
+    """
     try:
         proc = subprocess.run(
             list(command),
@@ -267,6 +382,15 @@ def _invoke_mypy(repo_root: Path, command: Sequence[str]) -> tuple[str, int]:
 
 
 def _run_target(target: TargetSpec, repo_root: Path) -> TargetOutcome:
+    """Execute mypy for a single target and capture results.
+
+    Args:
+        target: Target specification to run.
+        repo_root: Repository root for working directory.
+
+    Returns:
+        TargetOutcome with execution results and timing.
+    """
     command = _build_invocation(target)
     start = time.monotonic()
     output, exit_code = _invoke_mypy(repo_root, command)
@@ -275,10 +399,27 @@ def _run_target(target: TargetSpec, repo_root: Path) -> TargetOutcome:
 
 
 def _summary_status(outcomes: Sequence[TargetOutcome]) -> str:
+    """Compute the overall status from target outcomes.
+
+    Args:
+        outcomes: Sequence of target execution outcomes.
+
+    Returns:
+        Status string: 'ok' if all succeeded, 'error' otherwise.
+    """
     return "ok" if all(outcome.succeeded for outcome in outcomes) else "error"
 
 
 def _render_markdown(summary: dict[str, Any], outcomes: Sequence[TargetOutcome]) -> str:
+    """Render the baseline refresh results as a Markdown report.
+
+    Args:
+        summary: Summary dictionary with metadata.
+        outcomes: Sequence of target execution outcomes.
+
+    Returns:
+        Markdown-formatted report string.
+    """
     lines: list[str] = []
     lines.append("# mypy Baseline Refresh\n\n")
     lines.append(f"- generated_utc: {summary['generated_utc']}\n")
@@ -306,6 +447,19 @@ def _build_summary(
     append_timestamp: bool,
     output_dir: Path,
 ) -> dict[str, Any]:
+    """Build the summary dictionary for the baseline refresh run.
+
+    Args:
+        outcomes: Sequence of target execution outcomes.
+        generated_at: Timestamp when the run was generated.
+        repo_root: Repository root directory.
+        run_slug: Timestamp-based run identifier.
+        append_timestamp: Whether timestamps were appended to files.
+        output_dir: Output directory for baseline artifacts.
+
+    Returns:
+        Summary dictionary with metadata and target results.
+    """
     meta: dict[str, dict[str, Any]] = {}
     for outcome in outcomes:
         pointer_name = f"latest_{outcome.spec.filename}"
@@ -331,6 +485,14 @@ def _build_summary(
 
 
 def _build_status_payload(summary: dict[str, Any]) -> dict[str, Any]:
+    """Build a compact status payload from the summary.
+
+    Args:
+        summary: Full summary dictionary.
+
+    Returns:
+        Status payload with key metrics for each target.
+    """
     return {
         "status": summary["status"],
         "generated_utc": summary["generated_utc"],
@@ -355,6 +517,18 @@ def _build_artifacts(
     append_timestamp: bool,
     generated_at: datetime,
 ) -> list[ReportArtifact]:
+    """Build the list of report artifacts for the baseline refresh.
+
+    Args:
+        outcomes: Sequence of target execution outcomes.
+        summary: Summary dictionary with metadata.
+        status_payload: Compact status payload.
+        append_timestamp: Whether to append timestamps to files.
+        generated_at: Timestamp when the run was generated.
+
+    Returns:
+        List of ReportArtifact objects to write.
+    """
     timestamp_marker = f"\n# Refreshed: {generated_at.strftime('%Y-%m-%d_%H%M%S')}\n" if append_timestamp else ""
     artifacts: list[ReportArtifact] = [
         ReportArtifact(filename="bundle_summary.json", kind="json", content=lambda: summary, pointer="latest_bundle_summary.json"),
@@ -393,6 +567,13 @@ def _update_latest_pointers(
     artifact_result: WriteReportArtifactsResult,
     output_dir: Path,
 ) -> None:
+    """Update latest pointer files for successful target outputs.
+
+    Args:
+        outcomes: Sequence of target execution outcomes.
+        artifact_result: Result from write_report_artifacts.
+        output_dir: Output directory for pointer files.
+    """
     for outcome in outcomes:
         if not outcome.succeeded:
             continue
@@ -404,6 +585,14 @@ def _update_latest_pointers(
 
 
 def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
+    """Execute the mypy baseline refresh workflow.
+
+    Args:
+        argv: Command-line arguments, defaults to sys.argv if None.
+
+    Returns:
+        Summary dictionary with run results and artifact paths.
+    """
     parser = build_parser()
     args = parser.parse_args(argv)
     paths = build_paths(args)
@@ -464,6 +653,14 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
 
 
 def main(argv: Sequence[str] | None = None) -> int:
+    """CLI entry point for mypy baseline refresh.
+
+    Args:
+        argv: Command-line arguments, defaults to sys.argv if None.
+
+    Returns:
+        Exit code (0 for success).
+    """
     run(argv)
     return 0
 

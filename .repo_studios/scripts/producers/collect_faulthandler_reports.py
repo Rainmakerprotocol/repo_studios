@@ -56,6 +56,14 @@ SCHEMA_VERSION = 1
 
 @dataclass(frozen=True)
 class Paths:
+    """Immutable path configuration for faulthandler report collection.
+
+    Attributes:
+        repo_root: Repository root directory.
+        runs_dir: Directory containing faulthandler capture folders.
+        output_dir: Reports root directory for positional output bundles.
+    """
+
     repo_root: Path
     runs_dir: Path
     output_dir: Path
@@ -63,6 +71,16 @@ class Paths:
 
 @dataclass(frozen=True)
 class Options:
+    """Runtime options for faulthandler report collection.
+
+    Attributes:
+        artifacts_to_keep: Number of historical runs to retain.
+        log_level: Logging verbosity level.
+        validate_only: If True, validate without writing new artifacts.
+        top_frames: Override number of frames captured per signature.
+        timestamp: Optional timestamp override for output slug.
+    """
+
     artifacts_to_keep: int
     log_level: str = "INFO"
     validate_only: bool = False
@@ -96,10 +114,11 @@ OPTIONS_CONFIG = OptionsConfig(
 def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     """Parse command-line arguments for faulthandler report collection.
 
-    :param argv: Command-line arguments; defaults to ``sys.argv[1:]``.
-    :type argv: Sequence[str] | None
-    :returns: Parsed argument namespace with runs_dir, output_dir, artifacts_to_keep, etc.
-    :rtype: argparse.Namespace
+    Args:
+        argv: Command-line arguments. Defaults to sys.argv if None.
+
+    Returns:
+        Parsed argument namespace with runs_dir, output_dir, artifacts_to_keep, etc.
     """
     parser = argparse.ArgumentParser(
         prog="collect_faulthandler_reports",
@@ -143,10 +162,11 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
 def build_paths(args: argparse.Namespace) -> Paths:
     """Construct Paths dataclass from parsed CLI arguments.
 
-    :param args: Parsed argument namespace from :func:`parse_args`.
-    :type args: argparse.Namespace
-    :returns: Resolved path configuration for producer execution.
-    :rtype: Paths
+    Args:
+        args: Parsed argument namespace from parse_args.
+
+    Returns:
+        Resolved path configuration for producer execution.
     """
     return cast(Paths, build_standard_paths(args, PATH_CONFIG, origin=Path(__file__)))
 
@@ -154,10 +174,11 @@ def build_paths(args: argparse.Namespace) -> Paths:
 def build_options(args: argparse.Namespace) -> Options:
     """Construct Options dataclass from parsed CLI arguments.
 
-    :param args: Parsed argument namespace from :func:`parse_args`.
-    :type args: argparse.Namespace
-    :returns: Runtime options including log level, validate_only flag, and top_frames.
-    :rtype: Options
+    Args:
+        args: Parsed argument namespace from parse_args.
+
+    Returns:
+        Runtime options including log level, validate_only flag, and top_frames.
     """
     base = cast(Options, build_standard_options(args, OPTIONS_CONFIG))
     return replace(
@@ -172,8 +193,8 @@ def build_options(args: argparse.Namespace) -> Options:
 def configure_logging(level: str) -> None:
     """Configure root logger with specified level.
 
-    :param level: Logging level name (e.g., "DEBUG", "INFO").
-    :type level: str
+    Args:
+        level: Logging level name (DEBUG, INFO, WARNING, etc.).
     """
     logging.basicConfig(level=getattr(logging, level.upper(), logging.INFO), format="%(levelname)s %(message)s")
 
@@ -181,8 +202,8 @@ def configure_logging(level: str) -> None:
 def _allow_legacy_runs() -> bool:
     """Check if legacy faulthandler run paths are permitted.
 
-    :returns: True if FAULT_LOGS_ALLOW_LEGACY env var is not disabled.
-    :rtype: bool
+    Returns:
+        True if FAULT_LOGS_ALLOW_LEGACY env var is not disabled.
     """
     flag = os.environ.get("FAULT_LOGS_ALLOW_LEGACY", "1").strip().lower()
     return flag not in {"0", "false", "no", "off"}
@@ -191,10 +212,11 @@ def _allow_legacy_runs() -> bool:
 def _timestamp_slug(moment: datetime) -> str:
     """Format datetime as YYYYMMDD-HHMM slug.
 
-    :param moment: Datetime to format.
-    :type moment: datetime
-    :returns: Formatted timestamp slug.
-    :rtype: str
+    Args:
+        moment: Datetime to format.
+
+    Returns:
+        Formatted timestamp slug.
     """
     if moment.tzinfo is None:
         moment = moment.replace(tzinfo=timezone.utc)
@@ -204,11 +226,14 @@ def _timestamp_slug(moment: datetime) -> str:
 def _resolve_timestamp(raw: str | None) -> datetime:
     """Parse raw timestamp string into UTC datetime.
 
-    :param raw: Timestamp string (ISO 8601 or YYYYMMDD-HHMM); None for current time.
-    :type raw: str | None
-    :returns: Resolved datetime in UTC.
-    :rtype: datetime
-    :raises RuntimeError: If timestamp format is invalid.
+    Args:
+        raw: Timestamp string (ISO 8601 or YYYYMMDD-HHMM). None for current time.
+
+    Returns:
+        Resolved datetime in UTC.
+
+    Raises:
+        RuntimeError: If timestamp format is invalid.
     """
     if not raw:
         return datetime.now(timezone.utc)
@@ -233,8 +258,8 @@ def _resolve_timestamp(raw: str | None) -> datetime:
 def _detect_trigger_type() -> str:
     """Detect how the script was triggered.
 
-    :returns: One of "make", "ci", or "cli".
-    :rtype: str
+    Returns:
+        One of 'make', 'ci', or 'cli'.
     """
     if os.getenv("MAKELEVEL"):
         return "make"
@@ -246,8 +271,8 @@ def _detect_trigger_type() -> str:
 def _detect_requested_by() -> str | None:
     """Detect requesting user from environment.
 
-    :returns: Username from GITHUB_ACTOR, USERNAME, or USER; None if unavailable.
-    :rtype: str | None
+    Returns:
+        Username from GITHUB_ACTOR, USERNAME, or USER. None if unavailable.
     """
     return os.getenv("GITHUB_ACTOR") or os.getenv("USERNAME") or os.getenv("USER")
 
@@ -255,10 +280,11 @@ def _detect_requested_by() -> str | None:
 def _detect_git_sha(repo_root: Path) -> str | None:
     """Detect current Git commit SHA.
 
-    :param repo_root: Repository root path.
-    :type repo_root: Path
-    :returns: Commit SHA from GITHUB_SHA env or git rev-parse; None if unavailable.
-    :rtype: str | None
+    Args:
+        repo_root: Repository root path.
+
+    Returns:
+        Commit SHA from GITHUB_SHA env or git rev-parse. None if unavailable.
     """
     import subprocess
 
@@ -283,10 +309,11 @@ def _detect_git_sha(repo_root: Path) -> str | None:
 def _resolve_runs_base(paths: Paths) -> Path:
     """Resolve faulthandler runs base directory with legacy fallback.
 
-    :param paths: Path configuration from CLI arguments.
-    :type paths: Paths
-    :returns: Existing runs directory or legacy fallback.
-    :rtype: Path
+    Args:
+        paths: Path configuration from CLI arguments.
+
+    Returns:
+        Existing runs directory or legacy fallback.
     """
     runs_dir = paths.runs_dir
     if runs_dir.exists():
@@ -310,10 +337,11 @@ def _resolve_runs_base(paths: Paths) -> Path:
 def _find_latest_run(runs_base: Path) -> Path | None:
     """Find most recent faulthandler run directory by mtime.
 
-    :param runs_base: Base directory containing run subdirectories.
-    :type runs_base: Path
-    :returns: Path to latest run directory or None if empty.
-    :rtype: Path | None
+    Args:
+        runs_base: Base directory containing run subdirectories.
+
+    Returns:
+        Path to latest run directory or None if empty.
     """
     try:
         candidates = [p for p in runs_base.iterdir() if p.is_dir()]
@@ -328,12 +356,12 @@ def _find_latest_run(runs_base: Path) -> Path | None:
 def _resolve_run_dir(explicit: str | None, runs_base: Path) -> Path | None:
     """Resolve run directory from explicit path or latest discovery.
 
-    :param explicit: Explicit run directory path or None.
-    :type explicit: str | None
-    :param runs_base: Base directory for run discovery.
-    :type runs_base: Path
-    :returns: Resolved run directory path or None.
-    :rtype: Path | None
+    Args:
+        explicit: Explicit run directory path or None.
+        runs_base: Base directory for run discovery.
+
+    Returns:
+        Resolved run directory path or None.
     """
     if explicit:
         return Path(explicit)
@@ -343,10 +371,11 @@ def _resolve_run_dir(explicit: str | None, runs_base: Path) -> Path | None:
 def _render_markdown(report: dict[str, Any]) -> str:
     """Render faulthandler report as Markdown summary.
 
-    :param report: Fault analysis report dictionary.
-    :type report: dict[str, Any]
-    :returns: Formatted Markdown string.
-    :rtype: str
+    Args:
+        report: Fault analysis report dictionary.
+
+    Returns:
+        Formatted Markdown string.
     """
     raw_summary = report.get("summary")
     summary = cast(dict[str, Any], raw_summary) if isinstance(raw_summary, dict) else {}
@@ -383,16 +412,14 @@ def _render_markdown(report: dict[str, Any]) -> str:
 def build_manifest(*, paths: Paths, options: Options, analysis: FaultAnalysisResult, run_slug: str) -> dict[str, Any]:
     """Build HOP-compliant manifest.json payload for faulthandler report.
 
-    :param paths: Resolved path configuration.
-    :type paths: Paths
-    :param options: Runtime options.
-    :type options: Options
-    :param analysis: Fault analysis result containing report and signatures.
-    :type analysis: FaultAnalysisResult
-    :param run_slug: Timestamp slug in YYYYMMDD-HHMM format.
-    :type run_slug: str
-    :returns: Manifest payload with schema version, viewer, topic, and provenance.
-    :rtype: dict[str, Any]
+    Args:
+        paths: Resolved path configuration.
+        options: Runtime options.
+        analysis: Fault analysis result containing report and signatures.
+        run_slug: Timestamp slug in YYYYMMDD-HHMM format.
+
+    Returns:
+        Manifest payload with schema version, viewer, topic, and provenance.
     """
     bundle_dir = paths.output_dir / run_slug
     return {
@@ -431,12 +458,12 @@ def build_manifest(*, paths: Paths, options: Options, analysis: FaultAnalysisRes
 def build_telemetry(*, analysis: FaultAnalysisResult, run_slug: str) -> dict[str, Any]:
     """Build HOP-compliant telemetry.json payload with fault metrics.
 
-    :param analysis: Fault analysis result containing report and signatures.
-    :type analysis: FaultAnalysisResult
-    :param run_slug: Timestamp slug in YYYYMMDD-HHMM format.
-    :type run_slug: str
-    :returns: Telemetry payload with metrics and signature components.
-    :rtype: dict[str, Any]
+    Args:
+        analysis: Fault analysis result containing report and signatures.
+        run_slug: Timestamp slug in YYYYMMDD-HHMM format.
+
+    Returns:
+        Telemetry payload with metrics and signature components.
     """
     raw_summary = analysis.report.get("summary")
     summary = cast(dict[str, Any], raw_summary) if isinstance(raw_summary, dict) else {}
@@ -469,12 +496,12 @@ def build_telemetry(*, analysis: FaultAnalysisResult, run_slug: str) -> dict[str
 def _validate_latest(paths: Paths, log: logging.Logger) -> dict[str, Any]:
     """Validate latest bundle for required HOP artifacts.
 
-    :param paths: Path configuration with output_dir.
-    :type paths: Paths
-    :param log: Logger for error reporting.
-    :type log: logging.Logger
-    :returns: Validation result with status, issues list, and bundle_dir.
-    :rtype: dict[str, Any]
+    Args:
+        paths: Path configuration with output_dir.
+        log: Logger for error reporting.
+
+    Returns:
+        Validation result with status, issues list, and bundle_dir.
     """
     topic_dir = paths.output_dir
     if not topic_dir.exists():
@@ -497,17 +524,14 @@ def _validate_latest(paths: Paths, log: logging.Logger) -> dict[str, Any]:
 def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     """Execute faulthandler report collection pipeline.
 
-    Scans faulthandler run directories, builds structured report, and writes
+    Scan faulthandler run directories, build structured report, and write
     HOP-compliant artifacts (manifest.json, summary.md, telemetry.json).
 
-    :param argv: Command-line arguments; defaults to ``sys.argv[1:]``.
-    :type argv: Sequence[str] | None
-    :returns: Execution result with output paths, signature counts, and status.
-    :rtype: dict[str, Any]
+    Args:
+        argv: Command-line arguments. Defaults to sys.argv if None.
 
-    .. note::
-        Output is written to
-        ``.repo_studios/reports/healthview/producer_reports/faulthandler_reports/<YYYYMMDD-HHMM>/``.
+    Returns:
+        Execution result with output paths, signature counts, and status.
     """
     args = parse_args(argv)
     paths = build_paths(args)
@@ -579,10 +603,11 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
 def main(argv: Sequence[str] | None = None) -> int:
     """CLI entry point for faulthandler report collection.
 
-    :param argv: Command-line arguments; defaults to ``sys.argv[1:]``.
-    :type argv: Sequence[str] | None
-    :returns: Exit code (0 for success).
-    :rtype: int
+    Args:
+        argv: Command-line arguments. Defaults to sys.argv if None.
+
+    Returns:
+        Exit code (0 for success).
     """
     run(argv)
     return 0
