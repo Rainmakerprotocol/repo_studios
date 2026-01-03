@@ -69,16 +69,14 @@ SUMMARY_MODULE = "scripts.summarizers.summarize_standards"
 DEFAULT_INDEX_OUTPUT_DIR = build_topic_path("producer", "standards_index")
 DEFAULT_INDEX_PATH = Path(".repo_studios/scripts/repo_standards_index.yaml")
 DEFAULT_CATEGORIES_PATH = Path(".repo_studios/scripts/.repo_studios/standards_categories.yaml")
-DEFAULT_GAP_OUTPUT_DIR = Path(".repo_studios/command_center/reports")
-DEFAULT_DIFF_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/standards_index_diff_reports")
-DEFAULT_PROMPT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/standards_prompt_seeds")
+DEFAULT_GAP_OUTPUT_DIR = build_topic_path("producer", "standards_index_gaps")
+DEFAULT_DIFF_OUTPUT_DIR = build_topic_path("producer", "standards_index_diff")
+DEFAULT_PROMPT_OUTPUT_DIR = build_topic_path("producer", "standards_prompt_seeds")
 DEFAULT_PENDING_PATH = Path(".repo_studios/scripts/repo_standards_pending.yaml")
 DEFAULT_HEALTHVIEW_ROOT = build_topic_path("orchestrator", "standards_integrity")
 
 INDEX_VIEWER_SLUG = "healthview"
 INDEX_TOPIC_SLUG = "standards_index"
-DIFF_RUN_PREFIX = "standards_index_diff-"
-PROMPT_RUN_PREFIX = "standards_prompt_seed-"
 
 
 def _format_run_slug(moment: datetime) -> str:
@@ -455,8 +453,9 @@ def _execute_diff(paths: Paths, options: Options, index_outcome: IndexOutcome) -
     run_dir = None
     report_path = None
     if payload is not None:
+        # Diff script uses YYYYMMDD-HHMM slug directly (no prefix)
         slug = str(payload.get("timestamp") or "")
-        candidate = paths.diff_output_dir / f"{DIFF_RUN_PREFIX}{slug}" if slug else None
+        candidate = paths.diff_output_dir / slug if slug else None
         if candidate and candidate.exists():
             run_dir = candidate
             report_candidate = candidate / "report.json"

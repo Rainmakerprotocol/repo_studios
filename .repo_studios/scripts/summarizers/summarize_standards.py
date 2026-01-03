@@ -349,9 +349,19 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
         notes=notes,
     )
 
+    # Build telemetry payload for HOP base package compliance
+    telemetry_payload = {
+        "schema_version": SCHEMA_VERSION,
+        "viewer": VIEWER_SLUG,
+        "topic": TOPIC_SLUG,
+        "run_timestamp": options.run_timestamp.isoformat(timespec="seconds"),
+        "metrics": metrics,
+    }
+
     artifacts = [
-        ReportArtifact(filename=f"{SUMMARY_STEM}.json", kind="json", content=lambda: summary_payload),
-        ReportArtifact(filename=f"{SUMMARY_STEM}.md", kind="text", content=lambda: summary_markdown),
+        ReportArtifact(filename="manifest.json", kind="json", content=lambda: summary_payload),
+        ReportArtifact(filename="summary.md", kind="text", content=lambda: summary_markdown),
+        ReportArtifact(filename="telemetry.json", kind="json", content=lambda: telemetry_payload),
     ]
     result: WriteReportArtifactsResult = write_report_artifacts(
         stem=SUMMARY_STEM,

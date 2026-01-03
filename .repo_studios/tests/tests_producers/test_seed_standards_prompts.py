@@ -79,14 +79,15 @@ def test_structured_artifacts(tmp_path: Path) -> None:
     }
 
     output_dir = repo_root / mod.DEFAULT_OUTPUT_DIR
-    run_dirs = [p for p in output_dir.iterdir() if p.is_dir() and p.name.startswith("standards_prompt_seed-")]
+    # HOP slug format: YYYYMMDD-HHMM (no prefix)
+    run_dirs = [p for p in output_dir.iterdir() if p.is_dir() and p.name[0].isdigit()]
     assert len(run_dirs) == 1
     run_dir = run_dirs[0]
 
     for filename in [
-        "report.json",
-        "report.md",
-        "log.txt",
+        "manifest.json",
+        "summary.md",
+        "telemetry.json",
         "seed.json",
         "seed.yaml",
         "seed.txt",
@@ -140,7 +141,8 @@ def test_prune_history(tmp_path: Path, monkeypatch) -> None:
             ]
         )
 
-    run_dirs = [p for p in output_dir.iterdir() if p.is_dir() and p.name.startswith("standards_prompt_seed-")]
+    # HOP slug format: YYYYMMDD-HHMM (no prefix)
+    run_dirs = [p for p in output_dir.iterdir() if p.is_dir() and p.name[0].isdigit()]
     assert len(run_dirs) == 1
 
     # HOP compliance: no pointer files

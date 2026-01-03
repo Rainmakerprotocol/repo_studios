@@ -1,6 +1,0 @@
-============================= test session starts =============================
-collected 1 item
-
-tests/sample_test.py::test_ok PASSED
-
-============================== 1 passed in 0.01s ==============================

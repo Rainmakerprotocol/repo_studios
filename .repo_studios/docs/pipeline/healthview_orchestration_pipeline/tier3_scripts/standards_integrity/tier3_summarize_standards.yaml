@@ -71,12 +71,14 @@ parameters:
       description: "Logging verbosity (DEBUG, INFO, WARNING, ERROR)."
 
 outputs:
-  root: ".repo_studios/command_center/reports/healthview/standards_overview/<YYYYMMDD-HHMM>/"
+  root: ".repo_studios/reports/healthview/summarizer_reports/standards_overview/<YYYYMMDD-HHMM>/"
   artifacts:
-    - name: "standards_overview.json"
+    - name: "manifest.json"
       description: "Structured summary with metrics, samples, and artifact paths."
-    - name: "standards_overview.md"
+    - name: "summary.md"
       description: "Human-readable markdown summary with metrics table and notes."
+    - name: "telemetry.json"
+      description: "Telemetry payload with schema version, metrics, and run timestamp."
 
 behavior:
   steps:
@@ -97,7 +99,7 @@ behavior:
       description: "Generate human-readable summary with metrics table."
     - step: 6
       action: "Write artifacts"
-      description: "Emit JSON and Markdown via write_report_artifacts with pruning."
+      description: "Emit manifest.json, summary.md, and telemetry.json via write_report_artifacts with pruning."
 
 error_handling:
   missing_index: "Adds note and continues with empty metrics (does not fail)."
@@ -134,5 +136,5 @@ metadata:
   stage: "6.1"
   record_id: "S61R-006"
   created: "2026-01-02"
-  last_updated: "2026-01-02"
+  last_updated: "2026-01-03"
   template_version: "v1"

@@ -87,7 +87,8 @@ def _patched_loader(
                 )
                 output_dir.mkdir(parents=True, exist_ok=True)
                 slug = "20240102-1200"
-                run_dir = output_dir / orchestrator.INDEX_VIEWER_SLUG / orchestrator.INDEX_TOPIC_SLUG / slug
+                # Orchestrator expects: output_dir / slug (not output_dir / viewer / topic / slug)
+                run_dir = output_dir / slug
                 run_dir.mkdir(parents=True, exist_ok=True)
                 (run_dir / "manifest.json").write_text(
                     json.dumps({"viewer_slug": orchestrator.INDEX_VIEWER_SLUG, "topic": orchestrator.INDEX_TOPIC_SLUG}),

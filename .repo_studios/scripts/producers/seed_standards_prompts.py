@@ -347,12 +347,12 @@ def write_artifacts(
     run_dir.mkdir(parents=True, exist_ok=True)
     if logger:
         logger.debug("Writing standards seed artifacts to %s", run_dir)
-    (run_dir / "report.json").write_text(
+    (run_dir / "manifest.json").write_text(
         json.dumps(payload, indent=2, sort_keys=True) + "\n",
         encoding="utf-8",
     )
-    (run_dir / "report.md").write_text(render_markdown_report(payload), encoding="utf-8")
-    (run_dir / "log.txt").write_text(render_log(payload), encoding="utf-8")
+    (run_dir / "summary.md").write_text(render_markdown_report(payload), encoding="utf-8")
+    (run_dir / "telemetry.json").write_text(render_log(payload), encoding="utf-8")
     write_seed_files(run_dir, seed, formats)
 
 
@@ -366,7 +366,7 @@ def prune_history(
     result = prune_run_directories(
         base_dir,
         keep=max(keep, 1),
-        stem_prefix=RUN_PREFIX,
+        stem_prefix=None,  # HOP slugs use YYYYMMDD-HHMM format without prefix
         current_run=current_run,
         logger=logger,
     )
@@ -394,7 +394,7 @@ def compose_payload(
     summary: dict[str, Any],
     timestamp: dt.datetime,
 ) -> dict[str, Any]:
-    run_id = f"{RUN_PREFIX}-{timestamp.strftime('%Y%m%d_%H%M%S')}"
+    run_id = timestamp.strftime('%Y%m%d-%H%M')
     return {
         "schema_version": SCHEMA_VERSION,
         "status": "ok",

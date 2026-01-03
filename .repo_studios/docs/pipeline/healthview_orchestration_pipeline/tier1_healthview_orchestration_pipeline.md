@@ -246,7 +246,7 @@ Meta-orchestrator chains all Stage NN.1 orchestrators for full-suite diagnostics
   - Stage 3 (Fault Diagnostics Overview): Pass B complete, Pass C pending
   - Stage 4 (Dependency & Import Hygiene): Pass B complete, Pass C pending
   - Stage 5 (Monkey Patch Oversight): Pass B complete, Pass C pending
-  - Stage 6 (Standards Integrity): Pass B complete, Pass C pending
+  - Stage 6 (Standards Integrity): **Pass C complete** (HOP-compliant 2026-01-03)
   - Stage 7 (Meta-Orchestrator): Pass B complete, Pass C pending
 - **Phase 3 (Consolidation & Freeze):** Not started
 
@@ -1228,14 +1228,14 @@ _Tier-2 references (depth lives here):_
 
 These are Stage 6.1 readiness gates after all Tier-2 DONE script gates are closed.
 
-- [ ] Base package complete (`manifest.json`, `summary.md`, `telemetry.json`).
+- [x] Base package complete (`manifest.json`, `summary.md`, `telemetry.json`).
   See: [Stop-gates](tier2_roster/tier2_standards_integrity_roster.md#32-stop-gates-and-implementation-checklists)
-- [ ] No pointer artifacts (`latest_*` / `current_*`).
+- [x] No pointer artifacts (`latest_*` / `current_*`).
   See: [Stop-gates](tier2_roster/tier2_standards_integrity_roster.md#32-stop-gates-and-implementation-checklists)
-- [ ] Output root aligned to HOP contract
+- [x] Output root aligned to HOP contract
   (`.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`).
   See: [Contract snapshot](tier2_roster/tier2_standards_integrity_roster.md#23-current-vs-target-contract-snapshot-stage-61)
-- [ ] Tier-3 eligible (Stage 6.1 Tier-2 depth captured; ready for Tier-3 extraction).
+- [x] Tier-3 eligible (Stage 6.1 Tier-2 depth captured; ready for Tier-3 extraction).
   See: [Records index](tier2_roster/tier2_standards_integrity_roster.md#311-records-index)
 
 **Target contract (locked decisions):**
@@ -1244,14 +1244,13 @@ These are Stage 6.1 readiness gates after all Tier-2 DONE script gates are close
 - Base package is present: `manifest.json`, `summary.md`, `telemetry.json`.
 - Discovery is timestamp-based only (no pointer files such as `latest_*`).
 
-**Current evidence (Stage 6.1):**
+**Current evidence (Stage 6.1 — HOP-compliant as of 2026-01-03):**
 
-- Orchestrator bundle root is under
-  `.repo_studios/command_center/reports/healthview/standards_integrity/<YYYYMMDD-HHMM>/`
-  (not yet the canonical target root).
-- Stage bundles mix multiple output roots and slug formats
-  (notably prompt seeds using `standards_prompt_seed-YYYYMMDD_HHMMSS`).
-- Pointer artifacts exist in prompt seed outputs (`latest/latest_seed.*`) and are a stop-gate.
+- All Stage 6.1 scripts emit HOP-compliant output roots:
+  `.repo_studios/reports/healthview/<class>_reports/<topic>/<YYYYMMDD-HHMM>/`
+- All scripts emit base package: `manifest.json`, `summary.md`, `telemetry.json`.
+- No pointer artifacts (`latest_*`) are created.
+- Timestamp slug format unified: `YYYYMMDD-HHMM` (UTC).
 - Details and evidence live in the Stage 6.1 Tier-2 roster:
   [Current vs Target snapshot](tier2_roster/tier2_standards_integrity_roster.md#23-current-vs-target-contract-snapshot-stage-61),
   [Stop-gates](tier2_roster/tier2_standards_integrity_roster.md#32-stop-gates-and-implementation-checklists).
@@ -1290,44 +1289,42 @@ diff scopes and prompt generation driving the upper bound. Supersedes legacy
 
 **Inputs:**
 
-- `--index-output-dir` (line 212): Index artifact directory
-  (default: `.repo_studios/reports/producer_reports/standards_index_reports`)
-- `--index-path` (line 213): Latest index pointer path
-  (default: `.repo_studios/reports/producer_reports/standards_index_reports/latest_index.yaml`)
-- `--categories-path` (line 214): Standards categories YAML
-  (default: `.repo_studios/scripts/.repo_studios/standards_categories.yaml`)
-- `--gap-output-dir` (line 215): Gap analysis output directory
-  (default: `.repo_studios/command_center/reports`)
-- `--diff-output-dir` (line 216): Diff artifact directory
-  (default: `.repo_studios/reports/producer_reports/standards_index_diff_reports`)
-- `--diff-old-index` (line 219): Baseline index for diff
-  (optional, skips diff step if not provided, line 638)
-- `--diff-fail-on` (line 220): Fail policy forwarded to diff script (default: `any`)
-- `--prompt-output-dir` (line 217): Prompt seed artifact directory
-  (default: `.repo_studios/reports/producer_reports/standards_prompt_seeds`)
-- `--prompt-include-warn` (line 222): Include warn-severity rules in prompt seed (line 502)
-- `--prompt-formats` (line 223-227): Artifact formats (text/yaml/json, line 504)
-- `--gap-max-show` (line 221): Maximum gap candidates to log per source (default: 8)
-- `--pending-path` (line 218): Pending standards YAML path
+- `--index-output-dir`: Index artifact directory
+  (default: `.repo_studios/reports/healthview/producer_reports/standards_index/`)
+- `--index-path`: Latest index pointer path
+  (default: `.repo_studios/scripts/repo_standards_index.yaml`)
+- `--categories-path`: Standards categories YAML
+  (default: `.repo_studios/scripts/standards_categories.yaml`)
+- `--gap-output-dir`: Gap analysis output directory
+  (default: `.repo_studios/reports/healthview/producer_reports/standards_index_gaps/`)
+- `--diff-output-dir`: Diff artifact directory
+  (default: `.repo_studios/reports/healthview/producer_reports/standards_index_diff/`)
+- `--diff-old-index`: Baseline index for diff
+  (optional, skips diff step if not provided)
+- `--diff-fail-on`: Fail policy forwarded to diff script (default: `any`)
+- `--prompt-output-dir`: Prompt seed artifact directory
+  (default: `.repo_studios/reports/healthview/producer_reports/standards_prompt_seeds/`)
+- `--prompt-include-warn`: Include warn-severity rules in prompt seed
+- `--prompt-formats`: Artifact formats (text/yaml/json)
+- `--gap-max-show`: Maximum gap candidates to log per source (default: 8)
+- `--pending-path`: Pending standards YAML path
   (default: `.repo_studios/scripts/repo_standards_pending.yaml`)
 
 **Outputs:**
 
-- `.repo_studios/command_center/reports/healthview/standards_integrity/<YYYYmmdd-HHmm>/manifest.json`
-  (lines 763-794)
-- `.repo_studios/command_center/reports/healthview/standards_integrity/<YYYYmmdd-HHmm>/summary.md`
-  (lines 796-801)
-- `.repo_studios/command_center/reports/healthview/standards_integrity/<YYYYmmdd-HHmm>/telemetry.json`
-  (lines 796-801)
+- Orchestrator bundle:
+  `.repo_studios/command_center/reports/healthview/standards_integrity/<YYYYMMDD-HHMM>/`
+  - `manifest.json`, `summary.md`, `telemetry.json`
 - Index artifacts:
-  `.repo_studios/reports/producer_reports/standards_index_reports/standards_index-<timestamp>/`
-  (lines 63-64)
-- Gap artifacts: `.repo_studios/command_center/reports/standards_index_gaps/<slug>/` (lines 65-66)
+  `.repo_studios/reports/healthview/producer_reports/standards_index/<YYYYMMDD-HHMM>/`
+- Gap artifacts:
+  `.repo_studios/reports/healthview/producer_reports/standards_index_gaps/<YYYYMMDD-HHMM>/`
 - Diff artifacts:
-  `.repo_studios/reports/producer_reports/standards_index_diff_reports/standards_index_diff-<timestamp>/`
-  (lines 67-68)
-- Prompt artifacts: `.repo_studios/reports/producer_reports/standards_prompt_seeds/<run_id>/`
-  (lines 69-70)
+  `.repo_studios/reports/healthview/producer_reports/standards_index_diff/<YYYYMMDD-HHMM>/`
+- Prompt artifacts:
+  `.repo_studios/reports/healthview/producer_reports/standards_prompt_seeds/<YYYYMMDD-HHMM>/`
+- Overview artifacts:
+  `.repo_studios/reports/healthview/summarizer_reports/standards_overview/<YYYYMMDD-HHMM>/`
 
 **Execution Notes:**
 
@@ -1803,6 +1800,7 @@ All gaps have logical explanations:
 
 | Date | Author / Steward | Change | Doc-index timestamp | Regression suites |
 | --- | --- | --- | --- | --- |
+| 2026-01-03 | GitHub Copilot | Stage 6.1 HOP refactor complete: S61R-005/006 artifact names, orchestrator default paths, stop-gates closed, Pass C complete. | pending | 26 passed (Stage 6.1 tests) |
 | 2025-12-25 | GitHub Copilot | Closed Stage 1.1 script gate for `run_test_execution_telemetry.py` after Tier-2 DONE; validated Make target `studio-orchestrate-test-execution-telemetry` emits canonical HealthView bundles. | 20251225-0517 | make studio-orchestrate-test-execution-telemetry; doc-index |
 | 2025-12-24 | GitHub Copilot | Closed Stage 1.1 script gate for `summarize_test_execution_telemetry.py` after Tier-2 DONE + Tier-3 YAML create/validate; refreshed doc-index. | 20251224-2318 | doc-index; pytest tier3_index (29 passed) |
 | 2025-12-22 | GitHub Copilot | Closed Stage 1.1 script gate for `generate_test_log_health_report.py` after Tier-2 DONE; refreshed doc-index and confirmed deterministic selector advanced to the next Tier-2 record. | 20251222-0450 | doc-index; healthview-agent-next-compact |

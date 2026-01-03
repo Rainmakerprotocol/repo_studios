@@ -76,14 +76,14 @@ parameters:
       description: "Logging verbosity (DEBUG, INFO, WARNING, ERROR)."
 
 outputs:
-  root: ".repo_studios/reports/producer_reports/standards_prompt_seeds/standards_prompt_seed-<YYYYMMDD_HHMMSS>/"
+  root: ".repo_studios/reports/healthview/producer_reports/standards_prompt_seeds/<YYYYMMDD-HHMM>/"
   artifacts:
-    - name: "report.json"
+    - name: "manifest.json"
       description: "Run metadata including status, timestamp, summary, and seed integrity hash."
-    - name: "report.md"
+    - name: "summary.md"
       description: "Human-readable report with severity counts and category breakdown."
-    - name: "log.txt"
-      description: "Structured log entries for automation consumption."
+    - name: "telemetry.json"
+      description: "Structured telemetry for automation consumption."
     - name: "seed.txt"
       description: "Plain text seed suitable for prompt injection."
     - name: "seed.yaml"
@@ -110,10 +110,10 @@ behavior:
       description: "Generate timestamped run folder under output_dir."
     - step: 6
       action: "Write artifacts"
-      description: "Emit report.json, report.md, log.txt, and seed files in requested formats."
+      description: "Emit manifest.json, summary.md, telemetry.json, and seed files in requested formats."
     - step: 7
       action: "Prune old runs"
-      description: "Remove excess run directories using stem_prefix matching."
+      description: "Remove excess run directories using YYYYMMDD-HHMM slug matching."
     - step: 8
       action: "Legacy output (optional)"
       description: "Write to stdout or explicit path if legacy flags provided."
@@ -153,5 +153,5 @@ metadata:
   stage: "6.1"
   record_id: "S61R-005"
   created: "2026-01-02"
-  last_updated: "2026-01-02"
+  last_updated: "2026-01-03"
   template_version: "v1"

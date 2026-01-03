@@ -1,0 +1,133 @@
+{
+  "artifacts": {
+    "diff_report": null,
+    "diff_run": null,
+    "gap_manifest": ".repo_studios/reports/healthview/producer_reports/standards_index_gaps/20260103-0114/manifest.json",
+    "gap_run": ".repo_studios/reports/healthview/producer_reports/standards_index_gaps/20260103-0114",
+    "gap_summary_md": ".repo_studios/reports/healthview/producer_reports/standards_index_gaps/20260103-0114/summary.md",
+    "gap_telemetry": ".repo_studios/reports/healthview/producer_reports/standards_index_gaps/20260103-0114/telemetry.json",
+    "index_report": ".repo_studios/reports/healthview/producer_reports/standards_index/20260103-0114/telemetry.json",
+    "index_run": ".repo_studios/reports/healthview/producer_reports/standards_index/20260103-0114",
+    "prompt_run": ".repo_studios/reports/healthview/producer_reports/standards_prompt_seeds/20260103-0114"
+  },
+  "catalog": [
+    {
+      "role": "orchestrator",
+      "script_path": ".repo_studios/command_center/scripts/orchestrators/run_standards_integrity.py",
+      "topic": "standards-integrity"
+    },
+    {
+      "role": "producer",
+      "script_path": ".repo_studios/command_center/scripts/producers/analyze_standards_index_gaps.py",
+      "topic": "standards-integrity"
+    },
+    {
+      "role": "producer",
+      "script_path": ".repo_studios/scripts/producers/diff_standards_index.py",
+      "topic": "standards-integrity"
+    },
+    {
+      "role": "producer",
+      "script_path": ".repo_studios/scripts/producers/generate_standards_index.py",
+      "topic": "standards-integrity"
+    },
+    {
+      "role": "producer",
+      "script_path": ".repo_studios/scripts/producers/seed_standards_prompts.py",
+      "topic": "standards-integrity"
+    },
+    {
+      "role": "summarizer",
+      "script_path": ".repo_studios/scripts/summarizers/summarize_standards.py",
+      "topic": "standards-integrity"
+    }
+  ],
+  "generated_at": "2026-01-03T01:14:37.300022+00:00",
+  "inputs": {
+    "categories_path": ".repo_studios/scripts/.repo_studios/standards_categories.yaml",
+    "diff_old_index": null,
+    "index_path": ".repo_studios/scripts/repo_standards_index.yaml",
+    "pending_path": ".repo_studios/scripts/repo_standards_pending.yaml"
+  },
+  "metrics": {
+    "artifact_bytes": 6817,
+    "artifact_files": 3,
+    "runtime_seconds": 0.147009,
+    "step_count": 5,
+    "steps_failed": 0,
+    "steps_skipped": 1,
+    "steps_succeeded": 4
+  },
+  "run_slug": "20260103-0114",
+  "schema_version": 1,
+  "telemetry": {
+    "finished_at": "2026-01-03T01:14:37.299945+00:00",
+    "metrics": {
+      "artifact_bytes": 6817,
+      "artifact_files": 3,
+      "runtime_seconds": 0.147009,
+      "step_count": 5,
+      "steps_failed": 0,
+      "steps_skipped": 1,
+      "steps_succeeded": 4
+    },
+    "run_slug": "20260103-0114",
+    "started_at": "2026-01-03T01:14:37.152936+00:00",
+    "steps": [
+      {
+        "detail": "index generated",
+        "finished_at": "2026-01-03T01:14:37.183158+00:00",
+        "name": "index",
+        "payload": {
+          "integrity_hash": null,
+          "rule_count": null,
+          "status": null
+        },
+        "started_at": "2026-01-03T01:14:37.152943+00:00",
+        "status": "success"
+      },
+      {
+        "detail": "candidates=69",
+        "finished_at": "2026-01-03T01:14:37.244456+00:00",
+        "name": "gap",
+        "payload": {
+          "sources_with_candidates": 6,
+          "total_candidates": 69
+        },
+        "started_at": "2026-01-03T01:14:37.183168+00:00",
+        "status": "success"
+      },
+      {
+        "detail": "diff-old-index not provided",
+        "finished_at": "2026-01-03T01:14:37.244470+00:00",
+        "name": "diff",
+        "started_at": "2026-01-03T01:14:37.244467+00:00",
+        "status": "skipped"
+      },
+      {
+        "detail": "rules=0",
+        "finished_at": "2026-01-03T01:14:37.275764+00:00",
+        "name": "prompts",
+        "payload": {
+          "category_count": 0,
+          "run_id": "20260103-0114",
+          "total_rules": 0
+        },
+        "started_at": "2026-01-03T01:14:37.244522+00:00",
+        "status": "success"
+      },
+      {
+        "detail": "summarizer completed",
+        "finished_at": "2026-01-03T01:14:37.299933+00:00",
+        "name": "summary",
+        "started_at": "2026-01-03T01:14:37.275779+00:00",
+        "status": "success"
+      }
+    ],
+    "success": true,
+    "topic": "standards-integrity",
+    "viewer": "healthview"
+  },
+  "topic": "standards_integrity",
+  "viewer": "healthview"
+}

@@ -137,25 +137,24 @@ Authoritative entry points for Tier-1 routing and agent discovery are:
 - DB integration is gated behind `REPO_STUDIOS_DB_ENABLED` and is best-effort (warn-only failures).
   Every DB callsite includes `DB_INTEGRATION_MARKER:`.
 
-**Current evidence (repo-observed):**
+**Current evidence (repo-observed — HOP-compliant as of 2026-01-03):**
 
-- Output roots currently observed:
+- Output roots currently observed (all HOP-compliant):
   - Orchestrator bundle:
     `.repo_studios/command_center/reports/healthview/standards_integrity/<YYYYMMDD-HHMM>/`
   - Standards index bundle:
-    `.repo_studios/reports/producer_reports/rawview/standards_index/<YYYYMMDD-HHMM>/`
+    `.repo_studios/reports/healthview/producer_reports/standards_index/<YYYYMMDD-HHMM>/`
   - Gap analysis bundle:
-    `.repo_studios/command_center/reports/commandview/standards_index_gaps/<YYYYMMDD-HHMM>/`
+    `.repo_studios/reports/healthview/producer_reports/standards_index_gaps/<YYYYMMDD-HHMM>/`
   - Index diff bundle:
-    `.repo_studios/command_center/reports/rawview/standards_index_diff/<YYYYMMDD-HHMM>/`
+    `.repo_studios/reports/healthview/producer_reports/standards_index_diff/<YYYYMMDD-HHMM>/`
   - Prompt seed bundle:
-    `.repo_studios/reports/producer_reports/standards_prompt_seeds/standards_prompt_seed-<YYYYMMDD_HHMMSS>/`
+    `.repo_studios/reports/healthview/producer_reports/standards_prompt_seeds/<YYYYMMDD-HHMM>/`
   - Standards overview bundle:
-    `.repo_studios/command_center/reports/healthview/standards_overview/<YYYYMMDD-HHMM>/`
+    `.repo_studios/reports/healthview/summarizer_reports/standards_overview/<YYYYMMDD-HHMM>/`
 - Timestamp/run slug shapes observed:
-  - Most stage bundles: `YYYYMMDD-HHMM` (UTC)
-  - Prompt seed run id: `standards_prompt_seed-YYYYMMDD_HHMMSS` (UTC)
-- Artifact sets observed:
+  - All stage bundles: `YYYYMMDD-HHMM` (UTC)
+- Artifact sets observed (base package enforced):
   - Orchestrator bundle:
     - `manifest.json`
     - `summary.md`
@@ -165,20 +164,18 @@ Authoritative entry points for Tier-1 routing and agent discovery are:
     - `summary.md`
     - `telemetry.json`
   - Prompt seed bundles:
-    - `report.json`
-    - `report.md`
-    - `log.txt`
+    - `manifest.json`
+    - `summary.md`
+    - `telemetry.json`
     - `seed.txt`
     - `seed.yaml`
     - `seed.json`
-    - `latest/latest_seed.json` (pointer)
-    - `latest/latest_seed.yaml` (pointer)
-    - `latest/latest_seed.txt` (pointer)
   - Standards overview bundle:
-    - `standards_overview.json`
-    - `standards_overview.md`
+    - `manifest.json`
+    - `summary.md`
+    - `telemetry.json`
 
-Mismatch is treated as a stop-gate.
+**All stop-gates closed** — base package enforced, no pointer artifacts, HOP-compliant paths.
 
 ---
 
@@ -215,11 +212,11 @@ A compact, mechanism-oriented summary of pruning surfaces and how pruning is enf
   - `write_report_artifacts` for viewer/topic run folders.
 - **Pruning targets:**
   - `.repo_studios/command_center/reports/healthview/standards_integrity/` (orchestrator bundle)
-  - `.repo_studios/reports/producer_reports/rawview/standards_index/` (index bundle)
-  - `.repo_studios/command_center/reports/commandview/standards_index_gaps/` (gap bundle)
-  - `.repo_studios/command_center/reports/rawview/standards_index_diff/` (diff bundle)
-  - `.repo_studios/reports/producer_reports/standards_prompt_seeds/` (prompt seed bundles + latest pointers)
-  - `.repo_studios/command_center/reports/healthview/standards_overview/` (overview bundle)
+  - `.repo_studios/reports/healthview/producer_reports/standards_index/` (index bundle)
+  - `.repo_studios/reports/healthview/producer_reports/standards_index_gaps/` (gap bundle)
+  - `.repo_studios/reports/healthview/producer_reports/standards_index_diff/` (diff bundle)
+  - `.repo_studios/reports/healthview/producer_reports/standards_prompt_seeds/` (prompt seed bundle)
+  - `.repo_studios/reports/healthview/summarizer_reports/standards_overview/` (overview bundle)
 - **Pruning guardrails:**
   - Shared pruner enforces minimum keep of at least one.
   - Shared pruner can protect the current run directory.
@@ -456,7 +453,7 @@ io_contract:
     - "Scans sources listed in standards_categories.yaml (plus seed/extraction rules)."
   outputs:
     current:
-      root: ".repo_studios/reports/producer_reports/rawview/standards_index/<YYYYMMDD-HHMM>/"
+      root: ".repo_studios/reports/healthview/producer_reports/standards_index/<YYYYMMDD-HHMM>/"
       artifacts:
         - "manifest.json"
         - "summary.md"
@@ -470,10 +467,10 @@ io_contract:
 retention:
   surfaces:
     - "--artifacts-to-keep"
-    - "prune_run_directories(output_dir/rawview/standards_index)"
+    - "prune_run_directories(output_dir/healthview/producer_reports/standards_index)"
   mechanism: "prune_by_timestamp"
   targets:
-    - ".repo_studios/reports/producer_reports/rawview/standards_index/"
+    - ".repo_studios/reports/healthview/producer_reports/standards_index/"
   guardrails:
     - "Shared pruning enforces keep>=1 and protects current run"
   evidence:
@@ -681,7 +678,7 @@ io_contract:
     - "Two index YAML snapshots (old/new)."
   outputs:
     current:
-      root: ".repo_studios/command_center/reports/rawview/standards_index_diff/<YYYYMMDD-HHMM>/"
+      root: ".repo_studios/reports/healthview/producer_reports/standards_index_diff/<YYYYMMDD-HHMM>/"
       artifacts:
         - "manifest.json"
         - "summary.md"
@@ -695,10 +692,10 @@ io_contract:
 retention:
   surfaces:
     - "--artifacts-to-keep"
-    - "prune_run_directories(output_dir/rawview/standards_index_diff)"
+    - "prune_run_directories(output_dir/healthview/producer_reports/standards_index_diff)"
   mechanism: "prune_by_timestamp"
   targets:
-    - ".repo_studios/command_center/reports/rawview/standards_index_diff/"
+    - ".repo_studios/reports/healthview/producer_reports/standards_index_diff/"
   guardrails:
     - "Shared pruning enforces keep>=1 and protects current run"
   evidence:
@@ -792,17 +789,14 @@ io_contract:
     - "Reads repo_standards_index.yaml to build a severity-filtered prompt seed."
   outputs:
     current:
-      root: ".repo_studios/reports/producer_reports/standards_prompt_seeds/standards_prompt_seed-<YYYYMMDD_HHMMSS>/"
+      root: ".repo_studios/reports/healthview/producer_reports/standards_prompt_seeds/<YYYYMMDD-HHMM>/"
       artifacts:
-        - "report.json"
-        - "report.md"
-        - "log.txt"
+        - "manifest.json"
+        - "summary.md"
+        - "telemetry.json"
         - "seed.txt"
         - "seed.yaml"
         - "seed.json"
-        - "latest/latest_seed.txt"
-        - "latest/latest_seed.yaml"
-        - "latest/latest_seed.json"
     target:
       root: ".repo_studios/reports/healthview/<class>/<topic>/<timestamp>/"
       artifacts:
@@ -812,8 +806,8 @@ io_contract:
 retention:
   surfaces:
     - "--artifacts-to-keep"
-    - "prune_run_directories(output_dir, stem_prefix=standards_prompt_seed)"
-  mechanism: "prune_by_prefix"
+    - "prune_run_directories(output_dir)"
+  mechanism: "prune_by_timestamp"
   targets:
     - ".repo_studios/reports/producer_reports/standards_prompt_seeds/"
   guardrails:
@@ -908,10 +902,11 @@ io_contract:
     - "Reads repo_standards_index.yaml and repo_standards_pending.yaml for metrics and notes."
   outputs:
     current:
-      root: ".repo_studios/command_center/reports/healthview/standards_overview/<YYYYMMDD-HHMM>/"
+      root: ".repo_studios/reports/healthview/summarizer_reports/standards_overview/<YYYYMMDD-HHMM>/"
       artifacts:
-        - "standards_overview.json"
-        - "standards_overview.md"
+        - "manifest.json"
+        - "summary.md"
+        - "telemetry.json"
     target:
       root: ".repo_studios/reports/healthview/<class>/<topic>/<timestamp>/"
       artifacts:
@@ -924,7 +919,7 @@ retention:
     - "write_report_artifacts(keep=...)"
   mechanism: "prune_by_timestamp"
   targets:
-    - ".repo_studios/command_center/reports/healthview/standards_overview/"
+    - ".repo_studios/reports/healthview/summarizer_reports/standards_overview/"
   guardrails:
     - "Shared pruning enforces keep>=1 and protects current run"
   evidence:
@@ -945,7 +940,7 @@ qa:
   mypy: "Success: no issues found (2026-01-02)"
   coverage: "N/A"
 notes:
-  - "Writes JSON/Markdown only (no manifest/telemetry bundle)."
+  - "Writes full base package (manifest.json, summary.md, telemetry.json)."
 ```
 
 #### Implementation Workstreams (checkbox-driven) — summarize_standards.py
@@ -1002,18 +997,19 @@ stage are satisfied and the Tier-2 record set is stable enough to extract reusab
 - Ensure each per-script record includes Tier-3 metadata fields.
 - Ensure Tier-1 routes to the authoritative entry points (Contract Snapshot, Stop-Gates, Records Index).
 
-**Discovery Pass A discrepancies (repo-observed; do not resolve here):**
+**Discovery Pass A discrepancies (resolved 2026-01-03 via HOP refactor):**
 
-- Output roots are split across `.repo_studios/command_center/reports/...` and
-  `.repo_studios/reports/producer_reports/...`, not the Tier-1 canonical
-  `.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`.
-- Viewer slugs differ across scripts (`healthview`, `rawview`, `commandview`).
-- Prompt seed producer writes pointer artifacts under `latest/`.
-- Timestamp slug shapes differ across the chain (`YYYYMMDD-HHMM` vs `YYYYMMDD_HHMMSS`).
-- Standards overview summarizer does not emit the base package
-  (`manifest.json`, `summary.md`, `telemetry.json`).
-- The Stage 6.1 chain inventory in this roster lists a non-Command-Center gap analyzer path; the
-  orchestrator references `.repo_studios/command_center/scripts/producers/analyze_standards_index_gaps.py`.
+- ~~Output roots are split across `.repo_studios/command_center/reports/...` and
+  `.repo_studios/reports/producer_reports/...`~~ — **RESOLVED**: Gap, diff, prompt now use
+  `build_topic_path()` via orchestrator defaults.
+- ~~Viewer slugs differ across scripts~~ — **RESOLVED**: All HOP-compliant scripts use `healthview`.
+- ~~Prompt seed producer writes pointer artifacts under `latest/`~~ — **RESOLVED**: Pointer
+  artifacts removed; base package enforced.
+- ~~Timestamp slug shapes differ across the chain~~ — **RESOLVED**: All scripts emit `YYYYMMDD-HHMM`.
+- ~~Standards overview summarizer does not emit the base package~~ — **RESOLVED**: Now emits
+  `manifest.json`, `summary.md`, `telemetry.json`.
+- ~~Gap analyzer path mismatch~~ — **RESOLVED**: Orchestrator correctly references
+  `.repo_studios/command_center/scripts/producers/analyze_standards_index_gaps.py`.
 
 **Migration stop-gates (code-phase, later):**
 
@@ -1113,4 +1109,5 @@ checks:
 
 | Date | Change | Author | Doc-index timestamp | Regression suites |
 | --- | --- | --- | --- | --- |
+| 2026-01-03 | 6.1: HOP refactor complete — S61R-005/006 artifacts, orchestrator paths, stop-gates closed. | repo_studios_ai | pending | 26 passed |
 | 2025-12-20 | 6.1: per-record workstreams; doc-index. | repo_studios_ai | 20251220-1636 | Not run |

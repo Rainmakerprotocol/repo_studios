@@ -33,9 +33,16 @@
 
 | Output | Path Pattern | Description |
 |--------|--------------|-------------|
-| Bundle artifacts | `<output_dir>/<run-prefix>-<timestamp>/` | Prompt seed bundle |
+| Bundle artifacts | `<output_dir>/<YYYYMMDD-HHMM>/` | Prompt seed bundle |
 
-**Default Output Directory**: `.repo_studios/reports/producer_reports/healthview/standards_prompt_seeds/`
+**Default Output Directory**: `.repo_studios/reports/healthview/producer_reports/standards_prompt_seeds/`
+
+**Base Package Artifacts**:
+
+- `manifest.json` — Run metadata including status, timestamp, summary, and seed integrity hash
+- `summary.md` — Human-readable report with severity counts and category breakdown
+- `telemetry.json` — Structured telemetry for automation consumption
+- `seed.txt` / `seed.yaml` / `seed.json` — Prompt seed in requested formats
 
 ## CLI Arguments
 

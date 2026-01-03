@@ -81,8 +81,9 @@ def test_run_emits_healthview_bundle(tmp_path: Path) -> None:
     assert run_dir.exists()
 
     artifacts = {name: Path(path) for name, path in result["artifacts"].items()}
-    json_path = artifacts[f"{module.SUMMARY_STEM}.json"]
-    markdown_path = artifacts[f"{module.SUMMARY_STEM}.md"]
+    json_path = artifacts["manifest.json"]
+    markdown_path = artifacts["summary.md"]
+    telemetry_path = artifacts["telemetry.json"]
 
     payload = json.loads(json_path.read_text(encoding="utf-8"))
     assert payload["viewer"] == module.VIEWER_SLUG
@@ -95,6 +96,9 @@ def test_run_emits_healthview_bundle(tmp_path: Path) -> None:
     assert "# Standards Overview" in markdown_content
     assert "Rules: 2" in markdown_content
     assert "markdown-auto-001" in markdown_content
+
+    # HOP base package: telemetry.json must exist
+    assert telemetry_path.exists()
 
 
 def test_resolve_index_path_falls_back_to_legacy(tmp_path: Path) -> None:

@@ -1,0 +1,335 @@
+{
+  "schema_version": 1,
+  "metric_timestamp": "2026-01-02T23:53:48.655162+00:00",
+  "viewer": "healthview",
+  "topic": "standards_index_gaps",
+  "metrics": {
+    "total_candidates": 69,
+    "sources_with_candidates": 6,
+    "top_source_candidates": 18,
+    "scanned_sources": 6
+  },
+  "top_sources": [
+    {
+      "path": ".repo_studios\\docs\\standards\\global\\std-global-markdown-authoring.md",
+      "candidate_count": 18
+    },
+    {
+      "path": ".repo_studios\\docs\\standards\\global\\std-global-html-coding.md",
+      "candidate_count": 17
+    },
+    {
+      "path": ".repo_studios\\docs\\standards\\global\\std-global-python-engineering.md",
+      "candidate_count": 15
+    },
+    {
+      "path": ".repo_studios\\docs\\standards\\project\\std-project-operating-standard.md",
+      "candidate_count": 8
+    },
+    {
+      "path": ".repo_studios\\docs\\standards\\project\\std-project-python-instructions.md",
+      "candidate_count": 7
+    },
+    {
+      "path": ".repo_studios\\docs\\standards\\global\\std-global-code-cleanup.md",
+      "candidate_count": 4
+    }
+  ],
+  "sources": {
+    ".repo_studios\\docs\\standards\\global\\std-global-code-cleanup.md": [
+      {
+        "line": 37,
+        "text": "8. Ensure each module, class, and function includes a clear and concise docstring."
+      },
+      {
+        "line": 38,
+        "text": "9. Prefer in-place changes, but fully rewrite files if a logical restructuring results in clearer logic or better maintainability."
+      },
+      {
+        "line": 39,
+        "text": "10. Use in-code annotations to explain why changes were made (to assist future agents)."
+      },
+      {
+        "line": 103,
+        "text": "- Prefer small, focused diffs. Avoid touching unrelated files."
+      }
+    ],
+    ".repo_studios\\docs\\standards\\global\\std-global-html-coding.md": [
+      {
+        "line": 31,
+        "text": "- Use semantic HTML5 tags (`<header>`, `<main>`, `<footer>`, `<nav>`, `<section>`, `<article>`, etc.)."
+      },
+      {
+        "line": 32,
+        "text": "- Ensure every page includes:"
+      },
+      {
+        "line": 36,
+        "text": "- Use one `<h1>` per page."
+      },
+      {
+        "line": 42,
+        "text": "- Use **kebab-case** for all `id` and `class` attributes:"
+      },
+      {
+        "line": 48,
+        "text": "- Prefer reusable class names over inline styles."
+      },
+      {
+        "line": 49,
+        "text": "- Avoid vague class names (for example, `style1`, `x123`)."
+      },
+      {
+        "line": 53,
+        "text": "- Prefer Tailwind CSS or a shared utility layer for styling."
+      },
+      {
+        "line": 54,
+        "text": "- Do not embed large `<style>` blocks inside HTML files."
+      },
+      {
+        "line": 55,
+        "text": "- Avoid inline styles except for throwaway prototypes."
+      },
+      {
+        "line": 63,
+        "text": "- Use `role`, `aria-*`, and `tabindex` only when semantic tags do not provide the behavior."
+      },
+      {
+        "line": 64,
+        "text": "- Avoid using color alone to convey meaning."
+      },
+      {
+        "line": 70,
+        "text": "- Use descriptive `id` attributes so agents can target elements for updates."
+      },
+      {
+        "line": 78,
+        "text": "- Avoid dynamic DOM structures that rely on unchecked JavaScript injection unless using a declared frontend framework."
+      },
+      {
+        "line": 83,
+        "text": "- Use grid or flex layouts for columns and alignment."
+      },
+      {
+        "line": 84,
+        "text": "- Avoid absolute positioning unless required."
+      },
+      {
+        "line": 85,
+        "text": "- Use utility classes for spacing (`p-*`, `m-*`, `gap-*`, etc.)."
+      },
+      {
+        "line": 136,
+        "text": "        - ensure-single-h1: true"
+      }
+    ],
+    ".repo_studios\\docs\\standards\\global\\std-global-markdown-authoring.md": [
+      {
+        "line": 47,
+        "text": "- Use top-level headings (`#`) to name the file purpose."
+      },
+      {
+        "line": 48,
+        "text": "- Use second-level headings (`##`) for section groups (for example, `## Goals`, `## File Summary`, `## Agent Tasks`)."
+      },
+      {
+        "line": 49,
+        "text": "- Use third-level headings (`###`) only when subdividing known sections."
+      },
+      {
+        "line": 50,
+        "text": "- Use bullet points or tables for enumerated items."
+      },
+      {
+        "line": 51,
+        "text": "- Avoid overloading a single section with too many nested points \u2014 prefer separation."
+      },
+      {
+        "line": 52,
+        "text": "- Use fenced code blocks with language markers (for example, md, python, json, bash) when instructing agents."
+      },
+      {
+        "line": 67,
+        "text": "- Avoid ambiguous section headers like \"Stuff\", \"Etc\", or \"Misc\"."
+      },
+      {
+        "line": 70,
+        "text": "- Prefer explicit formatting over implied meaning \u2014 avoid AI confusion."
+      },
+      {
+        "line": 71,
+        "text": "- Ensure code examples are wrapped in triple backticks with proper language markers."
+      },
+      {
+        "line": 75,
+        "text": "- Use consistent Markdown heading hierarchy."
+      },
+      {
+        "line": 77,
+        "text": "- Use task lists (`- [ ]`) when describing multi-step behaviors for agents."
+      },
+      {
+        "line": 78,
+        "text": "- Avoid raw HTML inside `.md` unless unavoidable."
+      },
+      {
+        "line": 80,
+        "text": "- Prefer unique headings in plan/phase documents: apply domain + purpose prefixes (for example, \"AI UI Phased Plan\") to reduce duplicate anchor clusters. Preserve a single generic template (`docs/agents/step_template.md`) as canonical source of un-prefixed headings."
+      },
+      {
+        "line": 87,
+        "text": "- Never delete `.md` files unless explicitly instructed."
+      },
+      {
+        "line": 374,
+        "text": "- Prefer consistent table alignment (one space padding around pipes) for stable diffs."
+      },
+      {
+        "line": 375,
+        "text": "- Use comment markers for automation instead of raw HTML blocks when possible."
+      },
+      {
+        "line": 382,
+        "text": "- Use lowercase, kebab-case names (for example, `metrics-ui-standards.md`)."
+      },
+      {
+        "line": 384,
+        "text": "- Use relative links and stable anchors."
+      }
+    ],
+    ".repo_studios\\docs\\standards\\global\\std-global-python-engineering.md": [
+      {
+        "line": 39,
+        "text": "- Enforce Ruff formatting and linting (`ruff format`, `ruff check --fix`) with repo configuration files."
+      },
+      {
+        "line": 55,
+        "text": "- Use data containers (`dataclasses.dataclass`, `typing.NamedTuple`, or Pydantic models) for structured payloads."
+      },
+      {
+        "line": 57,
+        "text": "- Avoid circular imports by pushing integration glue to `__main__` or dedicated wiring modules."
+      },
+      {
+        "line": 87,
+        "text": "- Prefer `async def` for FastAPI routes or I/O-heavy orchestrators."
+      },
+      {
+        "line": 122,
+        "text": "- Use the standard library `logging` module; never use `print()` in runtime paths."
+      },
+      {
+        "line": 149,
+        "text": "- Document default values and override mechanisms in README or standards."
+      },
+      {
+        "line": 175,
+        "text": "- Pin minimum versions in CI to expose breaking changes early; avoid blanket version upper bounds unless mandated by security policies."
+      },
+      {
+        "line": 221,
+        "text": "- Ensure CI workflows mirror local commands; update pipeline definitions when adding new required validation steps."
+      },
+      {
+        "line": 289,
+        "text": "        - ensure-docstrings: [module, public-classes, public-functions]"
+      },
+      {
+        "line": 290,
+        "text": "        - ensure-type-hints: true"
+      },
+      {
+        "line": 293,
+        "text": "    - ensure-async-fastapi:"
+      },
+      {
+        "line": 296,
+        "text": "    - ensure-logging:"
+      },
+      {
+        "line": 299,
+        "text": "    - ensure-config-secrets:"
+      },
+      {
+        "line": 302,
+        "text": "    - ensure-complexity:"
+      },
+      {
+        "line": 306,
+        "text": "    - ensure-sqlite-safety:"
+      }
+    ],
+    ".repo_studios\\docs\\standards\\project\\std-project-operating-standard.md": [
+      {
+        "line": 25,
+        "text": "Use this document as the single source of truth for how Repo Studios projects are structured, validated, and kept in sync with automation. The guidance applies to all code and documentation inside the project workspace unless an approved override exists in `docs/standards/project/`."
+      },
+      {
+        "line": 72,
+        "text": "- Prefer installing Git hooks with `make install-hooks` for anchor and slug hygiene."
+      },
+      {
+        "line": 81,
+        "text": "- Avoid global mutable state and hardcoded paths; rely on typed settings objects and dependency injection."
+      },
+      {
+        "line": 104,
+        "text": "Use these commands locally before opening pull requests to prevent CI churn."
+      },
+      {
+        "line": 141,
+        "text": "        - ensure-commands-run: [\"pytest\", \"ruff check\", \"mypy\"]"
+      },
+      {
+        "line": 142,
+        "text": "        - ensure-docs-updated:"
+      },
+      {
+        "line": 147,
+        "text": "        - ensure-anchor-check: true"
+      },
+      {
+        "line": 148,
+        "text": "    - ensure-global-standards"
+      }
+    ],
+    ".repo_studios\\docs\\standards\\project\\std-project-python-instructions.md": [
+      {
+        "line": 25,
+        "text": "Use this guide to prevent repeated mistakes, apply pre-approved solutions, and capture new recurring issues with precise remediation steps. Agents may append to this document when a new recurring issue emerges and a fix can be clearly defined."
+      },
+      {
+        "line": 31,
+        "text": "- Prefer Make targets for validation: `make qa` (runs lint, type-check, tests)."
+      },
+      {
+        "line": 32,
+        "text": "- Never hardcode secrets or tokens; read from environment variables such as `METRICS_API_TOKEN` or `INTERNAL_API_KEYS`."
+      },
+      {
+        "line": 34,
+        "text": "- Use `api.server.get_db_path()` (or the injected dependency) instead of hardcoding database paths."
+      },
+      {
+        "line": 58,
+        "text": "* Use clear function or variable names (for example, `convert_to_inches` not `x`)."
+      },
+      {
+        "line": 61,
+        "text": "* Use logging instead of `print` for production paths."
+      },
+      {
+        "line": 62,
+        "text": "* Use list comprehensions where appropriate."
+      }
+    ]
+  },
+  "inputs": {
+    "repo_root": "C:\\Users\\genet\\repo_studios",
+    "index_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\scripts\\repo_standards_index.yaml",
+    "categories_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\scripts\\.repo_studios\\standards_categories.yaml",
+    "max_show": 8,
+    "artifacts_to_keep": 5
+  }
+}

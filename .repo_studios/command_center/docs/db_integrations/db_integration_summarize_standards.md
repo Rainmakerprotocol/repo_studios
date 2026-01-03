@@ -38,9 +38,15 @@
 
 | Output | Path Pattern | Description |
 |--------|--------------|-------------|
-| HealthView bundle | `<output_dir>/<timestamp>/` | Manifest, summary, telemetry |
+| HealthView bundle | `<output_dir>/<YYYYMMDD-HHMM>/` | Manifest, summary, telemetry |
 
-**Default Output Directory**: `.repo_studios/reports/summarizer_reports/healthview/standards_overview/`
+**Default Output Directory**: `.repo_studios/reports/healthview/summarizer_reports/standards_overview/`
+
+**Base Package Artifacts**:
+
+- `manifest.json` — Structured summary with metrics, samples, and artifact paths
+- `summary.md` — Human-readable markdown summary with metrics table and notes
+- `telemetry.json` — Telemetry payload with schema version, metrics, and run timestamp
 
 ## CLI Arguments
 

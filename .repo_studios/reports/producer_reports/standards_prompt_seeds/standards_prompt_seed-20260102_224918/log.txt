@@ -1,6 +1,0 @@
-status=ok
-timestamp=2026-01-02T22:49:18.921061+00:00
-index_path=C:\Users\genet\repo_studios\.repo_studios\scripts\repo_standards_index.yaml
-include_warn=false
-categories=0
-total_rules=0

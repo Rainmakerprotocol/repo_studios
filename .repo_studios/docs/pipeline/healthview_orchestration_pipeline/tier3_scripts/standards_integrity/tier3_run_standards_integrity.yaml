@@ -88,17 +88,17 @@ parameters:
       type: Path
       description: Output directory for gap analysis producer
       required: false
-      default: .repo_studios/command_center/reports
+      default: build_topic_path("producer", "standards_index_gaps")
     - name: diff_output_dir
       type: Path
       description: Output directory for diff producer
       required: false
-      default: .repo_studios/reports/producer_reports/standards_index_diff_reports
+      default: build_topic_path("producer", "standards_index_diff")
     - name: prompt_output_dir
       type: Path
       description: Output directory for prompt seed producer
       required: false
-      default: .repo_studios/reports/producer_reports/standards_prompt_seeds
+      default: build_topic_path("producer", "standards_prompt_seeds")
     - name: pending_path
       type: Path
       description: Path to the pending standards YAML

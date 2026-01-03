@@ -47,9 +47,14 @@
 
 | Output | Path Pattern | Description |
 |--------|--------------|-------------|
-| HealthView bundle | `<healthview_root>/<timestamp>/` | Manifest, summary, telemetry |
+| HealthView bundle | `<healthview_root>/<YYYYMMDD-HHMM>/` | Manifest, summary, telemetry |
 
-**Default HealthView Root**: `.repo_studios/command_center/reports/healthview/standards_integrity/`
+**Default Output Directories** (HOP-compliant via `build_topic_path()`):
+
+- **Gap Analysis**: `.repo_studios/reports/healthview/producer_reports/standards_index_gaps/`
+- **Diff**: `.repo_studios/reports/healthview/producer_reports/standards_index_diff/`
+- **Prompt Seeds**: `.repo_studios/reports/healthview/producer_reports/standards_prompt_seeds/`
+- **HealthView Root**: `.repo_studios/command_center/reports/healthview/standards_integrity/`
 
 ## Invoked Scripts
 
