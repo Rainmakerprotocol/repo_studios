@@ -146,13 +146,13 @@ def test_retention_prunes_old_runs(tmp_path):
         scan_dir=scan_dir,
     )
 
-    # Pre-existing bundles to prune.
-    stale_dir = output_base / "monkey_patch_trends-2025-11-20_120000"
+    # Pre-existing bundles to prune (HOP-compliant slug format).
+    stale_dir = output_base / "20251120-1200"
     stale_dir.mkdir(parents=True, exist_ok=True)
     (stale_dir / "trend.json").write_text("{}", encoding="utf-8")
     (stale_dir / "trend.md").write_text("", encoding="utf-8")
     (stale_dir / "bundle_summary.json").write_text("{}", encoding="utf-8")
-    recent_dir = output_base / "monkey_patch_trends-2025-11-21_120000"
+    recent_dir = output_base / "20251121-1200"
     recent_dir.mkdir(parents=True, exist_ok=True)
     (recent_dir / "trend.json").write_text("{}", encoding="utf-8")
     (recent_dir / "trend.md").write_text("", encoding="utf-8")
@@ -171,7 +171,8 @@ def test_retention_prunes_old_runs(tmp_path):
         ]
     )
 
-    remaining = list(output_base.glob("monkey_patch_trends-*"))
+    # All directories should match YYYYMMDD-HHMM pattern now
+    remaining = [d for d in output_base.iterdir() if d.is_dir()]
     assert len(remaining) == 2
     assert Path(stale_dir.resolve()).as_posix() in [Path(p).resolve().as_posix() for p in result["pruned"]]
     # HOP compliance: no pointer files

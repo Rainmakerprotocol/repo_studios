@@ -140,23 +140,26 @@ Authoritative entry points for Tier-1 routing and agent discovery are:
 **Current evidence (repo-observed):**
 
 - Output root currently observed (orchestrator HealthView bundle write):
-  `.repo_studios/command_center/reports/commandview/monkey_patch_oversight/<YYYYMMDD-HHMM>/`
-- Timestamp/run slug shape observed (orchestrator HealthView bundle write):
+  `.repo_studios/reports/healthview/orchestrator_reports/monkey_patch_oversight/<YYYYMMDD-HHMM>/`
+- Timestamp/run slug shape observed (all scripts):
   `YYYYMMDD-HHMM` (UTC)
 - Artifact set observed in orchestrator HealthView bundle writes:
   - `manifest.json`
   - `summary.md`
   - `telemetry.json`
 
-Mismatch is treated as a stop-gate.
+**HOP compliance confirmed (2026-01-03):**
+
+- All 5 scripts now use `build_topic_path()` for HOP-compliant output roots.
+- Slug format standardized to `YYYYMMDD-HHMM` across all scripts.
+- No pointer artifacts (`latest_*`) are created.
+- Consumer reads producer manifest via `payload.findings`.
+- Summarizer emits `manifest.json` and `summary.md` (HOP base package).
 
 Notes:
 
-- The orchestrator module docstring describes a different root than the actual
-  `viewer/topic/<slug>` layout.
-- The stage currently mixes multiple run slug formats across
-  producer/consumer/aggregator/summarizer outputs.
-- Pointer files (`latest_*`) exist in consumer/aggregator outputs and are consumed by the summarizer.
+- Implementation plan: `implementation_plans/stage_5_hop_refactor_plan.md`
+- Runtime evidence: Run `20260103-0201` verified all outputs at HOP paths.
 
 Evidence source (entry points):
 
@@ -193,23 +196,22 @@ A compact, mechanism-oriented summary of pruning surfaces and how pruning is enf
   - Aggregator: `--artifacts-to-keep` applied via `prune_run_directories`.
   - Summarizer: `--artifacts-to-keep` applied via `write_report_artifacts`.
 - **Pruning mechanism:**
-  - Orchestrator: `write_report_artifacts` hierarchical pruning (`viewer/topic/<YYYYMMDD-HHMM>`).
+  - All scripts: `YYYYMMDD-HHMM` slug format, pruned by timestamp sort.
+  - Orchestrator: `write_report_artifacts` hierarchical pruning (`viewer="", topic=""`).
   - Producer/consumer/aggregator: `prune_run_directories` on timestamped run dirs.
-  - Summarizer: `write_report_artifacts` non-hierarchical pruning (`<stem>-<YYYYMMDD_%H%M%S>`).
-- **Pruning targets:**
-  - `.repo_studios/command_center/reports/<viewer>/<topic>/` (orchestrator bundle outputs).
-    - `.repo_studios/reports/producer_reports/...` (producer outputs; note orchestrator overrides
-      base dir).
-  - `.repo_studios/reports/consumer_reports/monkey_patch_risk/` (consumer bundles + pointers).
-  - `.repo_studios/reports/aggregator_reports/monkey_patch_trends/` (aggregator bundles + pointers).
-  - `.repo_studios/reports/summarizer_reports/monkey_patch_overview/` (summarizer outputs).
+  - Summarizer: `write_report_artifacts` hierarchical pruning (`viewer="", topic=""`).
+- **Pruning targets (HOP-compliant paths):**
+  - `.repo_studios/reports/healthview/orchestrator_reports/monkey_patch_oversight/` (orchestrator).
+  - `.repo_studios/reports/healthview/producer_reports/monkey_patch_scans/` (producer).
+  - `.repo_studios/reports/healthview/consumer_reports/monkey_patch_risk/` (consumer).
+  - `.repo_studios/reports/healthview/aggregator_reports/monkey_patch_trends/` (aggregator).
+  - `.repo_studios/reports/healthview/summarizer_reports/monkey_patch_overview/` (summarizer).
 - **Pruning guardrails:**
   - Minimum keep is enforced to be at least one in shared pruners.
   - Current run can be protected explicitly (pruner `current_run` argument).
   - Directories containing a `.keep` sentinel are not deleted.
 - **Evidence source:**
-  - `.repo_studios/command_center/scripts/libraries/artifacts.py` (hierarchical/non-hierarchical
-    pruning behavior)
+  - `.repo_studios/command_center/scripts/libraries/artifacts.py` (hierarchical pruning behavior)
   - `.repo_studios/command_center/scripts/libraries/prune_logs.py` (`prune_run_directories` behavior)
   - Script-level retention wiring in each per-script record.
 
@@ -331,17 +333,18 @@ io_contract:
     - "repo_root + scan_root + per-step output roots + keep budgets + timestamp + feature flags"
   outputs:
     current:
-      root: ".repo_studios/command_center/reports/commandview/monkey_patch_oversight/<YYYYMMDD-HHMM>/"
+      root: ".repo_studios/reports/healthview/orchestrator_reports/monkey_patch_oversight/<YYYYMMDD-HHMM>/"
       artifacts:
         - "manifest.json"
         - "summary.md"
         - "telemetry.json"
     target:
-      root: ".repo_studios/reports/healthview/<class>/<topic>/<timestamp>/"
+      root: ".repo_studios/reports/healthview/orchestrator_reports/monkey_patch_oversight/<YYYYMMDD-HHMM>/"
       artifacts:
         - "manifest.json"
         - "summary.md"
         - "telemetry.json"
+    status: "HOP-compliant (2026-01-03)"
 retention:
   surfaces:
     - "--artifacts-to-keep (healthview bundle)"
@@ -351,7 +354,7 @@ retention:
     - "--summarizer-artifacts-to-keep"
   mechanism: "write_report_artifacts hierarchical pruning + per-step delegated pruning"
   targets:
-    - ".repo_studios/command_center/reports/commandview/monkey_patch_oversight/<YYYYMMDD-HHMM>/"
+    - ".repo_studios/reports/healthview/orchestrator_reports/monkey_patch_oversight/<YYYYMMDD-HHMM>/"
   guardrails:
     - "Minimum keep is enforced"
     - "Directories with a .keep sentinel are protected"
@@ -889,18 +892,11 @@ stage are satisfied and the Tier-2 record set is stable enough to extract reusab
 
 **Discovery stop-gates (repo-observed mismatches to resolve before code-phase claims):**
 
-- Orchestrator bundle docstring root conflicts with actual `viewer/topic/<YYYYMMDD-HHMM>` layout.
-- Orchestrator uses `viewer=commandview` for the HealthView bundle write.
-- Producer/consumer/aggregator/summarizer disagree on producer artifact naming:
-  - `manifest.json` vs `report.json`
-  - `matches.json` expectations vary
-- Producer/consumer/aggregator/summarizer disagree on producer artifact naming:
-  - `manifest.json` vs `report.json`
-  - `matches.json` expectations vary
-- Orchestrator expects producer payload `run_id` and a flat `producer_output_dir/<run_id>/` structure.
-  The producer returns `run_dir` and writes under `output_dir/healthview/monkey_patches/<YYYYMMDD-HHMM>/`.
-- Consumer + aggregator create `latest_*` pointer artifacts; summarizer consumes pointers when present.
-- Stage outputs use multiple timestamp slug formats (`YYYYMMDD-HHMM`, `YYYYMMDD_%H%M%S`, `%Y-%m-%d_%H%M%S`).
+- [x] ~~Orchestrator bundle docstring root conflicts with actual layout.~~ — RESOLVED: Uses `build_topic_path("orchestrator", "monkey_patch_oversight")`.
+- [x] ~~Orchestrator uses `viewer=commandview` for the HealthView bundle write.~~ — RESOLVED: Now uses `healthview` viewer.
+- [x] ~~Producer/consumer disagree on artifact naming (`manifest.json` vs `report.json`).~~ — RESOLVED: Consumer reads `manifest.payload.findings`.
+- [x] ~~Consumer + aggregator create `latest_*` pointer artifacts.~~ — RESOLVED: Removed `_write_legacy_outputs()` call.
+- [x] ~~Stage outputs use multiple timestamp slug formats.~~ — RESOLVED: All scripts use `YYYYMMDD-HHMM`.
 
 ---
 

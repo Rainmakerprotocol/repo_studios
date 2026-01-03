@@ -60,13 +60,15 @@ from libraries.cli import resolve_repo_root  # noqa: E402
 from libraries.report_paths import build_topic_path  # noqa: E402
 from libraries.retention_policy import get_keep  # noqa: E402
 
-DEFAULT_STRUCTURED_ROOT = Path(".repo_studios/reports/producer_reports/monkey_patch_scans")
+DEFAULT_STRUCTURED_ROOT = build_topic_path("producer", "monkey_patch_scans")
 LEGACY_ROOT = Path(".repo_studios/monkey_patch")
 LEGACY_REPORT_NAME = "report.json"
 STRUCTURED_MATCHES_NAME = "matches.json"
+MANIFEST_NAME = "manifest.json"
 DEFAULT_OUTPUT_BASE = build_topic_path("consumer", "monkey_patch_risk")
 DEFAULT_ARTIFACTS_TO_KEEP = get_keep("classify_monkey_patches")
-BUNDLE_PREFIX = "monkey_patch_risk-"
+# Legacy prefix for backward compatibility with existing pruning
+BUNDLE_PREFIX = ""
 
 
 class NoScansFoundError(FileNotFoundError):
@@ -76,8 +78,8 @@ class NoScansFoundError(FileNotFoundError):
 def _is_scan_dir(path: Path) -> bool:
     """Check if a directory contains valid scan artifacts.
 
-    Validate that the path is a directory containing either structured
-    matches or a legacy report file.
+    Validate that the path is a directory containing HOP manifest,
+    structured matches, or a legacy report file.
 
     Args:
         path: Directory path to check.
@@ -91,6 +93,17 @@ def _is_scan_dir(path: Path) -> bool:
         return False
     if (path / STRUCTURED_MATCHES_NAME).exists():
         return True
+    # HOP manifest format support
+    manifest_path = path / MANIFEST_NAME
+    if manifest_path.exists():
+        try:
+            data = json.loads(manifest_path.read_text(encoding="utf-8"))
+            if isinstance(data, dict):
+                payload = data.get("payload", {})
+                if isinstance(payload, dict) and isinstance(payload.get("findings"), list):
+                    return True
+        except Exception:
+            pass
     legacy_report = path / LEGACY_REPORT_NAME
     if legacy_report.exists():
         try:
@@ -206,10 +219,37 @@ class Finding:
         )
 
 
+def _load_hop_findings(manifest_path: Path) -> tuple[list[Finding], dict[str, Any] | None]:
+    """Load findings from HOP manifest.json format.
+
+    Extract findings from the manifest payload and return the full
+    manifest as metadata.
+
+    Args:
+        manifest_path: Path to the manifest.json file.
+
+    Returns:
+        Tuple of (findings list, manifest metadata dict).
+
+    Raises:
+        ValueError: If manifest does not contain expected structure.
+    """
+    data = json.loads(manifest_path.read_text(encoding="utf-8"))
+    if not isinstance(data, dict):
+        raise ValueError(f"{manifest_path} must be a JSON object")
+    payload = data.get("payload", {})
+    if not isinstance(payload, dict):
+        raise ValueError(f"{manifest_path} payload must be an object")
+    findings_raw = payload.get("findings", [])
+    if not isinstance(findings_raw, list):
+        raise ValueError(f"{manifest_path} payload.findings must be a list")
+    return [Finding.from_obj(obj) for obj in findings_raw], data
+
+
 def _load_structured_findings(run_dir: Path) -> tuple[list[Finding], dict[str, Any] | None]:
     """Load findings from structured scan artifacts.
 
-    Read matches.json and optionally report.json for metadata.
+    Supports HOP manifest.json format and legacy matches.json format.
 
     Args:
         run_dir: Scan run directory containing artifacts.
@@ -218,8 +258,17 @@ def _load_structured_findings(run_dir: Path) -> tuple[list[Finding], dict[str, A
         Tuple of (findings list, optional metadata dict).
 
     Raises:
-        ValueError: If matches.json does not contain a list.
+        ValueError: If artifacts do not contain expected structure.
     """
+    # Try HOP manifest format first
+    manifest_path = run_dir / MANIFEST_NAME
+    if manifest_path.exists():
+        try:
+            return _load_hop_findings(manifest_path)
+        except (ValueError, json.JSONDecodeError):
+            pass  # Fall through to legacy formats
+
+    # Legacy matches.json format
     matches_path = run_dir / STRUCTURED_MATCHES_NAME
     if not matches_path.exists():
         return [], None
@@ -413,7 +462,8 @@ def _write_consumer_bundle(
     """
     output_base.mkdir(parents=True, exist_ok=True)
     ts = _utcnow()
-    bundle_dir = output_base / f"{BUNDLE_PREFIX}{ts.strftime('%Y-%m-%d_%H%M%S')}"
+    slug = ts.strftime("%Y%m%d-%H%M")
+    bundle_dir = output_base / slug
     bundle_dir.mkdir(parents=True, exist_ok=True)
 
     summary_path = bundle_dir / "summary.json"
@@ -595,7 +645,7 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
             raise FileNotFoundError(f"No {STRUCTURED_MATCHES_NAME} or legacy {LEGACY_REPORT_NAME} found in {scan_dir}")
 
     result = aggregate(findings, metadata)
-    _write_legacy_outputs(scan_dir, result)
+    # Legacy outputs removed - consumer now writes only to its own directory
 
     output_base = args.output_base or DEFAULT_OUTPUT_BASE
     if not output_base.is_absolute():

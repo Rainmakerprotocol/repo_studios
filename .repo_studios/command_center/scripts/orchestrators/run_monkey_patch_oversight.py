@@ -67,10 +67,10 @@ SUMMARIZER_MODULE = "command_center.scripts.summarizers.summarize_monkey_patch_o
 UTILITY_SCRIPT = Path(".repo_studios/scripts/utilities/monkey_patch_risk.py")
 
 DEFAULT_SCAN_ROOT = Path(".")
-DEFAULT_PRODUCER_OUTPUT = Path(".repo_studios/reports/producer_reports/monkey_patch_scans")
-DEFAULT_CONSUMER_OUTPUT = Path(".repo_studios/reports/consumer_reports/monkey_patch_risk")
-DEFAULT_AGGREGATOR_OUTPUT = Path(".repo_studios/reports/aggregator_reports/monkey_patch_trends")
-DEFAULT_SUMMARIZER_OUTPUT = Path(".repo_studios/reports/summarizer_reports/monkey_patch_overview")
+DEFAULT_PRODUCER_OUTPUT = build_topic_path("producer", "monkey_patch_scans")
+DEFAULT_CONSUMER_OUTPUT = build_topic_path("consumer", "monkey_patch_risk")
+DEFAULT_AGGREGATOR_OUTPUT = build_topic_path("aggregator", "monkey_patch_trends")
+DEFAULT_SUMMARIZER_OUTPUT = build_topic_path("summarizer", "monkey_patch_overview")
 DEFAULT_HEALTHVIEW_ROOT = build_topic_path("orchestrator", "monkey_patch_oversight")
 
 

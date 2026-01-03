@@ -1,0 +1,24 @@
+{
+  "artifacts": {
+    "consumer_bundle_summary": ".repo_studios/reports/healthview/consumer_reports/monkey_patch_risk/20260103-0201/bundle_summary.json",
+    "consumer_summary": ".repo_studios/reports/healthview/consumer_reports/monkey_patch_risk/20260103-0201/summary.json",
+    "duplicate_matrix": null,
+    "producer_matches": null,
+    "producer_report": null,
+    "trend_bundle_summary": ".repo_studios/reports/healthview/aggregator_reports/monkey_patch_trends/20260103-0201/bundle_summary.json",
+    "trend_json": ".repo_studios/reports/healthview/aggregator_reports/monkey_patch_trends/20260103-0201/trend.json",
+    "trend_markdown": ".repo_studios/reports/healthview/aggregator_reports/monkey_patch_trends/20260103-0201/trend.md"
+  },
+  "counts_by_risk": {
+    "HIGH": 14,
+    "MODERATE": 52,
+    "SAFE": 53
+  },
+  "generated_at": "2026-01-03T02:01:42+00:00",
+  "notes": [],
+  "overlap": [],
+  "schema_version": 1,
+  "topic": "monkey_patch_overview",
+  "total_findings": 119,
+  "viewer": "healthview"
+}

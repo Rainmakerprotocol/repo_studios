@@ -21,5 +21,5 @@ def test_summarizer_exposes_run_entrypoint() -> None:
 
 
 def test_summarizer_declares_expected_slugs() -> None:
-    assert getattr(summarizer_module, "VIEWER_SLUG", None) == "commandview"
+    assert getattr(summarizer_module, "VIEWER_SLUG", None) == "healthview"
     assert getattr(summarizer_module, "TOPIC_SLUG", None) == "monkey_patch_overview"

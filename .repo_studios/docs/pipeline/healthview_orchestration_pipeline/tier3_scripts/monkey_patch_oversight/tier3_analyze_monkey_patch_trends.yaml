@@ -47,7 +47,8 @@ parameters:
   - name: consumer_base
     type: path
     required: false
-    default: .repo_studios/reports/healthview/consumer_reports/monkey_patch_risk
+    default: build_topic_path("consumer", "monkey_patch_risk")
+    hop_path: .repo_studios/reports/healthview/consumer_reports/monkey_patch_risk
     description: Base directory for consumer bundle discovery.
 
   - name: consumer_summary
@@ -61,14 +62,16 @@ parameters:
   - name: producer_base
     type: path
     required: false
-    default: .repo_studios/reports/healthview/producer_reports/monkey_patches
+    default: build_topic_path("producer", "monkey_patch_scans")
+    hop_path: .repo_studios/reports/healthview/producer_reports/monkey_patch_scans
     description: |
       Fallback base directory for producer discovery when no consumer bundles exist.
 
   - name: output_base
     type: path
     required: false
-    default: .repo_studios/reports/healthview/aggregator_reports/monkey_patch_trends
+    default: build_topic_path("aggregator", "monkey_patch_trends")
+    hop_path: .repo_studios/reports/healthview/aggregator_reports/monkey_patch_trends
     description: HealthView root where bundles are written.
     validation:
       parent_must_exist: false

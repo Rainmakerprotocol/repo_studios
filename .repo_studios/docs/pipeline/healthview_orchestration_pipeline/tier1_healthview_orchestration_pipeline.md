@@ -245,7 +245,7 @@ Meta-orchestrator chains all Stage NN.1 orchestrators for full-suite diagnostics
   - Stage 2 (Docs Health Overview): Pass B complete, Pass C pending
   - Stage 3 (Fault Diagnostics Overview): Pass B complete, Pass C pending
   - Stage 4 (Dependency & Import Hygiene): Pass B complete, Pass C pending
-  - Stage 5 (Monkey Patch Oversight): Pass B complete, Pass C pending
+  - Stage 5 (Monkey Patch Oversight): **Pass C complete** (HOP-compliant 2026-01-03)
   - Stage 6 (Standards Integrity): **Pass C complete** (HOP-compliant 2026-01-03)
   - Stage 7 (Meta-Orchestrator): Pass B complete, Pass C pending
 - **Phase 3 (Consolidation & Freeze):** Not started
@@ -1089,17 +1089,20 @@ These are Stage 5.1 readiness gates after all Tier-2 DONE script gates are close
 
 **Target contract (locked decisions):**
 
-- Output root migrates to `.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`.
+- Output root migrates to `.repo_studios/reports/healthview/<class>_reports/<topic>/<timestamp>/`.
 - Base package is present: `manifest.json`, `summary.md`, `telemetry.json`.
 - Discovery is timestamp-based only (no pointer files such as `latest_*`).
 
-**Current evidence (Stage 5.1):**
+**Current evidence (Stage 5.1 — HOP-compliant 2026-01-03):**
 
-- Output root currently observed is CommandView-rooted and not yet output-root compliant.
-- Base package artifacts (`manifest.json`, `summary.md`, `telemetry.json`) are observed
-  in orchestrator bundle writes.
-- Pointer artifacts remain a stop-gate (consumer/aggregator outputs include `latest_*`
-  and are consumed by the summarizer).
+- All 5 scripts use `build_topic_path()` for HOP-compliant output roots.
+- Slug format standardized to `YYYYMMDD-HHMM` across all scripts.
+- Base package artifacts (`manifest.json`, `summary.md`, `telemetry.json`) emitted by
+  producer, orchestrator, and summarizer.
+- No pointer artifacts (`latest_*`) are created.
+- Consumer reads producer manifest via `payload.findings`.
+- Implementation plan: `implementation_plans/stage_5_hop_refactor_plan.md`
+- Runtime evidence: Run `20260103-0201` verified all outputs at HOP paths.
 - Details and evidence live in the Stage 5.1 Tier-2 roster:
   [Current vs Target snapshot](tier2_roster/tier2_monkey_patch_oversight_roster.md#23-current-vs-target-contract-snapshot-stage-51),
   [Stop-gates](tier2_roster/tier2_monkey_patch_oversight_roster.md#32-stop-gates-and-implementation-checklists).
@@ -1138,13 +1141,13 @@ enabled; trend aggregation scales with the configured history window (from docst
 
 **Outputs:**
 
-- Producer: `.repo_studios/reports/producer_reports/monkey_patch_scans/` (line 63)
-- Consumer: `.repo_studios/reports/consumer_reports/monkey_patch_risk/` (line 64)
-- Aggregator: `.repo_studios/reports/aggregator_reports/monkey_patch_trends/` (line 65)
-- Summarizer: `.repo_studios/reports/summarizer_reports/monkey_patch_overview/` (line 66)
+- Producer: `.repo_studios/reports/healthview/producer_reports/monkey_patch_scans/<YYYYMMDD-HHMM>/`
+- Consumer: `.repo_studios/reports/healthview/consumer_reports/monkey_patch_risk/<YYYYMMDD-HHMM>/`
+- Aggregator: `.repo_studios/reports/healthview/aggregator_reports/monkey_patch_trends/<YYYYMMDD-HHMM>/`
+- Summarizer: `.repo_studios/reports/healthview/summarizer_reports/monkey_patch_overview/<YYYYMMDD-HHMM>/`
 - HealthView bundle:
-  `.repo_studios/command_center/reports/healthview/monkey_patch_oversight/<timestamp>/`
-  (manifest + summary + telemetry, lines 707-716)
+  `.repo_studios/reports/healthview/orchestrator_reports/monkey_patch_oversight/<YYYYMMDD-HHMM>/`
+  (manifest + summary + telemetry)
 
 **Execution Notes:**
 
@@ -1724,7 +1727,7 @@ All gaps have logical explanations:
 | CR-008 | Stage 2.1 emits pointer artifacts (`latest_*`) in intermediate outputs (violates “no mutable pointers”). | 5.1 | Stage 2.1 Tier-2 roster | Treat as a stop-gate; close via Tier-2 stop-gates when pointers are removed and evidence confirms. |
 | CR-009 | Stage 3.1 current bundle writes land under a CommandView-rooted path (viewer/root mismatch vs HealthView/HOP contract). | 6.1 | Stage 3.1 Tier-2 roster | Treat as a stop-gate; close when Stage 3.1 output roots align to the HOP contract and Tier-2 evidence updates. |
 | CR-010 | Stage 4.1 remains on the current output root (`.repo_studios/command_center/reports/...`) rather than the HOP contract root. | 7.1 | Stage 4.1 Tier-2 roster | Track as a stop-gate in Tier-2; update Tier-1 once output roots align and evidence confirms. |
-| CR-011 | Stage 5.1 mixes run slug formats and uses pointer artifacts (`latest_*`) across pipeline outputs (violates timestamp-only discovery). | 8.1 | Stage 5.1 Tier-2 roster | Treat as a stop-gate; close via Tier-2 once slugs/pointers are removed and evidence confirms. |
+| CR-011 | ~~Stage 5.1 mixes run slug formats and uses pointer artifacts (`latest_*`) across pipeline outputs.~~ | 8.1 | Stage 5.1 Tier-2 roster | **CLOSED (2026-01-03):** All scripts now use `YYYYMMDD-HHMM` slug format; pointer artifacts removed. |
 | CR-012 | Stage 6.1 output roots and timestamp formats are inconsistent across the chain (viewer/root split; prompt seed uses a different run id shape). | 9.1 | Stage 6.1 Tier-2 roster | Treat as a stop-gate; close via Tier-2 once outputs converge on the HOP contract and evidence confirms. |
 
 ---

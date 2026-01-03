@@ -13,8 +13,8 @@ tool:
       .repo_studios/reports/healthview/summarizer_reports/monkey_patch_overview/<YYYYMMDD-HHMM>/
 
     The run directory includes:
-      - monkey_patch_overview.json
-      - monkey_patch_overview.md
+      - manifest.json
+      - summary.md
   keywords:
     - healthview
     - summarizer
@@ -62,7 +62,8 @@ parameters:
   - name: consumer_output_dir
     type: path
     required: false
-    default: .repo_studios/reports/consumer_reports/monkey_patch_risk
+    default: build_topic_path("consumer", "monkey_patch_risk")
+    hop_path: .repo_studios/reports/healthview/consumer_reports/monkey_patch_risk
     description: Root directory containing consumer risk classification outputs.
     validation:
       must_exist: false
@@ -70,7 +71,8 @@ parameters:
   - name: producer_output_dir
     type: path
     required: false
-    default: .repo_studios/reports/producer_reports/monkey_patch_scans
+    default: build_topic_path("producer", "monkey_patch_scans")
+    hop_path: .repo_studios/reports/healthview/producer_reports/monkey_patch_scans
     description: Root directory containing producer scan outputs.
     validation:
       must_exist: false
@@ -78,7 +80,8 @@ parameters:
   - name: aggregator_output_dir
     type: path
     required: false
-    default: .repo_studios/reports/aggregator_reports/monkey_patch_trends
+    default: build_topic_path("aggregator", "monkey_patch_trends")
+    hop_path: .repo_studios/reports/healthview/aggregator_reports/monkey_patch_trends
     description: Root directory containing aggregator trend outputs.
     validation:
       must_exist: false
@@ -86,7 +89,8 @@ parameters:
   - name: output_dir
     type: path
     required: false
-    default: .repo_studios/reports/healthview/summarizer_reports/monkey_patch_overview
+    default: build_topic_path("summarizer", "monkey_patch_overview")
+    hop_path: .repo_studios/reports/healthview/summarizer_reports/monkey_patch_overview
     description: Root directory used to write summary artifacts.
     validation:
       parent_must_exist: false
@@ -186,13 +190,13 @@ parameters:
 outputs:
   primary:
     type: directory
-    format: monkey_patch_overview
+    format: hop_base_package
     path_pattern: .repo_studios/reports/healthview/summarizer_reports/monkey_patch_overview/<YYYYMMDD-HHMM>/
     description: Summary directory for a single Stage 5.1 run.
     contents:
       required:
-        - monkey_patch_overview.json
-        - monkey_patch_overview.md
+        - manifest.json
+        - summary.md
 
   secondary:
     - type: stdout
@@ -246,9 +250,7 @@ examples:
         --trend-json .repo_studios/reports/aggregator_reports/monkey_patch_trends/20260101-1200/trend.json
 
 known_limitations:
-  - Output artifacts use non-HOP filenames (monkey_patch_overview.json instead of manifest.json)
   - Requires upstream producer/consumer/aggregator outputs; no standalone input generation
-  - Reads latest_* pointers from upstream which may be removed in future HOP migrations
 
 metadata:
   category: summarizer

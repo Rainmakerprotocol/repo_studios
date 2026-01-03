@@ -1,0 +1,202 @@
+{
+  "artifacts": {
+    "dependency_log": null,
+    "dependency_markdown": ".repo_studios/reports/healthview/producer_reports/dependency_hygiene/20260103-0218/summary.md",
+    "dependency_report": ".repo_studios/reports/healthview/producer_reports/dependency_hygiene/20260103-0218/telemetry.json",
+    "import_graph_graph": ".repo_studios/reports/healthview/producer_reports/import_graph/20260103-0218/telemetry.json",
+    "import_graph_log": null,
+    "import_graph_report": ".repo_studios/reports/healthview/producer_reports/import_graph/20260103-0218/telemetry.json",
+    "placeholder_log": null,
+    "placeholder_matches": null,
+    "placeholder_report": null,
+    "typecheck_log": null,
+    "typecheck_markdown": ".repo_studios/reports/healthview/producer_reports/typecheck_report/20260103-0218/summary.md",
+    "typecheck_raw": ".repo_studios/reports/healthview/producer_reports/typecheck_report/20260103-0218/manifest.json",
+    "typecheck_report": ".repo_studios/reports/healthview/producer_reports/typecheck_report/20260103-0218/telemetry.json"
+  },
+  "catalog": [
+    {
+      "role": "orchestrator",
+      "script_path": ".repo_studios/command_center/scripts/orchestrators/run_dependency_import_hygiene.py",
+      "topic": "dependency-import-hygiene"
+    },
+    {
+      "role": "producer",
+      "script_path": ".repo_studios/scripts/producers/generate_dependency_hygiene_report.py",
+      "topic": "dependency-import-hygiene"
+    },
+    {
+      "role": "producer",
+      "script_path": ".repo_studios/scripts/producers/generate_import_graph_report.py",
+      "topic": "dependency-import-hygiene"
+    },
+    {
+      "role": "producer",
+      "script_path": ".repo_studios/scripts/producers/generate_typecheck_report.py",
+      "topic": "dependency-import-hygiene"
+    },
+    {
+      "role": "producer",
+      "script_path": ".repo_studios/scripts/producers/scan_code_placeholders.py",
+      "topic": "dependency-import-hygiene"
+    },
+    {
+      "role": "utility",
+      "script_path": ".repo_studios/scripts/utilities/refresh_mypy_baselines.py",
+      "topic": "dependency-import-hygiene"
+    }
+  ],
+  "generated_at": "2026-01-03T02:18:51.534724+00:00",
+  "inputs": {
+    "dependency_patterns": [],
+    "dependency_skip_pyproject": false,
+    "import_owned": [],
+    "placeholder_allowlist": ".repo_studios/config/placeholder_allowlist.txt",
+    "placeholder_exclude_prefixes": [],
+    "placeholder_extensions": [],
+    "placeholder_patterns": [],
+    "refresh_mypy_baselines": false,
+    "skip_import_graph": false,
+    "skip_typecheck": false,
+    "trigger_batch_cleanup": false
+  },
+  "metrics": {
+    "artifact_bytes": 10730,
+    "artifact_files": 3,
+    "runtime_seconds": 4.502168,
+    "step_count": 6,
+    "steps_failed": 2,
+    "steps_skipped": 2,
+    "steps_succeeded": 2
+  },
+  "run_slug": "20260103-0218",
+  "schema_version": 1,
+  "telemetry": {
+    "finished_at": "2026-01-03T02:18:51.534602+00:00",
+    "metrics": {
+      "artifact_bytes": 10730,
+      "artifact_files": 3,
+      "runtime_seconds": 4.502168,
+      "step_count": 6,
+      "steps_failed": 2,
+      "steps_skipped": 2,
+      "steps_succeeded": 2
+    },
+    "run_slug": "20260103-0218",
+    "started_at": "2026-01-03T02:18:47.032434+00:00",
+    "steps": [
+      {
+        "detail": "issues detected (5 findings)",
+        "finished_at": "2026-01-03T02:18:47.050690+00:00",
+        "name": "dependency",
+        "payload": {
+          "issue_count": 5,
+          "pyproject_scanned": true,
+          "requirements_scanned": 2,
+          "status": "failed"
+        },
+        "started_at": "2026-01-03T02:18:47.032439+00:00",
+        "status": "failed"
+      },
+      {
+        "detail": "status ok",
+        "finished_at": "2026-01-03T02:18:47.395067+00:00",
+        "name": "import_graph",
+        "payload": {
+          "cycle_count": 0,
+          "edge_count": 1,
+          "files_scanned": 258,
+          "module_count": 7,
+          "status": "ok"
+        },
+        "started_at": "2026-01-03T02:18:47.050746+00:00",
+        "status": "success"
+      },
+      {
+        "detail": "total matches 3",
+        "finished_at": "2026-01-03T02:18:51.258428+00:00",
+        "name": "placeholders",
+        "payload": {
+          "allowlist_size": 0,
+          "bundle_dir": ".repo_studios/reports/healthview/producer_reports/code_placeholders/20260103-0218",
+          "default_exclusions_applied": true,
+          "exclude_prefixes": [
+            ".venv/",
+            "node_modules/"
+          ],
+          "exclude_segments": [
+            "site-packages"
+          ],
+          "generated_utc": "2026-01-03T02:18:47.401933+00:00",
+          "include_extensions": [
+            ".js",
+            ".json",
+            ".md",
+            ".py",
+            ".ts",
+            ".txt",
+            ".yaml",
+            ".yml"
+          ],
+          "patterns": [
+            "FIXME",
+            "NOTE",
+            "OPTIMIZE",
+            "REVIEW",
+            "TODO",
+            "XXX"
+          ],
+          "repo_root": "C:\\Users\\genet\\repo_studios",
+          "run_id": "20260103-0218",
+          "run_timestamp": "20260103-0218",
+          "scan_root": ".",
+          "schema_version": 1,
+          "status": "ok",
+          "summary": {
+            "by_extension": {
+              ".md": 3
+            },
+            "by_pattern": {
+              "XXX": 3
+            }
+          },
+          "timestamp": "2026-01-03T02:18:47.401933+00:00",
+          "topic": "code_placeholders",
+          "total_matches": 3,
+          "viewer": "healthview"
+        },
+        "started_at": "2026-01-03T02:18:47.395077+00:00",
+        "status": "success"
+      },
+      {
+        "detail": "batch cleanup skipped via flag",
+        "finished_at": "2026-01-03T02:18:51.258441+00:00",
+        "name": "cleanup",
+        "started_at": "2026-01-03T02:18:51.258437+00:00",
+        "status": "skipped"
+      },
+      {
+        "detail": "typecheck completed",
+        "finished_at": "2026-01-03T02:18:51.534501+00:00",
+        "name": "typecheck",
+        "payload": {
+          "status": null
+        },
+        "started_at": "2026-01-03T02:18:51.258489+00:00",
+        "status": "failed"
+      },
+      {
+        "detail": "baseline refresh not requested",
+        "finished_at": "2026-01-03T02:18:51.534564+00:00",
+        "name": "refresh_baselines",
+        "started_at": "2026-01-03T02:18:51.534559+00:00",
+        "status": "skipped"
+      }
+    ],
+    "success": false,
+    "topic": "dependency-import-hygiene",
+    "viewer": "healthview"
+  },
+  "topic": "dependency_import_hygiene",
+  "viewer": "healthview"
+}

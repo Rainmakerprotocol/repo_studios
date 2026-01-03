@@ -36,17 +36,18 @@
 
 | Source | Default Path |
 |--------|--------------|
-| Consumer | `.repo_studios/reports/consumer_reports/monkey_patch_risk/` |
-| Producer | `.repo_studios/reports/producer_reports/monkey_patch_scans/` |
-| Aggregator | `.repo_studios/reports/aggregator_reports/monkey_patch_trends/` |
+| Consumer | `.repo_studios/reports/healthview/consumer_reports/monkey_patch_risk/` |
+| Producer | `.repo_studios/reports/healthview/producer_reports/monkey_patch_scans/` |
+| Aggregator | `.repo_studios/reports/healthview/aggregator_reports/monkey_patch_trends/` |
 
 ### Outputs
 
 | Output | Path Pattern | Description |
 |--------|--------------|-------------|
-| Overview artifacts | `<output_dir>/<timestamp>/` | HealthView-ready summary bundle |
+| manifest.json | `<output_dir>/<YYYYMMDD-HHMM>/manifest.json` | HealthView JSON manifest |
+| summary.md | `<output_dir>/<YYYYMMDD-HHMM>/summary.md` | HealthView markdown summary |
 
-**Default Output Directory**: `.repo_studios/reports/summarizer_reports/monkey_patch_overview/`
+**Default Output Directory**: `.repo_studios/reports/healthview/summarizer_reports/monkey_patch_overview/`
 
 ## CLI Arguments
 

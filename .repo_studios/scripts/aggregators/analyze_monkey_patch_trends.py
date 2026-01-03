@@ -12,15 +12,15 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, Iterable, Sequence
 
-DEFAULT_CONSUMER_BASE = Path(".repo_studios/reports/consumer_reports/monkey_patch_risk")
-DEFAULT_PRODUCER_BASE = Path(".repo_studios/reports/producer_reports/monkey_patch_scans")
+# Legacy path constants moved after imports that provide build_topic_path
 DEFAULT_MAX_RUNS = 20
 
 CONSUMER_BUNDLE_PREFIX = "monkey_patch_risk-"
 CONSUMER_SUMMARY_NAME = "summary.json"
 CONSUMER_BUNDLE_SUMMARY_NAME = "bundle_summary.json"
 
-AGGREGATOR_PREFIX = "monkey_patch_trends-"
+# Legacy prefix removed for HOP compliance
+AGGREGATOR_PREFIX = ""
 TREND_JSON_NAME = "trend.json"
 TREND_MD_NAME = "trend.md"
 AGGREGATOR_BUNDLE_SUMMARY_NAME = "bundle_summary.json"
@@ -48,6 +48,8 @@ from libraries.report_paths import build_topic_path  # noqa: E402
 from libraries.retention_policy import get_keep  # noqa: E402
 
 # Defaults that depend on imported functions
+DEFAULT_CONSUMER_BASE = build_topic_path("consumer", "monkey_patch_risk")
+DEFAULT_PRODUCER_BASE = build_topic_path("producer", "monkey_patch_scans")
 DEFAULT_OUTPUT_BASE = build_topic_path("aggregator", "monkey_patch_trends")
 DEFAULT_ARTIFACTS_TO_KEEP = get_keep("analyze_monkey_patch_trends")
 
@@ -592,7 +594,8 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     runs = runs[-max_runs:]
 
     generated_at = datetime.now(UTC)
-    bundle_dir = output_base / f"{AGGREGATOR_PREFIX}{generated_at.strftime('%Y-%m-%d_%H%M%S')}"
+    slug = generated_at.strftime("%Y%m%d-%H%M")
+    bundle_dir = output_base / slug
     bundle_dir.mkdir(parents=True, exist_ok=True)
 
     latest = _latest_delta(runs)

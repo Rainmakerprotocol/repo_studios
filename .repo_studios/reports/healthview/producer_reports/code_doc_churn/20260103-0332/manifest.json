@@ -1,0 +1,41 @@
+{
+  "viewer_slug": "producer_reports",
+  "topic": "code_doc_churn",
+  "run_timestamp": "20260103-0332",
+  "generated_utc": "2026-01-03T03:32:06.749320+00:00",
+  "git_sha": "2e7e7429f2c9036996a2865f5fe4d49e85cf032e",
+  "status": "ok",
+  "catalog": [
+    {
+      "artifact": "manifest.json",
+      "kind": "json"
+    },
+    {
+      "artifact": "summary.md",
+      "kind": "markdown"
+    },
+    {
+      "artifact": "telemetry.json",
+      "kind": "json"
+    }
+  ],
+  "inputs": {
+    "repo_root": "C:\\Users\\genet\\repo_studios",
+    "git_window": "14 days",
+    "git_until": null,
+    "doc_index": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\producer_reports\\doc_index",
+    "anchor_inventory": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\producer_reports\\healthview\\anchor_inventory",
+    "allowlist": "C:\\Users\\genet\\repo_studios\\.repo_studios\\config\\code_doc_churn_allowlist.txt",
+    "artifacts_to_keep": 5
+  },
+  "provenance": {
+    "trigger_type": "manual"
+  },
+  "summary": {
+    "generated_utc": "2026-01-03T03:32:06.749320+00:00",
+    "modules_missing_docs": 2,
+    "modules_with_docs": 1,
+    "commits_examined": 24,
+    "distinct_authors": 1
+  }
+}

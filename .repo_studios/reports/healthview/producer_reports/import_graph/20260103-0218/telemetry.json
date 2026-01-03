@@ -1,0 +1,214 @@
+{
+  "viewer": "healthview",
+  "topic": "import_graph",
+  "run_timestamp": "20260103-0218",
+  "generated_utc": "2026-01-03T02:18:47.032318+00:00",
+  "metrics": {
+    "status": "ok",
+    "files_scanned": 258,
+    "module_count": 7,
+    "edge_count": 1,
+    "cycle_count": 0,
+    "scan_all": false,
+    "owned_packages_requested": [
+      ".repo_studios",
+      "legacy"
+    ],
+    "owned_packages_resolved": [
+      ".repo_studios"
+    ]
+  },
+  "payload": {
+    "schema_version": 2,
+    "generated_utc": "2026-01-03T02:18:47.032318+00:00",
+    "repo_root": "C:\\Users\\genet\\repo_studios",
+    "scan_all": false,
+    "owned_packages_requested": [
+      ".repo_studios",
+      "legacy"
+    ],
+    "owned_packages_resolved": [
+      ".repo_studios"
+    ],
+    "missing_owned_packages": [
+      "legacy"
+    ],
+    "summary": {
+      "status": "ok",
+      "module_count": 7,
+      "edge_count": 1,
+      "cycle_count": 0,
+      "files_scanned": 258
+    },
+    "top_fan_in": [
+      {
+        "module": ".repo_studios/command_center",
+        "count": 1
+      }
+    ],
+    "top_fan_out": [
+      {
+        "module": ".repo_studios/tests",
+        "count": 1
+      },
+      {
+        "module": ".repo_studios/command_center",
+        "count": 0
+      },
+      {
+        "module": ".repo_studios/docs",
+        "count": 0
+      },
+      {
+        "module": ".repo_studios/scripts",
+        "count": 0
+      },
+      {
+        "module": ".repo_studios/tmp",
+        "count": 0
+      },
+      {
+        "module": ".repo_studios/tools",
+        "count": 0
+      },
+      {
+        "module": ".repo_studios/vendor",
+        "count": 0
+      }
+    ],
+    "cycles": [],
+    "cycle_provenance": [],
+    "isolated_modules": [
+      ".repo_studios/docs",
+      ".repo_studios/scripts",
+      ".repo_studios/tmp",
+      ".repo_studios/tools",
+      ".repo_studios/vendor"
+    ],
+    "graph": {
+      ".repo_studios/command_center": [],
+      ".repo_studios/docs": [],
+      ".repo_studios/scripts": [],
+      ".repo_studios/tests": [
+        ".repo_studios/command_center"
+      ],
+      ".repo_studios/tmp": [],
+      ".repo_studios/tools": [],
+      ".repo_studios/vendor": []
+    },
+    "edge_provenance": {
+      ".repo_studios/tests -> .repo_studios/command_center": [
+        {
+          "file": ".repo_studios\\tests\\tests_command_center\\test_reports_naming_audit.py",
+          "line": 6,
+          "statement": "from command_center.scripts.utilities import reports_naming_audit as audit"
+        },
+        {
+          "file": ".repo_studios\\tests\\tests_producers\\test_analyze_standards_index_gaps.py",
+          "line": 196,
+          "statement": "from command_center.scripts.producers import analyze_standards_index_gaps as producer"
+        },
+        {
+          "file": ".repo_studios\\tests\\tests_producers\\test_analyze_standards_index_gaps.py",
+          "line": 224,
+          "statement": "from command_center.scripts.producers import analyze_standards_index_gaps as producer"
+        },
+        {
+          "file": ".repo_studios\\tests\\tests_producers\\test_analyze_standards_index_gaps.py",
+          "line": 236,
+          "statement": "from command_center.scripts.producers import analyze_standards_index_gaps as producer"
+        },
+        {
+          "file": ".repo_studios\\tests\\tests_producers\\test_analyze_standards_index_gaps.py",
+          "line": 256,
+          "statement": "from command_center.scripts.producers import analyze_standards_index_gaps as producer"
+        },
+        {
+          "file": ".repo_studios\\tests\\tests_command_center\\docs_health\\test_run_docs_health_overview.py",
+          "line": 7,
+          "statement": "from command_center.scripts.orchestrators import run_docs_health_overview as orchestrator"
+        },
+        {
+          "file": ".repo_studios\\tests\\tests_command_center\\fault_diagnostics\\test_run_fault_diagnostics_overview.py",
+          "line": 6,
+          "statement": "from command_center.scripts.orchestrators import run_fault_diagnostics_overview as orchestrator"
+        },
+        {
+          "file": ".repo_studios\\tests\\tests_command_center\\fault_diagnostics\\test_summarize_fault_diagnostics_overview.py",
+          "line": 14,
+          "statement": "from command_center.scripts.summarizers import summarize_fault_diagnostics_overview as module"
+        },
+        {
+          "file": ".repo_studios\\tests\\tests_command_center\\orchestrators\\test_run_command_center_pipeline.py",
+          "line": 10,
+          "statement": "from command_center.scripts.orchestrators import run_command_center_pipeline as pipeline"
+        },
+        {
+          "file": ".repo_studios\\tests\\tests_command_center\\orchestrators\\test_run_inventory_update.py",
+          "line": 7,
+          "statement": "from command_center.scripts.orchestrators import run_inventory_update as inventory_update"
+        },
+        {
+          "file": ".repo_studios\\tests\\tests_command_center\\orchestrators\\test_run_monkey_patch_oversight.py",
+          "line": 10,
+          "statement": "from command_center.scripts.orchestrators import run_monkey_patch_oversight as oversight"
+        },
+        {
+          "file": ".repo_studios\\tests\\tests_command_center\\standards_integrity\\test_run_standards_integrity.py",
+          "line": 7,
+          "statement": "from command_center.scripts.orchestrators import run_standards_integrity as orchestrator"
+        },
+        {
+          "file": ".repo_studios\\tests\\tests_command_center\\standards_integrity\\test_run_standards_integrity_helpers.py",
+          "line": 8,
+          "statement": "from command_center.scripts.orchestrators import run_standards_integrity as orchestrator"
+        },
+        {
+          "file": ".repo_studios\\tests\\tests_command_center\\standards_integrity\\test_run_standards_integrity_helpers.py",
+          "line": 20,
+          "statement": "from command_center.scripts.orchestrators import run_standards_integrity as orchestrator"
+        },
+        {
+          "file": ".repo_studios\\tests\\tests_command_center\\standards_integrity\\test_run_standards_integrity_helpers.py",
+          "line": 30,
+          "statement": "from command_center.scripts.orchestrators import run_standards_integrity as orchestrator"
+        },
+        {
+          "file": ".repo_studios\\tests\\tests_command_center\\standards_integrity\\test_run_standards_integrity_helpers.py",
+          "line": 40,
+          "statement": "from command_center.scripts.orchestrators import run_standards_integrity as orchestrator"
+        },
+        {
+          "file": ".repo_studios\\tests\\tests_command_center\\standards_integrity\\test_run_standards_integrity_helpers.py",
+          "line": 48,
+          "statement": "from command_center.scripts.orchestrators import run_standards_integrity as orchestrator"
+        },
+        {
+          "file": ".repo_studios\\tests\\tests_command_center\\standards_integrity\\test_run_standards_integrity_helpers.py",
+          "line": 63,
+          "statement": "from command_center.scripts.orchestrators import run_standards_integrity as orchestrator"
+        },
+        {
+          "file": ".repo_studios\\tests\\tests_command_center\\standards_integrity\\test_run_standards_integrity_helpers.py",
+          "line": 77,
+          "statement": "from command_center.scripts.orchestrators import run_standards_integrity as orchestrator"
+        },
+        {
+          "file": ".repo_studios\\tests\\tests_command_center\\test_execution_telemetry\\test_summarize_test_execution_telemetry.py",
+          "line": 6,
+          "statement": "from command_center.scripts.summarizers import summarize_test_execution_telemetry as module"
+        },
+        {
+          "file": ".repo_studios\\tests\\tests_command_center\\viewer\\test_refresh.py",
+          "line": 10,
+          "statement": "from command_center.viewer import refresh as viewer_refresh"
+        },
+        {
+          "file": ".repo_studios\\tests\\tests_command_center\\viewer\\test_update_service.py",
+          "line": 8,
+          "statement": "from command_center.viewer import update_service"
+        }
+      ]
+    }
+  }
+}

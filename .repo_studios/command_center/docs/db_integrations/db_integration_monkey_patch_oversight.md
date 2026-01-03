@@ -67,9 +67,11 @@
 
 | Output | Path Pattern | Description |
 |--------|--------------|-------------|
-| HealthView bundle | `<healthview_root>/<timestamp>/` | Manifest, summary, telemetry |
+| manifest.json | `<healthview_root>/<YYYYMMDD-HHMM>/manifest.json` | HOP manifest with pipeline metadata |
+| summary.md | `<healthview_root>/<YYYYMMDD-HHMM>/summary.md` | HOP markdown summary |
+| telemetry.json | `<healthview_root>/<YYYYMMDD-HHMM>/telemetry.json` | HOP telemetry data |
 
-**Default HealthView Root**: `.repo_studios/command_center/reports/healthview/monkey_patch_oversight/`
+**Default HealthView Root**: `.repo_studios/reports/healthview/orchestrator_reports/monkey_patch_oversight/`
 
 ## Invoked Scripts
 

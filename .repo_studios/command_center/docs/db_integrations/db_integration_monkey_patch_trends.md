@@ -25,14 +25,13 @@
 
 ### Consumer Artifact Location
 
-- **Base**: `.repo_studios/reports/consumer_reports/monkey_patch_risk/`
-- **Bundle prefix**: `monkey_patch_risk-`
+- **HOP Path**: `.repo_studios/reports/healthview/consumer_reports/monkey_patch_risk/<YYYYMMDD-HHMM>/`
 - **Expected files**: `summary.json`, `bundle_summary.json`
 
 ### Producer Fallback Location
 
-- **Base**: `.repo_studios/reports/producer_reports/monkey_patch_scans/`
-- **Expected file**: `report.json`
+- **HOP Path**: `.repo_studios/reports/healthview/producer_reports/monkey_patch_scans/<YYYYMMDD-HHMM>/`
+- **Expected file**: `manifest.json`
 
 ### Outputs
 
@@ -43,7 +42,7 @@
 | bundle_summary.json | `<output_base>/<bundle-id>/bundle_summary.json` | Bundle metadata |
 | TREND_SNAPSHOT.md | Consumer dir | Copied trend snapshot |
 
-**Default Output Directory**: `.repo_studios/reports/aggregator_reports/monkey_patch_trends/`
+**Default Output Directory**: `.repo_studios/reports/healthview/aggregator_reports/monkey_patch_trends/`
 
 ## Risk Levels Tracked
 

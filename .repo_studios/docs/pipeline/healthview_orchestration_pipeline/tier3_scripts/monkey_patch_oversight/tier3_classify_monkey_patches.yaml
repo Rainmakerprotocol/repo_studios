@@ -64,7 +64,8 @@ parameters:
   - name: output_base
     type: path
     required: false
-    default: .repo_studios/reports/healthview/consumer_reports/monkey_patch_risk
+    default: build_topic_path("consumer", "monkey_patch_risk")
+    hop_path: .repo_studios/reports/healthview/consumer_reports/monkey_patch_risk
     description: HealthView root where bundles are written.
     validation:
       parent_must_exist: false

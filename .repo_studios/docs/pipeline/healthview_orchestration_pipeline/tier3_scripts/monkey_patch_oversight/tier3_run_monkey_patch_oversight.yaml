@@ -67,31 +67,36 @@ parameters:
   - name: producer_output_dir
     type: path
     required: false
-    default: .repo_studios/reports/producer_reports/monkey_patch_scans
+    default: build_topic_path("producer", "monkey_patch_scans")
+    hop_path: .repo_studios/reports/healthview/producer_reports/monkey_patch_scans
     description: Output directory for producer HealthView bundles.
 
   - name: consumer_output_dir
     type: path
     required: false
-    default: .repo_studios/reports/consumer_reports/monkey_patch_risk
+    default: build_topic_path("consumer", "monkey_patch_risk")
+    hop_path: .repo_studios/reports/healthview/consumer_reports/monkey_patch_risk
     description: Output directory for consumer HealthView bundles.
 
   - name: aggregator_output_dir
     type: path
     required: false
-    default: .repo_studios/reports/aggregator_reports/monkey_patch_trends
+    default: build_topic_path("aggregator", "monkey_patch_trends")
+    hop_path: .repo_studios/reports/healthview/aggregator_reports/monkey_patch_trends
     description: Output directory for aggregator HealthView bundles.
 
   - name: summarizer_output_dir
     type: path
     required: false
-    default: .repo_studios/reports/summarizer_reports/monkey_patch_overview
+    default: build_topic_path("summarizer", "monkey_patch_overview")
+    hop_path: .repo_studios/reports/healthview/summarizer_reports/monkey_patch_overview
     description: Output directory for summarizer HealthView bundles.
 
   - name: healthview_root
     type: path
     required: false
-    default: .repo_studios/reports/healthview/orchestrator_reports/monkey_patch_oversight
+    default: build_topic_path("orchestrator", "monkey_patch_oversight")
+    hop_path: .repo_studios/reports/healthview/orchestrator_reports/monkey_patch_oversight
     description: HealthView root where the orchestrator bundle is written.
 
   - name: artifacts_to_keep

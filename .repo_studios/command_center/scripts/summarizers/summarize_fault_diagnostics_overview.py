@@ -669,9 +669,19 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
         notes=notes,
     )
 
+    telemetry_payload = {
+        "schema_version": SCHEMA_VERSION,
+        "viewer": "healthview",
+        "topic": TOPIC_SLUG,
+        "run_timestamp": options.run_timestamp.isoformat(timespec="seconds"),
+        "metrics": metrics,
+        "severity_buckets": severity,
+    }
+
     artifacts = [
-        ReportArtifact(filename=f"{SUMMARY_STEM}.json", kind="json", content=lambda: overview_payload),
-        ReportArtifact(filename=f"{SUMMARY_STEM}.md", kind="text", content=lambda: summary_markdown),
+        ReportArtifact(filename="manifest.json", kind="json", content=lambda: overview_payload),
+        ReportArtifact(filename="summary.md", kind="text", content=lambda: summary_markdown),
+        ReportArtifact(filename="telemetry.json", kind="json", content=lambda: telemetry_payload),
     ]
     # HOP-compliant: pass viewer="" and topic="" to enable timestamp-only directory naming
     result: WriteReportArtifactsResult = write_report_artifacts(

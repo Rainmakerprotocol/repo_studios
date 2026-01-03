@@ -96,9 +96,7 @@ def test_run_prefers_structured_matches(tmp_path):
     assert "Total Findings" in md_text
     assert "sys_modules_assignment" in md_text
 
-    # Legacy copies remain for compatibility
-    legacy_summary = json.loads((run_dir / "RISK_SUMMARY.json").read_text(encoding="utf-8"))
-    assert legacy_summary["counts_by_risk"]["HIGH"] == 1
+    # Legacy outputs no longer written to producer directory - consumer writes only to its own bundle
 
 
 def test_run_falls_back_to_legacy(tmp_path):

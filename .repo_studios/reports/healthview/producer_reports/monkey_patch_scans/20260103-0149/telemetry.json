@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "viewer": "healthview",
+  "topic": "monkey_patches",
+  "run_timestamp": "20260103-0149",
+  "generated_at": "2026-01-03T01:49:19.525535+00:00",
+  "status": "ok",
+  "metrics": {
+    "files_scanned": 233,
+    "files_with_findings": 69,
+    "total_findings": 119,
+    "parse_errors": 0,
+    "duration_ms": 1602,
+    "findings_by_category": {
+      "attribute_reassignment_on_import": 3,
+      "builtins_mutation": 1,
+      "global_env_mutation": 2,
+      "setattr_on_import_or_class": 53,
+      "sys_modules_assignment": 60
+    }
+  },
+  "inputs": {
+    "scan_root": ".",
+    "project_packages": [
+      "tests"
+    ],
+    "exclude_dirs": [
+      ".founder_files",
+      ".git",
+      ".venv",
+      "__pycache__",
+      "build",
+      "dist",
+      "external",
+      "libraries",
+      "node_modules",
+      "venv",
+      "z_FUTURE_IMPIMENTATIONS",
+      "zzz_agent_repos"
+    ],
+    "exclude_globs": [
+      "**/site-packages/**",
+      "**/zzz_agent_repos/**",
+      ".founder_files/**",
+      "external/**",
+      "libraries/**",
+      "scripts/test_torch_vision_audio.py",
+      "src/audio/**",
+      "src/vision/**"
+    ],
+    "context_lines": 2,
+    "with_git": false,
+    "strict": false,
+    "keep": 10,
+    "timestamp": "20260103-0149"
+  }
+}

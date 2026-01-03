@@ -42,9 +42,9 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when running in isola
     )
     from libraries.report_paths import build_topic_path
 
-DEFAULT_CONSUMER_OUTPUT_DIR = Path(".repo_studios/reports/consumer_reports/monkey_patch_risk")
-DEFAULT_PRODUCER_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports/monkey_patch_scans")
-DEFAULT_AGGREGATOR_OUTPUT_DIR = Path(".repo_studios/reports/aggregator_reports/monkey_patch_trends")
+DEFAULT_CONSUMER_OUTPUT_DIR = build_topic_path("consumer", "monkey_patch_risk")
+DEFAULT_PRODUCER_OUTPUT_DIR = build_topic_path("producer", "monkey_patch_scans")
+DEFAULT_AGGREGATOR_OUTPUT_DIR = build_topic_path("aggregator", "monkey_patch_trends")
 DEFAULT_SUMMARIZER_OUTPUT_DIR = build_topic_path("summarizer", "monkey_patch_overview")
 SUMMARY_STEM = "monkey_patch_overview"
 VIEWER_SLUG = "healthview"
@@ -665,15 +665,18 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     )
 
     artifacts = [
-        ReportArtifact(filename=f"{SUMMARY_STEM}.json", kind="json", content=lambda: overview_payload),
-        ReportArtifact(filename=f"{SUMMARY_STEM}.md", kind="text", content=lambda: summary_markdown),
+        ReportArtifact(filename="manifest.json", kind="json", content=lambda: overview_payload),
+        ReportArtifact(filename="summary.md", kind="text", content=lambda: summary_markdown),
     ]
+    # HOP-compliant: pass viewer="" and topic="" to enable timestamp-only directory naming
     result: WriteReportArtifactsResult = write_report_artifacts(
         stem=SUMMARY_STEM,
         timestamp=options.run_timestamp,
         output_dir=paths.output_dir,
         artifacts=artifacts,
         keep=options.artifacts_to_keep,
+        viewer="",
+        topic="",
     )
 
     logger.info(
