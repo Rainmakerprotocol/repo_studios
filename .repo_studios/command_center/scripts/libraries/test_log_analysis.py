@@ -14,6 +14,8 @@ from typing import Any, Iterable, Sequence
 __all__ = [
     "TestHealth",
     "TestLogAnalysisResult",
+    "extract_failures_from_junit",
+    "extract_skips_from_junit",
     "select_junit_artifact",
     "select_full_log",
     "build_test_log_report",
@@ -102,6 +104,111 @@ def parse_junit(path: Path | None) -> TestHealth:
             th.xfailed += 1
     th.passed = max(th.total - (th.failed + th.errors + th.skipped), 0)
     return th
+
+
+def extract_failures_from_junit(junit_path: Path | None, *, limit: int = 25) -> list[dict[str, Any]]:
+    """Extract failing test identities from a JUnit XML file.
+
+    This is a compact, decision-grade sample intended for human summaries.
+
+    Args:
+        junit_path: Path to a JUnit XML file.
+        limit: Maximum number of failures to return.
+
+    Returns:
+        A list of failure records with node_id and message/snippet when available.
+    """
+
+    if junit_path is None or not junit_path.exists():
+        return []
+
+    ElementTree = _load_element_tree()
+    try:
+        root = ElementTree.parse(junit_path).getroot()
+    except Exception:
+        return []
+
+    failures: list[dict[str, Any]] = []
+    for testcase in root.iterfind(".//testcase"):
+        failure = testcase.find("failure")
+        error = testcase.find("error")
+        node = failure if failure is not None else error
+        if node is None:
+            continue
+
+        classname = testcase.get("classname")
+        name = testcase.get("name")
+        node_id = "::".join(part for part in [classname, name] if part)
+        message = node.get("message")
+        text = (node.text or "").strip() or None
+        snippet = None
+        if text:
+            snippet = text.splitlines()[0][:240]
+
+        failures.append(
+            {
+                "node_id": node_id or name or "(unknown)",
+                "classname": classname,
+                "name": name,
+                "kind": node.tag,
+                "message": message,
+                "snippet": snippet,
+            }
+        )
+        if len(failures) >= max(1, limit):
+            break
+
+    return failures
+
+
+def extract_skips_from_junit(junit_path: Path | None, *, limit: int = 25) -> list[dict[str, Any]]:
+    """Extract skipped test identities from a JUnit XML file.
+
+    Args:
+        junit_path: Path to a JUnit XML file.
+        limit: Maximum number of skipped tests to return.
+
+    Returns:
+        A list of skip records with node_id and skip message when available.
+    """
+
+    if junit_path is None or not junit_path.exists():
+        return []
+
+    ElementTree = _load_element_tree()
+    try:
+        root = ElementTree.parse(junit_path).getroot()
+    except Exception:
+        return []
+
+    skips: list[dict[str, Any]] = []
+    for testcase in root.iterfind(".//testcase"):
+        skipped = testcase.find("skipped")
+        if skipped is None:
+            continue
+
+        classname = testcase.get("classname")
+        name = testcase.get("name")
+        node_id = "::".join(part for part in [classname, name] if part)
+        message = skipped.get("message")
+        text = (skipped.text or "").strip() or None
+        snippet = None
+        if text:
+            snippet = text.splitlines()[0][:240]
+
+        skips.append(
+            {
+                "node_id": node_id or name or "(unknown)",
+                "classname": classname,
+                "name": name,
+                "message": message,
+                "snippet": snippet,
+            }
+        )
+        if len(skips) >= max(1, limit):
+            break
+
+    return skips
 
 
 def select_junit_artifact(logs_dir: Path) -> Path | None:
@@ -212,6 +319,8 @@ def build_test_log_report(
     junit = junit_path or select_junit_artifact(logs_dir)
     full_log = full_log_path or select_full_log(logs_dir)
     test_health = parse_junit(junit)
+    failures = extract_failures_from_junit(junit)
+    skips = extract_skips_from_junit(junit)
     log_text = read_text(full_log)
     lines = log_text.splitlines()
     warnings_block = _extract_block(lines, WARNINGS_HDR)
@@ -239,6 +348,14 @@ def build_test_log_report(
             "errors": test_health.errors,
             "warnings_total": int(sum(warn_by_type.values())),
             "tracebacks": traceback_count,
+        },
+        "failures": {
+            "sample": failures,
+            "sampled": len(failures),
+        },
+        "skips": {
+            "sample": skips,
+            "sampled": len(skips),
         },
         "warnings": {
             "by_type": dict(warn_by_type),
@@ -286,7 +403,7 @@ def render_markdown(report: dict[str, Any]) -> str:
         for wtype, count in sorted(by_type.items(), key=lambda item: (-item[1], item[0])):
             lines.append(f"| {wtype} | {count} |")
     else:
-        lines.append("(none)")
+        lines.append("- warning_types: 0")
     lines.append("")
     lines.append("## Top Warning Files")
     lines.append("")
@@ -297,7 +414,41 @@ def render_markdown(report: dict[str, Any]) -> str:
         for path, count in sorted(by_file.items(), key=lambda item: (-item[1], item[0]))[:15]:
             lines.append(f"| {path} | {count} |")
     else:
-        lines.append("(none)")
+        lines.append("- warning_files: 0")
+    lines.append("")
+    lines.append("## Failures (Sampled)")
+    lines.append("")
+    failure_sample = report.get("failures", {}).get("sample", [])
+    summary = report.get("summary", {})
+    failed = int(summary.get("failed", 0) or 0)
+    errors = int(summary.get("errors", 0) or 0)
+    if failed + errors <= 0:
+        lines.append("- failures_total: 0")
+    else:
+        lines.append(f"- failures_total: {failed + errors} (failed={failed}, errors={errors})")
+        if isinstance(failure_sample, list) and failure_sample:
+            for item in failure_sample[:10]:
+                if not isinstance(item, dict):
+                    continue
+                node_id = item.get("node_id") or "(unknown)"
+                kind = item.get("kind") or "failure"
+                lines.append(f"- {kind}: {node_id}")
+        else:
+            lines.append("- failures_sampled: 0")
+    lines.append("")
+    lines.append("## Skipped Tests (Sampled)")
+    lines.append("")
+    skipped_total = int(summary.get("skipped", 0) or 0)
+    skip_sample = report.get("skips", {}).get("sample", [])
+    lines.append(f"- skipped_total: {skipped_total}")
+    if isinstance(skip_sample, list) and skip_sample:
+        for item in skip_sample[:10]:
+            if not isinstance(item, dict):
+                continue
+            node_id = item.get("node_id") or "(unknown)"
+            lines.append(f"- skipped: {node_id}")
+    else:
+        lines.append("- skipped_sampled: 0")
     lines.append("")
     lines.append("## Slowest Tests")
     lines.append("")
@@ -308,6 +459,6 @@ def render_markdown(report: dict[str, Any]) -> str:
         for item in slow_tests:
             lines.append(f"| {item.get('seconds', 0):.2f} | {item.get('nodeid', '?')} |")
     else:
-        lines.append("(none)")
+        lines.append("- slow_tests_count: 0")
     lines.append("")
     return "\n".join(lines)

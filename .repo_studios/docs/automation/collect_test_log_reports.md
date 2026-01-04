@@ -23,13 +23,14 @@ related_files:
 
 ## Purpose
 
-`collect_test_log_reports.py` converts raw pytest log runs into a canonical report bundle so downstream consumers and dashboards can reuse summary metrics without reparsing warning blocks or slow-test sections. The producer leverages `utilities.test_log_analysis` to normalize outputs and writes the standard three artifacts via the shared storage facade (`create_storage()`), with pruning handled by `prune_run_directories()`.
+`collect_test_log_reports.py` converts raw pytest log runs into a canonical report bundle so downstream consumers and dashboards can reuse summary metrics without reparsing warning blocks or slow-test sections. The producer leverages `libraries.test_log_analysis` to normalize outputs and writes the standard three artifacts via the shared artifact writer (`write_report_artifacts()`), with pruning handled by `prune_run_directories()`.
 
 ## Invocation
 
 ```bash
 python .repo_studios/scripts/producers/collect_test_log_reports.py \
-  --output-dir .repo_studios/reports/healthview \
+  --logs-dir .repo_studios/reports/healthview/rawview/test_execution_runs \
+  --output-dir .repo_studios/reports/healthview/rawview/test_log_reports \
   --artifacts-to-keep 10 \
   --log-level INFO
 ```
@@ -38,13 +39,13 @@ From `.repo_studios/`, run `make studio-collect-test-log-reports` to execute the
 
 ### Key arguments
 
-- `--logs-dir`: Base directory containing pytest log runs (default `.repo_studios/command_center/reports/rawview/test_execution_runs`; falls back to `.repo_studios/pytest_logs` when the new tree is missing and `PYTEST_LOG_REPORTS_ALLOW_LEGACY` is not set to `0`).
+- `--logs-dir`: Base directory containing pytest log runs (default `.repo_studios/reports/healthview/rawview/test_execution_runs`).
 - `--logs-run`: Explicit run directory; when omitted the newest candidate under `--logs-dir` is selected automatically.
-- `--output-dir`: Base reports directory (default `.repo_studios/command_center/reports`).
+- `--output-dir`: Output directory containing timestamped bundles (default `.repo_studios/reports/healthview/rawview/test_log_reports`).
 - `--summarize-existing`: Do not run pytest; summarize existing logs (newest under `--logs-dir`, or the explicit `--logs-run`).
 - `--run-pytest` / `--no-run-pytest`: Explicitly control whether the producer runs pytest first. When omitted, the default is:
-  - fresh run (`--run-pytest`) if `--logs-run` is not provided
-  - summarize existing (`--no-run-pytest`) if `--logs-run` is provided
+  - reuse newest existing run if available
+  - otherwise run pytest to capture a new run
 - `--run-timestamp`: Optional override for the run slug in UTC (`YYYYMMDD-HHMM`). Useful for deterministic CI/test runs.
 - `--artifacts-to-keep`: Number of historical run directories retained after pruning (minimum 1, default 10, enforced by the shared helper).
 - `--log-level`: Logging verbosity (`INFO` default).
@@ -53,7 +54,7 @@ From `.repo_studios/`, run `make studio-collect-test-log-reports` to execute the
 
 Each run produces a bundle under positional encoding:
 
-`<output_dir>/rawview/test_log_reports/<YYYYMMDD-HHMM>/`
+`<output_dir>/<YYYYMMDD-HHMM>/`
 
 The bundle contains exactly:
 
@@ -83,9 +84,8 @@ The suite verifies canonical artifact emission, telemetry metric extraction, pru
 
 ## Operational notes
 
-- The default invocation (no `--logs-run`, no `--summarize-existing`) runs pytest first and stages a new run directory under `--logs-dir`, then emits the canonical report bundle.
+- The default invocation (no `--logs-run`, no `--summarize-existing`) reuses the newest existing run under `--logs-dir` when present; otherwise it runs pytest to stage a new run directory under `--logs-dir`, then emits the canonical report bundle.
 - Use `--summarize-existing` when you want to reuse existing logs (for example when another job already captured raw pytest output).
-- Legacy runs under `.repo_studios/pytest_logs` are still discovered when the environment variable `PYTEST_LOG_REPORTS_ALLOW_LEGACY` is not disabled.
 - Downstream consumer `generate_test_log_health_report.py` is expected to migrate to the canonical bundle (manifest/summary/telemetry). Do not rely on `latest_*` pointers.
 - Adjust `--artifacts-to-keep` based on storage budgets; CI jobs typically run with smaller retention windows (5–10 runs) to preserve auditability while limiting disk usage. The shared pruning helper keeps the current run plus any `.keep`-marked directories regardless of the configured limit to avoid accidental data loss.
 - The producer tolerates absent JUnit or pytest log files by emitting empty tables with zeroed metrics so dashboards can differentiate between “no findings” and “no data.”

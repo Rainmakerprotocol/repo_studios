@@ -27,8 +27,7 @@ related_files:
 operators can track warning spikes, failure patterns, and slow tests without rereading entire logs.
 The script prefers the positional bundle emitted by `collect_test_log_reports.py` (specifically the
 `telemetry.json` payload) and gracefully falls back to scanning
-`.repo_studios/command_center/reports/rawview/test_execution_runs/` (or the legacy
-`.repo_studios/pytest_logs/` tree when allowed) when no producer bundle is available. Retention rides
+`.repo_studios/reports/healthview/rawview/test_execution_runs/` when no producer bundle is available. Retention rides
 on the shared Command Center pruning helper (`prune_run_directories`) so `.keep` sentinels and the
 active bundle remain protected while stale runs are removed consistently across producers and
 consumers.
@@ -37,18 +36,13 @@ consumers.
 
 - **Structured producer bundle (preferred):**
   `.repo_studios/reports/healthview/rawview/test_log_reports/<YYYYMMDD-HHMM>/telemetry.json`.
-- **Fallback logs directory:** `.repo_studios/command_center/reports/rawview/test_execution_runs/`
-  by default; legacy `.repo_studios/pytest_logs/` runs are discovered when
-  `TEST_LOG_HEALTH_ALLOW_LEGACY` is not set to `0`.
+- **Fallback logs directory:** `.repo_studios/reports/healthview/rawview/test_execution_runs/`.
 - **CLI flags:**
   - `--logs-dir`: Root directory containing pytest log runs (default
-    `.repo_studios/command_center/reports/rawview/test_execution_runs`; falls back to
-    `.repo_studios/pytest_logs` when the new tree is missing and `TEST_LOG_HEALTH_ALLOW_LEGACY`
-    remains enabled).
+    `.repo_studios/reports/healthview/rawview/test_execution_runs`).
   - `--producer-bundle-dir`: Explicit producer run directory containing `telemetry.json`.
   - `--producer-reports-root`: Root directory containing timestamped producer bundles (default
-    `.repo_studios/command_center/reports/rawview/test_log_reports`; override to
-    `.repo_studios/reports/healthview/rawview/test_log_reports` when using the default producer output root).
+    `.repo_studios/reports/healthview/rawview/test_log_reports`).
   - `--producer-report`: Legacy pointer to old-style `latest_report.json` / `report.json` payloads
     (deprecated; avoid for new callers).
   - `--output-base`: Target directory for timestamped consumer bundles (default `.repo_studios/reports/consumer_reports/test_log_health_reports`).
@@ -115,5 +109,3 @@ pytest .repo_studios/tests/tests_consumers/test_generate_test_log_health_report.
   (`slow_test_<n>`) for quick triage.
 - Markdown outputs append a "Source References" section pointing to the producer bundle, raw logs,
   and CSV export for easy drill-down as part of human reviews.
-- Disable legacy log discovery by exporting `TEST_LOG_HEALTH_ALLOW_LEGACY=0` once CI callers fully
-  migrate to the structured reports hierarchy.

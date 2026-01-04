@@ -1,0 +1,206 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.3, pytest-9.0.1, pluggy-1.6.0
+rootdir: C:\Users\genet\repo_studios
+configfile: pytest.ini (WARNING: ignoring pytest config in pyproject.toml!)
+testpaths: .repo_studios/tests
+plugins: cov-5.0.0
+collected 554 items
+
+.repo_studios\tests\command_center\libraries\test_manifest.py ..         [  0%]
+.repo_studios\tests\command_center\libraries\test_metrics.py ...         [  0%]
+.repo_studios\tests\schema_validation\test_validate_inventory.py ...     [  1%]
+.repo_studios\tests\tests_aggregators\test_aggregate_docs_health_signals.py . [  1%]
+.                                                                        [  1%]
+.repo_studios\tests\tests_aggregators\test_analyze_monkey_patch_trends.py . [  1%]
+..                                                                       [  2%]
+.repo_studios\tests\tests_aggregators\test_generate_churn_complexity_heatmap.py . [  2%]
+.....                                                                    [  3%]
+.repo_studios\tests\tests_command_center\aggregators\test_generate_automation_manifest.py . [  3%]
+..                                                                       [  3%]
+.repo_studios\tests\tests_command_center\aggregators\test_generate_metrics_summary.py . [  4%]
+.                                                                        [  4%]
+.repo_studios\tests\tests_command_center\dependency_import_hygiene\test_run_dependency_import_hygiene.py . [  4%]
+..                                                                       [  4%]
+.repo_studios\tests\tests_command_center\docs_health\test_run_docs_health_overview.py . [  5%]
+.                                                                        [  5%]
+.repo_studios\tests\tests_command_center\fault_diagnostics\test_run_fault_diagnostics_overview.py . [  5%]
+                                                                         [  5%]
+.repo_studios\tests\tests_command_center\fault_diagnostics\test_summarize_fault_diagnostics_overview.py F [  5%]
+                                                                         [  5%]
+.repo_studios\tests\tests_command_center\monkey_patch\test_orchestrator_contract.py . [  5%]
+                                                                         [  5%]
+.repo_studios\tests\tests_command_center\monkey_patch\test_summarizer_contract.py . [  5%]
+.                                                                        [  6%]
+.repo_studios\tests\tests_command_center\orchestrators\test_orchestrate_full_diagnostic.py . [  6%]
+..                                                                       [  6%]
+.repo_studios\tests\tests_command_center\orchestrators\test_run_automation_dry_run.py . [  6%]
+...                                                                      [  7%]
+.repo_studios\tests\tests_command_center\orchestrators\test_run_command_center_pipeline.py . [  7%]
+..........                                                               [  9%]
+.repo_studios\tests\tests_command_center\orchestrators\test_run_inventory_update.py . [  9%]
+..                                                                       [  9%]
+.repo_studios\tests\tests_command_center\orchestrators\test_run_monkey_patch_oversight.py . [ 10%]
+                                                                         [ 10%]
+.repo_studios\tests\tests_command_center\orchestrators\test_run_test_execution_telemetry.py . [ 10%]
+.......
+
+================================== FAILURES ===================================
+_____________________ test_summarizer_generates_overview ______________________
+
+tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-1183/test_summarizer_generates_over0')
+
+    def test_summarizer_generates_overview(tmp_path: Path) -> None:
+        consumer_dir = tmp_path / "consumer"
+        producer_dir = tmp_path / "producer"
+        summarizer_dir = tmp_path / "summaries"
+        consumer_dir.mkdir(parents=True, exist_ok=True)
+        producer_dir.mkdir(parents=True, exist_ok=True)
+        summarizer_dir.mkdir(parents=True, exist_ok=True)
+    
+        # HOP timestamp format: YYYYMMDD-HHMM
+        current_name = "20240102-0001"
+        previous_name = "20240101-0001"
+        producer_run_name = "20240102-0000"
+    
+        # Telemetry contains signatures and severity (from old summary.json)
+        current_telemetry = {
+            "summary": {
+                "signature_count": 3,
+                "active_signature_count": 2,
+                "thread_block_count": 1,
+                "severity_buckets": {
+                    "repeat_offender": 2,
+                    "multi_hit": 1,
+                    "single_hit": 0,
+                },
+            },
+            "signatures": [
+                {"signature_id": "sig-a"},
+                {"signature_id": "sig-b"},
+                {"signature_id": "sig-c"},
+            ],
+        }
+        # Manifest contains metrics (from old bundle_summary.json)
+        current_manifest = {
+            "bundle": current_name,
+            "metrics": {
+                "signature_count": 3,
+                "active_signature_count": 2,
+                "repeat_offender": 2,
+                "multi_hit": 1,
+                "single_hit": 0,
+                "thread_block_count": 1,
+            },
+        }
+        previous_telemetry = {
+            "summary": {
+                "signature_count": 2,
+                "active_signature_count": 2,
+                "thread_block_count": 1,
+                "severity_buckets": {
+                    "repeat_offender": 1,
+                    "multi_hit": 1,
+                    "single_hit": 0,
+                },
+            },
+            "signatures": [
+                {"signature_id": "sig-a"},
+                {"signature_id": "sig-b"},
+            ],
+        }
+        previous_manifest = {
+            "bundle": previous_name,
+            "metrics": {
+                "signature_count": 2,
+                "active_signature_count": 2,
+                "repeat_offender": 1,
+                "multi_hit": 1,
+                "single_hit": 0,
+                "thread_block_count": 1,
+            },
+        }
+    
+        _write_bundle(consumer_dir, previous_name, previous_telemetry, previous_manifest)
+        _write_bundle(consumer_dir, current_name, current_telemetry, current_manifest)
+    
+        # Producer report in HOP format (no pointer files)
+        producer_report = {
+            "summary": {
+                "severity_buckets": {
+                    "repeat_offender": 3,
+                    "multi_hit": 1,
+                    "single_hit": 0,
+                }
+            }
+        }
+        _write_producer_run(producer_dir, producer_run_name, producer_report)
+    
+        result = module.run(
+            [
+                "--consumer-output-dir",
+                str(consumer_dir),
+                "--producer-output-dir",
+                str(producer_dir),
+                "--output-dir",
+                str(summarizer_dir),
+                "--artifacts-to-keep",
+                "2",
+                "--timestamp",
+                "2024-01-02T12:00:00+00:00",
+                "--log-level",
+                "DEBUG",
+            ]
+        )
+    
+        assert result["status"] == "ok"
+        run_dir = Path(result["run_dir"])
+>       overview_json = json.loads((run_dir / "fault_diagnostics_overview.json").read_text(encoding="utf-8"))
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.repo_studios\tests\tests_command_center\fault_diagnostics\test_summarize_fault_diagnostics_overview.py:148: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Python313\Lib\pathlib\_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\pathlib\_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-1183/test_summarizer_generates_over0/summaries/20240102-1200/fault_diagnostics_overview.json')
+mode = 'r', buffering = -1, encoding = 'utf-8', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\genet\\AppData\\Local\\Temp\\pytest-of-genet\\pytest-1183\\test_summarizer_generates_over0\\summaries\\20240102-1200\\fault_diagnostics_overview.json'
+
+C:\Python313\Lib\pathlib\_local.py:537: FileNotFoundError
+---------------------------- Captured stderr call -----------------------------
+[INFO] Fault Diagnostics overview artifacts written to C:\Users\genet\AppData\Local\Temp\pytest-of-genet\pytest-1183\test_summarizer_generates_over0\summaries\20240102-1200 (slug=20240102-1200)
+------------------------------ Captured log call ------------------------------
+INFO     summarize_fault_diagnostics_overview:summarize_fault_diagnostics_overview.py:697 Fault Diagnostics overview artifacts written to C:\Users\genet\AppData\Local\Temp\pytest-of-genet\pytest-1183\test_summarizer_generates_over0\summaries\20240102-1200 (slug=20240102-1200)
+============================== warnings summary ===============================
+.repo_studios\command_center\scripts\libraries\metrics.py:18
+  C:\Users\genet\repo_studios\.repo_studios\command_center\scripts\libraries\metrics.py:18: PytestCollectionWarning: cannot collect test class 'TestRunResult' because it has a __init__ constructor (from: .repo_studios/tests/command_center/libraries/test_manifest.py)
+    @dataclass(frozen=True)
+
+.repo_studios\command_center\scripts\libraries\metrics.py:18
+  C:\Users\genet\repo_studios\.repo_studios\command_center\scripts\libraries\metrics.py:18: PytestCollectionWarning: cannot collect test class 'TestRunResult' because it has a __init__ constructor (from: .repo_studios/tests/command_center/libraries/test_metrics.py)
+    @dataclass(frozen=True)
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+- generated xml file: C:\Users\genet\repo_studios\.repo_studios\reports\healthview\rawview\test_execution_runs\20260103-1346\junit_20260103-1346.xml -
+=========================== short test summary info ===========================
+FAILED .repo_studios/tests/tests_command_center/fault_diagnostics/test_summarize_fault_diagnostics_overview.py::test_summarizer_generates_overview
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! KeyboardInterrupt !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+C:\Python313\Lib\subprocess.py:1603: KeyboardInterrupt
+(to show a full traceback on KeyboardInterrupt use --full-trace)
+============ 1 failed, 63 passed, 2 warnings in 232.52s (0:03:52) =============

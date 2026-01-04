@@ -68,8 +68,9 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when executed directl
     from libraries.retention_policy import get_keep
 
 TOPIC_SLUG = "test_coverage_inventory"
+VIEWER_SLUG = "producer_reports"
 DEFAULT_OUTPUT_DIR = build_topic_path("producer", TOPIC_SLUG)
-DEFAULT_COVERAGE_XML = Path(".repo_studios/tests/fixtures/test_run_coverage/coverage.xml")
+DEFAULT_COVERAGE_XML = Path("coverage.xml")
 DEFAULT_ARTIFACTS_TO_KEEP = get_keep("generate_test_coverage_inventory")
 SCHEMA_VERSION = 1
 
@@ -261,7 +262,7 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
         default=[],
         help=(
             "Coverage targets passed to pytest-cov via --cov=<target> when --refresh-coverage-xml is enabled. "
-            "Repeat to specify multiple targets. Defaults to .repo_studios when omitted."
+            "Repeat to specify multiple targets. Defaults to '.' (repo root) when omitted."
         ),
     )
     parser.add_argument(
@@ -332,7 +333,7 @@ def _refresh_coverage_xml(
     """
     coverage_xml.parent.mkdir(parents=True, exist_ok=True)
 
-    resolved_cov_targets = list(cov_targets) if cov_targets else [".repo_studios"]
+    resolved_cov_targets = list(cov_targets) if cov_targets else ["."]
 
     cov_config_path: str | None = None
     if omit_tests:
@@ -829,7 +830,16 @@ def run(argv: Sequence[str] | None = None) -> int:
 
     refresh_exit_code: int | None = None
     refresh_suite_results: list[dict[str, Any]] | None = None
-    if args.refresh_coverage_xml:
+    should_refresh = bool(args.refresh_coverage_xml)
+    auto_refresh = False
+    if not should_refresh and not paths.coverage_xml.exists():
+        logging.info(
+            "Coverage XML not found; refreshing via pytest-cov using repo-root coverage targets."
+        )
+        should_refresh = True
+        auto_refresh = True
+
+    if should_refresh:
         fixtures_root = paths.repo_root / ".repo_studios" / "tests" / "fixtures"
         if _within_repo(paths.coverage_xml, paths.repo_root) and fixtures_root in paths.coverage_xml.parents:
             logging.warning(
@@ -847,7 +857,7 @@ def run(argv: Sequence[str] | None = None) -> int:
         refresh_exit_code = refresh_result.exit_code
         refresh_suite_results = refresh_result.suite_results
         if refresh_exit_code != 0:
-            if bool(getattr(args, "refresh_continue_on_error", False)):
+            if bool(getattr(args, "refresh_continue_on_error", False)) or auto_refresh:
                 logging.warning("Coverage refresh had failures (exit=%s); continuing", refresh_exit_code)
             else:
                 logging.error("Coverage refresh failed (exit=%s)", refresh_exit_code)
@@ -907,8 +917,15 @@ def run(argv: Sequence[str] | None = None) -> int:
     status = str(summary.get("status", "error"))
 
     output_dir = paths.output_dir
-    storage = create_storage(output_dir, "", "", timestamp=timestamp_slug)
-    bundle_dir = output_dir / timestamp_slug
+    if output_dir.name == TOPIC_SLUG and output_dir.parent.name == VIEWER_SLUG:
+        base_reports_dir = output_dir.parent.parent
+        topic_root = output_dir
+    else:
+        base_reports_dir = output_dir
+        topic_root = base_reports_dir / VIEWER_SLUG / TOPIC_SLUG
+
+    storage = create_storage(base_reports_dir, VIEWER_SLUG, TOPIC_SLUG, timestamp=timestamp_slug)
+    bundle_dir = topic_root / timestamp_slug
 
     manifest_path = bundle_dir / "manifest.json"
     summary_path = bundle_dir / "summary.md"
@@ -922,7 +939,7 @@ def run(argv: Sequence[str] | None = None) -> int:
 
     manifest: dict[str, Any] = {
         "schema_version": 1,
-        "viewer_slug": "producer_reports",
+        "viewer_slug": VIEWER_SLUG,
         "topic": TOPIC_SLUG,
         "run_timestamp": timestamp_slug,
         "generated_at": now_iso,
@@ -931,12 +948,12 @@ def run(argv: Sequence[str] | None = None) -> int:
         "repo_root": str(paths.repo_root),
         "inputs": {
             "coverage_xml": _relative_path(paths.coverage_xml, paths.repo_root),
-            "output_dir": _relative_path(output_dir, paths.repo_root),
+            "output_dir": _relative_path(topic_root, paths.repo_root),
             "min_coverage": summary.get("threshold"),
             "include_empty": bool(summary.get("include_empty", False)),
             "artifacts_to_keep": max(1, options.artifacts_to_keep),
             "timestamp": generated_at.isoformat(),
-            "refresh_coverage_xml": bool(args.refresh_coverage_xml),
+            "refresh_coverage_xml": bool(should_refresh),
             "refresh_tests": cast(list[str], args.refresh_tests),
             "refresh_continue_on_error": bool(getattr(args, "refresh_continue_on_error", False)),
             "refresh_omit_tests": bool(getattr(args, "refresh_omit_tests", False)),
@@ -958,7 +975,7 @@ def run(argv: Sequence[str] | None = None) -> int:
 
     telemetry: dict[str, Any] = {
         "schema_version": 1,
-        "viewer_slug": "producer_reports",
+        "viewer_slug": VIEWER_SLUG,
         "topic": TOPIC_SLUG,
         "run_timestamp": timestamp_slug,
         "generated_at": now_iso,
@@ -990,7 +1007,7 @@ def run(argv: Sequence[str] | None = None) -> int:
     storage.write_telemetry(telemetry)
 
     prune_run_directories(
-        output_dir,
+        topic_root,
         keep=max(1, options.artifacts_to_keep),
         current_run=bundle_dir,
         logger=logging.getLogger(__name__),

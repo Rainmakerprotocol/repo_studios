@@ -34,8 +34,7 @@ from libraries.retention_policy import get_keep  # noqa: E402
 TOPIC_SLUG = "churn_complexity_heatmap"
 DEFAULT_OUTPUT_BASE = build_topic_path("aggregator", TOPIC_SLUG)
 DEFAULT_TEST_LOG_SUMMARY = Path(".repo_studios/reports/healthview/consumer_reports/test_log_health_reports")
-DEFAULT_LOGS_DIR = Path(".repo_studios/command_center/reports/rawview/test_execution_runs")
-LEGACY_LOGS_DIR = Path(".repo_studios/pytest_logs")
+DEFAULT_LOGS_DIR = Path(".repo_studios/reports/healthview/rawview/test_execution_runs")
 DEFAULT_METRICS_SOURCE: Path | None = None
 DEFAULT_WINDOW = 500
 DEFAULT_ARTIFACTS_TO_KEEP = get_keep("generate_churn_complexity_heatmap")
@@ -476,22 +475,8 @@ def _discover_logs_junit(logs_dir: Path) -> Path | None:
     return junit_candidates[0] if junit_candidates else None
 
 
-def _allow_legacy_logs() -> bool:
-    """Check whether legacy logs directory fallback is enabled.
-
-    Controlled by CHURN_HEATMAP_ALLOW_LEGACY environment variable.
-
-    Returns:
-        True if legacy fallback is allowed, False otherwise.
-    """
-    flag = os.environ.get("CHURN_HEATMAP_ALLOW_LEGACY", "1").strip().lower()
-    return flag not in {"0", "false", "no", "off"}
-
-
 def _choose_logs_dir(repo_root: Path, candidate: Path, logger: logging.Logger) -> tuple[Path, Path | None]:
     """Select the logs directory and discover JUnit file.
-
-    Fall back to legacy logs directory if enabled and candidate lacks JUnit.
 
     Args:
         repo_root: Repository root directory.
@@ -502,19 +487,6 @@ def _choose_logs_dir(repo_root: Path, candidate: Path, logger: logging.Logger) -
         Tuple of (selected logs directory, JUnit path or None).
     """
     junit = _discover_logs_junit(candidate)
-    if junit is not None or not _allow_legacy_logs():
-        return candidate, junit
-
-    legacy = (repo_root / LEGACY_LOGS_DIR).resolve()
-    legacy_junit = _discover_logs_junit(legacy)
-    if legacy_junit is not None:
-        logger.info(
-            "JUnit artifacts not found under %s; falling back to legacy logs at %s",
-            candidate,
-            legacy,
-        )
-        return legacy, legacy_junit
-
     return candidate, junit
 
 

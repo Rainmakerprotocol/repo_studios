@@ -49,8 +49,7 @@ from libraries.cli import resolve_repo_root  # noqa: E402
 from libraries.report_paths import build_topic_path  # noqa: E402
 from libraries.retention_policy import get_keep  # noqa: E402
 
-LOGS_DIR_DEFAULT = ".repo_studios/command_center/reports/rawview/test_execution_runs"
-LEGACY_LOGS_DIR = ".repo_studios/pytest_logs"
+LOGS_DIR_DEFAULT = ".repo_studios/reports/healthview/rawview/test_execution_runs"
 TOPIC_SLUG = "test_log_health_reports"
 PRODUCER_REPORTS_ROOT_DEFAULT = ".repo_studios/reports/healthview/rawview/test_log_reports"
 OUTPUT_BASE_DEFAULT = build_topic_path("consumer", TOPIC_SLUG)
@@ -435,33 +434,6 @@ def _select_logs_dir(logs_dir: Path) -> Path | None:
     return runs[0] if runs else None
 
 
-def _allow_legacy_logs() -> bool:
-    """Check whether legacy log directory fallback is enabled.
-
-    Controlled by TEST_LOG_HEALTH_ALLOW_LEGACY environment variable.
-
-    Returns:
-        True if legacy fallback is allowed, False otherwise.
-    """
-    flag = os.environ.get("TEST_LOG_HEALTH_ALLOW_LEGACY", "1").strip().lower()
-    return flag not in {"0", "false", "no", "off"}
-
-
-def _resolve_legacy_logs_base(repo_root: Path) -> Path:
-    """Resolve the legacy pytest logs directory path.
-
-    Args:
-        repo_root: Repository root path.
-
-    Returns:
-        Absolute path to the legacy logs directory.
-    """
-    base = Path(LEGACY_LOGS_DIR)
-    if not base.is_absolute():
-        base = (repo_root / base).resolve()
-    return base
-
-
 def _empty_report(logs_dir: Path) -> dict[str, Any]:
     """Create an empty report structure when no logs are available.
 
@@ -795,18 +767,6 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
         source = "logs"
         logging.info("Structured pytest log report not found; analyzing logs under %s", logs_dir)
         logs_source = _select_logs_dir(logs_dir)
-        if logs_source is None and _allow_legacy_logs():
-            legacy_base = _resolve_legacy_logs_base(repo_root)
-            if legacy_base.exists():
-                legacy_candidate = _select_logs_dir(legacy_base)
-                if legacy_candidate is not None:
-                    logging.info(
-                        "Logs directory %s missing artifacts; falling back to legacy %s",
-                        logs_dir,
-                        legacy_base,
-                    )
-                    logs_dir = legacy_base
-                    logs_source = legacy_candidate
         if logs_source is None:
             logging.info("No pytest artifacts discovered under %s; emitting empty report", logs_dir)
             payload = _empty_report(logs_dir)

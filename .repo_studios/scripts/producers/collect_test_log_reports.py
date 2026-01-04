@@ -15,8 +15,8 @@ Outputs follow positional encoding under the configured reports root:
 from __future__ import annotations
 
 import argparse
+import json
 import logging
-import os
 import subprocess
 import sys
 from datetime import UTC, datetime
@@ -43,17 +43,17 @@ if libraries_root_str and libraries_root_str not in sys.path:
     sys.path.insert(0, libraries_root_str)
 
 from libraries import (  # noqa: E402
+    ReportArtifact,
     TestLogAnalysisResult,
     build_test_log_report,
     prune_run_directories,
+    write_report_artifacts,
 )
 from libraries.cli import resolve_repo_root  # noqa: E402
-from libraries.database_integration import create_storage  # noqa: E402
 from libraries.report_paths import build_topic_path  # noqa: E402
 from libraries.retention_policy import get_keep  # noqa: E402
 
-DEFAULT_LOGS_BASE = Path(".repo_studios/command_center/reports/rawview/test_execution_runs")
-LEGACY_LOGS_BASE = Path(".repo_studios/pytest_logs")
+DEFAULT_LOGS_BASE = build_topic_path("rawview", "test_execution_runs")
 TOPIC_SLUG = "test_log_reports"
 DEFAULT_OUTPUT_DIR = build_topic_path("rawview", TOPIC_SLUG)
 DEFAULT_KEEP = get_keep("collect_test_log_reports")
@@ -76,23 +76,6 @@ def _load_element_tree():
         import xml.etree.ElementTree as ElementTree
 
         return ElementTree
-
-
-def _bool_env(name: str, default: bool = False) -> bool:
-    """Parse a boolean value from an environment variable.
-
-    Args:
-        name: The environment variable name to read.
-        default: Value to return if the variable is not set.
-
-    Returns:
-        True unless the value is explicitly falsy (0, false, no, off, or empty).
-    """
-    value = os.environ.get(name)
-    if value is None:
-        return default
-    cleaned = value.strip().lower()
-    return cleaned not in {"0", "false", "no", "off", ""}
 
 
 def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
@@ -131,8 +114,9 @@ def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
         action=argparse.BooleanOptionalAction,
         default=None,
         help=(
-            "Whether to run pytest first to populate a fresh logs run directory under --logs-dir, then build the "
-            "report. Default: true when --logs-run is omitted; false when --logs-run is provided."
+            "Whether to run pytest to populate a fresh logs run directory under --logs-dir, then build the report. "
+            "When omitted, the collector reuses the newest existing run when present and falls back to running pytest "
+            "only if no runs are available."
         ),
     )
     parser.add_argument(
@@ -212,6 +196,7 @@ def _capture_pytest_run(
     repo_root: Path,
     logs_dir: Path,
     logs_run: Path | None,
+    run_slug: str,
     log: logging.Logger,
     pytest_args: Sequence[str],
 ) -> tuple[Path, int, list[str]]:
@@ -234,13 +219,12 @@ def _capture_pytest_run(
 
     run_dir = logs_run
     if run_dir is None:
-        stamp = datetime.now(UTC).strftime("%Y-%m-%d_%H%M")
-        run_dir = logs_dir / f"pytest_log_capture-{stamp}"
+        run_dir = logs_dir / run_slug
     run_dir.mkdir(parents=True, exist_ok=True)
 
     # Keep filenames compatible with existing parsers (startswith pytest/junit).
-    junit_name = f"junit_{run_dir.name.replace('pytest_log_capture-', '')}.xml"
-    log_name = f"pytest_{run_dir.name.replace('pytest_log_capture-', '')}.txt"
+    junit_name = f"junit_{run_slug}.xml"
+    log_name = f"pytest_{run_slug}.txt"
     junit_path = run_dir / junit_name
     pytest_log_path = run_dir / log_name
 
@@ -341,6 +325,25 @@ def _resolve_timestamp_slug(explicit: str | None) -> str:
     return cleaned
 
 
+def _parse_timestamp_slug(value: str) -> datetime:
+    """Parse a timestamp slug into a UTC datetime.
+
+    Args:
+        value: Timestamp slug in YYYYMMDD-HHMM format.
+
+    Returns:
+        UTC datetime instance.
+
+    Raises:
+        ValueError: If the timestamp slug is invalid.
+    """
+    try:
+        parsed = datetime.strptime(value, "%Y%m%d-%H%M")
+    except ValueError as exc:
+        raise ValueError("run timestamp must be in YYYYMMDD-HHMM format") from exc
+    return parsed.replace(tzinfo=UTC)
+
+
 def _relativize(path: Path | None, repo_root: Path) -> str | None:
     """Convert an absolute path to a repo-relative POSIX path string.
 
@@ -359,6 +362,12 @@ def _relativize(path: Path | None, repo_root: Path) -> str | None:
         return resolved.relative_to(repo_root.resolve()).as_posix()
     except Exception:
         return str(path)
+
+
+def _write_json(path: Path, payload: dict[str, object]) -> Path:
+    """Write JSON to disk with repository-standard formatting."""
+    path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    return path
 
 
 def _render_summary_markdown(
@@ -478,49 +487,55 @@ def _write_artifacts(
     elif pytest_exit_code not in (None, 0):
         status = "warn"
 
-    storage = create_storage(output_dir, "", "", timestamp=timestamp)
-    bundle_dir = output_dir / timestamp
-
-    manifest_path = bundle_dir / "manifest.json"
-    summary_path = bundle_dir / "summary.md"
-    telemetry_path = bundle_dir / "telemetry.json"
-
     now_iso = datetime.now(UTC).isoformat()
 
-    manifest: dict[str, object] = {
-        "schema_version": 1,
-        "viewer_slug": "rawview",
-        "topic": TOPIC_SLUG,
-        "run_timestamp": timestamp,
-        "generated_at": now_iso,
-        "status": status,
-        "git_sha": None,
-        "repo_root": str(repo_root),
-        "inputs": {
-            "logs_dir": _relativize(logs_dir, repo_root),
-            "logs_run": _relativize(logs_run, repo_root),
-            "allow_legacy": os.environ.get("PYTEST_LOG_REPORTS_ALLOW_LEGACY", "1"),
-            "artifacts_to_keep": max(1, keep),
+    run_timestamp = _parse_timestamp_slug(timestamp)
+    healthview_root = output_dir
+    try:
+        viewer = output_dir.parent.name
+        topic = output_dir.name
+        healthview_root = output_dir.parent.parent
+    except Exception:
+        viewer = "rawview"
+        topic = TOPIC_SLUG
+
+    def _manifest_payload(run_dir: Path) -> dict[str, object]:
+        manifest_path = run_dir / "manifest.json"
+        summary_path = run_dir / "summary.md"
+        telemetry_path = run_dir / "telemetry.json"
+        return {
+            "schema_version": 1,
+            "viewer_slug": viewer,
+            "topic": topic,
             "run_timestamp": timestamp,
-            "pytest_ran": pytest_ran,
-            "pytest_exit_code": pytest_exit_code,
-            "pytest_command": pytest_command,
-        },
-        "catalog": [
-            {"artifact": "manifest.json", "path": _relativize(manifest_path, repo_root)},
-            {"artifact": "summary.md", "path": _relativize(summary_path, repo_root)},
-            {"artifact": "telemetry.json", "path": _relativize(telemetry_path, repo_root)},
-        ],
-        "provenance": {
-            "script": "collect_test_log_reports.py",
-            "trigger": "cli",
-        },
-    }
+            "generated_at": now_iso,
+            "status": status,
+            "git_sha": None,
+            "repo_root": str(repo_root),
+            "inputs": {
+                "logs_dir": _relativize(logs_dir, repo_root),
+                "logs_run": _relativize(logs_run, repo_root),
+                "artifacts_to_keep": max(1, keep),
+                "run_timestamp": timestamp,
+                "pytest_ran": pytest_ran,
+                "pytest_exit_code": pytest_exit_code,
+                "pytest_command": pytest_command,
+            },
+            "catalog": [
+                {"artifact": "manifest.json", "path": _relativize(manifest_path, repo_root)},
+                {"artifact": "summary.md", "path": _relativize(summary_path, repo_root)},
+                {"artifact": "telemetry.json", "path": _relativize(telemetry_path, repo_root)},
+            ],
+            "provenance": {
+                "script": "collect_test_log_reports.py",
+                "trigger": "cli",
+            },
+        }
 
     telemetry: dict[str, object] = {
         "schema_version": 1,
-        "viewer_slug": "rawview",
-        "topic": TOPIC_SLUG,
+        "viewer_slug": viewer,
+        "topic": topic,
         "run_timestamp": timestamp,
         "generated_at": now_iso,
         "status": status,
@@ -570,21 +585,32 @@ def _write_artifacts(
         markdown_body=result.markdown,
     )
 
-    # DB_INTEGRATION_MARKER: Persist manifest bundle (report_runs + report_artifacts)
-    storage.write_manifest(manifest)
-    # DB_INTEGRATION_MARKER: Persist human-readable report summary (report_artifacts)
-    storage.write_summary({"markdown": summary_markdown}, format="md")
-    # DB_INTEGRATION_MARKER: Persist telemetry payload + extracted metrics (report_artifacts + test_metrics)
-    storage.write_telemetry(telemetry)
+    def _write_manifest(run_dir: Path) -> Path:
+        return _write_json(run_dir / "manifest.json", _manifest_payload(run_dir))
 
-    prune_run_directories(
-        output_dir,
+    def _write_summary(run_dir: Path) -> Path:
+        path = run_dir / "summary.md"
+        path.write_text(summary_markdown, encoding="utf-8")
+        return path
+
+    def _write_telemetry(run_dir: Path) -> Path:
+        return _write_json(run_dir / "telemetry.json", telemetry)
+
+    write_result = write_report_artifacts(
+        stem="test_log_reports",
+        timestamp=run_timestamp,
+        output_dir=healthview_root,
+        viewer=viewer,
+        topic=topic,
+        artifacts=[
+            ReportArtifact(filename="manifest.json", writer=_write_manifest),
+            ReportArtifact(filename="summary.md", writer=_write_summary),
+            ReportArtifact(filename="telemetry.json", writer=_write_telemetry),
+        ],
         keep=max(1, keep),
-        current_run=bundle_dir,
-        logger=logger,
     )
 
-    return bundle_dir
+    return write_result.run_dir
 
 
 def run(argv: Sequence[str] | None = None) -> dict[str, object]:
@@ -613,36 +639,36 @@ def run(argv: Sequence[str] | None = None) -> dict[str, object]:
     logs_dir = logs_dir if logs_dir.is_absolute() else (repo_root / logs_dir)
     logs_dir = logs_dir.resolve()
 
+    timestamp = _resolve_timestamp_slug(args.run_timestamp)
     logs_run_candidate = args.logs_run.resolve() if args.logs_run else None
+    resolved_existing = logs_run_candidate if logs_run_candidate else _resolve_run_dir(None, logs_dir)
+
     run_pytest: bool | None = args.run_pytest
     if args.summarize_existing:
         run_pytest = False
     if run_pytest is None:
-        run_pytest = logs_run_candidate is None
+        run_pytest = resolved_existing is None
 
+    logs_run: Path | None = resolved_existing
     if run_pytest:
         logs_run, pytest_exit_code, pytest_command = _capture_pytest_run(
             repo_root=repo_root,
             logs_dir=logs_dir,
             logs_run=logs_run_candidate,
+            run_slug=timestamp,
             log=log,
             pytest_args=args.pytest_args,
         )
-    elif not logs_dir.exists():
-        legacy = LEGACY_LOGS_BASE if LEGACY_LOGS_BASE.is_absolute() else (repo_root / LEGACY_LOGS_BASE)
-        legacy = legacy.resolve()
-        allow_legacy = _bool_env("PYTEST_LOG_REPORTS_ALLOW_LEGACY", default=True)
-        if allow_legacy and legacy.exists():
-            log.info("Logs directory %s missing; falling back to legacy %s", logs_dir, legacy)
-            logs_dir = legacy
-
-    if not run_pytest:
-        logs_run = logs_run_candidate if logs_run_candidate else _resolve_run_dir(None, logs_dir)
+        prune_run_directories(
+            logs_dir,
+            keep=max(1, args.artifacts_to_keep),
+            current_run=logs_run,
+            logger=log,
+        )
 
     output_dir = args.output_dir if isinstance(args.output_dir, Path) else Path(args.output_dir)
     output_dir = output_dir if output_dir.is_absolute() else (repo_root / output_dir)
     output_dir = output_dir.resolve()
-    timestamp = _resolve_timestamp_slug(args.run_timestamp)
 
     if logs_run is None or not logs_run.exists():
         log.warning("No pytest log runs found under %s; emitting no-data bundle", logs_dir)
@@ -742,9 +768,11 @@ def main(argv: Sequence[str] | None = None) -> int:
         argv: Command-line arguments. Uses sys.argv if None.
 
     Returns:
-        Exit code (always 0 on success).
+        Exit code (0 for success, 1 when no log inputs are available).
     """
-    run(argv)
+    payload = run(argv)
+    if isinstance(payload, dict) and payload.get("status") == "no_data":
+        return 1
     return 0
 
 

@@ -1,0 +1,37 @@
+{
+  "catalog": [
+    {
+      "artifact": "manifest.json",
+      "path": ".repo_studios/reports/healthview/rawview/test_log_reports/20260104-1522/manifest.json"
+    },
+    {
+      "artifact": "summary.md",
+      "path": ".repo_studios/reports/healthview/rawview/test_log_reports/20260104-1522/summary.md"
+    },
+    {
+      "artifact": "telemetry.json",
+      "path": ".repo_studios/reports/healthview/rawview/test_log_reports/20260104-1522/telemetry.json"
+    }
+  ],
+  "generated_at": "2026-01-04T15:22:58.370617+00:00",
+  "git_sha": null,
+  "inputs": {
+    "artifacts_to_keep": 5,
+    "logs_dir": ".repo_studios/reports/healthview/rawview/test_execution_runs",
+    "logs_run": ".repo_studios/reports/healthview/rawview/test_execution_runs/20260103-1346",
+    "pytest_command": null,
+    "pytest_exit_code": null,
+    "pytest_ran": false,
+    "run_timestamp": "20260104-1522"
+  },
+  "provenance": {
+    "script": "collect_test_log_reports.py",
+    "trigger": "cli"
+  },
+  "repo_root": "C:\\Users\\genet\\repo_studios",
+  "run_timestamp": "20260104-1522",
+  "schema_version": 1,
+  "status": "ok",
+  "topic": "test_log_reports",
+  "viewer_slug": "rawview"
+}

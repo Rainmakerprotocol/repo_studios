@@ -1,0 +1,75 @@
+{
+  "artifacts": {
+    "coverage_report": null,
+    "hardening": null,
+    "health_bundle_summary": null,
+    "health_report": null,
+    "heatmap": null,
+    "log_report": null
+  },
+  "components": {
+    "collect": {
+      "producer_report": null,
+      "report_dir": null,
+      "slow_tests_over_threshold": null,
+      "warnings_total": null
+    },
+    "coverage": {
+      "report_dir": null,
+      "summary": null
+    },
+    "hardening": {
+      "payload": null,
+      "run_dir": null
+    },
+    "health": {
+      "bundle_summary": null,
+      "payload": null,
+      "run_dir": null
+    },
+    "heatmap": {
+      "payload": null,
+      "run_dir": null
+    }
+  },
+  "failures": {
+    "detected": 1,
+    "examples": [
+      "collect: Coverage inventory exit code 1"
+    ]
+  },
+  "generated_at": "2026-01-04T16:22:05+00:00",
+  "metrics": {
+    "coverage_status": null,
+    "hardening_high_severity": null,
+    "hardening_status": null,
+    "health_report_source": null,
+    "heatmap_mode": null,
+    "log_report_available": false,
+    "pipeline_status": "failed",
+    "slow_tests_over_threshold": null,
+    "warnings_total": null
+  },
+  "run_slug": "20260104-1620",
+  "runtime_metrics": [
+    {
+      "detail": "Coverage inventory exit code 1",
+      "duration_seconds": 69.253,
+      "name": "collect",
+      "status": "failed"
+    }
+  ],
+  "schema_version": 1,
+  "steps": [
+    {
+      "detail": "Coverage inventory exit code 1",
+      "finished_at": "2026-01-04T16:22:05.025788+00:00",
+      "name": "collect",
+      "payload": null,
+      "started_at": "2026-01-04T16:20:55.773182+00:00",
+      "status": "failed"
+    }
+  ],
+  "topic": "test_execution_telemetry",
+  "viewer": "summarizer_reports"
+}

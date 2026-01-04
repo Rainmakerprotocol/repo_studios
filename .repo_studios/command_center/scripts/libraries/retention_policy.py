@@ -69,6 +69,8 @@ def _find_repo_root() -> Path:
     """Locate the repository root by searching for .repo_studios directory."""
     current = Path(__file__).resolve()
     for parent in current.parents:
+        if parent.name == ".repo_studios":
+            continue
         if (parent / ".repo_studios").is_dir():
             return parent
         if (parent / ".git").is_dir():
@@ -237,15 +239,54 @@ def get_orchestrator_config(orchestrator_name: str) -> OrchestratorConfig | None
     if not isinstance(orch_data, dict):
         return None
 
-    # Build script retention map
+    # Build script retention map using the orchestrator-scoped values.
+    #
+    # NOTE: We intentionally do NOT call get_script_retention(script_key) here.
+    # The same script key may appear under multiple orchestrators with different
+    # keep values, and get_script_retention performs a global lookup.
     scripts: dict[str, ScriptRetention] = {}
     for script_key, script_data in orch_data.get("scripts", {}).items():
-        retention = get_script_retention(script_key)
-        scripts[script_key] = retention
+        env_override = _get_env_override(script_key)
+        if env_override is not None:
+            scripts[script_key] = ScriptRetention(
+                key=script_key,
+                keep=env_override,
+                description="",
+                source="env",
+            )
+            continue
+
+        keep_value: int | None = None
+        description = ""
+        if isinstance(script_data, dict):
+            raw_keep = script_data.get("keep")
+            if raw_keep is not None:
+                try:
+                    keep_value = int(raw_keep)
+                except (TypeError, ValueError):
+                    keep_value = None
+            raw_description = script_data.get("description")
+            if raw_description is not None:
+                description = str(raw_description)
+        elif isinstance(script_data, int):
+            keep_value = script_data
+
+        if keep_value is None:
+            keep_value = DEFAULT_FALLBACK_KEEP
+            source = "fallback"
+        else:
+            source = "config"
+
+        scripts[script_key] = ScriptRetention(
+            key=script_key,
+            keep=max(1, keep_value),
+            description=description,
+            source=source,
+        )
 
     return OrchestratorConfig(
         name=orchestrator_name,
-        artifacts_to_keep=orch_data.get("artifacts_to_keep", DEFAULT_FALLBACK_KEEP),
+        artifacts_to_keep=max(1, int(orch_data.get("artifacts_to_keep", DEFAULT_FALLBACK_KEEP))),
         scripts=scripts,
     )
 

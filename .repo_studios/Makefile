@@ -219,7 +219,7 @@ studio-collect-test-log-reports:
 
 .PHONY: studio-generate-test-log-health-report
 studio-generate-test-log-health-report:
-	$(PYTHON) .repo_studios/scripts/consumers/generate_test_log_health_report.py --logs-dir .repo_studios/command_center/reports/rawview/test_execution_runs --output-base .repo_studios/reports/healthview/consumer_reports/test_log_health_reports --producer-reports-root .repo_studios/reports/healthview/rawview/test_log_reports --artifacts-to-keep 5 --log-level INFO
+	$(PYTHON) .repo_studios/scripts/consumers/generate_test_log_health_report.py --logs-dir .repo_studios/reports/healthview/rawview/test_execution_runs --output-base .repo_studios/reports/healthview/consumer_reports/test_log_health_reports --producer-reports-root .repo_studios/reports/healthview/rawview/test_log_reports --artifacts-to-keep 5 --log-level INFO
 
 .PHONY: studio-diff-standards-index
 studio-diff-standards-index:

@@ -1,45 +1,39 @@
 # Test Execution Telemetry Summary
 
 - run_slug: `20251201-0303`
-- pipeline_status: success
+- pipeline_status: failed
 - log_report_available: no
-- warnings_total: unknown
-- slow_tests_over_threshold: unknown
-- heatmap_mode: fixture
-- hardening_status: ok
+- warnings_total: 0
+- slow_tests_over_threshold: 0
+- heatmap_mode: unknown
+- hardening_status: unknown
 - hardening_high_severity: unknown
 - coverage_status: ok
 - health_report_source: none
-- completed_at: 2026-01-03T01:37:33+00:00
+- completed_at: 2026-01-04T16:32:01+00:00
 
 ## Runtime Metrics
 
 | Step | Status | Duration (s) | Detail |
 | --- | --- | --- | --- |
-| collect | success | 0.01 | log report captured |
-| analyse | success | 0.00 | analysis completed |
-| summarize | skipped | 0.00 | no structured log report found |
+| collect | failed | 0.00 | no pytest logs discovered |
 
 ## Failure Highlights
 
-- detected_failures: 0
+- detected_failures: 1
 - failure_examples:
-  - none
+  - collect: no pytest logs discovered
 
 ## Artifact Locations
 
-- log_report: `C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-995/test_run_handles_missing_logs0/telemetry_missing/test_log_reports/20251201-0303`
-- coverage_report: `C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-995/test_run_handles_missing_logs0/telemetry_missing/coverage/test_coverage-20251201_010100`
-- heatmap: `C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-995/test_run_handles_missing_logs0/telemetry_missing/heatmap/churn_complexity_heatmap-20251201_010100`
-- hardening: `C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-995/test_run_handles_missing_logs0/telemetry_missing/hardening/test_hardening-20251201_010100`
+- log_report: (missing)
+- coverage_report: `C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-1856/test_run_handles_missing_logs0/telemetry_missing/coverage/test_coverage-20251201_010100`
+- heatmap: (missing)
+- hardening: (missing)
 - health_report: (missing)
 - health_bundle_summary: (missing)
 
 ## Step Outcomes
 
-- collect: success
-  - detail: log report captured
-- analyse: success
-  - detail: analysis completed
-- summarize: skipped
-  - detail: no structured log report found
+- collect: failed
+  - detail: no pytest logs discovered

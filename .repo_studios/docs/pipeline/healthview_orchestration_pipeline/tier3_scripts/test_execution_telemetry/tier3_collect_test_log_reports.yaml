@@ -47,8 +47,6 @@ invocation:
   environment:
     requires_venv: true
     python_version: ">=3.11"
-    notes:
-      - "Optional env var PYTEST_LOG_REPORTS_ALLOW_LEGACY controls fallback to .repo_studios/pytest_logs."
 
 parameters:
   - name: repo_root
@@ -62,13 +60,13 @@ parameters:
   - name: logs_dir
     type: path
     required: false
-    default: .repo_studios/command_center/reports/rawview/test_execution_runs
+    default: .repo_studios/reports/healthview/rawview/test_execution_runs
     description: Base directory containing pytest log run folders.
     validation:
       must_exist: false
       must_be_directory: true
     examples:
-      - .repo_studios/command_center/reports/rawview/test_execution_runs
+      - .repo_studios/reports/healthview/rawview/test_execution_runs
 
   - name: logs_run
     type: path

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="64" time="232.461" timestamp="2026-01-03T08:46:25.083047-05:00" hostname="GeneOffice2023"><testcase classname=".repo_studios.tests.command_center.libraries.test_manifest" name="test_build_automation_manifest_round_trip" time="0.007" /><testcase classname=".repo_studios.tests.command_center.libraries.test_manifest" name="test_manifest_rejects_unknown_status" time="0.001" /><testcase classname=".repo_studios.tests.command_center.libraries.test_metrics" name="test_test_run_result_validation" time="0.000" /><testcase classname=".repo_studios.tests.command_center.libraries.test_metrics" name="test_build_metrics_summary_round_trip" time="0.003" /><testcase classname=".repo_studios.tests.command_center.libraries.test_metrics" name="test_metrics_summary_requires_tests" time="0.001" /><testcase classname=".repo_studios.tests.schema_validation.test_validate_inventory" name="test_validation_passes_for_valid_entry" time="0.203" /><testcase classname=".repo_studios.tests.schema_validation.test_validate_inventory" name="test_validation_detects_duplicate_ids" time="0.192" /><testcase classname=".repo_studios.tests.schema_validation.test_validate_inventory" name="test_json_output" time="0.193" /><testcase classname=".repo_studios.tests.tests_aggregators.test_aggregate_docs_health_signals" name="test_generates_docs_health_bundle" time="0.021" /><testcase classname=".repo_studios.tests.tests_aggregators.test_aggregate_docs_health_signals" name="test_skip_hygiene_omits_category" time="0.018" /><testcase classname=".repo_studios.tests.tests_aggregators.test_analyze_monkey_patch_trends" name="test_prefers_consumer_bundles" time="0.017" /><testcase classname=".repo_studios.tests.tests_aggregators.test_analyze_monkey_patch_trends" name="test_fallback_to_producer_reports" time="0.020" /><testcase classname=".repo_studios.tests.tests_aggregators.test_analyze_monkey_patch_trends" name="test_retention_prunes_old_runs" time="0.019" /><testcase classname=".repo_studios.tests.tests_aggregators.test_generate_churn_complexity_heatmap" name="test_prefers_consumer_bundle" time="0.064" /><testcase classname=".repo_studios.tests.tests_aggregators.test_generate_churn_complexity_heatmap" name="test_fallback_to_logs_when_summary_missing" time="0.048" /><testcase classname=".repo_studios.tests.tests_aggregators.test_generate_churn_complexity_heatmap" name="test_retention_prunes_old_runs" time="0.048" /><testcase classname=".repo_studios.tests.tests_aggregators.test_generate_churn_complexity_heatmap" name="test_main_returns_nonzero_when_no_python_files" time="0.042" /><testcase classname=".repo_studios.tests.tests_aggregators.test_generate_churn_complexity_heatmap" name="test_collect_git_churn_handles_oserror" time="0.003" /><testcase classname=".repo_studios.tests.tests_aggregators.test_generate_churn_complexity_heatmap" name="test_load_junit_failures_uses_classname_when_file_missing" time="0.004" /><testcase classname=".repo_studios.tests.tests_command_center.aggregators.test_generate_automation_manifest" name="test_generate_automation_manifest_bundle" time="0.012" /><testcase classname=".repo_studios.tests.tests_command_center.aggregators.test_generate_automation_manifest" name="test_manifest_files_changed_mismatch" time="0.007" /><testcase classname=".repo_studios.tests.tests_command_center.aggregators.test_generate_automation_manifest" name="test_guardrail_violation" time="0.011" /><testcase classname=".repo_studios.tests.tests_command_center.aggregators.test_generate_metrics_summary" name="test_metrics_summary_run" time="0.007" /><testcase classname=".repo_studios.tests.tests_command_center.aggregators.test_generate_metrics_summary" name="test_invalid_tests_payload" time="0.006" /><testcase classname=".repo_studios.tests.tests_command_center.dependency_import_hygiene.test_run_dependency_import_hygiene" name="test_run_emits_healthview_bundle" time="0.042" /><testcase classname=".repo_studios.tests.tests_command_center.dependency_import_hygiene.test_run_dependency_import_hygiene" name="test_run_respects_skip_flags" time="0.024" /><testcase classname=".repo_studios.tests.tests_command_center.dependency_import_hygiene.test_run_dependency_import_hygiene" name="test_batch_cleanup_plan_writes_bundle" time="0.014" /><testcase classname=".repo_studios.tests.tests_command_center.docs_health.test_run_docs_health_overview" name="test_orchestrator_writes_healthview_manifest" time="0.023" /><testcase classname=".repo_studios.tests.tests_command_center.docs_health.test_run_docs_health_overview" name="test_orchestrator_blocks_invalid_topic_alias" time="0.023" /><testcase classname=".repo_studios.tests.tests_command_center.fault_diagnostics.test_run_fault_diagnostics_overview" name="test_orchestrator_writes_manifest_with_summarizer" time="0.020" /><testcase classname=".repo_studios.tests.tests_command_center.fault_diagnostics.test_summarize_fault_diagnostics_overview" name="test_summarizer_generates_overview" time="0.014"><failure message="FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\genet\\AppData\\Local\\Temp\\pytest-of-genet\\pytest-1183\\test_summarizer_generates_over0\\summaries\\20240102-1200\\fault_diagnostics_overview.json'">tmp_path = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-1183/test_summarizer_generates_over0')
+
+    def test_summarizer_generates_overview(tmp_path: Path) -&gt; None:
+        consumer_dir = tmp_path / "consumer"
+        producer_dir = tmp_path / "producer"
+        summarizer_dir = tmp_path / "summaries"
+        consumer_dir.mkdir(parents=True, exist_ok=True)
+        producer_dir.mkdir(parents=True, exist_ok=True)
+        summarizer_dir.mkdir(parents=True, exist_ok=True)
+    
+        # HOP timestamp format: YYYYMMDD-HHMM
+        current_name = "20240102-0001"
+        previous_name = "20240101-0001"
+        producer_run_name = "20240102-0000"
+    
+        # Telemetry contains signatures and severity (from old summary.json)
+        current_telemetry = {
+            "summary": {
+                "signature_count": 3,
+                "active_signature_count": 2,
+                "thread_block_count": 1,
+                "severity_buckets": {
+                    "repeat_offender": 2,
+                    "multi_hit": 1,
+                    "single_hit": 0,
+                },
+            },
+            "signatures": [
+                {"signature_id": "sig-a"},
+                {"signature_id": "sig-b"},
+                {"signature_id": "sig-c"},
+            ],
+        }
+        # Manifest contains metrics (from old bundle_summary.json)
+        current_manifest = {
+            "bundle": current_name,
+            "metrics": {
+                "signature_count": 3,
+                "active_signature_count": 2,
+                "repeat_offender": 2,
+                "multi_hit": 1,
+                "single_hit": 0,
+                "thread_block_count": 1,
+            },
+        }
+        previous_telemetry = {
+            "summary": {
+                "signature_count": 2,
+                "active_signature_count": 2,
+                "thread_block_count": 1,
+                "severity_buckets": {
+                    "repeat_offender": 1,
+                    "multi_hit": 1,
+                    "single_hit": 0,
+                },
+            },
+            "signatures": [
+                {"signature_id": "sig-a"},
+                {"signature_id": "sig-b"},
+            ],
+        }
+        previous_manifest = {
+            "bundle": previous_name,
+            "metrics": {
+                "signature_count": 2,
+                "active_signature_count": 2,
+                "repeat_offender": 1,
+                "multi_hit": 1,
+                "single_hit": 0,
+                "thread_block_count": 1,
+            },
+        }
+    
+        _write_bundle(consumer_dir, previous_name, previous_telemetry, previous_manifest)
+        _write_bundle(consumer_dir, current_name, current_telemetry, current_manifest)
+    
+        # Producer report in HOP format (no pointer files)
+        producer_report = {
+            "summary": {
+                "severity_buckets": {
+                    "repeat_offender": 3,
+                    "multi_hit": 1,
+                    "single_hit": 0,
+                }
+            }
+        }
+        _write_producer_run(producer_dir, producer_run_name, producer_report)
+    
+        result = module.run(
+            [
+                "--consumer-output-dir",
+                str(consumer_dir),
+                "--producer-output-dir",
+                str(producer_dir),
+                "--output-dir",
+                str(summarizer_dir),
+                "--artifacts-to-keep",
+                "2",
+                "--timestamp",
+                "2024-01-02T12:00:00+00:00",
+                "--log-level",
+                "DEBUG",
+            ]
+        )
+    
+        assert result["status"] == "ok"
+        run_dir = Path(result["run_dir"])
+&gt;       overview_json = json.loads((run_dir / "fault_diagnostics_overview.json").read_text(encoding="utf-8"))
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.repo_studios\tests\tests_command_center\fault_diagnostics\test_summarize_fault_diagnostics_overview.py:148: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Python313\Lib\pathlib\_local.py:546: in read_text
+    return PathBase.read_text(self, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Python313\Lib\pathlib\_abc.py:632: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-1183/test_summarizer_generates_over0/summaries/20240102-1200/fault_diagnostics_overview.json')
+mode = 'r', buffering = -1, encoding = 'utf-8', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+&gt;       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\genet\\AppData\\Local\\Temp\\pytest-of-genet\\pytest-1183\\test_summarizer_generates_over0\\summaries\\20240102-1200\\fault_diagnostics_overview.json'
+
+C:\Python313\Lib\pathlib\_local.py:537: FileNotFoundError</failure></testcase><testcase classname=".repo_studios.tests.tests_command_center.monkey_patch.test_orchestrator_contract" name="test_orchestrator_exposes_run_entrypoint" time="0.001" /><testcase classname=".repo_studios.tests.tests_command_center.monkey_patch.test_summarizer_contract" name="test_summarizer_exposes_run_entrypoint" time="0.000" /><testcase classname=".repo_studios.tests.tests_command_center.monkey_patch.test_summarizer_contract" name="test_summarizer_declares_expected_slugs" time="0.000" /><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_orchestrate_full_diagnostic" name="test_run_emits_manifest_and_respects_includes" time="0.016" /><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_orchestrate_full_diagnostic" name="test_stop_on_first_failure_blocks_remaining" time="0.012" /><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_orchestrate_full_diagnostic" name="test_keep_going_runs_all_topics_after_failure" time="0.013" /><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_run_automation_dry_run" name="test_run_creates_bundle" time="0.026" /><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_run_automation_dry_run" name="test_missing_script" time="0.005" /><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_run_automation_dry_run" name="test_load_post_run_matrix_missing_sections" time="0.004" /><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_run_automation_dry_run" name="test_load_post_run_matrix_handles_malformed_rows" time="0.004" /><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_run_command_center_pipeline" name="test_pipeline_happy_path" time="0.009" /><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_run_command_center_pipeline" name="test_pipeline_stops_on_inventory_failure" time="0.005" /><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_run_command_center_pipeline" name="test_pipeline_rejects_missing_target" time="0.003" /><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_run_command_center_pipeline" name="test_pipeline_errors_when_inventory_artifact_missing" time="0.005" /><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_run_command_center_pipeline" name="test_pipeline_propagates_analysis_failure" time="0.006" /><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_run_command_center_pipeline" name="test_pipeline_detects_missing_scan_artifacts" time="0.004" /><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_run_command_center_pipeline" name="test_pipeline_rejects_file_target" time="0.004" /><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_run_command_center_pipeline" name="test_build_paths_rejects_outside_repo" time="0.003" /><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_run_command_center_pipeline" name="test_build_paths_accepts_prefixed_relative_target" time="0.004" /><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_run_command_center_pipeline" name="test_load_run_function_requires_existing_script" time="0.002" /><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_run_command_center_pipeline" name="test_load_run_function_requires_callable_run" time="0.004" /><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_run_inventory_update" name="test_inventory_update_invokes_producer" time="0.004" /><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_run_inventory_update" name="test_inventory_update_validates_target" time="0.004" /><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_run_inventory_update" name="test_inventory_update_requires_existing_directory" time="0.004" /><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_run_monkey_patch_oversight" name="test_monkey_patch_oversight_pipeline" time="0.018" /><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_run_test_execution_telemetry" name="test_parse_timestamp_invalid_raises" time="0.009" /><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_run_test_execution_telemetry" name="test_parse_timestamp_naive_assumes_utc" time="0.007" /><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_run_test_execution_telemetry" name="test_latest_directory_selects_latest" time="0.009" /><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_run_test_execution_telemetry" name="test_read_json_returns_dict_only" time="0.009" /><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_run_test_execution_telemetry" name="test_relativize_handles_outside_repo" time="0.010" /><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_run_test_execution_telemetry" name="test_load_run_callable_errors_when_missing_run" time="0.010" /><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_run_test_execution_telemetry" name="test_load_run_callable_uses_sys_modules_shortcut" time="0.006" /><testcase classname=".repo_studios.tests.tests_command_center.orchestrators.test_run_test_execution_telemetry" name="test_run_generates_healthview_bundle" time="0.054" /><testcase time="0.007" /></testsuite></testsuites>

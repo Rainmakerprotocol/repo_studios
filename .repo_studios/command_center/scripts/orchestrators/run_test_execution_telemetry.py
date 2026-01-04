@@ -2,11 +2,12 @@
 """Topic orchestrator for test execution telemetry.
 
 Emits HealthView bundles under
-`.repo_studios/reports/healthview/orchestrator_reports/test_execution_telemetry/<timestamp>/` and replaces
-the legacy `scripts/orchestrators/run_pytest_log_capture.py` flow by chaining log collection,
-coverage inventory, churn heatmap, hardening analysis, and the health report summarizer. Expect a
-roughly five to six minute runtime in CI when churn analysis is enabled; the pipeline stops on the
-first hard failure so log gaps surface quickly.
+`.repo_studios/reports/healthview/orchestrator_reports/test_execution_telemetry/<timestamp>/` by chaining
+log collection, coverage inventory, churn heatmap, hardening analysis, and the health report summarizer.
+
+The pipeline stops on the first hard failure so missing or invalid inputs surface quickly. The
+collector is responsible for being self-sufficient (reuse existing log runs when present, otherwise
+capture a fresh pytest run).
 """
 
 from __future__ import annotations
@@ -15,8 +16,9 @@ import argparse
 import importlib.util
 import json
 import logging
+import os
 import sys
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Sequence, cast
@@ -45,12 +47,23 @@ from libraries import (
     write_report_artifacts,
 )
 from libraries.report_paths import build_topic_path
+from libraries.retention_policy import get_keep, get_orchestrator_config
 
 LOGGER = logging.getLogger(__name__)
 
 TOPIC_SLUG = "test-execution-telemetry"
 HEALTHVIEW_TOPIC = "test_execution_telemetry"
 SCHEMA_VERSION = 1
+
+RETENTION_CONFIG = get_orchestrator_config("run_test_execution_telemetry")
+DEFAULT_ARTIFACTS_TO_KEEP = (
+    max(1, int(RETENTION_CONFIG.artifacts_to_keep)) if RETENTION_CONFIG is not None else 3
+)
+DEFAULT_COLLECTOR_KEEP = get_keep("collect_test_log_reports")
+DEFAULT_HEALTH_KEEP = get_keep("generate_test_log_health_report")
+DEFAULT_COVERAGE_KEEP = get_keep("generate_test_coverage_inventory")
+DEFAULT_HEATMAP_KEEP = get_keep("generate_churn_complexity_heatmap")
+DEFAULT_HARDENING_KEEP = get_keep("analyze_test_hardening")
 
 COLLECT_SCRIPT = Path(".repo_studios/scripts/producers/collect_test_log_reports.py")
 HEALTH_REPORT_SCRIPT = Path(".repo_studios/scripts/consumers/generate_test_log_health_report.py")
@@ -68,11 +81,11 @@ SUMMARIZER_SCRIPT = Path(
 )
 SUMMARIZER_MODULE = "command_center.scripts.summarizers.summarize_test_execution_telemetry"
 
-DEFAULT_LOGS_DIR = Path(".repo_studios/command_center/reports/rawview/test_execution_runs")
+DEFAULT_LOGS_DIR = build_topic_path("rawview", "test_execution_runs")
 DEFAULT_TEST_LOG_REPORTS_DIR = build_topic_path("rawview", "test_log_reports")
 DEFAULT_TEST_LOG_HEALTH_DIR = build_topic_path("consumer", "test_log_health_reports")
 DEFAULT_COVERAGE_OUTPUT_DIR = build_topic_path("producer", "test_coverage_inventory")
-DEFAULT_COVERAGE_XML = Path(".repo_studios/tests/fixtures/test_run_coverage/coverage.xml")
+DEFAULT_COVERAGE_XML = Path("coverage.xml")
 DEFAULT_HEATMAP_OUTPUT_DIR = build_topic_path("aggregator", "churn_complexity_heatmap")
 DEFAULT_HARDENING_OUTPUT_DIR = build_topic_path("producer", "test_hardening")
 DEFAULT_HEALTHVIEW_ROOT = build_topic_path("orchestrator", HEALTHVIEW_TOPIC)
@@ -83,6 +96,28 @@ COVERAGE_TOPIC_SLUG = "test_coverage_inventory"
 
 HARDENING_CLASS_SLUG = "producer_reports"
 HARDENING_TOPIC_SLUG = "test_hardening"
+
+
+def _is_ci_environment() -> bool:
+    """Return True when running under a CI environment.
+
+    This is intentionally conservative and only checks well-known CI markers.
+    """
+    markers = [
+        "CI",
+        "GITHUB_ACTIONS",
+        "TF_BUILD",
+        "BUILD_BUILDID",
+        "SYSTEM_TEAMPROJECT",
+    ]
+    for name in markers:
+        value = os.environ.get(name)
+        if value is None:
+            continue
+        cleaned = str(value).strip().lower()
+        if cleaned and cleaned not in {"0", "false", "no", "off"}:
+            return True
+    return False
 
 
 @dataclass(frozen=True)
@@ -304,21 +339,41 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--heatmap-window", type=int, default=500)
     parser.add_argument("--hardening-output-dir", default=str(DEFAULT_HARDENING_OUTPUT_DIR))
     parser.add_argument("--healthview-root", default=str(DEFAULT_HEALTHVIEW_ROOT))
-    parser.add_argument("--artifacts-to-keep", type=int, default=3, help="Topic artifacts to retain")
     parser.add_argument(
-        "--collector-artifacts-to-keep", type=int, default=10, help="Retention window for log report runs"
+        "--artifacts-to-keep",
+        type=int,
+        default=DEFAULT_ARTIFACTS_TO_KEEP,
+        help="Topic artifacts to retain",
     )
     parser.add_argument(
-        "--health-artifacts-to-keep", type=int, default=5, help="Retention window for health report runs"
+        "--collector-artifacts-to-keep",
+        type=int,
+        default=DEFAULT_COLLECTOR_KEEP,
+        help="Retention window for log report runs",
     )
     parser.add_argument(
-        "--coverage-artifacts-to-keep", type=int, default=10, help="Retention window for coverage inventory"
+        "--health-artifacts-to-keep",
+        type=int,
+        default=DEFAULT_HEALTH_KEEP,
+        help="Retention window for health report runs",
     )
     parser.add_argument(
-        "--heatmap-artifacts-to-keep", type=int, default=10, help="Retention window for churn heatmap runs"
+        "--coverage-artifacts-to-keep",
+        type=int,
+        default=DEFAULT_COVERAGE_KEEP,
+        help="Retention window for coverage inventory",
     )
     parser.add_argument(
-        "--hardening-artifacts-to-keep", type=int, default=10, help="Retention window for hardening analysis"
+        "--heatmap-artifacts-to-keep",
+        type=int,
+        default=DEFAULT_HEATMAP_KEEP,
+        help="Retention window for churn heatmap runs",
+    )
+    parser.add_argument(
+        "--hardening-artifacts-to-keep",
+        type=int,
+        default=DEFAULT_HARDENING_KEEP,
+        help="Retention window for hardening analysis",
     )
     parser.add_argument(
         "--timestamp",
@@ -365,7 +420,16 @@ def build_paths(args: argparse.Namespace) -> Paths:
     Returns:
         Paths dataclass with resolved file paths.
     """
-    return cast(Paths, build_standard_paths(args, PATHS_CONFIG, origin=Path(__file__)))
+    paths = cast(Paths, build_standard_paths(args, PATHS_CONFIG, origin=Path(__file__)))
+    healthview_root = paths.healthview_root
+    if not (
+        healthview_root.name == HEALTHVIEW_TOPIC
+        and healthview_root.parent.name == "orchestrator_reports"
+    ):
+        healthview_root = (healthview_root / "orchestrator_reports" / HEALTHVIEW_TOPIC).resolve()
+        healthview_root.mkdir(parents=True, exist_ok=True)
+        paths = replace(paths, healthview_root=healthview_root)
+    return paths
 
 
 def build_options(args: argparse.Namespace) -> Options:
@@ -505,6 +569,10 @@ def _execute_coverage(paths: Paths, options: Options) -> CoverageOutcome:
         str(paths.repo_root),
         "--coverage-xml",
         str(paths.coverage_xml),
+        "--refresh-coverage-xml",
+        "--refresh-continue-on-error",
+        "--refresh-cov-target",
+        ".",
         "--output-dir",
         str(paths.coverage_output_dir),
         "--timestamp",
@@ -518,11 +586,12 @@ def _execute_coverage(paths: Paths, options: Options) -> CoverageOutcome:
     if exit_code != 0:
         raise RuntimeError(f"Coverage inventory exit code {exit_code}")
 
-    expected_dir = paths.coverage_output_dir / COVERAGE_CLASS_SLUG / COVERAGE_TOPIC_SLUG / run_slug
+    # The coverage producer writes directly under the configured output directory
+    # (which is already a HOP topic root like .../producer_reports/test_coverage_inventory).
+    expected_dir = paths.coverage_output_dir / run_slug
     run_dir: Path | None = expected_dir if expected_dir.exists() else None
     if run_dir is None:
-        base_dir = paths.coverage_output_dir / COVERAGE_CLASS_SLUG / COVERAGE_TOPIC_SLUG
-        run_dir = _latest_directory(base_dir, "")
+        run_dir = _latest_directory(paths.coverage_output_dir, "")
 
     summary = None
     if run_dir is not None:
@@ -550,9 +619,10 @@ def _execute_collect(paths: Paths, options: Options) -> CollectOutcome:
     run_callable = _load_run_callable(paths.repo_root / COLLECT_SCRIPT, COLLECT_MODULE)
     run_slug = options.run_timestamp.strftime("%Y%m%d-%H%M")
     argv = [
+        "--repo-root",
+        str(paths.repo_root),
         "--logs-dir",
         str(paths.logs_dir),
-        "--summarize-existing",
         "--output-dir",
         str(paths.test_log_reports_dir),
         "--run-timestamp",
@@ -636,6 +706,8 @@ def _execute_hardening(paths: Paths, options: Options) -> HardeningOutcome:
         str(paths.repo_root),
         "--output-dir",
         str(paths.hardening_output_dir),
+        "--tests-dir",
+        ".repo_studios/tests",
         "--timestamp",
         options.run_timestamp.isoformat(),
         "--artifacts-to-keep",
@@ -866,15 +938,59 @@ def _section_coverage(
         lines.append(f"**Artifact:** `{artifact_path}`")
         lines.append("")
 
-    # Prefer telemetry payload from file, fall back to outcome
-    payload = telemetry.get("payload", {})
-    payload_summary = payload.get("summary", {})
+    def _first_defined(*candidates: Any, default: Any) -> Any:
+        for candidate in candidates:
+            if candidate is not None:
+                return candidate
+        return default
+
+    # Prefer telemetry from file, fall back to outcome
+    metrics = telemetry.get("metrics", {}) if isinstance(telemetry.get("metrics"), dict) else {}
+    payload = telemetry.get("payload", {}) if isinstance(telemetry.get("payload"), dict) else {}
+    payload_summary = payload.get("summary", {}) if isinstance(payload.get("summary"), dict) else {}
     summary = coverage_outcome.summary or {}
 
-    total_files = payload_summary.get("total_files") or summary.get("total_files", 0)
-    total_functions = payload_summary.get("total_functions") or summary.get("total_functions", 0)
-    covered_functions = payload_summary.get("covered_functions") or summary.get("covered_functions", 0)
-    pct = payload_summary.get("overall_coverage_pct") or summary.get("overall_coverage_pct", 0.0)
+    total_files = _first_defined(
+        metrics.get("total_files"),
+        payload_summary.get("total_files"),
+        summary.get("total_files"),
+        default=0,
+    )
+    total_functions = _first_defined(
+        metrics.get("total_functions"),
+        payload_summary.get("total_functions"),
+        summary.get("total_functions"),
+        default=0,
+    )
+    covered_functions = _first_defined(
+        metrics.get("covered_functions"),
+        payload_summary.get("covered_functions"),
+        summary.get("covered_functions"),
+        default=0,
+    )
+
+    pct_raw = _first_defined(
+        metrics.get("overall_coverage_pct"),
+        payload_summary.get("overall_coverage_pct"),
+        summary.get("overall_coverage_pct"),
+        default=0.0,
+    )
+    try:
+        pct = float(pct_raw)
+    except (TypeError, ValueError):
+        pct = 0.0
+
+    threshold_candidates = (
+        metrics.get("threshold"),
+        payload_summary.get("threshold"),
+        summary.get("threshold"),
+    )
+    threshold_configured = any(candidate is not None for candidate in threshold_candidates)
+    threshold_raw = _first_defined(*threshold_candidates, default=50.0)
+    try:
+        threshold = float(threshold_raw)
+    except (TypeError, ValueError):
+        threshold = 50.0
 
     lines.extend([
         "| Metric | Value |",
@@ -887,8 +1003,13 @@ def _section_coverage(
     ])
 
     concerns: list[str] = []
-    if pct < 50.0:
-        concerns.append(f"⚠️ Coverage at {pct:.1f}% — below 50% threshold")
+    if pct < threshold:
+        if threshold_configured:
+            concerns.append(f"⚠️ Coverage at {pct:.1f}% — below {threshold:.1f}% threshold")
+        else:
+            concerns.append(
+                f"⚠️ Coverage at {pct:.1f}% — below {threshold:.1f}% heuristic threshold (no min_coverage configured)"
+            )
 
     if concerns:
         lines.append("**Concerns:** " + "; ".join(concerns))
@@ -918,11 +1039,40 @@ def _section_hardening(
         lines.append(f"**Artifact:** `{artifact_path}`")
         lines.append("")
 
-    # Prefer telemetry payload from file
-    payload = telemetry.get("payload", {}) or hardening_outcome.payload or {}
-    files_analyzed = payload.get("files_analyzed", 0)
-    high_severity = payload.get("high_severity", 0)
-    total_issues = payload.get("total_issues", 0)
+    # Prefer producer telemetry.json schema.
+    metrics = telemetry.get("metrics", {}) if isinstance(telemetry.get("metrics"), dict) else {}
+    severity = metrics.get("severity", {}) if isinstance(metrics.get("severity"), dict) else {}
+    summary = {}
+    components = telemetry.get("components")
+    if isinstance(components, dict):
+        hardening_component = components.get("hardening")
+        if isinstance(hardening_component, dict) and isinstance(hardening_component.get("summary"), dict):
+            summary = hardening_component["summary"]
+
+    # Fall back to any inline payload if present.
+    payload = telemetry.get("payload")
+    if not isinstance(payload, dict):
+        payload = hardening_outcome.payload if isinstance(hardening_outcome.payload, dict) else {}
+
+    files_analyzed = (
+        metrics.get("total_files")
+        or summary.get("total_files")
+        or payload.get("total_files")
+        or payload.get("files_analyzed")
+        or 0
+    )
+    total_issues = (
+        metrics.get("total_issues")
+        or summary.get("total_issues")
+        or payload.get("total_issues")
+        or 0
+    )
+    high_severity = (
+        severity.get("high")
+        or (summary.get("severity_totals") or {}).get("high")
+        or payload.get("high_severity")
+        or 0
+    )
 
     lines.extend([
         "| Metric | Value |",
@@ -1249,7 +1399,7 @@ def run(argv: Sequence[str] | None = None) -> int:
         ctx.add_metadata("collect", collect)
         coverage_outcome_holder["value"] = coverage
         collect_outcome_holder["value"] = collect
-        detail = "no pytest logs discovered" if collect.report_dir is None else "log report captured"
+        detail = "no pytest logs discovered" if collect.producer_bundle_dir is None else "log report captured"
         payload = {
             "coverage": coverage.summary or {},
             "log_report": {
@@ -1257,8 +1407,8 @@ def run(argv: Sequence[str] | None = None) -> int:
                 "slow_tests": collect.slow_tests,
             },
         }
-        if collect.report_dir is None:
-            return step_success(detail=detail, payload=payload)
+        if collect.producer_bundle_dir is None:
+            return step_failed(detail=detail, payload=payload)
         return step_success(detail=detail, payload=payload)
 
     def analyse_step(ctx: TopicContext):
@@ -1301,11 +1451,12 @@ def run(argv: Sequence[str] | None = None) -> int:
     )
 
     result = pipeline.run(context)
+    exit_code = 0
     try:
         result.raise_for_failure()
     except RuntimeError as exc:
         LOGGER.error("Pipeline failed: %s", exc)
-        return 1
+        exit_code = 1
 
     collect_outcome = collect_outcome_holder.get("value")
     if collect_outcome is None:
@@ -1442,7 +1593,7 @@ def run(argv: Sequence[str] | None = None) -> int:
     telemetry_path.write_text(json.dumps(telemetry_payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
     LOGGER.info("Test Execution Telemetry orchestrator complete (slug=%s)", run_slug)
-    return 0
+    return exit_code
 
 
 def main(argv: Sequence[str] | None = None) -> None:

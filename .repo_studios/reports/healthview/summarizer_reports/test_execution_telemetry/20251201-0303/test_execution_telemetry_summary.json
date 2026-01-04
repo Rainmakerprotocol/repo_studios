@@ -1,30 +1,28 @@
 {
   "artifacts": {
-    "coverage_report": "C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-995/test_run_handles_missing_logs0/telemetry_missing/coverage/test_coverage-20251201_010100",
-    "hardening": "C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-995/test_run_handles_missing_logs0/telemetry_missing/hardening/test_hardening-20251201_010100",
+    "coverage_report": "C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-1856/test_run_handles_missing_logs0/telemetry_missing/coverage/test_coverage-20251201_010100",
+    "hardening": null,
     "health_bundle_summary": null,
     "health_report": null,
-    "heatmap": "C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-995/test_run_handles_missing_logs0/telemetry_missing/heatmap/churn_complexity_heatmap-20251201_010100",
-    "log_report": "C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-995/test_run_handles_missing_logs0/telemetry_missing/test_log_reports/20251201-0303"
+    "heatmap": null,
+    "log_report": null
   },
   "components": {
     "collect": {
       "producer_report": null,
       "report_dir": null,
-      "slow_tests_over_threshold": null,
-      "warnings_total": null
+      "slow_tests_over_threshold": 0,
+      "warnings_total": 0
     },
     "coverage": {
-      "report_dir": "C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-995/test_run_handles_missing_logs0/telemetry_missing/coverage/test_coverage-20251201_010100",
+      "report_dir": "C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-1856/test_run_handles_missing_logs0/telemetry_missing/coverage/test_coverage-20251201_010100",
       "summary": {
         "status": "ok"
       }
     },
     "hardening": {
-      "payload": {
-        "status": "ok"
-      },
-      "run_dir": "C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-995/test_run_handles_missing_logs0/telemetry_missing/hardening/test_hardening-20251201_010100"
+      "payload": null,
+      "run_dir": null
     },
     "health": {
       "bundle_summary": null,
@@ -32,85 +30,54 @@
       "run_dir": null
     },
     "heatmap": {
-      "payload": {
-        "mode": "fixture"
-      },
-      "run_dir": "C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-995/test_run_handles_missing_logs0/telemetry_missing/heatmap/churn_complexity_heatmap-20251201_010100"
+      "payload": null,
+      "run_dir": null
     }
   },
   "failures": {
-    "detected": 0,
-    "examples": []
+    "detected": 1,
+    "examples": [
+      "collect: no pytest logs discovered"
+    ]
   },
-  "generated_at": "2026-01-03T01:37:33+00:00",
+  "generated_at": "2026-01-04T16:32:01+00:00",
   "metrics": {
     "coverage_status": "ok",
     "hardening_high_severity": null,
-    "hardening_status": "ok",
+    "hardening_status": null,
     "health_report_source": null,
-    "heatmap_mode": "fixture",
+    "heatmap_mode": null,
     "log_report_available": false,
-    "pipeline_status": "success",
-    "slow_tests_over_threshold": null,
-    "warnings_total": null
+    "pipeline_status": "failed",
+    "slow_tests_over_threshold": 0,
+    "warnings_total": 0
   },
   "run_slug": "20251201-0303",
   "runtime_metrics": [
     {
-      "detail": "log report captured",
-      "duration_seconds": 0.006,
+      "detail": "no pytest logs discovered",
+      "duration_seconds": 0.0,
       "name": "collect",
-      "status": "success"
-    },
-    {
-      "detail": "analysis completed",
-      "duration_seconds": 0.0,
-      "name": "analyse",
-      "status": "success"
-    },
-    {
-      "detail": "no structured log report found",
-      "duration_seconds": 0.0,
-      "name": "summarize",
-      "status": "skipped"
+      "status": "failed"
     }
   ],
   "schema_version": 1,
   "steps": [
     {
-      "detail": "log report captured",
-      "finished_at": "2026-01-03T01:37:33.492332+00:00",
+      "detail": "no pytest logs discovered",
+      "finished_at": "2026-01-04T16:32:01.874848+00:00",
       "name": "collect",
       "payload": {
         "coverage": {
           "status": "ok"
         },
         "log_report": {
-          "slow_tests": null,
-          "warnings_total": null
+          "slow_tests": 0,
+          "warnings_total": 0
         }
       },
-      "started_at": "2026-01-03T01:37:33.486552+00:00",
-      "status": "success"
-    },
-    {
-      "detail": "analysis completed",
-      "finished_at": "2026-01-03T01:37:33.492816+00:00",
-      "name": "analyse",
-      "payload": {
-        "hardening_status": "ok",
-        "heatmap_mode": "fixture"
-      },
-      "started_at": "2026-01-03T01:37:33.492339+00:00",
-      "status": "success"
-    },
-    {
-      "detail": "no structured log report found",
-      "finished_at": "2026-01-03T01:37:33.492824+00:00",
-      "name": "summarize",
-      "payload": null,
-      "started_at": "2026-01-03T01:37:33.492821+00:00",
-      "status": "skipped"
+      "started_at": "2026-01-04T16:32:01.874541+00:00",
+      "status": "failed"
     }
   ],
   "topic": "test_execution_telemetry",

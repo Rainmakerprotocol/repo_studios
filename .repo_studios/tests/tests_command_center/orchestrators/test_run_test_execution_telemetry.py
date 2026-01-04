@@ -110,6 +110,205 @@ def test_load_run_callable_uses_sys_modules_shortcut(telemetry_module, monkeypat
     assert run_callable([]) == 0
 
 
+def test_execute_coverage_finds_run_dir(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, telemetry_module) -> None:
+    repo_root = tmp_path / "repo"
+    repo_root.mkdir(parents=True)
+
+    coverage_output_dir = tmp_path / "producer_reports" / "test_coverage_inventory"
+    coverage_output_dir.mkdir(parents=True)
+
+    coverage_xml = tmp_path / "coverage.xml"
+    coverage_xml.write_text("<coverage></coverage>\n", encoding="utf-8")
+
+    run_timestamp = telemetry_module._parse_timestamp("2025-12-01T01:01:00+00:00")
+    run_slug = run_timestamp.strftime("%Y%m%d-%H%M")
+    expected_run_dir = coverage_output_dir / run_slug
+
+    def fake_load_run_callable(_script_path: Path, _module_name: str):
+        def _runner(_argv):
+            expected_run_dir.mkdir(parents=True, exist_ok=True)
+            (expected_run_dir / "telemetry.json").write_text(
+                json.dumps({"payload": {"summary": {"status": "ok", "total_files": 1}}}),
+                encoding="utf-8",
+            )
+            return 0
+
+        return _runner
+
+    monkeypatch.setattr(telemetry_module, "_load_run_callable", fake_load_run_callable)
+
+    paths = telemetry_module.Paths(
+        repo_root=repo_root,
+        logs_dir=tmp_path / "logs",
+        test_log_reports_dir=tmp_path / "test_log_reports",
+        test_log_health_dir=tmp_path / "test_log_health",
+        coverage_output_dir=coverage_output_dir,
+        coverage_xml=coverage_xml,
+        heatmap_output_dir=tmp_path / "heatmap",
+        hardening_output_dir=tmp_path / "hardening",
+        healthview_root=tmp_path / "healthview",
+        summarizer_output_dir=tmp_path / "summarizer",
+    )
+
+    options = telemetry_module.Options(
+        log_level="ERROR",
+        artifacts_to_keep=1,
+        collector_keep=1,
+        health_keep=1,
+        coverage_keep=1,
+        heatmap_keep=1,
+        hardening_keep=1,
+        heatmap_window=10,
+        metrics_source=None,
+        run_timestamp=run_timestamp,
+    )
+
+    outcome = telemetry_module._execute_coverage(paths, options)
+    assert outcome.report_dir is not None
+    assert outcome.report_dir.resolve() == expected_run_dir.resolve()
+    assert outcome.summary is not None
+    assert outcome.summary.get("total_files") == 1
+
+
+def test_execute_hardening_passes_tests_dir(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, telemetry_module) -> None:
+    repo_root = tmp_path / "repo"
+    repo_root.mkdir(parents=True)
+
+    hardening_output_dir = tmp_path / "producer_reports" / "test_hardening"
+    hardening_output_dir.mkdir(parents=True)
+
+    run_timestamp = telemetry_module._parse_timestamp("2025-12-01T01:01:00+00:00")
+    expected_slug = run_timestamp.strftime("%Y%m%d-%H%M")
+    expected_run_dir = hardening_output_dir / expected_slug
+
+    captured: dict[str, list[str]] = {}
+
+    def fake_load_run_callable(_script_path: Path, _module_name: str):
+        def _runner(argv):
+            captured["argv"] = list(argv)
+            expected_run_dir.mkdir(parents=True, exist_ok=True)
+            return {"output_dir": str(expected_run_dir), "status": "ok"}
+
+        return _runner
+
+    monkeypatch.setattr(telemetry_module, "_load_run_callable", fake_load_run_callable)
+
+    paths = telemetry_module.Paths(
+        repo_root=repo_root,
+        logs_dir=tmp_path / "logs",
+        test_log_reports_dir=tmp_path / "test_log_reports",
+        test_log_health_dir=tmp_path / "test_log_health",
+        coverage_output_dir=tmp_path / "coverage",
+        coverage_xml=tmp_path / "coverage.xml",
+        heatmap_output_dir=tmp_path / "heatmap",
+        hardening_output_dir=hardening_output_dir,
+        healthview_root=tmp_path / "healthview",
+        summarizer_output_dir=tmp_path / "summarizer",
+    )
+
+    options = telemetry_module.Options(
+        log_level="ERROR",
+        artifacts_to_keep=1,
+        collector_keep=1,
+        health_keep=1,
+        coverage_keep=1,
+        heatmap_keep=1,
+        hardening_keep=1,
+        heatmap_window=10,
+        metrics_source=None,
+        run_timestamp=run_timestamp,
+    )
+
+    outcome = telemetry_module._execute_hardening(paths, options)
+    assert outcome.run_dir is not None
+    assert outcome.run_dir.resolve() == expected_run_dir.resolve()
+
+    argv = captured.get("argv")
+    assert argv is not None
+    assert "--tests-dir" in argv
+    tests_dir_value = argv[argv.index("--tests-dir") + 1]
+    assert tests_dir_value == ".repo_studios/tests"
+
+
+def test_section_hardening_uses_telemetry_metrics(telemetry_module) -> None:
+    telemetry = {
+        "metrics": {
+            "total_files": 3,
+            "total_issues": 7,
+            "severity": {"high": 2, "medium": 5, "low": 0},
+        },
+        "components": {
+            "hardening": {
+                "summary": {
+                    "total_files": 3,
+                    "total_issues": 7,
+                    "severity_totals": {"high": 2, "medium": 5, "low": 0},
+                }
+            }
+        },
+    }
+    outcome = telemetry_module.HardeningOutcome(run_dir=None, payload={})
+    lines = telemetry_module._section_hardening(outcome, "some/artifact", telemetry)
+    rendered = "\n".join(lines)
+    assert "| Files Analyzed | 3 |" in rendered
+    assert "| Total Issues | 7 |" in rendered
+    assert "| High Severity | 2 |" in rendered
+
+
+def test_section_coverage_prefers_telemetry_metrics_even_when_zero(telemetry_module) -> None:
+    telemetry = {
+        "metrics": {
+            "total_files": 0,
+            "total_functions": 10,
+            "covered_functions": 0,
+            "overall_coverage_pct": 0.0,
+            "threshold": 50.0,
+        },
+        "payload": {
+            "summary": {
+                "total_files": 123,
+                "total_functions": 123,
+                "covered_functions": 123,
+                "overall_coverage_pct": 99.9,
+                "threshold": 99.0,
+            }
+        },
+    }
+    outcome = telemetry_module.CoverageOutcome(
+        report_dir=None,
+        summary={
+            "total_files": 999,
+            "total_functions": 999,
+            "covered_functions": 999,
+            "overall_coverage_pct": 88.8,
+            "threshold": 88.8,
+        },
+    )
+    lines = telemetry_module._section_coverage(outcome, "some/artifact", telemetry)
+    rendered = "\n".join(lines)
+    assert "| Files | 0 |" in rendered
+    assert "| Functions | 10 |" in rendered
+    assert "| Covered | 0 |" in rendered
+    assert "| Coverage % | 0.0 |" in rendered
+
+
+def test_section_coverage_labels_heuristic_threshold_when_none_configured(telemetry_module) -> None:
+    telemetry = {
+        "metrics": {
+            "total_files": 1,
+            "total_functions": 2,
+            "covered_functions": 0,
+            "overall_coverage_pct": 0.0,
+            "threshold": None,
+        },
+        "payload": {"summary": {"threshold": None}},
+    }
+    outcome = telemetry_module.CoverageOutcome(report_dir=None, summary={"threshold": None})
+    lines = telemetry_module._section_coverage(outcome, "some/artifact", telemetry)
+    rendered = "\n".join(lines)
+    assert "heuristic threshold" in rendered
+
+
 def test_run_generates_healthview_bundle(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, telemetry_module) -> None:
     repo_root = Path(__file__).resolve().parents[4]
 
@@ -384,7 +583,17 @@ def test_run_handles_missing_logs(tmp_path: Path, monkeypatch: pytest.MonkeyPatc
         heatmap_report_dir.mkdir(parents=True, exist_ok=True)
         return telemetry_module.HeatmapOutcome(run_dir=heatmap_report_dir, payload={"mode": "fixture"})
 
+    def fake_execute_collect(paths, options):
+        return telemetry_module.CollectOutcome(
+            report_dir=None,
+            producer_bundle_dir=None,
+            warnings_total=0,
+            slow_tests=0,
+            payload={"status": "no_data"},
+        )
+
     monkeypatch.setattr(telemetry_module, "_execute_coverage", fake_execute_coverage)
+    monkeypatch.setattr(telemetry_module, "_execute_collect", fake_execute_collect)
     monkeypatch.setattr(telemetry_module, "_execute_hardening", fake_execute_hardening)
     monkeypatch.setattr(telemetry_module, "_execute_heatmap", fake_execute_heatmap)
 
@@ -441,7 +650,7 @@ def test_run_handles_missing_logs(tmp_path: Path, monkeypatch: pytest.MonkeyPatc
     )
 
     exit_code = telemetry_module.run(args)
-    assert exit_code == 0
+    assert exit_code == 1
 
     topic_dir = healthview_root / "orchestrator_reports" / "test_execution_telemetry"
     runs = sorted(child for child in topic_dir.iterdir() if child.is_dir())
@@ -457,4 +666,5 @@ def test_run_handles_missing_logs(tmp_path: Path, monkeypatch: pytest.MonkeyPatc
 
     summary_text = summary_markdown.read_text(encoding="utf-8")
     assert "log_report_available: no" in summary_text
-    assert "- summarize: skipped" in summary_text
+    assert "pipeline_status: failed" in summary_text
+    assert "- collect: failed" in summary_text

@@ -55,20 +55,33 @@ AssertionError: boom
 def test_collect_test_log_reports_emits_artifacts(tmp_path):
     producer_mod = _load_module("collect_test_log_reports", _PRODUCER_PATH)
 
-    assert producer_mod.DEFAULT_OUTPUT_DIR == Path(".repo_studios/reports/healthview")
+    assert producer_mod.DEFAULT_OUTPUT_DIR == Path(
+        ".repo_studios/reports/healthview/rawview/test_log_reports"
+    )
+    assert producer_mod.DEFAULT_LOGS_BASE == Path(
+        ".repo_studios/reports/healthview/rawview/test_execution_runs"
+    )
 
     repo = tmp_path / "repo"
-    run_dir = repo / ".repo_studios" / "pytest_logs" / "smoke" / "2025-01-01_000000"
+    run_dir = (
+        repo
+        / ".repo_studios"
+        / "reports"
+        / "healthview"
+        / "rawview"
+        / "test_execution_runs"
+        / "20250101-0000"
+    )
     run_dir.mkdir(parents=True)
     _write_junit(run_dir)
     _write_pytest_log(run_dir)
 
-    output_dir = repo / ".repo_studios" / "command_center" / "reports"
+    output_dir = repo / ".repo_studios" / "reports" / "healthview" / "rawview" / "test_log_reports"
 
     result = producer_mod.run(
         [
             "--logs-dir",
-            str(run_dir.parents[2]),
+            str(run_dir.parent),
             "--logs-run",
             str(run_dir),
             "--output-dir",
@@ -125,12 +138,14 @@ def test_collect_test_log_reports_emits_artifacts(tmp_path):
 def test_collect_test_log_reports_prunes_history(tmp_path):
     producer_mod = _load_module("collect_test_log_reports", _PRODUCER_PATH)
 
-    assert producer_mod.DEFAULT_OUTPUT_DIR == Path(".repo_studios/reports/healthview")
+    assert producer_mod.DEFAULT_OUTPUT_DIR == Path(
+        ".repo_studios/reports/healthview/rawview/test_log_reports"
+    )
 
     repo = tmp_path / "repo"
-    logs_base = repo / ".repo_studios" / "pytest_logs"
-    first_run = logs_base / "suite" / "run_a"
-    second_run = logs_base / "suite" / "run_b"
+    logs_base = repo / ".repo_studios" / "reports" / "healthview" / "rawview" / "test_execution_runs"
+    first_run = logs_base / "20250101-0000"
+    second_run = logs_base / "20250101-0001"
     first_run.mkdir(parents=True)
     second_run.mkdir(parents=True)
     _write_junit(first_run)
@@ -138,7 +153,7 @@ def test_collect_test_log_reports_prunes_history(tmp_path):
     _write_junit(second_run)
     _write_pytest_log(second_run)
 
-    output_dir = repo / ".repo_studios" / "command_center" / "reports"
+    output_dir = repo / ".repo_studios" / "reports" / "healthview" / "rawview" / "test_log_reports"
 
     producer_mod.run(
         [
@@ -175,8 +190,7 @@ def test_collect_test_log_reports_prunes_history(tmp_path):
     )
 
     artifacts_dir = Path(result["output_dir"])
-    runs_root = output_dir / "rawview" / "test_log_reports"
-    runs = [child.name for child in runs_root.iterdir() if child.is_dir()]
+    runs = [child.name for child in output_dir.iterdir() if child.is_dir()]
     assert len(runs) == 1
     assert artifacts_dir.name in runs
 
@@ -185,16 +199,20 @@ def test_collect_test_log_reports_handles_missing_runs(tmp_path):
     producer_mod = _load_module("collect_test_log_reports", _PRODUCER_PATH)
 
     repo = tmp_path / "repo"
-    logs_dir = repo / ".repo_studios" / "pytest_logs"
-    logs_dir.mkdir(parents=True)
+    logs_dir = repo / ".repo_studios" / "reports" / "healthview" / "rawview" / "test_execution_runs"
+    logs_dir.mkdir(parents=True, exist_ok=True)
 
     result = producer_mod.run(
         [
             "--summarize-existing",
+            "--repo-root",
+            str(repo),
             "--logs-dir",
             str(logs_dir),
             "--output-dir",
-            str(repo / "out"),
+            str(repo / ".repo_studios" / "reports" / "healthview" / "rawview" / "test_log_reports"),
+            "--run-timestamp",
+            "20250101-0000",
             "--log-level",
             "ERROR",
         ]
@@ -211,8 +229,8 @@ def test_collect_test_log_reports_can_run_pytest(tmp_path, monkeypatch):
     repo = tmp_path / "repo"
     repo.mkdir(parents=True)
     (repo / ".repo_studios").mkdir(parents=True, exist_ok=True)
-    logs_dir = repo / ".repo_studios" / "command_center" / "reports" / "rawview" / "test_execution_runs"
-    output_dir = repo / ".repo_studios" / "command_center" / "reports"
+    logs_dir = repo / ".repo_studios" / "reports" / "healthview" / "rawview" / "test_execution_runs"
+    output_dir = repo / ".repo_studios" / "reports" / "healthview" / "rawview" / "test_log_reports"
 
     def fake_run(cmd, *, cwd=None, stdout=None, stderr=None, text=None, check=None, capture_output=None):
         if "--junitxml" in cmd:
@@ -285,8 +303,8 @@ def test_collect_test_log_reports_summarize_existing_skips_pytest(tmp_path, monk
     repo.mkdir(parents=True)
     (repo / ".repo_studios").mkdir(parents=True, exist_ok=True)
 
-    logs_dir = repo / ".repo_studios" / "command_center" / "reports" / "rawview" / "test_execution_runs"
-    run_dir = logs_dir / "pytest_log_capture-2025-01-01_0000"
+    logs_dir = repo / ".repo_studios" / "reports" / "healthview" / "rawview" / "test_execution_runs"
+    run_dir = logs_dir / "20250101-0000"
     run_dir.mkdir(parents=True, exist_ok=True)
     _write_junit(run_dir)
     _write_pytest_log(run_dir)
@@ -296,7 +314,7 @@ def test_collect_test_log_reports_summarize_existing_skips_pytest(tmp_path, monk
 
     monkeypatch.setattr(producer_mod.subprocess, "run", explode)
 
-    output_dir = repo / ".repo_studios" / "reports" / "healthview"
+    output_dir = repo / ".repo_studios" / "reports" / "healthview" / "rawview" / "test_log_reports"
     result = producer_mod.run(
         [
             "--repo-root",

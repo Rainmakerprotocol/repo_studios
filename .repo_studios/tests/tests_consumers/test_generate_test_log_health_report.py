@@ -74,7 +74,15 @@ def test_generate_test_log_health_report_prefers_producer_bundle(tmp_path, monke
     )
     producer_dir.mkdir(parents=True)
 
-    logs_dir = repo / ".repo_studios" / "pytest_logs" / "run_a"
+    logs_dir = (
+        repo
+        / ".repo_studios"
+        / "reports"
+        / "healthview"
+        / "rawview"
+        / "test_execution_runs"
+        / "20250101-0000"
+    )
     logs_dir.mkdir(parents=True)
 
     payload = {
@@ -218,8 +226,8 @@ def test_generate_test_log_health_report_falls_back_to_logs(tmp_path, monkeypatc
     repo.mkdir()
     monkeypatch.chdir(repo)
 
-    logs_base = repo / ".repo_studios" / "pytest_logs"
-    run_dir = logs_base / "suite" / "2025-01-01"
+    logs_base = repo / ".repo_studios" / "reports" / "healthview" / "rawview" / "test_execution_runs"
+    run_dir = logs_base / "20250101-0000"
     run_dir.mkdir(parents=True)
     _write_junit(run_dir)
     _write_pytest_log(run_dir)
@@ -297,8 +305,8 @@ def test_generate_test_log_health_report_prunes_history(tmp_path, monkeypatch):
     repo.mkdir()
     monkeypatch.chdir(repo)
 
-    logs_base = repo / ".repo_studios" / "pytest_logs"
-    run_dir = logs_base / "suite" / "2025-01-01"
+    logs_base = repo / ".repo_studios" / "reports" / "healthview" / "rawview" / "test_execution_runs"
+    run_dir = logs_base / "20250101-0000"
     run_dir.mkdir(parents=True)
     _write_junit(run_dir)
     _write_pytest_log(run_dir)
