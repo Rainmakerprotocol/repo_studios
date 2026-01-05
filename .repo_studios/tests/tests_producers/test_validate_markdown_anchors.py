@@ -24,7 +24,14 @@ def test_reports_written_with_issues(tmp_path):
         "# Title\n\nMissing anchor [bad](#missing)\n",
         encoding="utf-8",
     )
-    output_dir = root / ".repo_studios" / "reports" / "healthview"
+    output_dir = (
+        root
+        / ".repo_studios"
+        / "reports"
+        / "healthview"
+        / "producer_reports"
+        / "markdown_anchor_validation"
+    )
 
     exit_code = mod.main(
         [
@@ -44,11 +51,11 @@ def test_reports_written_with_issues(tmp_path):
     )
 
     assert exit_code == 1
-    run_dir = output_dir / "healthview" / "markdown_anchor_validation" / "20240101-0000"
+    run_dir = output_dir / "20240101-0000"
     assert run_dir.is_dir()
 
     manifest = json.loads((run_dir / "manifest.json").read_text(encoding="utf-8"))
-    assert manifest["viewer_slug"] == "healthview"
+    assert manifest["viewer_slug"] == "producer_reports"
     assert manifest["topic"] == "markdown_anchor_validation"
     assert manifest["run_timestamp"] == "20240101-0000"
 
@@ -58,7 +65,7 @@ def test_reports_written_with_issues(tmp_path):
     assert telemetry["payload"]["report"]["issues"][0]["file"] == "docs/sample.md"
     assert (run_dir / "summary.md").is_file()
 
-    topic_dir = output_dir / "healthview" / "markdown_anchor_validation"
+    topic_dir = output_dir
     assert not (topic_dir / "latest_report.json").exists()
     assert not (topic_dir / "latest_report.md").exists()
 
@@ -69,8 +76,15 @@ def test_pruning_keeps_newest_run(tmp_path):
     docs = root / "docs"
     docs.mkdir(parents=True)
     (docs / "good.md").write_text("# Title\n\n[Self](#title)\n", encoding="utf-8")
-    output_dir = root / ".repo_studios" / "reports" / "healthview"
-    topic_dir = output_dir / "healthview" / "markdown_anchor_validation"
+    output_dir = (
+        root
+        / ".repo_studios"
+        / "reports"
+        / "healthview"
+        / "producer_reports"
+        / "markdown_anchor_validation"
+    )
+    topic_dir = output_dir
     topic_dir.mkdir(parents=True, exist_ok=True)
 
     stale_names = [

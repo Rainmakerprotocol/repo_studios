@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "viewer_slug": "producer_reports",
+  "topic": "anchor_inventory",
+  "run_timestamp": "20260105-0158",
+  "generated_at": "2026-01-05T01:58:41.335738+00:00",
+  "status": "ok",
+  "git_sha": null,
+  "repo_root": "C:\\Users\\genet\\repo_studios",
+  "inputs": {
+    "docs_root": "C:\\Users\\genet\\repo_studios\\docs",
+    "additional_docs_roots": [
+      "C:\\Users\\genet\\repo_studios\\.repo_studios\\docs"
+    ],
+    "allow_file": null,
+    "test_file": null,
+    "artifacts_to_keep": 5,
+    "timestamp": "2026-01-05T01:58:39.846725+00:00"
+  },
+  "catalog": [
+    {
+      "artifact": "manifest.json",
+      "path": ".repo_studios\\reports\\healthview\\producer_reports\\anchor_inventory\\20260105-0158\\manifest.json"
+    },
+    {
+      "artifact": "summary.md",
+      "path": ".repo_studios\\reports\\healthview\\producer_reports\\anchor_inventory\\20260105-0158\\summary.md"
+    },
+    {
+      "artifact": "telemetry.json",
+      "path": ".repo_studios\\reports\\healthview\\producer_reports\\anchor_inventory\\20260105-0158\\telemetry.json"
+    }
+  ],
+  "provenance": {
+    "script": "generate_anchor_inventory.py",
+    "trigger": "cli"
+  }
+}

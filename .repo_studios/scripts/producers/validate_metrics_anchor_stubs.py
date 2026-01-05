@@ -502,6 +502,7 @@ def render_summary_markdown(*, report: dict[str, Any], run_timestamp: str) -> st
     """
     summary = report.get("summary", {})
     status = report.get("status", "ok")
+    anchors_referenced = int(summary.get("anchors_referenced", 0) or 0)
     lines: list[str] = [
         "# Metrics Anchor Stub Validation\n\n",
         f"- Status: `{status}`\n",
@@ -509,11 +510,14 @@ def render_summary_markdown(*, report: dict[str, Any], run_timestamp: str) -> st
         f"- Legacy File: `{report.get('legacy_file', '')}`\n",
         f"- Allowlist: `{report.get('allowlist_path') or 'none'}`\n",
         f"- Files Checked: {summary.get('files_checked', 0)}\n",
-        f"- Anchors Referenced: {summary.get('anchors_referenced', 0)}\n",
+        f"- Anchors Referenced: {anchors_referenced}\n",
         f"- Legacy Stub Count: {summary.get('legacy_stub_count', 0)}\n",
         f"- Missing Anchors: {summary.get('missing_count', 0)}\n",
         f"- Allowlisted Anchors: {summary.get('allowlisted_count', 0)}\n",
     ]
+
+    if anchors_referenced == 0:
+        lines.append("- Signal: `low` (no references observed)\n")
 
     missing = report.get("missing", [])
     if missing:
@@ -523,12 +527,19 @@ def render_summary_markdown(*, report: dict[str, Any], run_timestamp: str) -> st
             files = "<br>".join(entry.get("files", [])) or "—"
             lines.append(f"\n| `{entry.get('anchor')}` | {files} |")
 
-    lines.append(
-        "\n\n## Next Steps\n\n"
-        "- [ ] Add legacy stub entries for missing anchors listed above, or document intentional drift.\n"
-        "- [ ] If exceptions are required, update the allowlist JSON with justification.\n"
-        "- [ ] Re-run this producer to confirm a clean state.\n"
-    )
+    if anchors_referenced == 0:
+        lines.append(
+            "\n\n## Next Steps\n\n"
+            "- [ ] If you expect references, confirm the repo contains `metrics_orchestrator.md#...` links and re-run.\n"
+            "- [ ] If references are intentionally absent, treat this run as low-signal and validate the legacy file via a spot-check.\n"
+        )
+    else:
+        lines.append(
+            "\n\n## Next Steps\n\n"
+            "- [ ] Add legacy stub entries for missing anchors listed above, or document intentional drift.\n"
+            "- [ ] If exceptions are required, update the allowlist JSON with justification.\n"
+            "- [ ] Re-run this producer to confirm a clean state.\n"
+        )
     return "".join(lines)
 
 

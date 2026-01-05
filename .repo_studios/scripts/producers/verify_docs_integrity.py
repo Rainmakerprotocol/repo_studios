@@ -829,10 +829,14 @@ def render_summary_markdown(*, report: dict[str, Any], run_timestamp: str) -> st
         A markdown-formatted summary string.
     """
     summary = report.get("summary", {})
+    paths = report.get("paths", {}) if isinstance(report.get("paths"), dict) else {}
+    index_path = paths.get("index_path")
     lines = [
         "# Documentation Integrity Report\n\n",
         f"- Status: `{report.get('status', 'unknown')}`\n",
         f"- Run Timestamp (UTC): `{run_timestamp}`\n",
+        f"- Index path: `{index_path}`\n" if index_path else "- Index path: (unknown)\n",
+        "- Integrity: verifies governed fenced JSON blocks have a stable `content_hash` matching the computed SHA-256.\n",
         f"- Documents processed: {summary.get('documents_processed', 0)}\n",
         f"- JSON blocks checked: {summary.get('json_blocks_checked', 0)}\n",
         f"- Blocks updated: {summary.get('documents_updated', 0)}\n",

@@ -344,13 +344,16 @@ def render_summary_markdown(*, report: dict) -> str:
     Returns:
         A markdown-formatted summary string.
     """
+    files_scanned = len(report.get("scanned_files", []))
     lines = [
         "# Markdown Anchor Validation Report",
         "",
         f"Generated (UTC): {report['generated_utc']}",
         f"Root: {report['root']}",
         "Patterns: " + (", ".join(report["patterns"]) or "<none>"),
+        f"Files scanned: {files_scanned}",
         f"Issue Count: {report['issue_count']}",
+        "Issue kinds: `file` (target file missing), `anchor` (target anchor missing)",
     ]
     if report["issues"]:
         lines.append("")

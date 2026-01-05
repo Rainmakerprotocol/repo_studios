@@ -59,10 +59,14 @@ parameters:
   - name: coverage_xml
     type: path
     required: false
-    default: .repo_studios/tests/fixtures/test_run_coverage/coverage.xml
-    description: Coverage.py XML input payload.
+    default: coverage.xml
+    description: |
+      Coverage.py XML input payload.
+
+      This defaults to repo-root coverage.xml and may be absent in a fresh workspace; when missing,
+      prefer refresh mode (--refresh-coverage-xml) so the producer can regenerate it.
     validation:
-      must_exist: true
+      must_exist: false
       must_be_file: true
 
   - name: refresh_coverage_xml
@@ -100,7 +104,7 @@ parameters:
   - name: refresh_cov_target
     type: string
     required: false
-    default: .repo_studios
+    default: .
     description: |
       Coverage targets passed to pytest-cov via --cov=<target> when refresh_coverage_xml is true.
       Multiple targets are supported by repeating the CLI flag.

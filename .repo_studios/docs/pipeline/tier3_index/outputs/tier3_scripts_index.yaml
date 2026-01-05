@@ -1,16 +1,16 @@
 version: 1.0.0
-generated_at: '2026-01-02T20:55:29.549921+00:00'
+generated_at: '2026-01-04T17:10:37.308441+00:00'
 generator_version: 1.0.0
 repository:
   name: repo_studios
   root: C:\Users\genet\repo_studios
   branch: main
 statistics:
-  total_scripts: 33
+  total_scripts: 39
   categories:
-    producer: 13
+    producer: 14
     utility: 1
-    unknown: 7
+    unknown: 12
     aggregator: 3
     orchestrator: 4
     summarizer: 3
@@ -18,8 +18,8 @@ statistics:
   status:
     active: 16
     template: 1
-    unknown: 8
-    draft: 8
+    unknown: 13
+    draft: 9
 scripts:
 - script_id: generate_commandview_inventory
   name: Generate CommandView Inventory
@@ -539,7 +539,7 @@ scripts:
   summary: "Renders a compact markdown + JSON summary for a Stage 5.1 Monkey Patch Oversight pipeline\
     \ run.\n\nThe summarizer consumes upstream producer, consumer, and aggregator outputs and emits overview\n\
     artifacts under:\n\n  .repo_studios/reports/healthview/summarizer_reports/monkey_patch_overview/<YYYYMMDD-HHMM>/\n\
-    \nThe run directory includes:\n  - monkey_patch_overview.json\n  - monkey_patch_overview.md\n"
+    \nThe run directory includes:\n  - manifest.json\n  - summary.md\n"
   keywords:
   - healthview
   - summarizer
@@ -549,6 +549,91 @@ scripts:
   status: active
   entry_point: run
   importable: true
+- script_id: unknown
+  name: analyze_standards_index_gaps
+  category: unknown
+  tier3_file: healthview_orchestration_pipeline\tier3_scripts\standards_integrity\tier3_analyze_standards_index_gaps.yaml
+  script_path: unknown
+  summary: 'Scans markdown sources for imperative statements (avoid, ensure, prefer, use, never, etc.)
+    that may represent standards directives not yet captured in the repo standards index. Produces a gap
+    report identifying candidate lines that should be reviewed for inclusion.
+
+    '
+  keywords: []
+  status: unknown
+  entry_point: unknown
+  importable: false
+- script_id: diff_standards_index
+  name: Diff Standards Index
+  category: producer
+  tier3_file: healthview_orchestration_pipeline\tier3_scripts\standards_integrity\tier3_diff_standards_index.yaml
+  script_path: .repo_studios/scripts/producers/diff_standards_index.py
+  summary: "Compares two standards index YAML snapshots (old vs new) and emits a canonical\nHealthView\
+    \ bundle documenting additions, removals, and changes under:\n\n  .repo_studios/reports/healthview/producer_reports/standards_index_diff/<YYYYMMDD-HHMM>/\n\
+    \nThe bundle includes manifest.json, summary.md, and telemetry.json.\n\nSupports fail-on policies\
+    \ to gate CI on specific change kinds.\n"
+  keywords:
+  - healthview
+  - producer
+  - standards
+  - diff
+  - index
+  - telemetry
+  status: draft
+  entry_point: main
+  importable: true
+- script_id: unknown
+  name: generate_standards_index
+  category: unknown
+  tier3_file: healthview_orchestration_pipeline\tier3_scripts\standards_integrity\tier3_generate_standards_index.yaml
+  script_path: unknown
+  summary: 'Builds repo_standards_index.yaml by merging seed rules, scanning configured sources, and optionally
+    extracting new standards from markdown files. Emits structured artifacts (manifest, summary, telemetry)
+    for auditing and downstream consumption.
+
+    '
+  keywords: []
+  status: unknown
+  entry_point: unknown
+  importable: false
+- script_id: unknown
+  name: run_standards_integrity
+  category: unknown
+  tier3_file: healthview_orchestration_pipeline\tier3_scripts\standards_integrity\tier3_run_standards_integrity.yaml
+  script_path: unknown
+  summary: No description
+  keywords: []
+  status: unknown
+  entry_point: unknown
+  importable: false
+- script_id: unknown
+  name: seed_standards_prompts
+  category: unknown
+  tier3_file: healthview_orchestration_pipeline\tier3_scripts\standards_integrity\tier3_seed_standards_prompts.yaml
+  script_path: unknown
+  summary: 'Generates structured prompt seed bundles from the standards index, filtered by severity. Produces
+    multiple output formats (text, yaml, json) suitable for feeding into prompt tuning workflows and standards-aware
+    AI agents.
+
+    '
+  keywords: []
+  status: unknown
+  entry_point: unknown
+  importable: false
+- script_id: unknown
+  name: summarize_standards
+  category: unknown
+  tier3_file: healthview_orchestration_pipeline\tier3_scripts\standards_integrity\tier3_summarize_standards.yaml
+  script_path: unknown
+  summary: 'Generates a HealthView-ready summary of the standards index, including rule counts, extraction
+    metrics, pending file status, and markdown rule samples. Produces JSON and Markdown artifacts for
+    dashboards and reporting.
+
+    '
+  keywords: []
+  status: unknown
+  entry_point: unknown
+  importable: false
 - script_id: analyze_test_hardening
   name: Analyze Test Hardening
   category: producer
@@ -703,6 +788,7 @@ by_category:
   - validate_metrics_anchor_stubs
   - verify_docs_integrity
   - scan_monkey_patches
+  - diff_standards_index
   - analyze_test_hardening
   - collect_test_log_reports
   - generate_test_coverage_inventory

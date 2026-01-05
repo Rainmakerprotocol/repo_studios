@@ -10,8 +10,8 @@ role:
   - roster
   - stage-vertical
 status: draft
-version: 0.1.0
-updated_at: 2025-12-25
+version: 0.1.1
+updated_at: 2026-01-04
 tags:
   - pipeline
   - healthview
@@ -226,10 +226,10 @@ record.
   - **Entry surface:** `run(argv)` and `main()`
   - **Key CLI inputs (selected):**
     - `--repo-root` (override repository root resolution)
-    - `--logs-dir` (default: `.repo_studios/command_center/reports/rawview/test_execution_runs`)
-    - `--test-coverage-xml` (default fixture: `.repo_studios/tests/fixtures/test_run_coverage/coverage.xml`)
+    - `--logs-dir` (default: `.repo_studios/reports/healthview/rawview/test_execution_runs`)
+    - `--test-coverage-xml` (default: `coverage.xml` at repo root)
     - `--heatmap-metrics-source` (optional)
-    - `--healthview-root` (default: `.repo_studios/command_center/reports`)
+    - `--healthview-root` (default: `.repo_studios/reports/healthview/orchestrator_reports/test_execution_telemetry`)
     - `--timestamp` (ISO 8601; run slug becomes `YYYYmmdd-HHMM` in UTC)
     - `--artifacts-to-keep`
     - Delegated retention flags:
@@ -354,7 +354,7 @@ Evidence (2025-12-25):
   - **Role:** Producer
   - **Entry surface:** `run(argv)` and `main(argv)`
   - **Key CLI inputs (selected):**
-    - `--logs-dir` (default: `.repo_studios/command_center/reports/rawview/test_execution_runs`)
+    - `--logs-dir` (default: `.repo_studios/reports/healthview/rawview/test_execution_runs`)
     - `--logs-run` (optional explicit run directory)
     - `--output-dir` (default: `.repo_studios/reports/healthview`)
     - `--run-timestamp` (UTC slug in `YYYYMMDD-HHMM`)
@@ -393,8 +393,8 @@ Evidence (2025-12-25):
     - Bundle paths: `bundle_dir = output_dir / timestamp`.
     - Artifact filenames: `manifest.json`, `summary.md`, `telemetry.json`.
     - Discovery (2025-12-21): this workspace had no existing run directories under
-      `.repo_studios/command_center/reports/rawview/test_log_reports/` or
-      `.repo_studios/command_center/reports/rawview/test_execution_runs/` at time of inspection.
+      `.repo_studios/reports/healthview/rawview/test_log_reports/` or
+      `.repo_studios/reports/healthview/rawview/test_execution_runs/` at time of inspection.
     - Retention helper:
       `prune_run_directories(base_dir=output_dir, current_run=bundle_dir, keep=...)`
       sorts candidates by filesystem `st_mtime` (not directory name) and deletes beyond `keep`,
@@ -496,7 +496,7 @@ Workstream E — QA & Evidence
     - `--artifacts-to-keep`
     - `--refresh-coverage-xml` (regenerate `--coverage-xml` via pytest + pytest-cov)
     - `--refresh-tests` (one-or-more pytest suite targets; executed as separate invocations)
-    - `--refresh-cov-target` (coverage source targets; defaults to `.repo_studios`)
+    - `--refresh-cov-target` (coverage source targets; defaults to `.` / repo root)
     - `--refresh-continue-on-error` (continue inventory generation even if some suites fail)
     - `--refresh-omit-tests` (omit `*/tests/*` from coverage measurement)
     - `--refresh-pytest-args -- <...>` (passthrough args; must appear last)
@@ -1252,6 +1252,7 @@ checks:
 
 |Date|Change|Author|Doc-index timestamp|Regression suites|
 |---|---|---|---|---|
+|2026-01-04|Updated Stage 1.1 records to reflect repo-root coverage defaults (`coverage.xml`, `--refresh-cov-target .`) and snapshot-mode coverage refresh behavior (continue-on-error + recorded exit codes).|repo_ai|20260104-1710|doc-index; make studio-orchestrate-test-execution-telemetry|
 |2025-12-25|Closed output-root + base-package stop-gates for `run_test_execution_telemetry.py`; updated tests; captured pytest/mypy/coverage evidence.|repo_ai|20251225-0011|pytest; mypy; coverage; doc-index|
 |2025-12-22|QA re-run for `analyze_test_hardening.py` (pytest + mypy) and marked record DONE. Doc-index refresh deferred to loop closure (post Tier-1 update).|repo_ai|—|pytest; mypy|
 |2025-12-22|Relocated per-script Tier-3 YAMLs for Stage 1.1 Test Execution Telemetry under `healthview_orchestration_pipeline/tier3_scripts/test_execution_telemetry/`; updated Tier-2 references + refreshed Tier-3 scripts index.|repo_ai|20251222-0222|doc-index|

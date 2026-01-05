@@ -31,7 +31,7 @@ command-center:
 ifeq ($(strip $(COMMAND_CENTER_TARGET)),)
 	$(error COMMAND_CENTER_TARGET variable required (make command-center COMMAND_CENTER_TARGET=...))
 endif
-	$(PYTHON) "$(CURDIR)/command_center/scripts/orchestrators/run_command_center_pipeline.py" --repo-root "$(REPO_ROOT)" "$(COMMAND_CENTER_TARGET)"
+	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) "$(CURDIR)/command_center/scripts/orchestrators/run_command_center_pipeline.py" --repo-root "$(REPO_ROOT)" "$(COMMAND_CENTER_TARGET)"
 
 .PHONY: studio-render-views
 studio-render-views:

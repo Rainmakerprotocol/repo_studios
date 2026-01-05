@@ -8,7 +8,7 @@ owners:
     - DocumentationOps
 status: active
 version: 1.0
-updated_at: 2026-01-02
+updated_at: 2026-01-04
 tags:
     - checkbox-report
     - repo-todo
@@ -42,10 +42,8 @@ Top files with the highest number of unfinished items:
   — 77 unchecked
 * `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_available_scripts_roster.md`
   — 72 unchecked
-* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_standards_integrity_roster.md`
-  — 44 unchecked
 * `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md`
-  — 35 unchecked
+  — 27 unchecked
 * `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage_3_1_implementation_plan.md`
   — 25 unchecked
 * `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage_5_1_implementation_plan.md`
@@ -55,7 +53,9 @@ Top files with the highest number of unfinished items:
 * `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_healthview_roster_template.md`
   — 11 unchecked
 * `.repo_studios/docs/pipeline/pipeline_templates/tier2_pipeline_howto.md` — 10 unchecked
-* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_test_execution_telemetry_roster.md`
+* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage_5_hop_refactor_plan.md`
+  — 4 unchecked
+* `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage_6_1_hop_refactor_plan.md`
   — 4 unchecked
 
 ### Sample Outstanding Tasks
@@ -102,8 +102,8 @@ Top files with the highest number of unfinished items:
 
 ## Signals & Telemetry
 
-* Total unchecked tasks: 319.
-* Files containing unchecked tasks: 16.
+* Total unchecked tasks: 275.
+* Files containing unchecked tasks: 17.
 
 ### Unchecked Tasks by H1
 
@@ -111,14 +111,14 @@ Top files with the highest number of unfinished items:
 | --- | --- |
 | Tier-2 Roster — Stage 7 Running the Complete Suite | 77 |
 | Tier-2 Roster — Stage 11.1 Available Scripts (Holding Area) | 72 |
-| Tier-2 Roster — Stage 6.1 Standards Integrity | 44 |
-| HealthView Orchestration Pipeline | 35 |
+| HealthView Orchestration Pipeline | 27 |
 | Stage 3.1 Fault Diagnostics Overview — Implementation Plan | 25 |
 | Stage 5.1 Implementation Plan: Monkey Patch Oversight | 14 |
 | Stage 4.1 Implementation Plan: Dependency & Import Hygiene | 13 |
 | Tier-2 Roster Template — <STAGE_ID> <STAGE_NAME> | 11 |
 | How-To — Authoring Tier-2 Pipeline Documents | 10 |
-| Stage 1.1 Roster — Test Execution Telemetry | 4 |
+| Stage 5 HOP Refactor Plan — Monkey Patch Oversight Pipeline | 4 |
+| Stage 6.1 HOP Refactor Plan — Runtime Compliance Remediation | 4 |
 
 ## Maintenance Playbook
 
@@ -132,4 +132,4 @@ Top files with the highest number of unfinished items:
 
 ## Update Log
 
-* 2026-01-02 — Report regenerated.
+* 2026-01-04 — Report regenerated.

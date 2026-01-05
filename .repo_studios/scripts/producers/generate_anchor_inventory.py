@@ -640,23 +640,36 @@ def render_markdown(report: dict[str, Any], ordered_slugs: list[SlugStat]) -> st
         f"Generated (UTC): {report['generated_utc']}",
         f"Docs Root: {report['docs_root']}",
         "",
-        "## Summary",
-        "",
-        f"- total slugs: {summary['total_slugs']}",
-        f"- cross-file duplicates: {summary['cross_file_duplicates']}",
-        f"- generic allow size: {summary['generic_allow_size']}",
-        f"- allowlist size: {summary['allowlist_size']}",
-        f"- total documents: {summary.get('total_documents')}",
-        f"- documents missing H1: {summary.get('documents_missing_h1')}",
-        f"- documents missing H2 (with H1 present): {summary.get('documents_missing_h2')}",
-        f"- documents with repeated anchors (same file): {summary.get('documents_with_repeated_anchors')}",
-        f"- documents with cross-file duplicates: {summary.get('documents_with_cross_file_duplicates')}",
-        "",
-        "## Document Root Coverage",
-        "",
-        "Top directories by document count (up to 10):",
+        "Scanned Roots:",
         "",
     ]
+    scanned_roots = report.get("scanned_roots", [])
+    if scanned_roots:
+        for root in scanned_roots:
+            lines.append(f"- `{root}`")
+    else:
+        lines.append("- (none)")
+    lines.extend(
+        [
+            "",
+            "## Summary",
+            "",
+            f"- total slugs: {summary['total_slugs']}",
+            f"- cross-file duplicates: {summary['cross_file_duplicates']}",
+            f"- generic allow size: {summary['generic_allow_size']}",
+            f"- allowlist size: {summary['allowlist_size']}",
+            f"- total documents: {summary.get('total_documents')}",
+            f"- documents missing H1: {summary.get('documents_missing_h1')}",
+            f"- documents missing H2 (with H1 present): {summary.get('documents_missing_h2')}",
+            f"- documents with repeated anchors (same file): {summary.get('documents_with_repeated_anchors')}",
+            f"- documents with cross-file duplicates: {summary.get('documents_with_cross_file_duplicates')}",
+            "",
+            "## Document Root Coverage",
+            "",
+            "Top directories by document count (up to 10):",
+            "",
+        ]
+    )
     for entry in summary.get("top_document_roots", [])[:10]:
         lines.append(f"- `{entry['root']}` — {entry['count']} documents")
     if not summary.get("top_document_roots"):
@@ -693,6 +706,17 @@ def render_markdown(report: dict[str, Any], ordered_slugs: list[SlugStat]) -> st
     lines.append("")
     lines.append("<!-- markdownlint-enable MD013 -->")
     lines.append("")
+
+    missing_h1_docs = [doc for doc in documents if doc.get("h1_count", 0) == 0]
+    lines.append("## Documents Missing H1 Headings (up to 15)")
+    lines.append("")
+    if missing_h1_docs:
+        for doc in missing_h1_docs[:15]:
+            lines.append(f"- `{doc['path']}` — H2 count {doc['h2_count']}")
+    else:
+        lines.append("- (none)")
+    lines.append("")
+
     missing_h2_docs = [doc for doc in documents if doc.get("h1_count", 0) > 0 and doc.get("h2_count", 0) == 0]
     lines.append("## Documents Missing H2 Headings (up to 15)")
     lines.append("")
@@ -724,7 +748,6 @@ def render_markdown(report: dict[str, Any], ordered_slugs: list[SlugStat]) -> st
     lines.append("## Source References")
     lines.append("")
     lines.append(f"- Docs Root: `{report['docs_root']}`")
-    scanned_roots = report.get("scanned_roots", [])
     extra_roots = [root for root in scanned_roots if root != report["docs_root"]]
     for root in extra_roots:
         lines.append(f"- Additional Root: `{root}`")

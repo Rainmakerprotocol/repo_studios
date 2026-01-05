@@ -32,7 +32,7 @@ def test_reports_written_with_duplicates(tmp_path):
         encoding="utf-8",
     )
 
-    output_dir = root / ".repo_studios" / "reports" / "healthview"
+    output_dir = root / ".repo_studios" / "reports" / "healthview" / "producer_reports" / mod.TOPIC_SLUG
 
     json_out = root / "baseline.json"
 
@@ -58,7 +58,7 @@ def test_reports_written_with_duplicates(tmp_path):
     )
 
     assert exit_code == 0
-    run_dir = output_dir / mod.VIEWER_SLUG / mod.TOPIC_SLUG / "20240101-0000"
+    run_dir = output_dir / "20240101-0000"
     assert run_dir.is_dir()
 
     telemetry = json.loads((run_dir / "telemetry.json").read_text(encoding="utf-8"))
@@ -89,6 +89,12 @@ def test_reports_written_with_duplicates(tmp_path):
     assert (run_dir / "summary.md").is_file()
     assert (run_dir / "telemetry.json").is_file()
 
+    summary_md = (run_dir / "summary.md").read_text(encoding="utf-8")
+    assert "Scanned Roots:" in summary_md
+    assert f"- `{docs}`" in summary_md
+    assert "## Documents Missing H1 Headings (up to 15)" in summary_md
+    assert "## Documents Missing H2 Headings (up to 15)" in summary_md
+
     baseline = json.loads(json_out.read_text(encoding="utf-8"))
     assert baseline["summary"] == summary
 
@@ -99,8 +105,8 @@ def test_pruning_keeps_newest_run(tmp_path):
     docs = root / "docs"
     docs.mkdir(parents=True)
     (docs / "alpha.md").write_text("# Alpha\n", encoding="utf-8")
-    output_dir = root / ".repo_studios" / "reports" / "healthview"
-    topic_dir = output_dir / mod.VIEWER_SLUG / mod.TOPIC_SLUG
+    output_dir = root / ".repo_studios" / "reports" / "healthview" / "producer_reports" / mod.TOPIC_SLUG
+    topic_dir = output_dir
     topic_dir.mkdir(parents=True, exist_ok=True)
 
     stale_names = ["20230101-0000", "20230201-0000", "20230301-0000"]

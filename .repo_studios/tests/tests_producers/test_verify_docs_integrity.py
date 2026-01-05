@@ -108,12 +108,13 @@ def test_clean_run_generates_artifacts(tmp_path, monkeypatch):
         mod.dt.datetime(2025, 1, 1, 12, 0, 0, tzinfo=mod.dt.timezone.utc),
     )
 
+    output_root = repo_root / "artifacts" / "producer_reports" / "docs_integrity_validation"
     payload = mod.run(
         [
             "--repo-root",
             str(repo_root),
             "--output-dir",
-            str(repo_root / "artifacts"),
+            str(output_root),
             "--artifacts-to-keep",
             "2",
             "--log-level",
@@ -127,11 +128,8 @@ def test_clean_run_generates_artifacts(tmp_path, monkeypatch):
     assert payload["summary"]["json_blocks_checked"] == 2
     assert payload["summary"]["mismatched_blocks"] == 0
 
-    output_root = repo_root / "artifacts"
     expected_run_timestamp = "20250101-1200"
-    expected_run_dir = (
-        output_root / "healthview" / "docs_integrity_validation" / expected_run_timestamp
-    )
+    expected_run_dir = output_root / expected_run_timestamp
 
     assert payload["run_timestamp"] == expected_run_timestamp
     assert Path(payload["run_dir"]) == expected_run_dir
@@ -140,12 +138,12 @@ def test_clean_run_generates_artifacts(tmp_path, monkeypatch):
     assert (expected_run_dir / "summary.md").exists()
     assert (expected_run_dir / "telemetry.json").exists()
     assert not (expected_run_dir / "report.json").exists()
-    assert not (output_root / "latest").exists()
+    assert not (output_root.parent / "latest").exists()
 
     manifest = json.loads(
         (expected_run_dir / "manifest.json").read_text(encoding="utf-8")
     )
-    assert manifest["viewer_slug"] == "healthview"
+    assert manifest["viewer_slug"] == "producer_reports"
     assert manifest["topic"] == "docs_integrity_validation"
     assert manifest["run_timestamp"] == expected_run_timestamp
 
@@ -154,6 +152,10 @@ def test_clean_run_generates_artifacts(tmp_path, monkeypatch):
     )
     assert telemetry["status"] == "ok"
     assert telemetry["metrics"]["documents_processed"] == 1
+
+    summary_md = (expected_run_dir / "summary.md").read_text(encoding="utf-8")
+    assert "- Index path: `" in summary_md
+    assert "Integrity: verifies governed fenced JSON blocks" in summary_md
 
 
 def test_detects_mismatches_and_updates(tmp_path, monkeypatch):
@@ -219,12 +221,13 @@ def test_detects_mismatches_and_updates(tmp_path, monkeypatch):
         mod.dt.datetime(2025, 1, 1, 12, 0, 0, tzinfo=mod.dt.timezone.utc),
     )
 
+    output_root = repo_root / "artifacts" / "producer_reports" / "docs_integrity_validation"
     first_payload = mod.run(
         [
             "--repo-root",
             str(repo_root),
             "--output-dir",
-            str(repo_root / "artifacts"),
+            str(output_root),
             "--log-level",
             "INFO",
         ]
@@ -245,7 +248,7 @@ def test_detects_mismatches_and_updates(tmp_path, monkeypatch):
             "--repo-root",
             str(repo_root),
             "--output-dir",
-            str(repo_root / "artifacts"),
+            str(output_root),
             "--log-level",
             "INFO",
             "--update",

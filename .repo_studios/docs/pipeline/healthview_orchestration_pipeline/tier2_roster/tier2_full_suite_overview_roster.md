@@ -11,7 +11,7 @@ role:
   - stage-vertical
 status: seeded
 version: 0.1.0
-updated_at: 2025-12-20
+updated_at: 2026-01-04
 tags:
   - pipeline
   - healthview
@@ -398,11 +398,11 @@ cli_surfaces:
     - "--timestamp"
 io_contract:
   inputs:
-    - "Consumes logs under .repo_studios/command_center/reports/rawview/test_execution_runs (default)"
+    - "Consumes logs under .repo_studios/reports/healthview/rawview/test_execution_runs (default)"
     - "Accepts --timestamp and derives run_slug as YYYYMMDD-HHMM (UTC)"
   outputs:
     current:
-      root: ".repo_studios/command_center/reports/healthview/test_execution_telemetry/YYYYMMDD-HHMM/"
+      root: ".repo_studios/reports/healthview/orchestrator_reports/test_execution_telemetry/YYYYMMDD-HHMM/"
       artifacts:
         - "manifest.json"
         - "telemetry.json"
@@ -420,12 +420,12 @@ retention:
     - "per-step retention flags (collector/health/coverage/heatmap/hardening)"
   mechanism: "prune_by_keep_budget"
   targets:
-    - ".repo_studios/command_center/reports/healthview/test_execution_telemetry"
+    - ".repo_studios/reports/healthview/orchestrator_reports/test_execution_telemetry"
     - ".repo_studios/reports/producer_reports/test_coverage_reports"
     - ".repo_studios/reports/consumer_reports/test_log_health_reports"
     - ".repo_studios/reports/aggregator_reports/churn_complexity_heatmap"
   guardrails:
-    - "Pipeline stops on first hard failure (docstring)"
+    - "Pipeline stops on first hard failure by default (coverage refresh may be configured to continue-on-error)"
   evidence:
     - "run_test_execution_telemetry.py: run_slug formatting + report writer"
 db_integration:
@@ -441,7 +441,7 @@ evidence:
   tests:
     - "<pytest path>"
   fixtures:
-    - ".repo_studios/tests/fixtures/test_run_coverage/coverage.xml"
+    - "coverage.xml defaults to repo root; fixture coverage XML is used in unit tests only"
 notes:
   - "write_report_artifacts emits manifest.json + telemetry.json; summary.md is produced by the summarizer step."
 ```
@@ -1169,4 +1169,5 @@ checks:
 
 | Date | Change | Author | Doc-index timestamp | Regression suites |
 | --- | --- | --- | --- | --- |
+| 2026-01-04 | Updated Stage 7 summary record to reflect current HealthView rawview/orchestrator paths and repo-root coverage defaults (fixture used for tests only). | GitHub Copilot | 20260104-1710 | doc-index |
 | 2025-12-20 | Seeded Stage 7 Tier-2 roster skeleton (placeholders only). | repo_studios_ai | `<doc-index-ts>` | `<suites>` |

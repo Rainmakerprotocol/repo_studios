@@ -83,11 +83,11 @@ def test_structured_artifacts_without_missing(tmp_path, monkeypatch):
     assert payload["summary"]["anchors_referenced"] == 1
 
     output_dir = Path(payload["output_dir"])
-    assert payload["viewer_slug"] == "healthview"
+    assert payload["viewer_slug"] == "producer_reports"
     assert payload["topic"] == "metrics_anchor_stub_validation"
     assert payload["run_timestamp"] == "20250101-1200"
 
-    run_dir = output_dir / payload["viewer_slug"] / payload["topic"] / payload["run_timestamp"]
+    run_dir = output_dir / payload["run_timestamp"]
     assert (run_dir / "manifest.json").exists()
     assert (run_dir / "summary.md").exists()
     assert (run_dir / "telemetry.json").exists()
@@ -158,7 +158,7 @@ def test_detects_missing_and_honors_allowlist(tmp_path, monkeypatch):
     assert payload_second["summary"]["allowlisted_count"] == 1
 
     output_dir = Path(payload_second["output_dir"])
-    topic_dir = output_dir / payload_second["viewer_slug"] / payload_second["topic"]
+    topic_dir = output_dir
     run_dirs = [p for p in topic_dir.iterdir() if p.is_dir()]
     assert len(run_dirs) == 1
     assert run_dirs[0].name == payload_second["run_timestamp"]

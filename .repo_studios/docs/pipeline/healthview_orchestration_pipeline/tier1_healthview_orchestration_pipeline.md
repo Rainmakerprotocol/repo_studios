@@ -9,8 +9,8 @@ owners:
 role:
   - pipeline-spine
 status: in-progress
-version: 0.3.1
-updated_at: 2025-12-18
+version: 0.3.2
+updated_at: 2026-01-04
 tags:
   - pipeline
   - healthview
@@ -531,7 +531,8 @@ These are Stage 1.1 readiness gates after all Tier-2 DONE script gates are close
 **Overview:**  
 The Test Execution Telemetry orchestrator runs a producer → consumer → aggregator → summarizer
 pipeline to synthesize test execution signals into a HealthView topic bundle. Expect 5-6 minute
-runtime when churn analysis is enabled; pipeline stops on first hard failure.
+runtime when churn analysis is enabled; pipeline stops on first hard failure (with snapshot-mode
+exceptions explicitly recorded in the relevant manifests when enabled).
 
 **Orchestrator:**  
 [.repo_studios/command_center/scripts/orchestrators/run_test_execution_telemetry.py](../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py)
@@ -543,8 +544,8 @@ runtime when churn analysis is enabled; pipeline stops on first hard failure.
 
 **Inputs:**
 
-- Pytest log files and JUnit XML from `.repo_studios/command_center/reports/rawview/test_execution_runs/<timestamp>/`
-- `coverage.xml` from `.repo_studios/tests/fixtures/test_run_coverage/coverage.xml`
+- Pytest log files and JUnit XML from `.repo_studios/reports/healthview/rawview/test_execution_runs/<timestamp>/`
+- `coverage.xml` from `coverage.xml` (repo root; refreshed when configured)
 - Git history for churn analysis (via git log)
 - Optional: Lizard complexity metrics source (JSON file, fallback to churn-only if missing)
 
@@ -562,7 +563,9 @@ runtime when churn analysis is enabled; pipeline stops on first hard failure.
 **Execution Details:**
 
 - Scripts invoked via dynamic imports using `run(argv)` helpers (not subprocess spawning)
-- Exit code propagation: first non-zero exit stops pipeline, no partial bundles published
+- Exit code propagation: first non-zero exit stops pipeline by default.
+  - Snapshot mode may tolerate coverage refresh failures so the orchestrator still emits a usable
+    bundle while recording refresh exit codes in the coverage producer manifest.
 - Artifact retention is configurable; Stage 1.1 exposes multiple retention knobs during migration.
   See Tier-2 Stage 1.1 for the current retention surfaces and pruning evidence.
 - Stage-specific configuration (timestamp overrides, optional inputs, tuning knobs) lives in Tier-2;
@@ -1803,6 +1806,7 @@ All gaps have logical explanations:
 
 | Date | Author / Steward | Change | Doc-index timestamp | Regression suites |
 | --- | --- | --- | --- | --- |
+| 2026-01-04 | GitHub Copilot | Updated Stage 1.1 Inputs/Execution notes to reflect repo-root coverage defaults (`coverage.xml`) and snapshot-mode coverage refresh behavior (continue-on-error + recorded exit codes). | 20260104-1710 | doc-index; make studio-orchestrate-test-execution-telemetry |
 | 2026-01-03 | GitHub Copilot | Stage 6.1 HOP refactor complete: S61R-005/006 artifact names, orchestrator default paths, stop-gates closed, Pass C complete. | pending | 26 passed (Stage 6.1 tests) |
 | 2025-12-25 | GitHub Copilot | Closed Stage 1.1 script gate for `run_test_execution_telemetry.py` after Tier-2 DONE; validated Make target `studio-orchestrate-test-execution-telemetry` emits canonical HealthView bundles. | 20251225-0517 | make studio-orchestrate-test-execution-telemetry; doc-index |
 | 2025-12-24 | GitHub Copilot | Closed Stage 1.1 script gate for `summarize_test_execution_telemetry.py` after Tier-2 DONE + Tier-3 YAML create/validate; refreshed doc-index. | 20251224-2318 | doc-index; pytest tier3_index (29 passed) |
