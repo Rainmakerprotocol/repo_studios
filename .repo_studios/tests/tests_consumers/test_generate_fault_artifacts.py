@@ -49,10 +49,10 @@ def test_fault_artifacts_prefers_producer_report(tmp_path):
     run_dir = (
         repo
         / ".repo_studios"
-        / "command_center"
         / "reports"
+        / "healthview"
         / "rawview"
-        / "fault_diagnostics_runs"
+        / "fault_diagnostics"
         / "2025-01-01_000000"
     )
     run_dir.mkdir(parents=True)
@@ -175,10 +175,10 @@ def test_fault_artifacts_scans_without_producer(tmp_path):
     run_dir = (
         repo
         / ".repo_studios"
-        / "command_center"
         / "reports"
+        / "healthview"
         / "rawview"
-        / "fault_diagnostics_runs"
+        / "fault_diagnostics"
         / "2025-01-02_000000"
     )
     run_dir.mkdir(parents=True)
@@ -224,10 +224,10 @@ def test_fault_artifacts_prunes_history(tmp_path, monkeypatch):
     run_dir = (
         repo
         / ".repo_studios"
-        / "command_center"
         / "reports"
+        / "healthview"
         / "rawview"
-        / "fault_diagnostics_runs"
+        / "fault_diagnostics"
         / "2025-01-03_000000"
     )
     run_dir.mkdir(parents=True)

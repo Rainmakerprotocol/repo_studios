@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "viewer_slug": "producer_reports",
+  "topic": "docs_integrity_validation",
+  "run_timestamp": "20260105-1942",
+  "generated_utc": "2026-01-05T19:42:39.743379+00:00",
+  "status": "ok",
+  "metrics": {
+    "documents_processed": 1,
+    "json_blocks_checked": 2,
+    "mismatched_blocks": 0,
+    "documents_updated": 0,
+    "index_blocks_checked": 1,
+    "table_regenerated": false,
+    "missing_documents_count": 0,
+    "errors_count": 0
+  },
+  "payload": {
+    "schema_version": 1,
+    "timestamp": "2026-01-05T19:42:39.743379+00:00",
+    "status": "ok",
+    "exit_code": 0,
+    "message": "All governed JSON blocks verified.",
+    "run_id": "20260105-1942",
+    "output_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\producer_reports\\docs_integrity_validation",
+    "paths": {
+      "repo_root": "C:\\Users\\genet\\repo_studios",
+      "index_path": ".repo_studios/docs/standards/docs_index.md"
+    },
+    "options": {
+      "update": false,
+      "regen_table": true,
+      "artifacts_to_keep": 5,
+      "log_level": "INFO"
+    },
+    "summary": {
+      "documents_processed": 1,
+      "json_blocks_checked": 2,
+      "mismatched_blocks": 0,
+      "documents_updated": 0,
+      "index_blocks_checked": 1,
+      "table_regenerated": false
+    },
+    "mismatches": [],
+    "missing_documents": [],
+    "errors": []
+  }
+}

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 from contextlib import contextmanager
+from datetime import datetime, timezone
 from pathlib import Path
 
 from command_center.scripts.orchestrators import run_docs_health_overview as orchestrator
@@ -113,6 +114,85 @@ def _patched_aggregator(repo_root: Path, aggregator_output: Path):
                 }
 
             return _fake
+        return original_loader(script_path, module_name, attribute)
+
+    orchestrator._load_callable = _fake_loader
+    try:
+        yield
+    finally:
+        orchestrator._load_callable = original_loader
+
+
+@contextmanager
+def _patched_anchor_inventory(repo_root: Path, metrics: dict[str, int]):
+    original_loader = orchestrator._load_callable
+
+    def _fake_loader(script_path: Path, module_name: str, attribute: str):
+        if (
+            script_path.resolve()
+            == (repo_root / orchestrator.ANCHOR_INVENTORY_SCRIPT).resolve()
+            and attribute == "run"
+        ):
+
+            def _fake(argv: list[str] | None = None) -> dict[str, object]:
+                argv = argv or []
+                output_dir = Path.cwd()
+                if "--output-dir" in argv:
+                    try:
+                        output_dir = Path(argv[argv.index("--output-dir") + 1])
+                    except (ValueError, IndexError):  # pragma: no cover
+                        output_dir = Path.cwd()
+
+                run_timestamp = None
+                if "--timestamp" in argv:
+                    try:
+                        run_timestamp = argv[argv.index("--timestamp") + 1]
+                    except (ValueError, IndexError):  # pragma: no cover
+                        run_timestamp = None
+
+                slug = "20240102-1200"
+                if run_timestamp:
+                    parsed = datetime.fromisoformat(run_timestamp)
+                    parsed_utc = parsed.astimezone(timezone.utc)
+                    slug = parsed_utc.strftime("%Y%m%d-%H%M")
+
+                run_dir = output_dir / slug
+                run_dir.mkdir(parents=True, exist_ok=True)
+
+                manifest_path = run_dir / "manifest.json"
+                summary_path = run_dir / "summary.md"
+                telemetry_path = run_dir / "telemetry.json"
+
+                manifest_path.write_text("{}\n", encoding="utf-8")
+                summary_path.write_text("# Anchor Inventory\n\n", encoding="utf-8")
+                telemetry_payload = {
+                    "schema_version": 1,
+                    "viewer_slug": "producer_reports",
+                    "topic": "anchor_inventory",
+                    "run_timestamp": slug,
+                    "generated_at": "2024-01-02T12:00:00+00:00",
+                    "status": "ok",
+                    "metrics": metrics,
+                }
+                telemetry_path.write_text(
+                    json.dumps(telemetry_payload, indent=2, sort_keys=True) + "\n",
+                    encoding="utf-8",
+                )
+
+                return {
+                    "run_dir": str(run_dir),
+                    "slug": slug,
+                    "artifacts": {
+                        "manifest.json": str(manifest_path),
+                        "summary.md": str(summary_path),
+                        "telemetry.json": str(telemetry_path),
+                    },
+                    "total_slugs": metrics.get("total_slugs", 0),
+                    "duplicates": metrics.get("cross_file_duplicates", 0),
+                }
+
+            return _fake
+
         return original_loader(script_path, module_name, attribute)
 
     orchestrator._load_callable = _fake_loader
@@ -248,3 +328,97 @@ def test_orchestrator_blocks_invalid_topic_alias(tmp_path: Path) -> None:
 
     assert exit_code == 1
     assert (alias_dir / "latest_summary.md").exists()
+
+
+def test_orchestrator_rolls_up_anchor_inventory_metrics(tmp_path: Path) -> None:
+    repo_root = Path(__file__).resolve().parents[4]
+
+    aggregator_inputs = tmp_path / "inputs"
+    _seed_aggregator_inputs(aggregator_inputs)
+
+    healthview_root = tmp_path / "healthview"
+    aggregator_output = tmp_path / "aggregator_output"
+
+    expected_metrics = {
+        "total_documents": 143,
+        "documents_missing_h1": 7,
+        "documents_missing_h2": 3,
+        "documents_with_cross_file_duplicates": 114,
+        "documents_with_repeated_anchors": 2,
+        "total_slugs": 789,
+        "cross_file_duplicates": 81,
+    }
+
+    with _patched_aggregator(repo_root, aggregator_output), _patched_anchor_inventory(
+        repo_root, expected_metrics
+    ):
+        exit_code = orchestrator.run(
+            [
+                "--repo-root",
+                str(repo_root),
+                "--doc-index-output-dir",
+                str(tmp_path / "doc_index"),
+                "--anchor-inventory-output-dir",
+                str(aggregator_inputs / "anchor_inventory"),
+                "--anchor-validation-output-dir",
+                str(aggregator_inputs / "anchor_validation"),
+                "--docs-integrity-output-dir",
+                str(aggregator_inputs / "docs_integrity"),
+                "--metrics-stub-output-dir",
+                str(aggregator_inputs / "metrics_stub"),
+                "--churn-output-dir",
+                str(aggregator_inputs / "churn"),
+                "--undocumented-output-dir",
+                str(aggregator_inputs / "undocumented"),
+                "--aggregator-output-dir",
+                str(aggregator_output),
+                "--healthview-root",
+                str(healthview_root),
+                "--artifacts-to-keep",
+                "2",
+                "--aggregator-artifacts-to-keep",
+                "2",
+                "--skip-doc-index",
+                "--skip-anchor-validation",
+                "--skip-docs-integrity",
+                "--skip-metrics-stub",
+                "--skip-churn",
+                "--skip-undocumented",
+                "--skip-hygiene-signals",
+                "--timestamp",
+                "2024-01-02T12:00:00+00:00",
+                "--log-level",
+                "DEBUG",
+            ]
+        )
+
+    assert exit_code == 0
+
+    manifest_paths = list(
+        healthview_root.glob("orchestrator_reports/docs_health/*/manifest.json")
+    )
+    assert manifest_paths
+    manifest = json.loads(manifest_paths[0].read_text(encoding="utf-8"))
+    artifacts = manifest["artifacts"]
+    assert artifacts.get("anchor_inventory_summary")
+    assert artifacts["anchor_inventory_summary"].endswith("/summary.md")
+    assert artifacts.get("anchor_inventory_manifest")
+    assert artifacts["anchor_inventory_manifest"].endswith("/manifest.json")
+
+    summary_path = manifest_paths[0].with_name("summary.md")
+    summary_text = summary_path.read_text(encoding="utf-8")
+    assert "## Pipeline Status" in summary_text
+    assert "| anchor-inventory | ✅ success |" in summary_text
+    assert "docs=143" in summary_text
+    assert "missing_h1=7" in summary_text
+    assert "missing_h2=3" in summary_text
+    assert "slugs=789" in summary_text
+    assert "duplicates=81" in summary_text
+
+    assert "## Anchor Inventory" in summary_text
+    assert "| Missing H1 | 7 |" in summary_text
+    assert "| Missing H2 | 3 |" in summary_text
+    assert "| Total Slugs | 789 |" in summary_text
+    assert "| Cross-file Duplicates | 81 |" in summary_text
+    assert "| Docs w/ Cross-file Duplicates | 114 |" in summary_text
+    assert "| Docs w/ Repeated Anchors | 2 |" in summary_text

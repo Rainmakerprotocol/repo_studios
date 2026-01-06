@@ -121,7 +121,7 @@ PATH_SPECS: dict[str, PathSpec] = {
     ),
     "anchor_inventory": PathSpec(
         field="anchor_inventory",
-        default=Path(".repo_studios/reports/producer_reports/healthview/anchor_inventory"),
+        default=Path(".repo_studios/reports/healthview/producer_reports/anchor_inventory"),
         ensure_dir=False,
         within_repo=True,
     ),
@@ -347,7 +347,9 @@ def _module_key(path: str) -> str:
     Returns:
         Module identifier string.
     """
-    path = path.strip().lstrip("./")
+    path = path.strip()
+    if path.startswith("./"):
+        path = path[2:]
     if not path:
         return "root"
     parts = path.split("/")
@@ -375,7 +377,27 @@ def _is_doc_path(path: str) -> bool:
     Returns:
         True if the path is a documentation file.
     """
-    normalized = path.lower()
+    normalized = path.replace("\\", "/").strip()
+    if normalized.startswith("./"):
+        normalized = normalized[2:]
+    normalized = normalized.lower()
+
+    # Exclude generated report artifacts; these are outputs, not authored docs.
+    generated_prefixes = (
+        "reports/",
+        "command_center/reports/",
+        ".repo_studios/reports/",
+        ".repo_studios/command_center/reports/",
+        ".repo_studios/.repo_studios/reports/",
+    )
+    generated_markers = (
+        "/reports/healthview/",
+        "/command_center/reports/",
+        "/.repo_studios/reports/",
+        "/.repo_studios/command_center/reports/",
+    )
+    if normalized.startswith(generated_prefixes) or any(marker in normalized for marker in generated_markers):
+        return False
     if normalized.startswith("docs/"):
         return True
     if normalized.startswith(".repo_studios/docs/"):

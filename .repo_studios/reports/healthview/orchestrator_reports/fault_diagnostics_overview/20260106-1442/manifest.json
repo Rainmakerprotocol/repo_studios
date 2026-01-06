@@ -1,0 +1,107 @@
+{
+  "artifacts": {
+    "consumer_bundle": ".repo_studios/reports/healthview/consumer_reports/fault_artifacts/20260106-1442",
+    "consumer_bundle_summary": null,
+    "overview_manifest.json": ".repo_studios/reports/healthview/summarizer_reports/fault_diagnostics_overview/20260106-1442/manifest.json",
+    "overview_summary.md": ".repo_studios/reports/healthview/summarizer_reports/fault_diagnostics_overview/20260106-1442/summary.md",
+    "overview_telemetry.json": ".repo_studios/reports/healthview/summarizer_reports/fault_diagnostics_overview/20260106-1442/telemetry.json",
+    "producer_report": null,
+    "summarizer_run": ".repo_studios/reports/healthview/summarizer_reports/fault_diagnostics_overview/20260106-1442"
+  },
+  "catalog": [
+    {
+      "role": "consumer",
+      "script_path": ".repo_studios/scripts/consumers/generate_fault_artifacts.py",
+      "topic": "fault_diagnostics_overview"
+    },
+    {
+      "role": "orchestrator",
+      "script_path": ".repo_studios/command_center/scripts/orchestrators/run_fault_diagnostics_overview.py",
+      "topic": "fault_diagnostics_overview"
+    },
+    {
+      "role": "producer",
+      "script_path": ".repo_studios/scripts/producers/collect_faulthandler_reports.py",
+      "topic": "fault_diagnostics_overview"
+    },
+    {
+      "role": "summarizer",
+      "script_path": ".repo_studios/command_center/scripts/summarizers/summarize_fault_diagnostics_overview.py",
+      "topic": "fault_diagnostics_overview"
+    }
+  ],
+  "generated_at": "2026-01-06T14:42:12.427887+00:00",
+  "inputs": {
+    "producer_top_frames": null,
+    "reuse_report": null,
+    "run_dir": null,
+    "runs_dir": ".repo_studios/reports/healthview/rawview/fault_diagnostics",
+    "skip_consumer": false,
+    "skip_producer": false,
+    "skip_summarizer": false
+  },
+  "metrics": {
+    "artifact_bytes": 4932,
+    "artifact_files": 3,
+    "runtime_seconds": 0.208754,
+    "step_count": 3,
+    "steps_failed": 0,
+    "steps_skipped": 0,
+    "steps_succeeded": 3
+  },
+  "run_slug": "20260106-1442",
+  "schema_version": 1,
+  "telemetry": {
+    "finished_at": "2026-01-06T14:42:12.427829+00:00",
+    "metrics": {
+      "artifact_bytes": 4932,
+      "artifact_files": 3,
+      "runtime_seconds": 0.208754,
+      "step_count": 3,
+      "steps_failed": 0,
+      "steps_skipped": 0,
+      "steps_succeeded": 3
+    },
+    "run_slug": "20260106-1442",
+    "started_at": "2026-01-06T14:42:12.219075+00:00",
+    "steps": [
+      {
+        "detail": "signatures=0, repeat_offender=0",
+        "finished_at": "2026-01-06T14:42:12.371872+00:00",
+        "name": "producer",
+        "payload": {
+          "repeat_offender": 0,
+          "signatures": 0
+        },
+        "started_at": "2026-01-06T14:42:12.219183+00:00",
+        "status": "success"
+      },
+      {
+        "detail": "signatures=0, repeat_offender=0",
+        "finished_at": "2026-01-06T14:42:12.407510+00:00",
+        "name": "consumer",
+        "payload": {
+          "repeat_offender": 0,
+          "signatures": 0
+        },
+        "started_at": "2026-01-06T14:42:12.372143+00:00",
+        "status": "success"
+      },
+      {
+        "detail": "slug=20260106-1442",
+        "finished_at": "2026-01-06T14:42:12.427693+00:00",
+        "name": "summarizer",
+        "payload": {
+          "slug": "20260106-1442"
+        },
+        "started_at": "2026-01-06T14:42:12.407706+00:00",
+        "status": "success"
+      }
+    ],
+    "success": true,
+    "topic": "fault_diagnostics_overview",
+    "viewer": "healthview"
+  },
+  "topic": "fault_diagnostics_overview",
+  "viewer": "healthview"
+}

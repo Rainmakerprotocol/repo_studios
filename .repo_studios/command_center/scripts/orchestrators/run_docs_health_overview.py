@@ -345,6 +345,11 @@ class AnchorInventoryOutcome:
     Attributes:
         run_dir: Timestamped output directory.
         slug: Run timestamp slug.
+        total_documents: Number of documents scanned.
+        documents_missing_h1: Number of documents missing an H1.
+        documents_missing_h2: Number of documents missing an H2.
+        documents_with_cross_file_duplicates: Number of documents with cross-file duplicate slugs.
+        documents_with_repeated_anchors: Number of documents with repeated anchors.
         total_slugs: Total anchor slugs inventoried.
         duplicates: Number of duplicate anchors.
         artifacts: Mapping of artifact names to paths.
@@ -352,6 +357,11 @@ class AnchorInventoryOutcome:
 
     run_dir: Path | None
     slug: str | None
+    total_documents: int | None
+    documents_missing_h1: int | None
+    documents_missing_h2: int | None
+    documents_with_cross_file_duplicates: int | None
+    documents_with_repeated_anchors: int | None
     total_slugs: int | None
     duplicates: int | None
     artifacts: dict[str, Path]
@@ -805,9 +815,36 @@ def _execute_anchor_inventory(paths: Paths, options: Options) -> AnchorInventory
         if isinstance(payload.get("duplicates"), int)
         else None
     )
+
+    telemetry_metrics: dict[str, Any] = {}
+    if run_dir is not None:
+        telemetry_path = run_dir / "telemetry.json"
+        telemetry_payload = _read_json(telemetry_path) if telemetry_path.exists() else None
+        if isinstance(telemetry_payload, dict) and isinstance(
+            telemetry_payload.get("metrics"), dict
+        ):
+            telemetry_metrics = cast(dict[str, Any], telemetry_payload["metrics"])
+
+    def _metric_int(name: str) -> int | None:
+        value = telemetry_metrics.get(name)
+        return value if isinstance(value, int) else None
+
+    total_documents = _metric_int("total_documents")
+    documents_missing_h1 = _metric_int("documents_missing_h1")
+    documents_missing_h2 = _metric_int("documents_missing_h2")
+    documents_with_cross_file_duplicates = _metric_int(
+        "documents_with_cross_file_duplicates"
+    )
+    documents_with_repeated_anchors = _metric_int("documents_with_repeated_anchors")
+
     return AnchorInventoryOutcome(
         run_dir=run_dir,
         slug=payload.get("slug") if isinstance(payload.get("slug"), str) else None,
+        total_documents=total_documents,
+        documents_missing_h1=documents_missing_h1,
+        documents_missing_h2=documents_missing_h2,
+        documents_with_cross_file_duplicates=documents_with_cross_file_duplicates,
+        documents_with_repeated_anchors=documents_with_repeated_anchors,
         total_slugs=total_slugs,
         duplicates=duplicates,
         artifacts=_filter_artifacts(artifacts),
@@ -861,42 +898,341 @@ def _execute_anchor_validation(
     if exit_code != 0:
         raise RuntimeError(f"validate_markdown_anchors exited with {exit_code}")
     run_timestamp = options.run_timestamp.astimezone(timezone.utc).strftime("%Y%m%d-%H%M")
-    run_dir_candidate = (
-        paths.anchor_validation_output_dir
-        / "healthview"
-        / ANCHOR_VALIDATION_TOPIC
-        / run_timestamp
-    )
+    run_dir_candidate = paths.anchor_validation_output_dir / run_timestamp
     run_dir: Path | None = run_dir_candidate if run_dir_candidate.exists() else None
 
-    telemetry_path: Path | None = (
-        (run_dir / "telemetry.json") if run_dir is not None else None
-    )
+    telemetry_path: Path | None = (run_dir / "telemetry.json") if run_dir is not None else None
     if telemetry_path and not telemetry_path.exists():
         telemetry_path = None
+
     telemetry = _read_json(telemetry_path) if telemetry_path else None
 
-    report_payload: dict[str, Any] | None = None
-    if isinstance(telemetry, dict):
-        payload = telemetry.get("payload")
-        if isinstance(payload, dict) and isinstance(payload.get("report"), dict):
-            report_payload = payload["report"]
-
-    status = report_payload.get("status") if isinstance(report_payload, dict) else None
-    issue_count = (
-        report_payload.get("issue_count") if isinstance(report_payload, dict) else None
-    )
-    if isinstance(issue_count, str):
-        try:
-            issue_count = int(issue_count)
-        except ValueError:  # pragma: no cover - defensive
-            issue_count = None
+    status = telemetry.get("status") if isinstance(telemetry, dict) else None
+    issue_count: int | None = None
+    if isinstance(telemetry, dict) and isinstance(telemetry.get("metrics"), dict):
+        metrics = cast(dict[str, Any], telemetry["metrics"])
+        if isinstance(metrics.get("issue_count"), int):
+            issue_count = cast(int, metrics["issue_count"])
     return AnchorValidationOutcome(
         run_dir=run_dir,
         status=status,
         issue_count=issue_count,
         report_path=telemetry_path,
     )
+
+
+def _status_icon(status: str) -> str:
+    """Return an emoji icon for a step status.
+
+    Args:
+        status: Step status string (success, skipped, or failed).
+
+    Returns:
+        Emoji icon corresponding to the status.
+    """
+    return "✅" if status == "success" else "⚠️" if status == "skipped" else "❌"
+
+
+def _section_pipeline_status(result_steps: Sequence[TopicStepResult]) -> list[str]:
+    """Render the pipeline status section as Markdown lines.
+
+    Args:
+        result_steps: Sequence of step result objects.
+
+    Returns:
+        List of Markdown lines for the pipeline status table.
+    """
+    lines = [
+        "## Pipeline Status",
+        "",
+        "| Step | Status | Detail |",
+        "| --- | --- | --- |",
+    ]
+    for step in result_steps:
+        icon = _status_icon(step.status)
+        detail = step.detail or ""
+        lines.append(f"| {step.name} | {icon} {step.status} | {detail} |")
+    lines.append("")
+    return lines
+
+
+def _format_artifact_pointer(path_value: str | None) -> list[str]:
+    if not path_value:
+        return []
+    return [f"**Artifact:** `{path_value}`", ""]
+
+
+def _metrics_table(rows: list[tuple[str, object]]) -> list[str]:
+    lines = ["| Metric | Value |", "| --- | ---:|"]
+    for name, value in rows:
+        lines.append(f"| {name} | {value} |")
+    lines.append("")
+    return lines
+
+
+def _concerns_line(concerns: list[str]) -> list[str]:
+    if concerns:
+        return ["**Concerns:** " + "; ".join(concerns), ""]
+    return ["**Concerns:** None", ""]
+
+
+def _load_telemetry_metrics(path_value: str | None, repo_root: Path) -> dict[str, Any]:
+    if not path_value:
+        return {}
+    candidate = Path(path_value)
+    if not candidate.is_absolute():
+        candidate = repo_root / candidate
+    telemetry = _read_json(candidate)
+    if not isinstance(telemetry, dict):
+        return {}
+    metrics = telemetry.get("metrics")
+    return cast(dict[str, Any], metrics) if isinstance(metrics, dict) else {}
+
+
+def _render_docs_health_summary(
+    *,
+    run_slug: str,
+    completed_at: datetime,
+    result_steps: Sequence[TopicStepResult],
+    artifacts: dict[str, str | None],
+    summary: dict[str, Any],
+    repo_root: Path,
+) -> str:
+    """Render a docs-health summary.md styled like test-execution-telemetry.
+
+    Args:
+        run_slug: Timestamp slug for the orchestrator run.
+        completed_at: Completion timestamp.
+        result_steps: Pipeline step results.
+        artifacts: Orchestrator manifest artifacts mapping.
+        summary: Aggregated summary data from the docs-health aggregator.
+        repo_root: Repository root path.
+
+    Returns:
+        Markdown-formatted summary string.
+    """
+    lines: list[str] = [
+        "# Docs Health Run",
+        "",
+        f"Run: `{run_slug}` | Completed: {completed_at.isoformat()}",
+        "",
+    ]
+
+    lines.extend(_section_pipeline_status(result_steps))
+    lines.append("---")
+    lines.append("")
+
+    overall = summary.get("overall_score")
+    category_scores = summary.get("category_scores") if isinstance(summary.get("category_scores"), dict) else {}
+    statuses = summary.get("statuses") if isinstance(summary.get("statuses"), dict) else {}
+    weights = summary.get("weights") if isinstance(summary.get("weights"), dict) else {}
+    status_counts = summary.get("status_counts") if isinstance(summary.get("status_counts"), dict) else {}
+
+    lines.append("## Overall Score")
+    lines.append("")
+    lines.extend(_format_artifact_pointer(artifacts.get("aggregator_run")))
+    lines.extend(_metrics_table([("Overall Score", overall if overall is not None else "")]))
+
+    if category_scores:
+        lines.extend(
+            [
+                "| Category | Score | Status | Weight |",
+                "| --- | ---:| --- | ---:|",
+            ]
+        )
+        for category, score in category_scores.items():
+            status = statuses.get(category, "")
+            weight = weights.get(category, "")
+            lines.append(f"| {category} | {score} | {status} | {weight} |")
+        lines.append("")
+
+    concerns: list[str] = []
+    critical = status_counts.get("critical") if isinstance(status_counts.get("critical"), int) else 0
+    if critical:
+        concerns.append(f"❌ {critical} category(ies) are critical")
+    lines.extend(_concerns_line(concerns))
+    lines.append("---")
+    lines.append("")
+
+    # Doc Index
+    doc_index_metrics = _load_telemetry_metrics(artifacts.get("doc_index_report"), repo_root)
+    lines.append("## Doc Index")
+    lines.append("")
+    lines.extend(_format_artifact_pointer(artifacts.get("doc_index_run")))
+    doc_index_rows: list[tuple[str, object]] = [
+        ("Documents", doc_index_metrics.get("total_documents", "")),
+        ("Headings", doc_index_metrics.get("total_headings", "")),
+        ("Links", doc_index_metrics.get("total_links", "")),
+        ("Missing Descriptions", doc_index_metrics.get("documents_missing_description_count", "")),
+        ("Placeholder Docs", doc_index_metrics.get("placeholder_documents_count", "")),
+        ("Duplicate Slugs", doc_index_metrics.get("duplicate_slug_count", "")),
+        ("Link Density", doc_index_metrics.get("link_density", "")),
+    ]
+    lines.extend(_metrics_table(doc_index_rows))
+    concerns = []
+    missing_desc = doc_index_metrics.get("documents_missing_description_count")
+    if isinstance(missing_desc, int) and missing_desc > 0:
+        concerns.append(f"⚠️ {missing_desc} missing descriptions")
+    placeholders = doc_index_metrics.get("placeholder_documents_count")
+    if isinstance(placeholders, int) and placeholders > 0:
+        concerns.append(f"⚠️ {placeholders} placeholder docs")
+    duplicates = doc_index_metrics.get("duplicate_slug_count")
+    if isinstance(duplicates, int) and duplicates > 0:
+        concerns.append(f"⚠️ {duplicates} duplicate slugs")
+    lines.extend(_concerns_line(concerns))
+    lines.append("---")
+    lines.append("")
+
+    # Anchor Inventory
+    anchor_inventory_metrics = _load_telemetry_metrics(
+        artifacts.get("anchor_inventory_report"), repo_root
+    )
+    lines.append("## Anchor Inventory")
+    lines.append("")
+    lines.extend(_format_artifact_pointer(artifacts.get("anchor_inventory_run")))
+    anchor_rows: list[tuple[str, object]] = [
+        ("Documents Scanned", anchor_inventory_metrics.get("total_documents", "")),
+        ("Missing H1", anchor_inventory_metrics.get("documents_missing_h1", "")),
+        ("Missing H2", anchor_inventory_metrics.get("documents_missing_h2", "")),
+        ("Total Slugs", anchor_inventory_metrics.get("total_slugs", "")),
+        ("Cross-file Duplicates", anchor_inventory_metrics.get("cross_file_duplicates", "")),
+        (
+            "Docs w/ Cross-file Duplicates",
+            anchor_inventory_metrics.get("documents_with_cross_file_duplicates", ""),
+        ),
+        (
+            "Docs w/ Repeated Anchors",
+            anchor_inventory_metrics.get("documents_with_repeated_anchors", ""),
+        ),
+    ]
+    lines.extend(_metrics_table(anchor_rows))
+    concerns = []
+    missing_h1 = anchor_inventory_metrics.get("documents_missing_h1")
+    if isinstance(missing_h1, int) and missing_h1 > 0:
+        concerns.append(f"⚠️ {missing_h1} missing H1")
+    missing_h2 = anchor_inventory_metrics.get("documents_missing_h2")
+    if isinstance(missing_h2, int) and missing_h2 > 0:
+        concerns.append(f"⚠️ {missing_h2} missing H2")
+    lines.extend(_concerns_line(concerns))
+    lines.append("---")
+    lines.append("")
+
+    # Anchor Validation
+    anchor_validation_metrics = _load_telemetry_metrics(
+        artifacts.get("anchor_validation_report"), repo_root
+    )
+    lines.append("## Anchor Validation")
+    lines.append("")
+    lines.extend(_format_artifact_pointer(artifacts.get("anchor_validation_run")))
+    anchor_validation_rows: list[tuple[str, object]] = [
+        ("Files Scanned", anchor_validation_metrics.get("files_scanned", "")),
+        ("Links Checked", anchor_validation_metrics.get("links_checked", "")),
+        ("Issue Count", anchor_validation_metrics.get("issue_count", "")),
+        ("Missing Files", anchor_validation_metrics.get("missing_file_count", "")),
+        ("Missing Anchors", anchor_validation_metrics.get("missing_anchor_count", "")),
+    ]
+    lines.extend(_metrics_table(anchor_validation_rows))
+    concerns = []
+    issues = anchor_validation_metrics.get("issue_count")
+    if isinstance(issues, int) and issues > 0:
+        concerns.append(f"❌ {issues} broken anchor issue(s)")
+    lines.extend(_concerns_line(concerns))
+    lines.append("---")
+    lines.append("")
+
+    # Docs Integrity
+    docs_integrity_metrics = _load_telemetry_metrics(
+        artifacts.get("docs_integrity_report"), repo_root
+    )
+    lines.append("## Docs Integrity")
+    lines.append("")
+    lines.extend(_format_artifact_pointer(artifacts.get("docs_integrity_run")))
+    integrity_rows: list[tuple[str, object]] = [
+        ("JSON Blocks Checked", docs_integrity_metrics.get("json_blocks_checked", "")),
+        ("Mismatched Blocks", docs_integrity_metrics.get("mismatched_blocks", "")),
+        ("Errors", docs_integrity_metrics.get("errors_count", "")),
+        ("Missing Documents", docs_integrity_metrics.get("missing_documents_count", "")),
+    ]
+    lines.extend(_metrics_table(integrity_rows))
+    concerns = []
+    mismatches = docs_integrity_metrics.get("mismatched_blocks")
+    if isinstance(mismatches, int) and mismatches > 0:
+        concerns.append(f"❌ {mismatches} mismatched JSON block(s)")
+    errors_count = docs_integrity_metrics.get("errors_count")
+    if isinstance(errors_count, int) and errors_count > 0:
+        concerns.append(f"❌ {errors_count} error(s)")
+    lines.extend(_concerns_line(concerns))
+    lines.append("---")
+    lines.append("")
+
+    # Metrics Stub
+    metrics_stub_metrics = _load_telemetry_metrics(
+        artifacts.get("metrics_stub_report"), repo_root
+    )
+    lines.append("## Metrics Stub Coverage")
+    lines.append("")
+    lines.extend(_format_artifact_pointer(artifacts.get("metrics_stub_run")))
+    stub_rows: list[tuple[str, object]] = [
+        ("Files Checked", metrics_stub_metrics.get("files_checked", "")),
+        ("Anchors Referenced", metrics_stub_metrics.get("anchors_referenced", "")),
+        ("Missing Count", metrics_stub_metrics.get("missing_count", "")),
+    ]
+    lines.extend(_metrics_table(stub_rows))
+    concerns = []
+    stub_missing = metrics_stub_metrics.get("missing_count")
+    if isinstance(stub_missing, int) and stub_missing > 0:
+        concerns.append(f"❌ {stub_missing} missing anchor stub(s)")
+    anchors_referenced = metrics_stub_metrics.get("anchors_referenced")
+    if not concerns and isinstance(anchors_referenced, int) and anchors_referenced == 0:
+        lines.extend(["**Concerns:** None — informational: no anchors referenced this run", ""])
+    else:
+        lines.extend(_concerns_line(concerns))
+    lines.append("---")
+    lines.append("")
+
+    # Code-doc churn
+    churn_metrics = _load_telemetry_metrics(artifacts.get("churn_report"), repo_root)
+    lines.append("## Code ↔ Docs Churn")
+    lines.append("")
+    lines.extend(_format_artifact_pointer(artifacts.get("churn_run")))
+    churn_rows: list[tuple[str, object]] = [
+        ("Commits Examined", churn_metrics.get("commits_examined", "")),
+        ("Modules Missing Docs", churn_metrics.get("modules_missing_docs", "")),
+        ("Modules With Docs", churn_metrics.get("modules_with_docs", "")),
+    ]
+    lines.extend(_metrics_table(churn_rows))
+    concerns = []
+    churn_missing = churn_metrics.get("modules_missing_docs")
+    if isinstance(churn_missing, int) and churn_missing > 0:
+        concerns.append(f"⚠️ {churn_missing} module(s) missing docs")
+    lines.extend(_concerns_line(concerns))
+    lines.append("---")
+    lines.append("")
+
+    # Undocumented logic
+    undocumented_metrics = _load_telemetry_metrics(
+        artifacts.get("undocumented_report"), repo_root
+    )
+    lines.append("## Undocumented Logic")
+    lines.append("")
+    lines.extend(_format_artifact_pointer(artifacts.get("undocumented_run")))
+    undocumented_rows: list[tuple[str, object]] = [
+        ("Modules Scanned", undocumented_metrics.get("modules_scanned", "")),
+        ("Modules With Findings", undocumented_metrics.get("modules_with_findings", "")),
+        ("Entities Missing Docs", undocumented_metrics.get("entities_missing_docs", "")),
+        ("Docstring Coverage %", undocumented_metrics.get("docstring_coverage_percent", "")),
+    ]
+    lines.extend(_metrics_table(undocumented_rows))
+    concerns = []
+    missing_entities = undocumented_metrics.get("entities_missing_docs")
+    if isinstance(missing_entities, int) and missing_entities > 0:
+        concerns.append(f"❌ {missing_entities} missing-doc entities")
+    coverage_pct = undocumented_metrics.get("docstring_coverage_percent")
+    if isinstance(coverage_pct, (int, float)):
+        concerns.append(f"⚠️ docstring coverage {float(coverage_pct):.1f}%")
+    lines.extend(_concerns_line(concerns))
+
+    return "\n".join(lines).rstrip() + "\n"
 
 
 def _execute_docs_integrity(paths: Paths, options: Options) -> DocsIntegrityOutcome:
@@ -987,6 +1323,10 @@ def _execute_metrics_stub(paths: Paths, options: Options) -> MetricsStubOutcome:
     run_dir = (
         Path(payload_dict.get("run_dir", "")) if payload_dict.get("run_dir") else None
     )
+    if run_dir is None:
+        run_timestamp = options.run_timestamp.astimezone(timezone.utc).strftime("%Y%m%d-%H%M")
+        candidate = paths.metrics_stub_output_dir / run_timestamp
+        run_dir = candidate if candidate.exists() else None
     if run_dir and not run_dir.exists():
         run_dir = None
     summary_payload = payload_dict.get("summary")
@@ -1362,8 +1702,14 @@ def _summarize_steps(steps: Sequence[Any]) -> str:
     """
     lines = ["# Docs Health Run", ""]
     for step in steps:
-        detail = f" ({step.detail})" if step.detail else ""
-        lines.append(f"- {step.name}: {step.status}{detail}")
+        lines.append(f"- {step.name}: {step.status}")
+        if not step.detail:
+            continue
+        detail_items = [item.strip() for item in step.detail.split(",") if item.strip()]
+        if not detail_items:
+            continue
+        for item in detail_items:
+            lines.append(f"  - {item}")
     return "\n".join(lines) + "\n"
 
 
@@ -1436,15 +1782,34 @@ def run(argv: Sequence[str] | None = None) -> int:
         context.add_metadata(
             "anchor_inventory",
             {
+                "total_documents": outcome.total_documents,
+                "documents_missing_h1": outcome.documents_missing_h1,
+                "documents_missing_h2": outcome.documents_missing_h2,
+                "documents_with_cross_file_duplicates": outcome.documents_with_cross_file_duplicates,
+                "documents_with_repeated_anchors": outcome.documents_with_repeated_anchors,
                 "total_slugs": outcome.total_slugs,
                 "duplicates": outcome.duplicates,
             },
         )
         detail_bits: list[str] = []
+        if outcome.total_documents is not None:
+            detail_bits.append(f"docs={outcome.total_documents}")
+        if outcome.documents_missing_h1 is not None:
+            detail_bits.append(f"missing_h1={outcome.documents_missing_h1}")
+        if outcome.documents_missing_h2 is not None:
+            detail_bits.append(f"missing_h2={outcome.documents_missing_h2}")
         if outcome.total_slugs is not None:
             detail_bits.append(f"slugs={outcome.total_slugs}")
         if outcome.duplicates is not None:
             detail_bits.append(f"duplicates={outcome.duplicates}")
+        if outcome.documents_with_cross_file_duplicates is not None:
+            detail_bits.append(
+                f"cross_file_docs={outcome.documents_with_cross_file_duplicates}"
+            )
+        if outcome.documents_with_repeated_anchors is not None:
+            detail_bits.append(
+                f"repeated_docs={outcome.documents_with_repeated_anchors}"
+            )
         detail = ", ".join(detail_bits) if detail_bits else "anchor inventory completed"
         payload = {
             "run_dir": _relativize(outcome.run_dir, paths.repo_root),
@@ -1626,6 +1991,18 @@ def run(argv: Sequence[str] | None = None) -> int:
             anchor_inventory_outcome.run_dir if anchor_inventory_outcome else None,
             paths.repo_root,
         ),
+        "anchor_inventory_manifest": _relativize(
+            anchor_inventory_outcome.artifacts.get("manifest.json")
+            if anchor_inventory_outcome
+            else None,
+            paths.repo_root,
+        ),
+        "anchor_inventory_summary": _relativize(
+            anchor_inventory_outcome.artifacts.get("summary.md")
+            if anchor_inventory_outcome
+            else None,
+            paths.repo_root,
+        ),
         "anchor_inventory_report": _relativize(
             anchor_inventory_outcome.artifacts.get("telemetry.json")
             if anchor_inventory_outcome
@@ -1638,20 +2015,44 @@ def run(argv: Sequence[str] | None = None) -> int:
             else None,
             paths.repo_root,
         ),
+        "anchor_validation_run": _relativize(
+            anchor_validation_outcome.run_dir if anchor_validation_outcome else None,
+            paths.repo_root,
+        ),
         "docs_integrity_run": _relativize(
             docs_integrity_outcome.run_dir if docs_integrity_outcome else None,
+            paths.repo_root,
+        ),
+        "docs_integrity_report": _relativize(
+            (docs_integrity_outcome.run_dir / "telemetry.json")
+            if docs_integrity_outcome and docs_integrity_outcome.run_dir
+            else None,
             paths.repo_root,
         ),
         "metrics_stub_run": _relativize(
             metrics_stub_outcome.run_dir if metrics_stub_outcome else None,
             paths.repo_root,
         ),
+        "metrics_stub_report": _relativize(
+            (metrics_stub_outcome.run_dir / "telemetry.json")
+            if metrics_stub_outcome and metrics_stub_outcome.run_dir
+            else None,
+            paths.repo_root,
+        ),
+        "churn_run": _relativize(
+            churn_outcome.run_dir if churn_outcome else None,
+            paths.repo_root,
+        ),
         "churn_report": _relativize(
             churn_outcome.artifacts.get("telemetry.json") if churn_outcome else None,
             paths.repo_root,
         ),
+        "undocumented_run": _relativize(
+            undocumented_outcome.run_dir if undocumented_outcome else None,
+            paths.repo_root,
+        ),
         "undocumented_report": _relativize(
-            undocumented_outcome.artifacts.get("report.json")
+            undocumented_outcome.artifacts.get("telemetry.json")
             if undocumented_outcome
             else None,
             paths.repo_root,
@@ -1734,13 +2135,9 @@ def run(argv: Sequence[str] | None = None) -> int:
         "catalog": [entry.__dict__ for entry in registry.all_entries()],
     }
 
-    summary_markdown = _summarize_steps(result.steps)
-
     artifacts = [
         ReportArtifact(filename="manifest.json", kind="json", content=lambda: manifest),
-        ReportArtifact(
-            filename="summary.md", kind="text", content=lambda: summary_markdown
-        ),
+        ReportArtifact(filename="summary.md", kind="text", content=lambda: ""),
         ReportArtifact(
             filename="telemetry.json", kind="json", content=lambda: telemetry_payload
         ),
@@ -1770,6 +2167,17 @@ def run(argv: Sequence[str] | None = None) -> int:
     telemetry_path.write_text(
         json.dumps(telemetry_payload, indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )
+
+    summary_markdown = _render_docs_health_summary(
+        run_slug=run_slug,
+        completed_at=completed_at,
+        result_steps=result.steps,
+        artifacts=artifacts_section,
+        summary=manifest.get("summary") if isinstance(manifest.get("summary"), dict) else {},
+        repo_root=paths.repo_root,
+    )
+    summary_path = result_artifacts.artifacts["summary.md"]
+    summary_path.write_text(summary_markdown, encoding="utf-8")
 
     try:
         enforce_report_naming(

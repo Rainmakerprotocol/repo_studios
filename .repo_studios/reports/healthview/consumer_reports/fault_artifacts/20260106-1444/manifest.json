@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "viewer": "healthview",
+  "topic": "fault_artifacts",
+  "generated_at": "2026-01-06T14:44:42+00:00",
+  "source": "scan",
+  "run_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\rawview\\fault_diagnostics\\2026-01-06_1440",
+  "metrics": {
+    "signature_count": 0,
+    "active_signature_count": 0,
+    "repeat_offender": 0,
+    "multi_hit": 0,
+    "single_hit": 0,
+    "thread_block_count": 0
+  },
+  "artifacts": {
+    "telemetry": "telemetry.json",
+    "summary": "summary.md"
+  },
+  "source_report": null
+}

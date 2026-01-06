@@ -657,7 +657,7 @@ These are Stage 2.1 readiness gates after all Tier-2 DONE script gates are close
 The Docs Health Overview orchestrator chains eight scripts in producer → aggregator pipeline: (1)
 generate doc index scanning markdown files for headings/links, (2) build anchor inventory
 extracting markdown anchor IDs, (3) validate markdown anchors checking for broken links, (4) verify
-docs integrity against standards (single H1, wrapped lines), (5) validate metrics anchor stubs
+docs integrity by validating governed JSON `content_hash` blocks (and regenerating the docs index table), (5) validate metrics anchor stubs
 ensuring metric definitions have anchors, (6) generate code-doc churn report comparing code vs. doc
 file churn, (7) generate undocumented logic report identifying functions lacking docstrings, and
 (8) aggregate all signals into final HealthView bundle. Expect 6-8 minute runtime depending on
@@ -673,7 +673,7 @@ anchor validation and churn aggregation. Replaces legacy ad hoc docs inventory/a
 | `generate_doc_index.py` | Producer | Scan repository for markdown files, extract headings, build document inventory | TBD |
 | `generate_anchor_inventory.py` | Producer | Extract markdown anchor IDs, build cross-reference map with duplicates flagged | TBD |
 | `validate_markdown_anchors.py` | Producer | Check for broken internal links, orphaned anchors, cross-file reference errors | TBD |
-| `verify_docs_integrity.py` | Producer | Validate doc structure against standards (single H1, line wrapping, formatting) | TBD |
+| `verify_docs_integrity.py` | Producer | Validate governed JSON `content_hash` blocks and refresh the docs index table | TBD |
 | `validate_metrics_anchor_stubs.py` | Producer | Ensure metric definitions have corresponding anchor points for linking | TBD |
 | `generate_code_doc_churn_report.py` | Producer | Compare code file churn vs. doc file churn, identify staleness risk areas | TBD |
 | `generate_undocumented_logic_report.py` | Producer | Identify functions/classes lacking docstrings or external doc references | TBD |
@@ -816,8 +816,7 @@ These are Stage 3.1 readiness gates after all Tier-2 DONE script gates are close
 **Overview:**  
 The Fault Diagnostics Overview orchestrator chains a 3-script pipeline
 (producer → consumer → summarizer) for end-to-end faulthandler diagnostics. Replaces legacy
-`run_fault_pipeline.py`. Mirrors output to both HealthView and CommandView locations for backward
-compatibility. Runtime: 3-5 minutes typical (from docstring, lines 1-25).
+`run_fault_pipeline.py`. Runtime: 3-5 minutes typical (from docstring, lines 1-25).
 
 **Orchestrator:**
 [run_fault_diagnostics_overview.py](../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py)
@@ -827,27 +826,24 @@ compatibility. Runtime: 3-5 minutes typical (from docstring, lines 1-25).
 
 | Script | Category | Purpose | Tier-3 YAML |
 | ------ | -------- | ------- | ----------- |
-| `collect_faulthandler_reports.py` | Producer | Scan `.repo_studios/runs` directories for crash reports, parse tracebacks, categorize faults | [tier3_collect_faulthandler_reports.yaml](tier3_scripts/fault_diagnostics_overview/tier3_collect_faulthandler_reports.yaml) |
+| `collect_faulthandler_reports.py` | Producer | Scan HealthView rawview fault diagnostics runs, parse faulthandler dumps, categorize faults | [tier3_collect_faulthandler_reports.yaml](tier3_scripts/fault_diagnostics_overview/tier3_collect_faulthandler_reports.yaml) |
 | `generate_fault_artifacts.py` | Consumer | Process producer output into structured artifacts (CSV, JSON, SUMMARY.md) | TBD |
 | `summarize_fault_diagnostics_overview.py` | Summarizer | Generate HealthView overview bundle with cross-run comparisons | TBD |
 
 **Inputs:**
 
-- `.repo_studios/runs/` (runtime directories with crash dumps)
-- Optional `--run-dir` (explicit run directory, line 210)
-- Optional `--reuse-report` (path to existing producer report, line 211)
-- Optional `--producer-top-frames` (override frame depth for producer, line 212)
+- `.repo_studios/reports/healthview/rawview/fault_diagnostics/<timestamp>/` (runtime directories with crash dumps)
+- `--runs-dir` (optional override for the rawview runs base)
+- Optional `--run-dir` (explicit run directory override)
+- Optional `--reuse-report` (path to existing producer report JSON)
+- Optional `--producer-top-frames` (override frame depth for producer)
 
 **Outputs:**
 
-- Producer: `.repo_studios/command_center/<topic>_report_collection/` +
-  `.repo_studios/<topic>_report_collection/` (CommandView mirror, lines 58-59)
-- Consumer HealthView: `.repo_studios/command_center/reports/<topic>_artifact_gen/` (line 60)
-- Consumer CommandView: `.repo_studios/reports/<topic>_artifact_gen/`
-  (backward compatibility, line 61)
-- Summarizer: `.repo_studios/command_center/reports/<topic>_overview/` (line 62)
-- HealthView bundle: `.repo_studios/command_center/viewers/HealthView/<topic>_faultdiag/`
-  (manifest + summary + telemetry, lines 63-64, 589-598)
+- Producer bundle: `.repo_studios/reports/healthview/producer_reports/faulthandler_reports/<YYYYMMDD-HHMM>/`
+- Consumer bundle: `.repo_studios/reports/healthview/consumer_reports/fault_artifacts/<YYYYMMDD-HHMM>/`
+- Summarizer bundle: `.repo_studios/reports/healthview/summarizer_reports/fault_diagnostics_overview/<YYYYMMDD-HHMM>/`
+- Orchestrator bundle: `.repo_studios/reports/healthview/orchestrator_reports/fault_diagnostics_overview/<YYYYMMDD-HHMM>/`
 
 **Execution Notes:**
 
@@ -859,14 +855,12 @@ compatibility. Runtime: 3-5 minutes typical (from docstring, lines 1-25).
 - Fail-fast: Aborts on summarizer failure, continues if producer/consumer skipped (lines 512-518)
 - Writes orchestrator telemetry to HealthView bundle with metrics (file count, total bytes,
   timestamps, lines 534-543)
-- Backward compatibility: Continues to write artifacts to CommandView locations so older scripts
-  don't break (lines 58-61)
 - Execution functions: `_execute_producer()` (lines 272-312), `_execute_consumer()` (lines 315-371),
   `_execute_summarizer()` (lines 374-423)
 - Script registration via `CatalogRegistry` for downstream discovery (lines 427-431)
 
 **Status:** `Operational (partial hardening)` – Script count corrected from 2 to 3, runtime verified
-at 3-5 minutes, dual output locations documented, special reuse/override flags confirmed
+at 3-5 minutes, special reuse/override flags confirmed
 
 **Planned Expansions:**
 
@@ -1660,8 +1654,7 @@ timestamped HealthView bundles. Coverage analysis shows 28/36 scripts (77.8%) or
 - **Stage 2 (Docs Health Overview):** Pass B complete – code-verified 8-script pipeline,
   skip flags (9 CLI options), report naming guardrails, 6-8 min runtime
 - **Stage 3 (Fault Diagnostics Overview):** Pass B complete – code-verified 3-script pipeline
-  (corrected from 2), 3-5 min runtime, dual HealthView+CommandView output, special reuse/override
-  flags
+  (corrected from 2), 3-5 min runtime, special reuse/override flags
 - **Stage 4 (Dependency & Import Hygiene):** Pass B complete – code-verified 5-script pipeline
   (4 producers + 1 utility), 7-11 min runtime, 6 skip flags, batch cleanup dry-run capability,
   fail-tolerant execution
@@ -1728,7 +1721,7 @@ All gaps have logical explanations:
 | CR-006 | Stage 1.1 emits pointer artifacts (`latest_*`) in downstream outputs (violates “no mutable pointers”). | 4.1 | Stage 1.1 Tier-2 roster | Treat as a stop-gate for Stage 1.1 contract compliance; remove pointers during migration and close the contradiction when Tier-2 evidence confirms. |
 | CR-007 | Stage 2.1 retains split intermediate output roots (producer/aggregator reports) during migration rather than a single HOP-rooted bundle surface. | 5.1 | Stage 2.1 Tier-2 roster | Treat as a stop-gate until output roots converge; rely on Tier-2 evidence for current roots and close when migrations land. |
 | CR-008 | Stage 2.1 emits pointer artifacts (`latest_*`) in intermediate outputs (violates “no mutable pointers”). | 5.1 | Stage 2.1 Tier-2 roster | Treat as a stop-gate; close via Tier-2 stop-gates when pointers are removed and evidence confirms. |
-| CR-009 | Stage 3.1 current bundle writes land under a CommandView-rooted path (viewer/root mismatch vs HealthView/HOP contract). | 6.1 | Stage 3.1 Tier-2 roster | Treat as a stop-gate; close when Stage 3.1 output roots align to the HOP contract and Tier-2 evidence updates. |
+| CR-009 | ~~Stage 3.1 current bundle writes land under a CommandView-rooted path (viewer/root mismatch vs HealthView/HOP contract).~~ | 6.1 | Stage 3.1 Tier-2 roster | **CLOSED (2026-01-06):** Stage 3.1 pipeline output roots align to the HOP contract (`.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`). |
 | CR-010 | Stage 4.1 remains on the current output root (`.repo_studios/command_center/reports/...`) rather than the HOP contract root. | 7.1 | Stage 4.1 Tier-2 roster | Track as a stop-gate in Tier-2; update Tier-1 once output roots align and evidence confirms. |
 | CR-011 | ~~Stage 5.1 mixes run slug formats and uses pointer artifacts (`latest_*`) across pipeline outputs.~~ | 8.1 | Stage 5.1 Tier-2 roster | **CLOSED (2026-01-03):** All scripts now use `YYYYMMDD-HHMM` slug format; pointer artifacts removed. |
 | CR-012 | Stage 6.1 output roots and timestamp formats are inconsistent across the chain (viewer/root split; prompt seed uses a different run id shape). | 9.1 | Stage 6.1 Tier-2 roster | Treat as a stop-gate; close via Tier-2 once outputs converge on the HOP contract and evidence confirms. |
@@ -1806,6 +1799,7 @@ All gaps have logical explanations:
 
 | Date | Author / Steward | Change | Doc-index timestamp | Regression suites |
 | --- | --- | --- | --- | --- |
+| 2026-01-06 | GitHub Copilot | Stage 3.1 follow-up: corrected Tier-1 Inputs/Outputs for `collect_faulthandler_reports.py` to use HealthView rawview + HOP bundle roots; verified Make target `studio-collect-faulthandler-reports` runs successfully (requires explicit `--repo-root` because `.repo_studios/scripts/.repo_studios/` exists and can confuse repo-root discovery). | 20260106-1502 | make studio-collect-faulthandler-reports; doc-index producer |
 | 2026-01-04 | GitHub Copilot | Updated Stage 1.1 Inputs/Execution notes to reflect repo-root coverage defaults (`coverage.xml`) and snapshot-mode coverage refresh behavior (continue-on-error + recorded exit codes). | 20260104-1710 | doc-index; make studio-orchestrate-test-execution-telemetry |
 | 2026-01-03 | GitHub Copilot | Stage 6.1 HOP refactor complete: S61R-005/006 artifact names, orchestrator default paths, stop-gates closed, Pass C complete. | pending | 26 passed (Stage 6.1 tests) |
 | 2025-12-25 | GitHub Copilot | Closed Stage 1.1 script gate for `run_test_execution_telemetry.py` after Tier-2 DONE; validated Make target `studio-orchestrate-test-execution-telemetry` emits canonical HealthView bundles. | 20251225-0517 | make studio-orchestrate-test-execution-telemetry; doc-index |
@@ -1822,7 +1816,7 @@ All gaps have logical explanations:
 | 2025-12-12 | GitHub Copilot | Phase 2 Pass B hardening: Stage 1 (Test Execution Telemetry) \u2013 updated script count to 6 (added summarizer), verified 5-6 min runtime, artifact retention defaults, dynamic imports, actual input/output paths from orchestrator code inspection | N/A (no doc-index yet) | Verified via code inspection: [run_test_execution_telemetry.py](../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py) lines 1-670, [test_run_test_execution_telemetry.py](../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py) lines 1-362 |
 | 2025-12-12 | GitHub Copilot | Phase 2 Pass B hardening: Stage 7 (Meta-Orchestrator) \u2013 verified sequential execution via dynamic imports, 6-topic chain, fail-fast strategy, composite manifest generation, 20-30 min runtime expectations | N/A (no doc-index yet) | Verified via code inspection: [orchestrate_full_diagnostic.py](../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py) lines 1-554, TOPIC_DEFINITIONS tuple with 6 entries |
 | 2025-12-12 | GitHub Copilot | Phase 2 Pass B hardening: Stage 2 (Docs Health Overview) \u2013 verified 8-script pipeline, 6-8 min runtime, step skipping support, report naming guardrails via enforce_report_naming(), retention behavior enforced, execution order confirmed | N/A (no doc-index yet) | Verified via code inspection: [run_docs_health_overview.py](../../../command_center/scripts/orchestrators/run_docs_health_overview.py) lines 1-1095, 8 _execute_* functions (lines 394-710) |
-| 2025-12-12 | GitHub Copilot | Phase 2 Pass B hardening: Stage 3 (Fault Diagnostics Overview) \u2013 corrected script count from 2 to 3 (added missing summarizer), verified 3-5 min runtime, dual HealthView+CommandView output, special reuse/override flags (--reuse-report, --producer-top-frames), artifact retention defaults | N/A (no doc-index yet) | Verified via code inspection: [run_fault_diagnostics_overview.py](../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py) lines 1-604, execution functions (lines 272-312, 315-371, 374-423), [test_run_fault_diagnostics_overview.py](../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py) |
+| 2025-12-12 | GitHub Copilot | Phase 2 Pass B hardening: Stage 3 (Fault Diagnostics Overview) \u2013 corrected script count from 2 to 3 (added missing summarizer), verified 3-5 min runtime, special reuse/override flags (--reuse-report, --producer-top-frames), artifact retention defaults | N/A (no doc-index yet) | Verified via code inspection: [run_fault_diagnostics_overview.py](../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py) lines 1-604, execution functions (lines 272-312, 315-371, 374-423), [test_run_fault_diagnostics_overview.py](../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py) |
 | 2025-12-12 | GitHub Copilot | Phase 2 Pass B hardening: Stage 4 (Dependency & Import Hygiene) \u2013 verified 5-script pipeline (4 producers + 1 utility), 7-11 min runtime, 6 skip flags (import-graph, typecheck, batch-cleanup opt-in, mypy-baselines opt-in, dependency patterns, skip-pyproject), batch cleanup dry-run capability (legacy shim retired), fail-tolerant execution (stop_on_failure=False) | N/A (no doc-index yet) | Verified via code inspection: [run_dependency_import_hygiene.py](../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py) lines 1-1111, execution functions (lines 437-468, 471-500, 503-543, 639-711, 714-742, 765-793), [test_run_dependency_import_hygiene.py](../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py) |
 | 2025-12-12 | GitHub Copilot | Phase 2 Pass B hardening: Stage 5 (Monkey Patch Oversight) \u2013 verified 4-script pipeline (producer \u2192 consumer \u2192 aggregator \u2192 summarizer) + 1 utility, 4-7 min runtime, step skipping support, optional Git enrichment, trend analysis support, producer configurability (context lines, strict mode, project packages, exclude patterns) | N/A (no doc-index yet) | Verified via code inspection: [run_monkey_patch_oversight.py](../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py) lines 1-735, execution functions (lines 303-361, 364-400, 403-449, 452-515), [test_run_monkey_patch_oversight.py](../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py) |
 | 2025-12-12 | GitHub Copilot | Phase 2 Pass B hardening: Stage 6 (Standards Integrity) – corrected script count from 4 to 5 (added missing analyze_standards_index_gaps.py producer), verified 5-8 min runtime, conditional diff skip logic, prompt format configurability (text/yaml/json), retention behavior enforced, 5-step pipeline (index → gap → diff → prompts → summary), fail-fast on summarizer | N/A (no doc-index yet) | Verified via code inspection: [run_standards_integrity.py](../../../command_center/scripts/orchestrators/run_standards_integrity.py) lines 1-817, execution functions (lines 332-361, 364-413, 416-467, 470-512, 515-522), [test_run_standards_integrity.py](../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py) |

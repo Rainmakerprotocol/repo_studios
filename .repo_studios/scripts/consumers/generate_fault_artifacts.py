@@ -75,7 +75,7 @@ from libraries.cli import resolve_repo_root  # noqa: E402
 from libraries.retention_policy import get_keep  # noqa: E402
 from libraries.report_paths import build_topic_path  # noqa: E402
 
-RAWVIEW_RUNS_BASE = Path(".repo_studios/command_center/reports/rawview/fault_diagnostics_runs")
+RAWVIEW_RUNS_BASE = build_topic_path("rawview", "fault_diagnostics")
 LEGACY_RUNS_BASE = Path(".repo_studios/faulthandler")
 TOPIC_SLUG = "fault_artifacts"
 DEFAULT_OUTPUT_DIR = build_topic_path("consumer", TOPIC_SLUG)

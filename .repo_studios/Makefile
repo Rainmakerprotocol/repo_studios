@@ -117,7 +117,7 @@ studio-validate-metrics-anchor-stubs:
 	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) \
 		".repo_studios/scripts/producers/validate_metrics_anchor_stubs.py" \
 		--repo-root "$(REPO_ROOT)" \
-		--artifacts-to-keep 10 \
+		--include-repo-studios \
 		--log-level "$(LOG_LEVEL)"
 
 .PHONY: studio-analyze-test-hardening
@@ -138,7 +138,15 @@ studio-verify-docs-integrity:
 
 .PHONY: studio-collect-faulthandler-reports
 studio-collect-faulthandler-reports:
-	$(PYTHON) scripts/producers/collect_faulthandler_reports.py --runs-dir .repo_studios/command_center/reports/rawview/fault_diagnostics_runs --output-dir .repo_studios/command_center/reports --artifacts-to-keep 10 --log-level "$(LOG_LEVEL)"
+	cd "$(REPO_ROOT)" && \
+		$(if $(filter Windows_NT,$(OS)),set "PYTHONPATH=$(CURDIR);$(CURDIR)/command_center/scripts" &&,PYTHONPATH="$(CURDIR):$(CURDIR)/command_center/scripts") \
+		$(PYTHON) \
+		".repo_studios/scripts/producers/collect_faulthandler_reports.py" \
+		--repo-root "$(REPO_ROOT)" \
+		--runs-dir ".repo_studios/reports/healthview/rawview/fault_diagnostics" \
+		--output-dir ".repo_studios/reports/healthview/producer_reports/faulthandler_reports" \
+		--artifacts-to-keep 10 \
+		--log-level "$(LOG_LEVEL)"
 
 .PHONY: studio-generate-fault-artifacts
 studio-generate-fault-artifacts:
@@ -199,7 +207,7 @@ studio-orchestrate-full-diagnostic:
 
 .PHONY: studio-configure-faulthandler-runtime-smoke
 studio-configure-faulthandler-runtime-smoke:
-	$(PYTHON) "$(CURDIR)/scripts/utilities/configure_faulthandler_runtime.py"
+	$(PYTHON) "$(CURDIR)/scripts/utilities/configure_faulthandler_runtime.py" --repo-root "$(REPO_ROOT)"
 
 .PHONY: studio-dump-faulthandler-snapshot-smoke
 studio-dump-faulthandler-snapshot-smoke:

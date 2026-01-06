@@ -46,7 +46,7 @@ from utilities.fault_run_analysis import (  # noqa: E402
     build_fault_report,
 )
 
-DEFAULT_RUNS_RELATIVE = Path(".repo_studios/command_center/reports/rawview/fault_diagnostics_runs")
+DEFAULT_RUNS_RELATIVE = build_topic_path("rawview", "fault_diagnostics")
 LEGACY_RUNS_RELATIVE = Path(".repo_studios/faulthandler")
 TOPIC_SLUG = "faulthandler_reports"
 DEFAULT_OUTPUT_DIR = build_topic_path("producer", TOPIC_SLUG)

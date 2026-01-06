@@ -162,6 +162,14 @@ def parse_args(argv: list[str] | None) -> argparse.Namespace:
         help="Number of historical run directories to retain after pruning",
     )
     parser.add_argument(
+        "--include-repo-studios",
+        action="store_true",
+        help=(
+            "Include markdown files under .repo_studios/ in the repository scan. "
+            "By default, hidden directories are excluded."
+        ),
+    )
+    parser.add_argument(
         "--log-level",
         default="INFO",
         choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
@@ -231,10 +239,11 @@ def _normalize_anchor(text: str) -> str:
     return re.sub(r"[^a-z0-9._-]", "", normalized)
 
 
-def iter_markdown_files(repo_root: Path) -> Iterable[Path]:
+def iter_markdown_files(repo_root: Path, *, include_repo_studios: bool) -> Iterable[Path]:
     """Iterate over markdown files in the repository.
 
-    Exclude hidden directories, vendor, and external folders.
+    Exclude hidden directories (optionally allowing .repo_studios), vendor/external
+    folders, and generated report artifacts.
 
     Args:
         repo_root: Repository root directory.
@@ -244,8 +253,18 @@ def iter_markdown_files(repo_root: Path) -> Iterable[Path]:
     """
     for path in repo_root.rglob("*.md"):
         rel = path.relative_to(repo_root)
-        if any(part.startswith(".") for part in rel.parts):
+
+        # Exclude generated report artifacts to avoid self-referential scans.
+        if rel.parts and rel.parts[0] == "reports":
             continue
+        if rel.parts[:2] == (".repo_studios", "reports"):
+            continue
+        if rel.parts[:3] == (".repo_studios", "command_center", "reports"):
+            continue
+
+        if any(part.startswith(".") for part in rel.parts):
+            if not (include_repo_studios and rel.parts and rel.parts[0] == ".repo_studios"):
+                continue
         if rel.parts[0] in {"vendor", "external"}:
             continue
         yield path
@@ -373,6 +392,7 @@ def build_report(
     missing: list[dict[str, Any]],
     allowlisted_count: int,
     markdown_count: int,
+    include_repo_studios: bool,
     timestamp: dt.datetime,
 ) -> dict[str, Any]:
     """Build the validation report dictionary.
@@ -412,6 +432,10 @@ def build_report(
         "legacy_file": str(legacy_file),
         "allowlist_path": str(allowlist_path) if allowlist_path.exists() else None,
         "options": {"artifacts_to_keep": artifacts_to_keep},
+        "scan": {
+            "include_repo_studios": include_repo_studios,
+            "hidden_directories": "excluded (except .repo_studios when enabled)",
+        },
         "summary": summary,
         "missing": missing,
         "referenced_anchors": sorted(referenced.keys()),
@@ -503,12 +527,15 @@ def render_summary_markdown(*, report: dict[str, Any], run_timestamp: str) -> st
     summary = report.get("summary", {})
     status = report.get("status", "ok")
     anchors_referenced = int(summary.get("anchors_referenced", 0) or 0)
+    scan = cast(dict[str, Any], report.get("scan", {}))
+    include_repo_studios = bool(scan.get("include_repo_studios", False))
     lines: list[str] = [
         "# Metrics Anchor Stub Validation\n\n",
         f"- Status: `{status}`\n",
         f"- Run Timestamp (UTC): `{run_timestamp}`\n",
         f"- Legacy File: `{report.get('legacy_file', '')}`\n",
         f"- Allowlist: `{report.get('allowlist_path') or 'none'}`\n",
+        f"- Include .repo_studios: `{str(include_repo_studios).lower()}`\n",
         f"- Files Checked: {summary.get('files_checked', 0)}\n",
         f"- Anchors Referenced: {anchors_referenced}\n",
         f"- Legacy Stub Count: {summary.get('legacy_stub_count', 0)}\n",
@@ -593,7 +620,11 @@ def run(argv: list[str] | None = None) -> dict[str, Any]:
     logger.info("Output directory: %s", paths.output_dir)
     logger.info("Legacy file: %s", paths.legacy_file)
 
-    markdown_files = list(iter_markdown_files(paths.repo_root))
+    include_repo_studios = bool(getattr(args, "include_repo_studios", False))
+    if include_repo_studios:
+        logger.info("Including markdown under .repo_studios")
+
+    markdown_files = list(iter_markdown_files(paths.repo_root, include_repo_studios=include_repo_studios))
     referenced = collect_referenced_anchors(markdown_files, paths.repo_root)
     legacy = collect_legacy_stub_anchors(paths.legacy_file)
     allowlist = load_allowlist(paths.allowlist_path)
@@ -613,6 +644,7 @@ def run(argv: list[str] | None = None) -> dict[str, Any]:
         missing=missing,
         allowlisted_count=allowlisted_count,
         markdown_count=len(markdown_files),
+        include_repo_studios=include_repo_studios,
         timestamp=timestamp,
     )
 
@@ -621,6 +653,7 @@ def run(argv: list[str] | None = None) -> dict[str, Any]:
         "legacy_file": str(paths.legacy_file),
         "allowlist_path": str(paths.allowlist_path) if paths.allowlist_path.exists() else None,
         "artifacts_to_keep": options.artifacts_to_keep,
+        "include_repo_studios": include_repo_studios,
     }
     manifest = compose_manifest(report=report, run_timestamp=run_timestamp, inputs=inputs)
     telemetry = compose_telemetry(report=report)

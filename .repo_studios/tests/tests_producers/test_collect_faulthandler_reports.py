@@ -34,10 +34,10 @@ def test_collect_faulthandler_reports_emits_artifacts(tmp_path):
     runs_dir = (
         repo
         / ".repo_studios"
-        / "command_center"
         / "reports"
+        / "healthview"
         / "rawview"
-        / "fault_diagnostics_runs"
+        / "fault_diagnostics"
     )
     run_dir = runs_dir / "2025-01-01_000000"
     run_dir.mkdir(parents=True)
@@ -106,7 +106,7 @@ def test_collect_faulthandler_reports_returns_no_runs_when_missing(tmp_path):
     producer_mod = _load_module("collect_faulthandler_reports", _PRODUCER_PATH)
 
     repo = tmp_path / "repo"
-    runs_dir = repo / ".repo_studios" / "command_center" / "reports" / "rawview" / "fault_diagnostics_runs"
+    runs_dir = repo / ".repo_studios" / "reports" / "healthview" / "rawview" / "fault_diagnostics"
     output_dir = repo / ".repo_studios" / "command_center" / "reports"
 
     result = producer_mod.run(

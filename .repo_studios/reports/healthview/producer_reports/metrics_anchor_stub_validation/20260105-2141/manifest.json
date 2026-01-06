@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "viewer_slug": "producer_reports",
+  "topic": "metrics_anchor_stub_validation",
+  "run_timestamp": "20260105-2141",
+  "generated_utc": "2026-01-05T21:41:10.955905+00:00",
+  "status": "ok",
+  "inputs": {
+    "repo_root": "C:\\Users\\genet\\repo_studios",
+    "legacy_file": "C:\\Users\\genet\\repo_studios\\docs\\api\\metrics_orchestrator.md",
+    "allowlist_path": null,
+    "artifacts_to_keep": 10
+  },
+  "summary": {
+    "files_checked": 36,
+    "anchors_referenced": 0,
+    "legacy_stub_count": 0,
+    "missing_count": 0,
+    "allowlisted_count": 0
+  },
+  "catalog": [
+    "scripts.utilities.validate_metrics_anchor_stubs"
+  ],
+  "provenance": {
+    "requested_by": "cli",
+    "trigger_type": "manual"
+  }
+}

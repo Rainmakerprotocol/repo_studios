@@ -62,7 +62,7 @@ SUMMARIZER_SCRIPT = Path(".repo_studios/command_center/scripts/summarizers/summa
 SUMMARIZER_MODULE = "command_center.scripts.summarizers.summarize_fault_diagnostics_overview"
 ORCHESTRATOR_SCRIPT = Path(".repo_studios/command_center/scripts/orchestrators/run_fault_diagnostics_overview.py")
 
-DEFAULT_RUNS_DIR = build_topic_path("rawview", "fault_diagnostics_runs")
+DEFAULT_RUNS_DIR = build_topic_path("rawview", "fault_diagnostics")
 DEFAULT_PRODUCER_OUTPUT = build_topic_path("producer", PRODUCER_TOPIC_SLUG)
 DEFAULT_CONSUMER_OUTPUT = build_topic_path("consumer", CONSUMER_TOPIC_SLUG)
 DEFAULT_SUMMARIZER_OUTPUT = build_topic_path("summarizer", SUMMARIZER_TOPIC_SLUG)
@@ -295,7 +295,11 @@ def configure_logging(level: str) -> None:
     Args:
         level: Logging level name (e.g., "DEBUG", "INFO").
     """
-    logging.basicConfig(level=getattr(logging, level.upper(), logging.INFO), format="%(levelname)s %(message)s")
+    logging.basicConfig(
+        level=getattr(logging, level.upper(), logging.INFO),
+        format="%(levelname)s %(message)s",
+        force=True,
+    )
 
 
 def _load_callable(script_path: Path, module_name: str, attribute: str) -> Callable[[Sequence[str] | None], Any]:
@@ -354,14 +358,14 @@ class ProducerOutcome:
     Attributes:
         payload: Raw return dict from producer run().
         run_dir: Faulthandler run directory processed.
-        report_path: Path to generated producer report.
+        bundle_dir: Path to generated producer bundle directory.
         repeat_offender: Count of repeat offender signatures.
         signatures: Total signature count.
     """
 
     payload: dict[str, Any]
     run_dir: Path | None
-    report_path: Path | None
+    bundle_dir: Path | None
     repeat_offender: int | None
     signatures: int | None
 
@@ -373,17 +377,13 @@ class ConsumerOutcome:
     Attributes:
         payload: Raw return dict from consumer run().
         bundle_dir: Path to generated consumer bundle directory.
-        bundle_summary: Path to bundle summary artifact.
-        summary_json: Path to summary.json within bundle.
-        summary_markdown: Path to SUMMARY.md within bundle.
+        summary_markdown: Path to summary.md within bundle.
         repeat_offender: Count of repeat offender signatures.
         signatures: Total signature count.
     """
 
     payload: dict[str, Any]
     bundle_dir: Path | None
-    bundle_summary: Path | None
-    summary_json: Path | None
     summary_markdown: Path | None
     repeat_offender: int | None
     signatures: int | None
@@ -442,9 +442,11 @@ def _execute_producer(paths: Paths, options: Options) -> ProducerOutcome:
     run_dir = Path(payload.get("run_dir", "")) if payload.get("run_dir") else None
     if run_dir and not run_dir.exists():
         run_dir = None
-    report_path = Path(payload.get("report", "")) if payload.get("report") else None
-    if report_path and not report_path.exists():
-        report_path = None
+    bundle_dir = Path(payload.get("output_dir", "")) if payload.get("output_dir") else None
+    if bundle_dir and not bundle_dir.exists():
+        bundle_dir = None
+    if not payload.get("manifest"):
+        bundle_dir = None
     repeat_offender = payload.get("repeat_offender_signatures")
     if not isinstance(repeat_offender, int):
         repeat_offender = None
@@ -454,7 +456,7 @@ def _execute_producer(paths: Paths, options: Options) -> ProducerOutcome:
     return ProducerOutcome(
         payload=payload,
         run_dir=run_dir,
-        report_path=report_path,
+        bundle_dir=bundle_dir,
         repeat_offender=repeat_offender,
         signatures=signatures,
     )
@@ -492,21 +494,13 @@ def _execute_consumer(paths: Paths, options: Options, producer: ProducerOutcome 
         argv.extend(["--outdir", str(source_outdir)])
     if options.reuse_report is not None:
         argv.extend(["--report", str(options.reuse_report)])
-    elif producer and producer.report_path is not None:
-        argv.extend(["--report", str(producer.report_path)])
     payload = run_callable(argv)
     if not isinstance(payload, dict):
         raise RuntimeError("generate_fault_artifacts returned unexpected payload")
     bundle_dir = Path(payload.get("consumer_report", "")) if payload.get("consumer_report") else None
     if bundle_dir and not bundle_dir.exists():
         bundle_dir = None
-    bundle_summary_path = Path(payload.get("bundle_summary", "")) if payload.get("bundle_summary") else None
-    if bundle_summary_path and not bundle_summary_path.exists():
-        bundle_summary_path = None
-    summary_json = bundle_dir / "summary.json" if bundle_dir else None
-    if summary_json and not summary_json.exists():
-        summary_json = None
-    summary_markdown = bundle_dir / "SUMMARY.md" if bundle_dir else None
+    summary_markdown = bundle_dir / "summary.md" if bundle_dir else None
     if summary_markdown and not summary_markdown.exists():
         summary_markdown = None
     repeat_offender = payload.get("repeat_offender_signatures")
@@ -518,8 +512,6 @@ def _execute_consumer(paths: Paths, options: Options, producer: ProducerOutcome 
     return ConsumerOutcome(
         payload=payload,
         bundle_dir=bundle_dir,
-        bundle_summary=bundle_summary_path,
-        summary_json=summary_json,
         summary_markdown=summary_markdown,
         repeat_offender=repeat_offender,
         signatures=signatures,
@@ -563,12 +555,6 @@ def _execute_summarizer(
         "--timestamp",
         options.run_timestamp.isoformat(),
     ]
-    if consumer and consumer.summary_json is not None:
-        argv.extend(["--consumer-summary", str(consumer.summary_json)])
-    if consumer and consumer.bundle_summary is not None:
-        argv.extend(["--consumer-bundle-summary", str(consumer.bundle_summary)])
-    if producer and producer.report_path is not None:
-        argv.extend(["--producer-report", str(producer.report_path)])
     payload = run_callable(argv)
     if not isinstance(payload, dict):
         raise RuntimeError("summarize_fault_diagnostics_overview returned unexpected payload")
@@ -637,6 +623,26 @@ def run(argv: Sequence[str] | None = None) -> int:
     paths = build_paths(args)
     options = build_options(args, paths=paths)
     configure_logging(options.log_level)
+
+    LOGGER.debug(
+        "Resolved paths: runs_dir=%s producer_output_dir=%s consumer_output_dir=%s summarizer_output_dir=%s orchestrator_output_dir=%s",
+        paths.runs_dir,
+        paths.producer_output_dir,
+        paths.consumer_output_dir,
+        paths.summarizer_output_dir,
+        paths.orchestrator_output_dir,
+    )
+    LOGGER.debug(
+        "Resolved options: artifacts_to_keep=%s producer_keep=%s consumer_keep=%s summarizer_keep=%s skip_producer=%s skip_consumer=%s skip_summarizer=%s run_timestamp=%s",
+        options.artifacts_to_keep,
+        options.producer_keep,
+        options.consumer_keep,
+        options.summarizer_keep,
+        options.skip_producer,
+        options.skip_consumer,
+        options.skip_summarizer,
+        options.run_timestamp.isoformat(),
+    )
 
     registry = CatalogRegistry()
     _register_scripts(registry)
@@ -730,11 +736,9 @@ def run(argv: Sequence[str] | None = None) -> int:
     telemetry_payload = telemetry.as_dict()
 
     artifacts_section = {
-        "producer_report": _relativize(producer_outcome.report_path if producer_outcome else None, paths.repo_root),
+        "producer_report": _relativize(producer_outcome.bundle_dir if producer_outcome else None, paths.repo_root),
         "consumer_bundle": _relativize(consumer_outcome.bundle_dir if consumer_outcome else None, paths.repo_root),
-        "consumer_bundle_summary": _relativize(
-            consumer_outcome.bundle_summary if consumer_outcome else None, paths.repo_root
-        ),
+        "consumer_bundle_summary": _relativize(consumer_outcome.summary_markdown if consumer_outcome else None, paths.repo_root),
         "summarizer_run": _relativize(summarizer_outcome.run_dir if summarizer_outcome else None, paths.repo_root),
     }
     if summarizer_outcome:
@@ -768,6 +772,13 @@ def run(argv: Sequence[str] | None = None) -> int:
         ReportArtifact(filename="summary.md", kind="text", content=lambda: summary_markdown),
         ReportArtifact(filename="telemetry.json", kind="json", content=lambda: telemetry_payload),
     ]
+    LOGGER.debug(
+        "Writing orchestrator artifacts: output_dir=%s viewer=%r topic=%r timestamp=%s",
+        paths.orchestrator_output_dir,
+        "",
+        "",
+        options.run_timestamp.isoformat(),
+    )
     result_artifacts = write_report_artifacts(
         stem=TOPIC_SLUG,
         timestamp=options.run_timestamp,
@@ -777,6 +788,7 @@ def run(argv: Sequence[str] | None = None) -> int:
         viewer="",
         topic="",
     )
+    LOGGER.debug("Orchestrator artifacts written: run_dir=%s slug=%s", result_artifacts.run_dir, result_artifacts.slug)
 
     artifact_metrics = measure_artifact_directory(result_artifacts.run_dir)
     metrics_section = telemetry_payload.setdefault("metrics", {})
@@ -804,3 +816,7 @@ def main(argv: Sequence[str] | None = None) -> None:
 
 
 __all__ = ["run", "main", "parse_args", "build_paths", "build_options"]
+
+
+if __name__ == "__main__":
+    main()

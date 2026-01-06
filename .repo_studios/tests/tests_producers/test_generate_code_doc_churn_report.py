@@ -223,3 +223,55 @@ def test_churn_honors_allowlist(tmp_path):
 
     summary = result["summary"]
     assert summary["modules_without_doc_updates"] == 0
+
+
+def test_churn_ignores_generated_report_markdown(tmp_path):
+    module = _load_module("generate_code_doc_churn_report", _CONSUMER_MODULE_PATH)
+
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    (repo / ".repo_studios").mkdir()
+    _init_repo(repo)
+
+    (repo / "app").mkdir()
+    (repo / "app" / "main.py").write_text("print('v1')\n", encoding="utf-8")
+    _commit(repo, "initial app")
+
+    # Modify code, and also write a generated report markdown. The report markdown
+    # should not count as a documentation update for churn purposes.
+    (repo / "app" / "main.py").write_text("print('v2')\n", encoding="utf-8")
+    report_md = repo / ".repo_studios" / "reports" / "healthview" / "producer_reports" / "tmp" / "summary.md"
+    report_md.parent.mkdir(parents=True, exist_ok=True)
+    report_md.write_text("# Generated\n", encoding="utf-8")
+
+    nested_report_md = (
+        repo
+        / "subdir"
+        / ".repo_studios"
+        / "command_center"
+        / "reports"
+        / "fault_artifacts_consumer"
+        / "SUMMARY.md"
+    )
+    nested_report_md.parent.mkdir(parents=True, exist_ok=True)
+    nested_report_md.write_text("# Generated Nested\n", encoding="utf-8")
+    _commit(repo, "update app with generated report")
+
+    cwd = os.getcwd()
+    os.chdir(repo)
+    try:
+        result = module.run(
+            argv=[
+                "--repo-root",
+                str(repo),
+                "--git-window",
+                "30 days",
+                "--output-dir",
+                str(repo / ".repo_studios" / "reports"),
+            ]
+        )
+    finally:
+        os.chdir(cwd)
+
+    summary = result["summary"]
+    assert summary["modules_without_doc_updates"] == 1

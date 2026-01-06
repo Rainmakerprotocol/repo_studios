@@ -918,11 +918,11 @@ script:
   category: "producer"
 tier3:
   metadata_block_version: "v1"
-  allowed: false
-  exists: false
+  allowed: true
+  exists: true
   name: "tier3_verify_docs_integrity.yaml"
-  meets_template: "NA"
-  last_updated: null
+  meets_template: "yes"
+  last_updated: "2025-12-30"
 cli_surfaces:
   run_entrypoint: "run(argv)"
   key_flags:
@@ -930,7 +930,7 @@ cli_surfaces:
     - "--index"
     - "--output-dir"
     - "--update"
-    - "--regen-table"
+    - "--no-table"
     - "--artifacts-to-keep"
     - "--log-level"
     - "--exit-codes-hash"
@@ -939,7 +939,7 @@ io_contract:
     - "Validates governed JSON blocks and content_hash stability (optionally updates mismatches)"
   outputs:
     current:
-      root: ".repo_studios/reports/producer_reports/healthview/docs_integrity_validation/YYYYMMDD-HHMM/"
+      root: ".repo_studios/reports/healthview/producer_reports/docs_integrity_validation/YYYYMMDD-HHMM/"
       artifacts:
         - "manifest.json"
         - "summary.md"

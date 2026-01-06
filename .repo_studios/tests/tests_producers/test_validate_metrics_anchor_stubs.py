@@ -162,3 +162,58 @@ def test_detects_missing_and_honors_allowlist(tmp_path, monkeypatch):
     run_dirs = [p for p in topic_dir.iterdir() if p.is_dir()]
     assert len(run_dirs) == 1
     assert run_dirs[0].name == payload_second["run_timestamp"]
+
+
+def test_includes_repo_studios_when_enabled(tmp_path, monkeypatch):
+    mod = _load_module()
+    repo_root = tmp_path / "repo"
+    repo_root.mkdir()
+    (repo_root / ".repo_studios").mkdir()
+
+    _write_legacy_file(
+        repo_root / "docs/api/metrics_orchestrator.md",
+        anchors=["Sample Anchor"],
+    )
+    _write_markdown(
+        repo_root / ".repo_studios/docs/example.md",
+        "[Metrics](metrics_orchestrator.md#sample-anchor)\n",
+    )
+
+    _set_fixed_datetime(
+        monkeypatch,
+        mod,
+        mod.dt.datetime(2025, 1, 1, 12, 0, 0, tzinfo=mod.dt.timezone.utc),
+    )
+
+    payload_default = mod.run(
+        [
+            "--repo-root",
+            str(repo_root),
+            "--artifacts-to-keep",
+            "2",
+            "--log-level",
+            "DEBUG",
+        ]
+    )
+    assert payload_default["status"] == "ok"
+    assert payload_default["summary"]["anchors_referenced"] == 0
+
+    _set_fixed_datetime(
+        monkeypatch,
+        mod,
+        mod.dt.datetime(2025, 1, 1, 12, 1, 0, tzinfo=mod.dt.timezone.utc),
+    )
+
+    payload_including = mod.run(
+        [
+            "--repo-root",
+            str(repo_root),
+            "--include-repo-studios",
+            "--artifacts-to-keep",
+            "2",
+            "--log-level",
+            "DEBUG",
+        ]
+    )
+    assert payload_including["status"] == "ok"
+    assert payload_including["summary"]["anchors_referenced"] == 1

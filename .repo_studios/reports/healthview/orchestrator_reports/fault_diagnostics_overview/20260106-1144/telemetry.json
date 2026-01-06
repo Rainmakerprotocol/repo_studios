@@ -1,0 +1,51 @@
+{
+  "finished_at": "2026-01-06T11:44:12.876864+00:00",
+  "metrics": {
+    "artifact_bytes": 4782,
+    "artifact_files": 3,
+    "runtime_seconds": 0.072283,
+    "step_count": 3,
+    "steps_failed": 0,
+    "steps_skipped": 0,
+    "steps_succeeded": 3
+  },
+  "run_slug": "20260106-1144",
+  "started_at": "2026-01-06T11:44:12.804581+00:00",
+  "steps": [
+    {
+      "detail": "producer completed",
+      "finished_at": "2026-01-06T11:44:12.845683+00:00",
+      "name": "producer",
+      "payload": {
+        "repeat_offender": null,
+        "signatures": null
+      },
+      "started_at": "2026-01-06T11:44:12.804684+00:00",
+      "status": "success"
+    },
+    {
+      "detail": "signatures=0",
+      "finished_at": "2026-01-06T11:44:12.858164+00:00",
+      "name": "consumer",
+      "payload": {
+        "repeat_offender": null,
+        "signatures": 0
+      },
+      "started_at": "2026-01-06T11:44:12.845859+00:00",
+      "status": "success"
+    },
+    {
+      "detail": "slug=20260106-1144",
+      "finished_at": "2026-01-06T11:44:12.876768+00:00",
+      "name": "summarizer",
+      "payload": {
+        "slug": "20260106-1144"
+      },
+      "started_at": "2026-01-06T11:44:12.858333+00:00",
+      "status": "success"
+    }
+  ],
+  "success": true,
+  "topic": "fault_diagnostics_overview",
+  "viewer": "healthview"
+}
