@@ -31,6 +31,7 @@ Authoritative location:
 - [Analyze test hardening](../../.repo_studios/command_center/docs/db_integrations/db_integration_analyze_test_hardening.md)
 - [Check inventory health](../../.repo_studios/command_center/docs/db_integrations/db_integration_check_inventory_health.md)
 - [Collect faulthandler reports](../../.repo_studios/command_center/docs/db_integrations/db_integration_collect_faulthandler_reports.md)
+- [Fault diagnostics overview orchestrator](../../.repo_studios/command_center/docs/db_integrations/db_integration_fault_diagnostics_overview_orchestrator.md)
 - [Diff standards index](../../.repo_studios/command_center/docs/db_integrations/db_integration_diff_standards_index.md)
 - [Test log reports](../../.repo_studios/command_center/docs/db_integrations/db_integration_test_log_reports.md)
 

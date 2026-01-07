@@ -588,19 +588,198 @@ def _register_scripts(registry: CatalogRegistry) -> None:
 
 
 def _summarize_steps(result_steps: Sequence[Any]) -> str:
-    """Generate Markdown summary of pipeline step results.
+    """Legacy wrapper for summary rendering.
 
-    Args:
-        result_steps: Sequence of step result objects.
-
-    Returns:
-        Markdown summary content.
+    Note:
+        Prefer `_build_summary_markdown` which includes artifacts and snapshot.
     """
     lines = ["# Fault Diagnostics Run", ""]
     for step in result_steps:
         detail = f" ({step.detail})" if step.detail else ""
         lines.append(f"- {step.name}: {step.status}{detail}")
     return "\n".join(lines) + "\n"
+
+
+def _status_badge(status: str) -> str:
+    """Format a status string with a Docs Health-style badge."""
+    normalized = (status or "").lower()
+    if normalized == "success":
+        return "✅ success"
+    if normalized == "skipped":
+        return "⏭️ skipped"
+    if normalized == "failed":
+        return "❌ failed"
+    return status
+
+
+def _load_json(path: Path | None) -> dict[str, Any] | None:
+    """Load a JSON file, returning None when missing/unreadable."""
+    if path is None:
+        return None
+    try:
+        return cast(dict[str, Any], json.loads(path.read_text(encoding="utf-8")))
+    except Exception:  # pragma: no cover - best effort for summary rendering
+        return None
+
+
+def _build_summary_markdown(
+    *,
+    run_slug: str,
+    completed_at: datetime,
+    result_steps: Sequence[Any],
+    artifacts_section: dict[str, str | None],
+    summarizer_manifest: dict[str, Any] | None,
+) -> str:
+    """Generate a Docs Health-style Markdown summary for the orchestrator bundle."""
+    step_index: dict[str, Any] = {}
+    for step in result_steps:
+        name = getattr(step, "name", None)
+        if isinstance(name, str):
+            step_index[name] = step
+
+    lines: list[str] = []
+    lines.append("# Fault Diagnostics Run")
+    lines.append("")
+    lines.append(f"Run: `{run_slug}` | Completed: {completed_at.isoformat()}")
+
+    lines.append("")
+    lines.append("## Pipeline Status")
+    lines.append("")
+    lines.append("| Step | Status | Detail |")
+    lines.append("| --- | --- | --- |")
+    for step in result_steps:
+        detail = step.detail or ""
+        lines.append(f"| {step.name} | {_status_badge(step.status)} | {detail} |")
+
+    lines.append("")
+    lines.append("---")
+    lines.append("")
+    lines.append("## Artifacts")
+    lines.append("")
+    producer_bundle = artifacts_section.get("producer_report")
+    consumer_bundle = artifacts_section.get("consumer_bundle")
+    summarizer_run = artifacts_section.get("summarizer_run")
+    overview_manifest = artifacts_section.get("overview_manifest.json")
+    overview_summary = artifacts_section.get("overview_summary.md")
+    overview_telemetry = artifacts_section.get("overview_telemetry.json")
+
+    lines.append(f"- Producer bundle: `{producer_bundle}`" if producer_bundle else "- Producer bundle: (none)")
+    lines.append(f"- Consumer bundle: `{consumer_bundle}`" if consumer_bundle else "- Consumer bundle: (none)")
+    lines.append(f"- Summarizer bundle: `{summarizer_run}`" if summarizer_run else "- Summarizer bundle: (none)")
+    if overview_manifest or overview_summary or overview_telemetry:
+        lines.append(
+            f"- Overview: manifest=`{overview_manifest}` summary=`{overview_summary}` telemetry=`{overview_telemetry}`"
+        )
+
+    def render_step_section(step_name: str, *, artifact: str | None, extra_artifacts: list[str] | None = None) -> None:
+        step = step_index.get(step_name)
+        status = getattr(step, "status", "") if step else ""
+        detail = getattr(step, "detail", "") if step else ""
+        payload = getattr(step, "payload", None) if step else None
+
+        lines.append("")
+        lines.append("---")
+        lines.append("")
+        lines.append(f"## {step_name.capitalize()}")
+        lines.append("")
+        lines.append(f"Status: {_status_badge(str(status))}" + (f" — {detail}" if detail else ""))
+        lines.append("")
+        lines.append(f"**Artifact:** `{artifact}`" if artifact else "**Artifact:** (none)")
+        if extra_artifacts:
+            for entry in extra_artifacts:
+                lines.append(f"- {entry}")
+
+        if isinstance(payload, dict) and payload:
+            lines.append("")
+            lines.append("| Metric | Value |")
+            lines.append("| --- | ---: |")
+            for key, value in payload.items():
+                lines.append(f"| {key} | {value} |")
+
+        if str(status).lower() == "failed":
+            lines.append("")
+            lines.append("**Concerns:** ❌ step failed")
+
+    render_step_section(
+        "producer",
+        artifact=producer_bundle,
+    )
+    render_step_section(
+        "consumer",
+        artifact=consumer_bundle,
+    )
+    summarizer_extras: list[str] = []
+    if overview_manifest:
+        summarizer_extras.append(f"manifest: `{overview_manifest}`")
+    if overview_summary:
+        summarizer_extras.append(f"summary: `{overview_summary}`")
+    if overview_telemetry:
+        summarizer_extras.append(f"telemetry: `{overview_telemetry}`")
+    render_step_section(
+        "summarizer",
+        artifact=summarizer_run,
+        extra_artifacts=summarizer_extras if summarizer_extras else None,
+    )
+
+    notes: list[str] = []
+    snapshot_metrics: dict[str, Any] | None = None
+    baseline: dict[str, Any] | None = None
+    if summarizer_manifest:
+        raw_notes = summarizer_manifest.get("notes")
+        if isinstance(raw_notes, list):
+            notes = [str(item) for item in raw_notes if item]
+        raw_metrics = summarizer_manifest.get("metrics")
+        snapshot_metrics = raw_metrics if isinstance(raw_metrics, dict) else None
+        raw_baseline = summarizer_manifest.get("baseline")
+        baseline = raw_baseline if isinstance(raw_baseline, dict) else None
+
+    if snapshot_metrics:
+        lines.append("")
+        lines.append("---")
+        lines.append("")
+        lines.append("## Snapshot")
+        lines.append("")
+        lines.append("| Metric | Value |")
+        lines.append("| --- | ---: |")
+        for key in (
+            "signature_count",
+            "active_signature_count",
+            "repeat_offender",
+            "multi_hit",
+            "single_hit",
+            "thread_block_count",
+        ):
+            if key in snapshot_metrics:
+                lines.append(f"| {key} | {snapshot_metrics.get(key)} |")
+
+    if baseline:
+        lines.append("")
+        lines.append("---")
+        lines.append("")
+        lines.append("## Baseline")
+        lines.append("")
+        bundle = baseline.get("bundle")
+        lines.append(f"- Previous Bundle: `{bundle}`" if bundle else "- Previous Bundle: (none)")
+        summary = baseline.get("summary")
+        if isinstance(summary, dict):
+            new_ids = summary.get("new_signature_ids")
+            removed_ids = summary.get("removed_signature_ids")
+            if isinstance(new_ids, list):
+                lines.append(f"- New Signatures: {len(new_ids)}")
+            if isinstance(removed_ids, list):
+                lines.append(f"- Retired Signatures: {len(removed_ids)}")
+
+    if notes:
+        lines.append("")
+        lines.append("---")
+        lines.append("")
+        lines.append("## Concerns")
+        lines.append("")
+        for note in notes:
+            lines.append(f"- {note}")
+
+    lines.append("")
+    return "\n".join(lines)
 
 
 def run(argv: Sequence[str] | None = None) -> int:
@@ -765,7 +944,17 @@ def run(argv: Sequence[str] | None = None) -> int:
         "catalog": [entry.__dict__ for entry in registry.all_entries()],
     }
 
-    summary_markdown = _summarize_steps(result.steps)
+    summarizer_manifest_path: Path | None = None
+    if summarizer_outcome:
+        summarizer_manifest_path = summarizer_outcome.artifacts.get("manifest.json")
+    summarizer_manifest_payload = _load_json(summarizer_manifest_path)
+    summary_markdown = _build_summary_markdown(
+        run_slug=run_slug,
+        completed_at=completed_at,
+        result_steps=result.steps,
+        artifacts_section=artifacts_section,
+        summarizer_manifest=summarizer_manifest_payload,
+    )
 
     artifacts = [
         ReportArtifact(filename="manifest.json", kind="json", content=lambda: manifest),

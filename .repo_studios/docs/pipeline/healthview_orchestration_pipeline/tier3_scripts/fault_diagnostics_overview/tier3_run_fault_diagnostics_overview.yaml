@@ -69,7 +69,7 @@ parameters:
   - name: runs_dir
     type: path
     required: false
-    default: .repo_studios/reports/healthview/rawview/fault_diagnostics_runs
+    default: .repo_studios/reports/healthview/rawview/fault_diagnostics
     description: Base directory containing raw faulthandler run directories.
     validation:
       must_exist: false
@@ -214,7 +214,12 @@ outputs:
 
   - type: markdown
     filename: summary.md
-    description: Human-readable pipeline summary with step status.
+    description: |
+      Human-readable pipeline summary with:
+      - run metadata (slug + completion time)
+      - pipeline status table (producer/consumer/summarizer)
+      - artifact pointers into upstream bundles
+      - a compact snapshot + baseline comparison (when available)
 
 retention:
   mechanism: prune_by_keep_budget
@@ -251,7 +256,7 @@ dependencies:
 
   optional:
     - description: Raw faulthandler run directories
-      path: .repo_studios/reports/healthview/rawview/fault_diagnostics_runs
+      path: .repo_studios/reports/healthview/rawview/fault_diagnostics
       notes: "Required if not skipping producer step"
 
 error_handling:

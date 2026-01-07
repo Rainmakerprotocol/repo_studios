@@ -7,54 +7,62 @@ from command_center.scripts.orchestrators import run_fault_diagnostics_overview 
 
 
 def _seed_fault_artifacts(base_dir: Path) -> None:
-    current_name = "fault_artifacts-20240102_000001-run"
-    current_summary = {
-        "summary": {
-            "signature_count": 2,
-            "active_signature_count": 2,
-            "thread_block_count": 1,
-            "severity_buckets": {
-                "repeat_offender": 1,
-                "multi_hit": 1,
+    def write_bundle(slug: str, *, signature_ids: list[str]) -> None:
+        bundle_dir = base_dir / slug
+        bundle_dir.mkdir(parents=True, exist_ok=True)
+        manifest = {
+            "schema_version": 1,
+            "viewer": "healthview",
+            "topic": "fault_artifacts",
+            "generated_at": "2024-01-02T00:00:00+00:00",
+            "metrics": {
+                "signature_count": len(signature_ids),
+                "active_signature_count": len(signature_ids),
+                "repeat_offender": 1 if signature_ids else 0,
+                "multi_hit": 0,
                 "single_hit": 0,
+                "thread_block_count": 0,
             },
-        },
-        "signatures": [
-            {"signature_id": "sig-a"},
-            {"signature_id": "sig-b"},
-        ],
-    }
-    current_bundle_summary = {
-        "bundle": current_name,
-        "metrics": {
-            "signature_count": 2,
-            "active_signature_count": 2,
-            "repeat_offender": 1,
-            "multi_hit": 1,
-            "single_hit": 0,
-            "thread_block_count": 1,
-        },
-    }
-    bundle_dir = base_dir / current_name
-    bundle_dir.mkdir(parents=True, exist_ok=True)
-    (bundle_dir / "summary.json").write_text(json.dumps(current_summary), encoding="utf-8")
-    (bundle_dir / "bundle_summary.json").write_text(json.dumps(current_bundle_summary), encoding="utf-8")
-    (base_dir / "latest_summary.json").write_text(json.dumps(current_summary), encoding="utf-8")
-    (base_dir / "latest_bundle_summary.json").write_text(json.dumps(current_bundle_summary), encoding="utf-8")
+            "artifacts": {
+                "telemetry": "telemetry.json",
+                "summary": "summary.md",
+            },
+            "source": "seed",
+            "run_dir": "seed",
+        }
+        telemetry = {
+            "schema_version": 1,
+            "viewer": "healthview",
+            "topic": "fault_artifacts",
+            "run_timestamp": "2024-01-02T00:00:00+00:00",
+            "summary": {
+                "severity_buckets": {
+                    "repeat_offender": 1 if signature_ids else 0,
+                    "multi_hit": 0,
+                    "single_hit": 0,
+                }
+            },
+            "signatures": [{"signature_id": signature_id} for signature_id in signature_ids],
+        }
+        (bundle_dir / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
+        (bundle_dir / "telemetry.json").write_text(json.dumps(telemetry), encoding="utf-8")
+        (bundle_dir / "summary.md").write_text("# Seed\n", encoding="utf-8")
+
+    write_bundle("20240101-2359", signature_ids=["sig-a"])
+    write_bundle("20240102-0001", signature_ids=["sig-a", "sig-b"])
 
 
 def _seed_producer_report(base_dir: Path) -> None:
-    payload = {
-        "summary": {
-            "severity_buckets": {
-                "repeat_offender": 2,
-                "multi_hit": 1,
-                "single_hit": 0,
-            }
-        }
+    bundle_dir = base_dir / "20240102-0001"
+    bundle_dir.mkdir(parents=True, exist_ok=True)
+    telemetry = {
+        "schema_version": 1,
+        "viewer": "healthview",
+        "topic": "faulthandler_reports",
+        "run_timestamp": "2024-01-02T00:00:00+00:00",
+        "metrics": {"repeat_offender_signatures": 2},
     }
-    base_dir.mkdir(parents=True, exist_ok=True)
-    (base_dir / "latest_report.json").write_text(json.dumps(payload), encoding="utf-8")
+    (bundle_dir / "telemetry.json").write_text(json.dumps(telemetry), encoding="utf-8")
 
 
 def test_orchestrator_writes_manifest_with_summarizer(tmp_path: Path) -> None:
@@ -118,5 +126,13 @@ def test_orchestrator_writes_manifest_with_summarizer(tmp_path: Path) -> None:
     assert summarizer_step["payload"]["slug"]
     summary_path = manifest_path.with_name("summary.md")
     assert summary_path.exists()
+    summary_text = summary_path.read_text(encoding="utf-8")
+    assert "# Fault Diagnostics Run" in summary_text
+    assert "## Pipeline Status" in summary_text
+    assert "| Step | Status | Detail |" in summary_text
+    assert "## Artifacts" in summary_text
+    assert "## Producer" in summary_text
+    assert "## Consumer" in summary_text
+    assert "## Summarizer" in summary_text
     telemetry_path = manifest_path.with_name("telemetry.json")
     assert telemetry_path.exists()

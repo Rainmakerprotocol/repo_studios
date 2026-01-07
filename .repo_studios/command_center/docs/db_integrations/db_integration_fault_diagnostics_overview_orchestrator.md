@@ -5,7 +5,7 @@ role: [DBIntegrationDoc]
 owners: [repo_studios_ai]
 status: draft
 version: 1
-updated_at: 2025-01-02
+updated_at: 2026-01-07
 tags: [db-integration, orchestrator, healthview, fault-diagnostics]
 related_files:
   - .repo_studios/command_center/scripts/orchestrators/run_fault_diagnostics_overview.py
@@ -47,7 +47,7 @@ The orchestrator coordinates execution of the following upstream scripts:
 | Argument | Default | Description |
 | --- | --- | --- |
 | `--repo-root` | (inferred) | Repository root override |
-| `--runs-dir` | `.repo_studios/command_center/reports/rawview/fault_diagnostics_runs` | Faulthandler runs base |
+| `--runs-dir` | `.repo_studios/reports/healthview/rawview/fault_diagnostics` | Faulthandler runs base |
 | `--run-dir` | (none) | Explicit faulthandler run directory to process |
 | `--producer-output-dir` | `.repo_studios/reports/healthview/producer_reports/faulthandler_reports` | Producer output |
 | `--consumer-output-dir` | `.repo_studios/reports/healthview/consumer_reports/fault_artifacts` | Consumer output |
@@ -109,7 +109,7 @@ catalog_entries:
   - Source: `manifest.json`, `summary.md`, `telemetry.json`
   - Roles:
     - `manifest_json` (JSON — orchestrator manifest with artifact refs)
-    - `summary_md` (Markdown — consolidated fault diagnostics summary)
+    - `summary_md` (Markdown — pipeline status + artifact pointers + snapshot/baseline)
     - `telemetry_json` (JSON — full pipeline telemetry payload)
 
 - `orchestration_catalog`

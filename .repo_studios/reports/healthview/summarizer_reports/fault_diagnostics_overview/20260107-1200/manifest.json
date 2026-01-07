@@ -1,0 +1,49 @@
+{
+  "artifacts": {
+    "baseline_previous_bundle": ".repo_studios/reports/healthview/consumer_reports/fault_artifacts/20260107-1123",
+    "consumer_manifest": ".repo_studios/reports/healthview/consumer_reports/fault_artifacts/20260107-1123/manifest.json",
+    "consumer_summary": ".repo_studios/reports/healthview/consumer_reports/fault_artifacts/20260107-1123/summary.md",
+    "consumer_telemetry": ".repo_studios/reports/healthview/consumer_reports/fault_artifacts/20260107-1123/telemetry.json",
+    "current_bundle": ".repo_studios/reports/healthview/consumer_reports/fault_artifacts/20260107-1123",
+    "producer_telemetry": ".repo_studios/reports/healthview/producer_reports/faulthandler_reports/20260106-1457/telemetry.json"
+  },
+  "baseline": {
+    "bundle": "20260107-1123",
+    "metrics": {
+      "active_signature_count": 0,
+      "multi_hit": 0,
+      "repeat_offender": 0,
+      "signature_count": 0,
+      "single_hit": 0,
+      "thread_block_count": 0
+    },
+    "severity": {
+      "multi_hit": 0,
+      "repeat_offender": 0,
+      "single_hit": 0
+    },
+    "summary": {
+      "new_signature_ids": [],
+      "removed_signature_ids": []
+    }
+  },
+  "generated_at": "2026-01-07T12:00:36+00:00",
+  "metrics": {
+    "active_signature_count": 0,
+    "multi_hit": 0,
+    "repeat_offender": 0,
+    "signature_count": 0,
+    "single_hit": 0,
+    "thread_block_count": 0
+  },
+  "notes": [],
+  "producer_repeat_offender": 0,
+  "schema_version": 1,
+  "severity_buckets": {
+    "multi_hit": 0,
+    "repeat_offender": 0,
+    "single_hit": 0
+  },
+  "topic": "fault_diagnostics_overview",
+  "viewer": "healthview"
+}

@@ -1,6 +1,7 @@
-# Fault Diagnostics Summary
+# Faulthandler Report Summary
 
 Generated (UTC): 2026-01-07T14:42:59+00:00
+Source Run Dir: C:\Users\genet\repo_studios\.repo_studios\reports\healthview\rawview\fault_diagnostics\2026-01-06_1440
 
 ## Summary
 
@@ -18,12 +19,4 @@ Generated (UTC): 2026-01-07T14:42:59+00:00
 - repeat_offender: 0
 - multi_hit: 0
 - single_hit: 0
-
-## Dumps
-
-- combined.txt
-
-## Top Signatures
-
-(none)
 

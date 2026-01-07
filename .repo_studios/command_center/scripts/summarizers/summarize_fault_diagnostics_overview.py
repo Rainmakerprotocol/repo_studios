@@ -151,7 +151,7 @@ class Options:
         run_timestamp: UTC timestamp for artifact generation.
         consumer_telemetry_override: Explicit telemetry.json path.
         consumer_manifest_override: Explicit manifest.json path.
-        producer_report_override: Explicit producer report path.
+        producer_telemetry_override: Explicit producer telemetry path.
     """
 
     artifacts_to_keep: int
@@ -159,7 +159,7 @@ class Options:
     run_timestamp: datetime
     consumer_telemetry_override: Path | None
     consumer_manifest_override: Path | None
-    producer_report_override: Path | None
+    producer_telemetry_override: Path | None
 
 
 @dataclass(frozen=True)
@@ -195,7 +195,16 @@ def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
     parser.add_argument("--output-dir", default=str(DEFAULT_SUMMARIZER_OUTPUT_DIR))
     parser.add_argument("--consumer-telemetry", help="Explicit consumer telemetry.json path override")
     parser.add_argument("--consumer-manifest", help="Explicit consumer manifest.json path override")
-    parser.add_argument("--producer-report", help="Explicit producer report.json override")
+    parser.add_argument(
+        "--producer-telemetry",
+        dest="producer_telemetry",
+        help="Explicit producer telemetry.json path override",
+    )
+    parser.add_argument(
+        "--producer-report",
+        dest="producer_telemetry",
+        help="(deprecated) Explicit producer telemetry.json path override",
+    )
     parser.add_argument("--artifacts-to-keep", type=int, default=5, help="Retention budget for overview artifacts")
     parser.add_argument(
         "--timestamp",
@@ -285,7 +294,9 @@ def build_options(args: argparse.Namespace, *, paths: Paths) -> Options:
         consumer_manifest_override=_resolve_optional_path(
             paths.repo_root, getattr(args, "consumer_manifest", None)
         ),
-        producer_report_override=_resolve_optional_path(paths.repo_root, getattr(args, "producer_report", None)),
+        producer_telemetry_override=_resolve_optional_path(
+            paths.repo_root, getattr(args, "producer_telemetry", None)
+        ),
     )
 
 
@@ -478,7 +489,7 @@ def _collect_signature_ids(summary_payload: Mapping[str, Any] | None) -> set[str
 
 
 def _extract_producer_repeat_offender(payload: Mapping[str, Any] | None) -> int | None:
-    """Extract repeat_offender count from producer report.
+    """Extract repeat_offender count from producer telemetry.
 
     Args:
         payload: Producer report payload.
@@ -489,9 +500,26 @@ def _extract_producer_repeat_offender(payload: Mapping[str, Any] | None) -> int 
     if not isinstance(payload, Mapping):
         return None
     summary = payload.get("summary")
-    if not isinstance(summary, Mapping):
+    if isinstance(summary, Mapping):
+        severity = summary.get("severity_buckets")
+        return _coerce_int(severity if isinstance(severity, Mapping) else None, "repeat_offender")
+
+    metrics = payload.get("metrics")
+    if isinstance(metrics, Mapping):
+        candidate = _coerce_int(metrics, "repeat_offender_signatures")
+        if candidate is not None:
+            return candidate
+
+    components = payload.get("components")
+    if not isinstance(components, Mapping):
         return None
-    severity = summary.get("severity_buckets")
+    faulthandler = components.get("faulthandler")
+    if not isinstance(faulthandler, Mapping):
+        return None
+    fh_summary = faulthandler.get("summary")
+    if not isinstance(fh_summary, Mapping):
+        return None
+    severity = fh_summary.get("severity_buckets")
     return _coerce_int(severity if isinstance(severity, Mapping) else None, "repeat_offender")
 
 
@@ -589,28 +617,35 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
         base=paths.consumer_output_dir,
         filename=CONSUMER_SUMMARY_NAME,
     )
-    producer_report_path = _ensure_path(
-        options.producer_report_override,
+    producer_telemetry_path = _ensure_path(
+        options.producer_telemetry_override,
         base=paths.producer_output_dir,
-        filename="report.json",
+        filename="telemetry.json",
     )
 
     consumer_telemetry_payload = _load_json(consumer_telemetry_path)
     consumer_manifest_payload = _load_json(consumer_manifest_path)
-    producer_payload = _load_json(producer_report_path)
+    producer_payload = _load_json(producer_telemetry_path)
 
     metrics = _extract_metrics(consumer_manifest_payload if isinstance(consumer_manifest_payload, Mapping) else None)
     severity = _extract_severity(consumer_telemetry_payload if isinstance(consumer_telemetry_payload, Mapping) else None)
 
-    bundle_name = None
+    current_bundle_dir = consumer_manifest_path.parent if consumer_manifest_path else None
+    bundle_name = current_bundle_dir.name if current_bundle_dir else None
     if isinstance(consumer_manifest_payload, Mapping):
         raw_bundle = consumer_manifest_payload.get("bundle")
         if isinstance(raw_bundle, str):
-            bundle_name = raw_bundle
+            candidate = paths.consumer_output_dir / raw_bundle
+            if candidate.is_dir():
+                bundle_name = raw_bundle
 
     previous_bundle_dir = _find_previous_bundle(paths.consumer_output_dir, bundle_name)
-    previous_manifest_payload = _load_json(previous_bundle_dir / CONSUMER_MANIFEST_NAME) if previous_bundle_dir else None
-    previous_telemetry_payload = _load_json(previous_bundle_dir / CONSUMER_TELEMETRY_NAME) if previous_bundle_dir else None
+    previous_manifest_payload = (
+        _load_json(previous_bundle_dir / CONSUMER_MANIFEST_NAME) if previous_bundle_dir else None
+    )
+    previous_telemetry_payload = (
+        _load_json(previous_bundle_dir / CONSUMER_TELEMETRY_NAME) if previous_bundle_dir else None
+    )
 
     baseline_summary = None
     if previous_bundle_dir and isinstance(previous_manifest_payload, Mapping):
@@ -635,15 +670,20 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
         notes.append("Consumer telemetry not located; ensure generate_fault_artifacts has been refreshed.")
     if consumer_manifest_path is None:
         notes.append("Consumer manifest missing; baseline comparison may be incomplete.")
-    if producer_report_path is None:
-        notes.append("Producer report unavailable; repeat offender counts may be stale.")
+    if producer_telemetry_path is None:
+        notes.append("Producer telemetry unavailable; repeat offender counts may be stale.")
 
     artifacts_section = {
         "consumer_telemetry": _normalize_relative(consumer_telemetry_path, paths.repo_root),
         "consumer_manifest": _normalize_relative(consumer_manifest_path, paths.repo_root),
         "consumer_summary": _normalize_relative(consumer_summary_md_path, paths.repo_root),
-        "producer_report": _normalize_relative(producer_report_path, paths.repo_root),
-        "previous_bundle": _normalize_relative(previous_bundle_dir, paths.repo_root) if previous_bundle_dir else None,
+        "producer_telemetry": _normalize_relative(producer_telemetry_path, paths.repo_root),
+        "current_bundle": _normalize_relative(current_bundle_dir, paths.repo_root)
+        if current_bundle_dir
+        else None,
+        "baseline_previous_bundle": _normalize_relative(previous_bundle_dir, paths.repo_root)
+        if previous_bundle_dir
+        else None,
     }
 
     overview_payload = {
@@ -715,6 +755,10 @@ def main(argv: Sequence[str] | None = None) -> None:
         argv: Command-line arguments; defaults to sys.argv[1:].
     """
     raise SystemExit(0 if run(argv).get("status") == "ok" else 1)
+
+
+if __name__ == "__main__":
+    main()
 
 
 __all__ = ["run", "main", "build_paths", "build_options"]

@@ -150,7 +150,25 @@ studio-collect-faulthandler-reports:
 
 .PHONY: studio-generate-fault-artifacts
 studio-generate-fault-artifacts:
-	$(PYTHON) scripts/consumers/generate_fault_artifacts.py --output-dir reports/healthview/consumer_reports/fault_artifacts --artifacts-to-keep 10 --log-level INFO
+	cd "$(REPO_ROOT)" && \
+		$(if $(filter Windows_NT,$(OS)),set "PYTHONPATH=$(CURDIR);$(CURDIR)/command_center/scripts" &&,PYTHONPATH="$(CURDIR):$(CURDIR)/command_center/scripts") \
+		$(PYTHON) \
+		".repo_studios/scripts/consumers/generate_fault_artifacts.py" \
+		--repo-root "$(REPO_ROOT)" \
+		--output-dir ".repo_studios/reports/healthview/consumer_reports/fault_artifacts" \
+		--log-level "$(LOG_LEVEL)"
+
+.PHONY: studio-summarize-fault-diagnostics-overview
+studio-summarize-fault-diagnostics-overview:
+	cd "$(REPO_ROOT)" && \
+		$(if $(filter Windows_NT,$(OS)),set "PYTHONPATH=$(CURDIR);$(CURDIR)/command_center/scripts" &&,PYTHONPATH="$(CURDIR):$(CURDIR)/command_center/scripts") \
+		$(PYTHON) \
+		".repo_studios/command_center/scripts/summarizers/summarize_fault_diagnostics_overview.py" \
+		--repo-root "$(REPO_ROOT)" \
+		--consumer-output-dir ".repo_studios/reports/healthview/consumer_reports/fault_artifacts" \
+		--producer-output-dir ".repo_studios/reports/healthview/producer_reports/faulthandler_reports" \
+		--output-dir ".repo_studios/reports/healthview/summarizer_reports/fault_diagnostics_overview" \
+		--log-level "$(LOG_LEVEL)"
 
 .PHONY: studio-orchestrate-fault-diagnostics
 studio-orchestrate-fault-diagnostics:
