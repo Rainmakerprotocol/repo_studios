@@ -22,9 +22,11 @@ try:  # pragma: no cover - prefer import when packaged
         WriteReportArtifactsResult,
         build_standard_options,
         build_standard_paths,
+        measure_artifact_directory,
         write_report_artifacts,
     )
     from libraries.report_paths import build_topic_path
+    from libraries.retention_policy import get_keep
 except ModuleNotFoundError:  # pragma: no cover - fallback when running in isolation
     LIBRARIES_ROOT = Path(__file__).resolve().parents[1]
     if str(LIBRARIES_ROOT) not in sys.path:
@@ -38,9 +40,11 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when running in isola
         WriteReportArtifactsResult,
         build_standard_options,
         build_standard_paths,
+        measure_artifact_directory,
         write_report_artifacts,
     )
     from libraries.report_paths import build_topic_path
+    from libraries.retention_policy import get_keep
 
 DEFAULT_CONSUMER_OUTPUT_DIR = build_topic_path("consumer", "monkey_patch_risk")
 DEFAULT_PRODUCER_OUTPUT_DIR = build_topic_path("producer", "monkey_patch_scans")
@@ -50,6 +54,8 @@ SUMMARY_STEM = "monkey_patch_overview"
 VIEWER_SLUG = "healthview"
 TOPIC_SLUG = "monkey_patch_overview"
 SCHEMA_VERSION = 1
+
+DEFAULT_ARTIFACTS_TO_KEEP = get_keep("summarize_monkey_patch_overview")
 
 
 @dataclass(frozen=True)
@@ -162,7 +168,12 @@ def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
     parser.add_argument("--producer-report", help="Explicit producer report.json override")
     parser.add_argument("--producer-matches", help="Explicit producer matches.json override")
     parser.add_argument("--duplicate-matrix", help="Optional duplicate detection matrix to cross-check")
-    parser.add_argument("--artifacts-to-keep", type=int, default=5, help="Retention budget for overview artifacts")
+    parser.add_argument(
+        "--artifacts-to-keep",
+        type=int,
+        default=DEFAULT_ARTIFACTS_TO_KEEP,
+        help="Retention budget for overview artifacts",
+    )
     parser.add_argument(
         "--timestamp",
         help="ISO-8601 timestamp for the emitted artifacts (defaults to current UTC time)",
@@ -623,6 +634,18 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
         "notes": notes,
     }
 
+    telemetry_payload: dict[str, Any] = {
+        "schema_version": SCHEMA_VERSION,
+        "viewer": VIEWER_SLUG,
+        "topic": TOPIC_SLUG,
+        "generated_at": options.run_timestamp.isoformat(timespec="seconds"),
+        "status": "ok",
+        "counts_by_risk": counts,
+        "total_findings": total_findings,
+        "overlap_count": len(overlap),
+        "notes": notes,
+    }
+
     summary_markdown = _build_markdown(
         generated_at=options.run_timestamp,
         counts=counts,
@@ -640,6 +663,7 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     artifacts = [
         ReportArtifact(filename="manifest.json", kind="json", content=lambda: overview_payload),
         ReportArtifact(filename="summary.md", kind="text", content=lambda: summary_markdown),
+        ReportArtifact(filename="telemetry.json", kind="json", content=lambda: telemetry_payload),
     ]
     # HOP-compliant: pass viewer="" and topic="" to enable timestamp-only directory naming
     result: WriteReportArtifactsResult = write_report_artifacts(
@@ -651,6 +675,25 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
         viewer="",
         topic="",
     )
+
+    artifact_metrics = measure_artifact_directory(result.run_dir)
+    telemetry_payload.setdefault("metrics", {}).update(artifact_metrics.as_dict())
+    overview_payload.setdefault("metrics", {}).update(artifact_metrics.as_dict())
+    overview_payload["telemetry"] = telemetry_payload
+
+    manifest_path = result.artifacts.get("manifest.json")
+    if manifest_path is not None:
+        manifest_path.write_text(
+            json.dumps(overview_payload, indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
+
+    telemetry_path = result.artifacts.get("telemetry.json")
+    if telemetry_path is not None:
+        telemetry_path.write_text(
+            json.dumps(telemetry_payload, indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
 
     logger.info(
         "Monkey Patch overview artifacts written to %s (slug=%s)",

@@ -1,0 +1,34 @@
+{
+  "catalog": [
+    {
+      "artifact": "manifest.json",
+      "path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\aggregator_reports\\monkey_patch_trends\\20260115-1332\\manifest.json"
+    },
+    {
+      "artifact": "summary.md",
+      "path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\aggregator_reports\\monkey_patch_trends\\20260115-1332\\summary.md"
+    },
+    {
+      "artifact": "telemetry.json",
+      "path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\aggregator_reports\\monkey_patch_trends\\20260115-1332\\telemetry.json"
+    }
+  ],
+  "generated_at": "2026-01-15T13:32:42+00:00",
+  "inputs": {
+    "consumer_base": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\consumer_reports\\monkey_patch_risk",
+    "keep": 5,
+    "max_runs": 20,
+    "producer_base": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\producer_reports\\monkey_patch_scans"
+  },
+  "payload": {
+    "latest": null,
+    "mode": "consumer",
+    "runs_considered": 1
+  },
+  "repo_root": "C:\\Users\\genet\\repo_studios\\.repo_studios\\scripts",
+  "run_timestamp": "20260115-1332",
+  "schema_version": 1,
+  "status": "ok",
+  "topic": "monkey_patch_trends",
+  "viewer": "healthview"
+}

@@ -1,0 +1,63 @@
+{
+  "finished_at": "2026-01-15T13:28:12.986932+00:00",
+  "metrics": {
+    "artifact_bytes": 6382,
+    "artifact_files": 3,
+    "runtime_seconds": 1.757742,
+    "step_count": 4,
+    "steps_failed": 0,
+    "steps_skipped": 0,
+    "steps_succeeded": 4
+  },
+  "run_slug": "20260115-1328",
+  "started_at": "2026-01-15T13:28:11.229190+00:00",
+  "steps": [
+    {
+      "detail": "status=ok, findings=122",
+      "finished_at": "2026-01-15T13:28:12.921217+00:00",
+      "name": "producer",
+      "payload": {
+        "run_id": null,
+        "status": "ok",
+        "total_findings": 122
+      },
+      "started_at": "2026-01-15T13:28:11.229197+00:00",
+      "status": "success"
+    },
+    {
+      "detail": "source=structured",
+      "finished_at": "2026-01-15T13:28:12.947291+00:00",
+      "name": "consumer",
+      "payload": {
+        "bundle_dir": ".repo_studios/reports/healthview/consumer_reports/monkey_patch_risk/20260115-1328",
+        "source": "structured"
+      },
+      "started_at": "2026-01-15T13:28:12.921230+00:00",
+      "status": "success"
+    },
+    {
+      "detail": "mode=consumer",
+      "finished_at": "2026-01-15T13:28:12.968775+00:00",
+      "name": "aggregator",
+      "payload": {
+        "mode": "consumer",
+        "runs": 1
+      },
+      "started_at": "2026-01-15T13:28:12.947307+00:00",
+      "status": "success"
+    },
+    {
+      "detail": "slug=20260115-1328",
+      "finished_at": "2026-01-15T13:28:12.986923+00:00",
+      "name": "summarizer",
+      "payload": {
+        "slug": "20260115-1328"
+      },
+      "started_at": "2026-01-15T13:28:12.968789+00:00",
+      "status": "success"
+    }
+  ],
+  "success": true,
+  "topic": "monkey_patch_oversight",
+  "viewer": "healthview"
+}

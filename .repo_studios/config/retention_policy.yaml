@@ -86,6 +86,9 @@ orchestrators:
       analyze_monkey_patch_trends:
         keep: 5
         description: "Trend aggregator"
+      summarize_monkey_patch_overview:
+        keep: 3
+        description: "Monkey patch overview summarizer"
       summarize_health_suite:
         keep: 3
         description: "Health suite summarizer"

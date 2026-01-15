@@ -26,27 +26,28 @@ LIBRARIES_ROOT = Path(__file__).resolve().parents[1]
 if str(LIBRARIES_ROOT) not in sys.path:
     sys.path.insert(0, str(LIBRARIES_ROOT))
 
-from libraries import (
-    CatalogRegistry,
-    KeepSpec,
-    OptionsConfig,
-    PathSpec,
-    PathsConfig,
-    ReportArtifact,
-    TopicContext,
-    TopicStep,
-    TopicStepOutcome,
+from libraries import (  # noqa: E402
     build_pipeline_telemetry,
     build_standard_options,
     build_standard_paths,
     build_topic_pipeline,
+    CatalogRegistry,
+    KeepSpec,
     measure_artifact_directory,
+    OptionsConfig,
+    PathSpec,
+    PathsConfig,
+    ReportArtifact,
     step_failed,
     step_skipped,
     step_success,
+    TopicContext,
+    TopicStep,
+    TopicStepOutcome,
     write_report_artifacts,
 )
-from libraries.report_paths import build_topic_path
+from libraries.report_paths import build_topic_path  # noqa: E402
+from libraries.retention_policy import get_keep, get_orchestrator_config  # noqa: E402
 
 LOGGER = logging.getLogger(__name__)
 
@@ -72,6 +73,29 @@ DEFAULT_CONSUMER_OUTPUT = build_topic_path("consumer", "monkey_patch_risk")
 DEFAULT_AGGREGATOR_OUTPUT = build_topic_path("aggregator", "monkey_patch_trends")
 DEFAULT_SUMMARIZER_OUTPUT = build_topic_path("summarizer", "monkey_patch_overview")
 DEFAULT_HEALTHVIEW_ROOT = build_topic_path("orchestrator", "monkey_patch_oversight")
+
+_RETENTION_CONFIG = get_orchestrator_config("run_monkey_patch_oversight")
+DEFAULT_ORCHESTRATOR_KEEP = (_RETENTION_CONFIG.artifacts_to_keep if _RETENTION_CONFIG else 3)
+DEFAULT_PRODUCER_KEEP = (
+    _RETENTION_CONFIG.scripts.get("scan_monkey_patches").keep
+    if _RETENTION_CONFIG and "scan_monkey_patches" in _RETENTION_CONFIG.scripts
+    else get_keep("scan_monkey_patches")
+)
+DEFAULT_CONSUMER_KEEP = (
+    _RETENTION_CONFIG.scripts.get("classify_monkey_patches").keep
+    if _RETENTION_CONFIG and "classify_monkey_patches" in _RETENTION_CONFIG.scripts
+    else get_keep("classify_monkey_patches")
+)
+DEFAULT_AGGREGATOR_KEEP = (
+    _RETENTION_CONFIG.scripts.get("analyze_monkey_patch_trends").keep
+    if _RETENTION_CONFIG and "analyze_monkey_patch_trends" in _RETENTION_CONFIG.scripts
+    else get_keep("analyze_monkey_patch_trends")
+)
+DEFAULT_SUMMARIZER_KEEP = (
+    _RETENTION_CONFIG.scripts.get("summarize_monkey_patch_overview").keep
+    if _RETENTION_CONFIG and "summarize_monkey_patch_overview" in _RETENTION_CONFIG.scripts
+    else get_keep("summarize_monkey_patch_overview")
+)
 
 
 @dataclass(frozen=True)
@@ -302,11 +326,16 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--aggregator-output-dir", default=str(DEFAULT_AGGREGATOR_OUTPUT))
     parser.add_argument("--summarizer-output-dir", default=str(DEFAULT_SUMMARIZER_OUTPUT))
     parser.add_argument("--healthview-root", default=str(DEFAULT_HEALTHVIEW_ROOT))
-    parser.add_argument("--artifacts-to-keep", type=int, default=3, help="Retention budget for manifest artifacts")
-    parser.add_argument("--producer-artifacts-to-keep", type=int, default=10)
-    parser.add_argument("--consumer-artifacts-to-keep", type=int, default=10)
-    parser.add_argument("--aggregator-artifacts-to-keep", type=int, default=10)
-    parser.add_argument("--summarizer-artifacts-to-keep", type=int, default=5)
+    parser.add_argument(
+        "--artifacts-to-keep",
+        type=int,
+        default=DEFAULT_ORCHESTRATOR_KEEP,
+        help="Retention budget for manifest artifacts",
+    )
+    parser.add_argument("--producer-artifacts-to-keep", type=int, default=DEFAULT_PRODUCER_KEEP)
+    parser.add_argument("--consumer-artifacts-to-keep", type=int, default=DEFAULT_CONSUMER_KEEP)
+    parser.add_argument("--aggregator-artifacts-to-keep", type=int, default=DEFAULT_AGGREGATOR_KEEP)
+    parser.add_argument("--summarizer-artifacts-to-keep", type=int, default=DEFAULT_SUMMARIZER_KEEP)
     parser.add_argument("--trend-max-runs", type=int, default=20, help="Maximum trend runs to blend")
     parser.add_argument("--producer-context-lines", type=int, default=2)
     parser.add_argument("--producer-with-git", action="store_true")
@@ -1014,3 +1043,7 @@ def main(argv: Sequence[str] | None = None) -> None:
 
 
 __all__ = ["run", "main", "parse_args", "build_paths", "build_options"]
+
+
+if __name__ == "__main__":
+    main()

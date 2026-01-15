@@ -1,0 +1,19 @@
+{
+  "counts_by_risk": {
+    "HIGH": 14,
+    "MODERATE": 52,
+    "SAFE": 56
+  },
+  "generated_at": "2026-01-15T13:28:11+00:00",
+  "metrics": {
+    "artifact_bytes": 2120,
+    "artifact_files": 3
+  },
+  "notes": [],
+  "overlap_count": 0,
+  "schema_version": 1,
+  "status": "ok",
+  "topic": "monkey_patch_overview",
+  "total_findings": 122,
+  "viewer": "healthview"
+}

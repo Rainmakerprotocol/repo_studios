@@ -70,6 +70,7 @@ studio-scan-monkey-patches:
 	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) \
 		".repo_studios/scripts/producers/scan_monkey_patches.py" \
 		--repo-root . \
+		--output-dir ".repo_studios/reports/healthview/producer_reports/monkey_patch_scans" \
 		--log-level "$(LOG_LEVEL)"
 
 .PHONY: studio-seed-standards-prompts

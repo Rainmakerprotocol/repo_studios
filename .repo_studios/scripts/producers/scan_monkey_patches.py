@@ -1175,6 +1175,52 @@ def summarize_findings(
     return by_category, by_import_base, top_files
 
 
+def summarize_findings_extended(findings: list[Finding], top_n: int = 10) -> dict[str, Any]:
+    """Compute extended summary statistics for findings.
+
+    In addition to the legacy summary (category/import-base/top-files), compute
+    test vs non-test splits and module-scope counts to support better human
+    triage while keeping the bundle machine-readable.
+
+    Args:
+        findings: List of Finding objects to summarize.
+        top_n: Number of top files to include in each ranking.
+
+    Returns:
+        Dictionary with extended summary metrics.
+    """
+    total_findings = len(findings)
+    test_findings = [f for f in findings if f.is_test]
+    non_test_findings = [f for f in findings if not f.is_test]
+
+    module_scope_findings = [f for f in findings if f.is_module_scope]
+    module_scope_test = [f for f in module_scope_findings if f.is_test]
+    module_scope_non_test = [f for f in module_scope_findings if not f.is_test]
+
+    by_category_test: Counter[str] = Counter(f.category for f in test_findings)
+    by_category_non_test: Counter[str] = Counter(f.category for f in non_test_findings)
+
+    by_file_test: Counter[str] = Counter(f.file for f in test_findings)
+    by_file_non_test: Counter[str] = Counter(f.file for f in non_test_findings)
+
+    top_files_test = sorted(by_file_test.items(), key=lambda item: (-item[1], item[0]))[:top_n]
+    top_files_non_test = sorted(by_file_non_test.items(), key=lambda item: (-item[1], item[0]))[:top_n]
+
+    return {
+        "total_findings_test": len(test_findings),
+        "total_findings_non_test": len(non_test_findings),
+        "module_scope_total": len(module_scope_findings),
+        "module_scope_test": len(module_scope_test),
+        "module_scope_non_test": len(module_scope_non_test),
+        "by_category_test": dict(sorted(by_category_test.items())),
+        "by_category_non_test": dict(sorted(by_category_non_test.items())),
+        "top_files_test": [{"path": path, "count": count} for path, count in top_files_test],
+        "top_files_non_test": [{"path": path, "count": count} for path, count in top_files_non_test],
+        "_extended_schema_version": 1,
+        "_extended_total_findings": total_findings,
+    }
+
+
 def _relativize(path: Path, repo_root: Path) -> str:
     """Convert path to POSIX string relative to repo root.
 
@@ -1252,6 +1298,7 @@ def compose_manifest(
         Complete manifest dictionary ready for JSON serialization.
     """
     by_category, by_import_base, top_files = summarize_findings(findings)
+    extended_summary = summarize_findings_extended(findings)
     files_with_findings = len({f.file for f in findings})
     status = "ok"
     if parse_errors:
@@ -1307,6 +1354,7 @@ def compose_manifest(
                 "by_category": dict(sorted(by_category.items())),
                 "by_import_base": dict(sorted(by_import_base.items())),
                 "top_files": [{"path": path, "count": count} for path, count in top_files],
+                **extended_summary,
             },
             "findings": [finding.to_dict() for finding in findings],
         },
@@ -1336,10 +1384,16 @@ def compose_telemetry(
     payload_obj = cast(dict[str, Any], manifest.get("payload")) if isinstance(manifest.get("payload"), dict) else {}
     summary = cast(dict[str, Any], payload_obj.get("summary")) if isinstance(payload_obj.get("summary"), dict) else {}
     by_category = cast(dict[str, Any], summary.get("by_category")) if isinstance(summary.get("by_category"), dict) else {}
+    total_findings_test = int(summary.get("total_findings_test", 0) or 0)
+    total_findings_non_test = int(summary.get("total_findings_non_test", 0) or 0)
+    module_scope_non_test = int(summary.get("module_scope_non_test", 0) or 0)
     metrics: dict[str, object] = {
         "files_scanned": int(payload_obj.get("files_scanned", 0) or 0),
         "files_with_findings": int(payload_obj.get("files_with_findings", 0) or 0),
         "total_findings": int(payload_obj.get("total_findings", 0) or 0),
+        "total_findings_test": total_findings_test,
+        "total_findings_non_test": total_findings_non_test,
+        "module_scope_non_test": module_scope_non_test,
         "parse_errors": int(payload_obj.get("parse_errors", 0) or 0),
         "duration_ms": int(payload_obj.get("duration_ms", 0) or 0),
         "findings_by_category": by_category,
@@ -1371,8 +1425,55 @@ def render_summary_markdown(manifest: dict[str, object]) -> str:
     payload_obj = cast(dict[str, Any], manifest.get("payload")) if isinstance(manifest.get("payload"), dict) else {}
     summary = cast(dict[str, Any], payload_obj.get("summary")) if isinstance(payload_obj.get("summary"), dict) else {}
     by_category = cast(dict[str, Any], summary.get("by_category")) if isinstance(summary.get("by_category"), dict) else {}
+    by_category_test = (
+        cast(dict[str, Any], summary.get("by_category_test")) if isinstance(summary.get("by_category_test"), dict) else {}
+    )
+    by_category_non_test = (
+        cast(dict[str, Any], summary.get("by_category_non_test"))
+        if isinstance(summary.get("by_category_non_test"), dict)
+        else {}
+    )
     by_import_base = cast(dict[str, Any], summary.get("by_import_base")) if isinstance(summary.get("by_import_base"), dict) else {}
     top_files = cast(list[object], summary.get("top_files")) if isinstance(summary.get("top_files"), list) else []
+
+    total_findings_test = int(summary.get("total_findings_test", 0) or 0)
+    total_findings_non_test = int(summary.get("total_findings_non_test", 0) or 0)
+    module_scope_non_test = int(summary.get("module_scope_non_test", 0) or 0)
+    top_files_test = cast(list[object], summary.get("top_files_test")) if isinstance(summary.get("top_files_test"), list) else []
+    top_files_non_test = (
+        cast(list[object], summary.get("top_files_non_test")) if isinstance(summary.get("top_files_non_test"), list) else []
+    )
+
+    inputs_obj = cast(dict[str, Any], manifest.get("inputs")) if isinstance(manifest.get("inputs"), dict) else {}
+    keep_value = inputs_obj.get("keep")
+
+    def _display_path(value: str) -> str:
+        return value.replace("\\", "/")
+
+    def _escape_table_cell(value: str) -> str:
+        sanitized = value.replace("\n", " ").replace("\r", " ")
+        return sanitized.replace("|", "\\|")
+
+    def _truncate_middle(value: str, max_len: int) -> str:
+        if max_len <= 0:
+            return ""
+
+        text = _display_path(value)
+        if len(text) <= max_len:
+            return text
+
+        if max_len < 10:
+            return text[:max_len]
+
+        left_len = (max_len - 1) // 2
+        right_len = max_len - 1 - left_len
+        return f"{text[:left_len]}…{text[-right_len:]}"
+
+    def _format_path_for_table(value: str, max_len: int = 72) -> str:
+        path = value.strip()
+        if not path:
+            return "-"
+        return _escape_table_cell(_truncate_middle(path, max_len))
 
     lines = [
         "# Monkey Patch Scan Report\n\n",
@@ -1382,13 +1483,44 @@ def render_summary_markdown(manifest: dict[str, object]) -> str:
         f"- Files Scanned: {payload_obj.get('files_scanned', 0)}\n",
         f"- Files With Findings: {payload_obj.get('files_with_findings', 0)}\n",
         f"- Total Findings: {payload_obj.get('total_findings', 0)}\n",
-        f"- Parse Errors: {payload_obj.get('parse_errors', 0)}\n\n",
+        f"- Findings (non-test): {total_findings_non_test}\n",
+        f"- Findings (tests): {total_findings_test}\n",
+        f"- Module-scope findings (non-test): {module_scope_non_test}\n",
+        f"- Parse Errors: {payload_obj.get('parse_errors', 0)}\n",
     ]
+
+    if keep_value is not None:
+        lines.append(f"- Retention (keep): {keep_value}\n")
+
+    lines.append("\n")
+
+    lines.append("## Artifacts\n\n")
+    lines.append("- `manifest.json` (full findings + inputs)\n")
+    lines.append("- `telemetry.json` (thin metrics for dashboards)\n")
+    lines.append("- `summary.md` (this file)\n\n")
+
+    lines.append("## Risk Highlights\n\n")
+    lines.append("- Focus first on non-test module-scope findings and `sys_modules_assignment` outside tests.\n")
+    lines.append("- Test-only patches are often acceptable when scoped and justified.\n\n")
 
     if by_category:
         lines.append("## Findings by Category\n\n")
         lines.append("| Category | Count |\n| --- | ---: |\n")
         for category, count in sorted(by_category.items(), key=lambda item: item[0]):
+            lines.append(f"| {category} | {count} |\n")
+        lines.append("\n")
+
+    if by_category_non_test:
+        lines.append("## Findings by Category (Non-Test)\n\n")
+        lines.append("| Category | Count |\n| --- | ---: |\n")
+        for category, count in sorted(by_category_non_test.items(), key=lambda item: item[0]):
+            lines.append(f"| {category} | {count} |\n")
+        lines.append("\n")
+
+    if by_category_test:
+        lines.append("## Findings by Category (Tests)\n\n")
+        lines.append("| Category | Count |\n| --- | ---: |\n")
+        for category, count in sorted(by_category_test.items(), key=lambda item: item[0]):
             lines.append(f"| {category} | {count} |\n")
         lines.append("\n")
 
@@ -1401,11 +1533,32 @@ def render_summary_markdown(manifest: dict[str, object]) -> str:
 
     if top_files:
         lines.append("## Files With Highest Patch Counts\n\n")
+        lines.append("- Full file paths live in `manifest.json` under `payload.summary.top_files`.\n\n")
         lines.append("| File | Count |\n| --- | ---: |\n")
         for entry in top_files:
             if not isinstance(entry, dict):
                 continue
-            lines.append(f"| {entry.get('path', '')} | {entry.get('count', 0)} |\n")
+            lines.append(f"| {_format_path_for_table(str(entry.get('path', '')))} | {entry.get('count', 0)} |\n")
+        lines.append("\n")
+
+    if top_files_non_test:
+        lines.append("## Top Non-Test Files\n\n")
+        lines.append("- Full file paths live in `manifest.json` under `payload.summary.top_files_non_test`.\n\n")
+        lines.append("| File | Count |\n| --- | ---: |\n")
+        for entry in top_files_non_test:
+            if not isinstance(entry, dict):
+                continue
+            lines.append(f"| {_format_path_for_table(str(entry.get('path', '')))} | {entry.get('count', 0)} |\n")
+        lines.append("\n")
+
+    if top_files_test:
+        lines.append("## Top Test Files\n\n")
+        lines.append("- Full file paths live in `manifest.json` under `payload.summary.top_files_test`.\n\n")
+        lines.append("| File | Count |\n| --- | ---: |\n")
+        for entry in top_files_test:
+            if not isinstance(entry, dict):
+                continue
+            lines.append(f"| {_format_path_for_table(str(entry.get('path', '')))} | {entry.get('count', 0)} |\n")
         lines.append("\n")
 
     lines.append("## Next Steps\n\n")

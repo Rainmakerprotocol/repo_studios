@@ -65,6 +65,8 @@ LEGACY_ROOT = Path(".repo_studios/monkey_patch")
 LEGACY_REPORT_NAME = "report.json"
 STRUCTURED_MATCHES_NAME = "matches.json"
 MANIFEST_NAME = "manifest.json"
+TELEMETRY_NAME = "telemetry.json"
+SUMMARY_NAME = "summary.md"
 DEFAULT_OUTPUT_BASE = build_topic_path("consumer", "monkey_patch_risk")
 DEFAULT_ARTIFACTS_TO_KEEP = get_keep("classify_monkey_patches")
 # Legacy prefix for backward compatibility with existing pruning
@@ -435,6 +437,7 @@ def _write_legacy_outputs(scan_dir: Path, agg: dict[str, Any]) -> None:
 
 def _write_consumer_bundle(
     *,
+    repo_root: Path,
     scan_dir: Path,
     agg: dict[str, Any],
     output_base: Path,
@@ -466,10 +469,13 @@ def _write_consumer_bundle(
     bundle_dir = output_base / slug
     bundle_dir.mkdir(parents=True, exist_ok=True)
 
+    run_summary_path = bundle_dir / SUMMARY_NAME
+    telemetry_path = bundle_dir / TELEMETRY_NAME
+    manifest_path = bundle_dir / MANIFEST_NAME
+
     summary_path = bundle_dir / "summary.json"
     summary_path.write_text(json.dumps(agg, indent=2) + "\n", encoding="utf-8")
 
-    md_path = bundle_dir / "SUMMARY.md"
     markdown = _render_markdown(agg, generated=ts)
     md_lines = markdown.rstrip("\n").splitlines()
     if md_lines and md_lines[-1] != "":
@@ -481,7 +487,8 @@ def _write_consumer_bundle(
     if producer_report:
         md_lines.append(f"- Producer Report: `{producer_report.resolve()}`")
     md_lines.append(f"- Consumer Bundle: `{bundle_dir.resolve()}`")
-    md_path.write_text("\n".join(md_lines) + "\n", encoding="utf-8")
+    consumer_summary_md = "\n".join(md_lines) + "\n"
+    run_summary_path.write_text(consumer_summary_md, encoding="utf-8")
 
     bundle_summary = {
         "schema_version": 1,
@@ -491,7 +498,7 @@ def _write_consumer_bundle(
         "producer_report": str(producer_report.resolve()) if producer_report else None,
         "artifacts": {
             "summary_json": str(summary_path.resolve()),
-            "summary_md": str(md_path.resolve()),
+            "summary_md": str(run_summary_path.resolve()),
         },
         "counts_by_risk": agg.get("counts_by_risk"),
         "top_files": agg.get("top_files"),
@@ -500,6 +507,64 @@ def _write_consumer_bundle(
     }
     bundle_summary_path = bundle_dir / "bundle_summary.json"
     bundle_summary_path.write_text(json.dumps(bundle_summary, indent=2) + "\n", encoding="utf-8")
+
+    telemetry_payload: dict[str, Any] = {
+        "schema_version": 1,
+        "viewer": "healthview",
+        "topic": "monkey_patch_risk",
+        "run_timestamp": slug,
+        "generated_at": ts.isoformat(timespec="seconds"),
+        "status": "ok",
+        "repo_root": str(repo_root.resolve()),
+        "source": source,
+        "scan_dir": str(scan_dir.resolve()),
+        "producer_report": str(producer_report.resolve()) if producer_report else None,
+        "counts_by_risk": agg.get("counts_by_risk"),
+        "total_findings": agg.get("total_findings"),
+        "artifacts": {
+            "summary_json": "summary.json",
+            "bundle_summary_json": "bundle_summary.json",
+            "summary_md": SUMMARY_NAME,
+        },
+    }
+    telemetry_path.write_text(json.dumps(telemetry_payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+    manifest_payload: dict[str, Any] = {
+        "schema_version": 1,
+        "viewer": "healthview",
+        "topic": "monkey_patch_risk",
+        "run_timestamp": slug,
+        "generated_at": ts.isoformat(timespec="seconds"),
+        "status": "ok",
+        "repo_root": str(repo_root.resolve()),
+        "inputs": {
+            "source": source,
+            "scan_dir": str(scan_dir.resolve()),
+            "producer_report": str(producer_report.resolve()) if producer_report else None,
+            "keep": keep,
+        },
+        "catalog": [
+            {
+                "artifact": MANIFEST_NAME,
+                "path": str(manifest_path.resolve()),
+            },
+            {
+                "artifact": SUMMARY_NAME,
+                "path": str(run_summary_path.resolve()),
+            },
+            {
+                "artifact": TELEMETRY_NAME,
+                "path": str(telemetry_path.resolve()),
+            },
+        ],
+        "payload": {
+            "counts_by_risk": agg.get("counts_by_risk"),
+            "total_findings": agg.get("total_findings"),
+            "top_files": agg.get("top_files"),
+            "top_categories": agg.get("top_categories"),
+        },
+    }
+    manifest_path.write_text(json.dumps(manifest_payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
     # HOP compliance: no pointer files
     pruned = _prune_history(output_base, keep=keep, current=bundle_dir, logger=logger)
@@ -654,6 +719,7 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     if not producer_report_path.exists():
         producer_report_path = None
     bundle_dir, bundle_summary, pruned = _write_consumer_bundle(
+        repo_root=repo_root,
         scan_dir=scan_dir,
         agg=result,
         output_base=output_base,

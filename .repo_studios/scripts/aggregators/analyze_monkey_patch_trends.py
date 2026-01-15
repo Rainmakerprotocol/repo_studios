@@ -26,6 +26,10 @@ TREND_MD_NAME = "trend.md"
 AGGREGATOR_BUNDLE_SUMMARY_NAME = "bundle_summary.json"
 CONSUMER_TREND_COPY_NAME = "TREND_SNAPSHOT.md"
 
+MANIFEST_NAME = "manifest.json"
+SUMMARY_NAME = "summary.md"
+TELEMETRY_NAME = "telemetry.json"
+
 PRODUCER_REPORT_NAME = "report.json"
 
 RISK_LEVELS: tuple[str, ...] = ("HIGH", "MODERATE", "SAFE")
@@ -635,6 +639,62 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
 
     trend_md = _render_markdown(generated_at=generated_at, mode=mode, runs=runs, latest=latest, notes=notes)
     trend_md_path.write_text(trend_md, encoding="utf-8")
+
+    # HOP base artifacts
+    (bundle_dir / SUMMARY_NAME).write_text(trend_md, encoding="utf-8")
+
+    telemetry_payload: dict[str, Any] = {
+        "schema_version": 1,
+        "viewer": "healthview",
+        "topic": "monkey_patch_trends",
+        "run_timestamp": slug,
+        "generated_at": generated_at.isoformat(timespec="seconds"),
+        "status": "ok",
+        "repo_root": str(repo_root.resolve()),
+        "mode": mode,
+        "runs_considered": len(runs_payload),
+        "latest": latest,
+        "notes": notes,
+        "artifacts": {
+            "trend_json": TREND_JSON_NAME,
+            "trend_md": TREND_MD_NAME,
+            "bundle_summary": AGGREGATOR_BUNDLE_SUMMARY_NAME,
+        },
+    }
+    (bundle_dir / TELEMETRY_NAME).write_text(
+        json.dumps(telemetry_payload, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+
+    manifest_payload: dict[str, Any] = {
+        "schema_version": 1,
+        "viewer": "healthview",
+        "topic": "monkey_patch_trends",
+        "run_timestamp": slug,
+        "generated_at": generated_at.isoformat(timespec="seconds"),
+        "status": "ok",
+        "repo_root": str(repo_root.resolve()),
+        "inputs": {
+            "consumer_base": str(consumer_base.resolve()),
+            "producer_base": str(producer_base.resolve()),
+            "max_runs": max_runs,
+            "keep": int(args.artifacts_to_keep),
+        },
+        "catalog": [
+            {"artifact": MANIFEST_NAME, "path": str((bundle_dir / MANIFEST_NAME).resolve())},
+            {"artifact": SUMMARY_NAME, "path": str((bundle_dir / SUMMARY_NAME).resolve())},
+            {"artifact": TELEMETRY_NAME, "path": str((bundle_dir / TELEMETRY_NAME).resolve())},
+        ],
+        "payload": {
+            "mode": mode,
+            "runs_considered": len(runs_payload),
+            "latest": latest,
+        },
+    }
+    (bundle_dir / MANIFEST_NAME).write_text(
+        json.dumps(manifest_payload, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
 
     trend_bundle_summary = {
         "schema_version": 1,
