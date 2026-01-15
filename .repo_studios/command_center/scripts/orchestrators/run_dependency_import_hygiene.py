@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
-"""Topic orchestrator for dependency and import hygiene.
+"""Run Stage 4.1 dependency and import hygiene orchestration.
 
-Publishes Healthview bundles to
-`.repo_studios/command_center/reports/healthview/dependency_import_hygiene/<timestamp>/` and replaces
-`scripts/orchestrators/run_batch_cleanup.py` together with the manually sequenced hygiene producers.
-It runs dependency hygiene, import graph, placeholder scan, batch cleanup dry run, typecheck, and
-optional mypy baseline refresh steps before mirroring artifacts. Typical runs take seven to eleven
-minutes in CI, with linting and mypy dominating when baseline refresh is enabled.
+Publishes HealthView orchestrator bundles to
+`.repo_studios/reports/healthview/orchestrator_reports/dependency_import_hygiene/<timestamp>/`.
+
+The pipeline runs dependency hygiene, import graph, placeholder scan, optional batch cleanup
+dry-run planning, typecheck, and optional mypy baseline refresh. Typecheck must execute (Option A):
+if the typecheck producer reports `status=skipped` because it could not discover targets, this
+orchestrator treats the run as failed unless `--skip-typecheck` is provided.
 """
 
 from __future__ import annotations
@@ -76,7 +77,9 @@ DEFAULT_BATCH_CLEANUP_OUTPUT_BASE = Path(
 )
 DEFAULT_TYPECHECK_OUTPUT_DIR = build_topic_path("producer", "typecheck_report")
 DEFAULT_MYPY_BASELINES_OUTPUT_DIR = Path(".repo_studios/command_center/reports/rawview/mypy_baselines")
-DEFAULT_HEALTHVIEW_ROOT = Path(".repo_studios/command_center/reports")
+DEFAULT_ORCHESTRATOR_OUTPUT_DIR = build_topic_path("orchestrator", HEALTHVIEW_TOPIC)
+
+DEFAULT_TYPECHECK_TARGETS: tuple[str, ...] = (".repo_studios",)
 
 DEPENDENCY_RUN_PREFIX = "dependency_hygiene"
 IMPORT_GRAPH_RUN_PREFIX = "import_graph"
@@ -98,7 +101,7 @@ class Paths:
         batch_cleanup_output_base: Base directory for batch cleanup outputs.
         typecheck_output_dir: Output directory for typecheck reports.
         mypy_baselines_output_dir: Output directory for mypy baseline files.
-        healthview_root: Root directory for healthview reports.
+        orchestrator_output_dir: Output directory for the orchestrator HealthView bundle.
     """
 
     repo_root: Path
@@ -109,7 +112,7 @@ class Paths:
     batch_cleanup_output_base: Path
     typecheck_output_dir: Path
     mypy_baselines_output_dir: Path
-    healthview_root: Path
+    orchestrator_output_dir: Path
 
 
 PATHS_CONFIG = PathsConfig(
@@ -139,8 +142,11 @@ PATHS_CONFIG = PathsConfig(
             ensure_dir=True,
             within_repo=False,
         ),
-        "healthview_root": PathSpec(
-            field="healthview_root", default=DEFAULT_HEALTHVIEW_ROOT, ensure_dir=True, within_repo=False
+        "orchestrator_output_dir": PathSpec(
+            field="orchestrator_output_dir",
+            default=DEFAULT_ORCHESTRATOR_OUTPUT_DIR,
+            ensure_dir=True,
+            within_repo=False,
         ),
     },
     repo_root_depth=4,
@@ -208,6 +214,8 @@ class Options:
         placeholder_extensions: File extensions for placeholder scanning.
         placeholder_patterns: Placeholder tokens to search for.
         placeholder_exclude_prefixes: Prefixes to exclude from scanning.
+        typecheck_targets: Explicit typecheck targets forwarded to the typecheck producer.
+        allow_missing_typecheck_targets: If true, allow typecheck producer to skip when targets are missing.
     """
 
     log_level: str
@@ -229,6 +237,8 @@ class Options:
     placeholder_extensions: tuple[str, ...]
     placeholder_patterns: tuple[str, ...]
     placeholder_exclude_prefixes: tuple[str, ...] | None
+    typecheck_targets: tuple[str, ...]
+    allow_missing_typecheck_targets: bool
 
 
 @dataclass(frozen=True)
@@ -277,16 +287,16 @@ class PlaceholderOutcome:
 
     Attributes:
         run_dir: Directory containing run artifacts.
-        report_json: Path to the report JSON file.
-        matches_json: Path to the matches JSON file.
-        log_path: Path to the log file.
-        payload: Parsed payload from the producer.
+        manifest_json: Path to the manifest JSON file.
+        telemetry_json: Path to the telemetry JSON file.
+        summary_md: Path to the Markdown summary.
+        payload: Parsed payload from the telemetry file.
     """
 
     run_dir: Path | None
-    report_json: Path | None
-    matches_json: Path | None
-    log_path: Path | None
+    manifest_json: Path | None
+    telemetry_json: Path | None
+    summary_md: Path | None
     payload: dict[str, Any] | None
 
 
@@ -365,7 +375,19 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--batch-cleanup-output-base", default=str(DEFAULT_BATCH_CLEANUP_OUTPUT_BASE))
     parser.add_argument("--typecheck-output-dir", default=str(DEFAULT_TYPECHECK_OUTPUT_DIR))
     parser.add_argument("--mypy-baselines-output-dir", default=str(DEFAULT_MYPY_BASELINES_OUTPUT_DIR))
-    parser.add_argument("--healthview-root", default=str(DEFAULT_HEALTHVIEW_ROOT))
+    parser.add_argument(
+        "--orchestrator-output-dir",
+        default=str(DEFAULT_ORCHESTRATOR_OUTPUT_DIR),
+        help="Output directory for the orchestrator HealthView bundle (HOP-compliant)",
+    )
+    parser.add_argument(
+        "--healthview-root",
+        default=None,
+        help=(
+            "DEPRECATED: Legacy HealthView root (will write to <root>/healthview/dependency_import_hygiene/<timestamp>/). "
+            "Prefer --orchestrator-output-dir."
+        ),
+    )
     parser.add_argument("--dependency-artifacts-to-keep", type=int, default=10)
     parser.add_argument("--import-graph-artifacts-to-keep", type=int, default=10)
     parser.add_argument("--placeholder-artifacts-to-keep", type=int, default=5)
@@ -410,6 +432,23 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     )
     parser.add_argument("--skip-import-graph", action="store_true", help="Skip the import graph producer")
     parser.add_argument("--skip-typecheck", action="store_true", help="Skip the typecheck producer")
+    parser.add_argument(
+        "--typecheck-target",
+        action="append",
+        dest="typecheck_targets",
+        help=(
+            "Explicit typecheck targets forwarded to the typecheck producer. "
+            "May be provided multiple times. Defaults to .repo_studios."
+        ),
+    )
+    parser.add_argument(
+        "--allow-missing-typecheck-targets",
+        action="store_true",
+        help=(
+            "Allow the typecheck producer to report status=skipped when targets are missing. "
+            "Default behavior treats missing targets as a failure (Option A)."
+        ),
+    )
     parser.add_argument(
         "--trigger-batch-cleanup",
         action="store_true",
@@ -462,7 +501,27 @@ def build_paths(args: argparse.Namespace) -> Paths:
     Returns:
         Resolved Paths dataclass with all directory paths.
     """
-    return cast(Paths, build_standard_paths(args, PATHS_CONFIG, origin=Path(__file__)))
+    paths = cast(Paths, build_standard_paths(args, PATHS_CONFIG, origin=Path(__file__)))
+    legacy_root = getattr(args, "healthview_root", None)
+    if legacy_root:
+        legacy_dir = Path(str(legacy_root))
+        LOGGER.warning(
+            "--healthview-root is deprecated; writing legacy output under %s",
+            legacy_dir,
+        )
+        orchestrator_output_dir = (legacy_dir / VIEWER_SLUG / HEALTHVIEW_TOPIC).resolve()
+        return Paths(
+            repo_root=paths.repo_root,
+            dependency_output_dir=paths.dependency_output_dir,
+            import_graph_output_dir=paths.import_graph_output_dir,
+            placeholder_output_dir=paths.placeholder_output_dir,
+            placeholder_allowlist=paths.placeholder_allowlist,
+            batch_cleanup_output_base=paths.batch_cleanup_output_base,
+            typecheck_output_dir=paths.typecheck_output_dir,
+            mypy_baselines_output_dir=paths.mypy_baselines_output_dir,
+            orchestrator_output_dir=orchestrator_output_dir,
+        )
+    return paths
 
 
 def _normalize_sequence(values: Iterable[str] | None) -> tuple[str, ...]:
@@ -495,6 +554,9 @@ def build_options(args: argparse.Namespace) -> Options:
     placeholder_extensions = _normalize_sequence(getattr(args, "placeholder_include_ext", None))
     placeholder_patterns = _normalize_sequence(getattr(args, "placeholder_pattern", None))
     placeholder_exclude = _normalize_sequence(getattr(args, "placeholder_exclude_prefix", None))
+    typecheck_targets = _normalize_sequence(getattr(args, "typecheck_targets", None))
+    if not typecheck_targets:
+        typecheck_targets = DEFAULT_TYPECHECK_TARGETS
     return Options(
         log_level=str(args.log_level),
         artifacts_to_keep=keep_values.artifacts_to_keep,
@@ -515,6 +577,8 @@ def build_options(args: argparse.Namespace) -> Options:
         placeholder_extensions=placeholder_extensions,
         placeholder_patterns=placeholder_patterns,
         placeholder_exclude_prefixes=placeholder_exclude if placeholder_exclude else None,
+        typecheck_targets=typecheck_targets,
+        allow_missing_typecheck_targets=bool(getattr(args, "allow_missing_typecheck_targets", False)),
     )
 
 
@@ -785,21 +849,31 @@ def _placeholder_scan(paths: Paths, options: Options) -> PlaceholderOutcome:
         argv.extend(["--exclude-prefix", *options.placeholder_exclude_prefixes])
     payload = run_callable(argv)
     run_dir = None
-    if isinstance(payload, dict):
-        run_id = payload.get("run_id")
-        if isinstance(run_id, str):
-            candidate = paths.placeholder_output_dir / run_id
-            if candidate.exists():
-                run_dir = candidate.resolve()
-    report_json = run_dir / "report.json" if run_dir and (run_dir / "report.json").exists() else None
-    matches_json = run_dir / "matches.json" if run_dir and (run_dir / "matches.json").exists() else None
-    log_path = run_dir / "log.txt" if run_dir and (run_dir / "log.txt").exists() else None
+    run_id = payload.get("run_id") if isinstance(payload, dict) else None
+    if isinstance(run_id, str):
+        candidate = paths.placeholder_output_dir / run_id
+        if candidate.exists():
+            run_dir = candidate.resolve()
+
+    manifest_json = run_dir / "manifest.json" if run_dir and (run_dir / "manifest.json").exists() else None
+    telemetry_json = run_dir / "telemetry.json" if run_dir and (run_dir / "telemetry.json").exists() else None
+    summary_md = run_dir / "summary.md" if run_dir and (run_dir / "summary.md").exists() else None
+    telemetry_payload = _read_json(telemetry_json) if telemetry_json else None
+    parsed_payload: dict[str, Any] | None = None
+    if isinstance(telemetry_payload, dict):
+        metrics = telemetry_payload.get("metrics")
+        if isinstance(metrics, dict):
+            parsed_payload = dict(metrics)
+        payload = telemetry_payload.get("payload")
+        if parsed_payload is None and isinstance(payload, dict):
+            parsed_payload = payload
+
     return PlaceholderOutcome(
         run_dir=run_dir,
-        report_json=report_json,
-        matches_json=matches_json,
-        log_path=log_path,
-        payload=payload if isinstance(payload, dict) else None,
+        manifest_json=manifest_json,
+        telemetry_json=telemetry_json,
+        summary_md=summary_md,
+        payload=parsed_payload,
     )
 
 
@@ -849,31 +923,6 @@ def _cleanup_step_commands(repo_root: Path) -> list[tuple[str, list[str]]]:
     ]
 
 
-def _update_cleanup_latest(bundle_dir: Path, output_base: Path) -> None:
-    """Update latest pointer files for cleanup artifacts.
-
-    Args:
-        bundle_dir: Directory containing current cleanup artifacts.
-        output_base: Base output directory for pointers.
-    """
-    mapping = {
-        "cleanup_summary.json": output_base / "latest_cleanup_summary.json",
-        "cleanup_log.txt": output_base / "latest_cleanup_log.txt",
-        "bundle_summary.json": output_base / "latest_bundle_summary.json",
-    }
-    for source_name, destination in mapping.items():
-        source_path = bundle_dir / source_name
-        if not source_path.exists():
-            continue
-        destination.parent.mkdir(parents=True, exist_ok=True)
-        try:
-            if destination.exists() or destination.is_symlink():
-                destination.unlink()
-            destination.hardlink_to(source_path)
-        except Exception:
-            shutil.copy2(source_path, destination)
-
-
 def _prune_cleanup_history(output_base: Path, current_dir: Path, keep: int) -> list[str]:
     """Prune old cleanup bundle directories.
 
@@ -895,6 +944,8 @@ def _prune_cleanup_history(output_base: Path, current_dir: Path, keep: int) -> l
     pruned: list[str] = []
     for obsolete in bundles[keep:]:
         if obsolete == current_dir:
+            continue
+        if (obsolete / ".keep").exists():
             continue
         shutil.rmtree(obsolete, ignore_errors=True)
         pruned.append(str(obsolete.resolve()))
@@ -993,7 +1044,6 @@ def _batch_cleanup(paths: Paths, options: Options) -> BatchCleanupOutcome:
     bundle_summary_path = bundle_dir / "bundle_summary.json"
     bundle_summary_path.write_text(json.dumps(bundle_summary_payload, indent=2) + "\n", encoding="utf-8")
 
-    _update_cleanup_latest(bundle_dir, paths.batch_cleanup_output_base)
     _prune_cleanup_history(paths.batch_cleanup_output_base, bundle_dir, options.cleanup_keep)
 
     return BatchCleanupOutcome(
@@ -1022,6 +1072,8 @@ def _typecheck_report(paths: Paths, options: Options) -> TypecheckOutcome:
         str(paths.repo_root),
         "--output-dir",
         str(paths.typecheck_output_dir),
+        "--targets",
+        *options.typecheck_targets,
         "--artifacts-to-keep",
         str(options.typecheck_keep),
         "--log-level",
@@ -1032,19 +1084,19 @@ def _typecheck_report(paths: Paths, options: Options) -> TypecheckOutcome:
     _invoke_main(main_callable, argv)
     timestamp = options.run_timestamp.strftime("%Y%m%d-%H%M")
     run_dir = (paths.typecheck_output_dir / timestamp).resolve()
-    telemetry_path = run_dir / "telemetry.json" if run_dir.exists() else None
-    payload = _read_json(telemetry_path) if telemetry_path else None
+    manifest_path = run_dir / "manifest.json" if run_dir.exists() else None
+    payload = _read_json(manifest_path) if manifest_path else None
     report_json = run_dir / "telemetry.json" if run_dir and run_dir.exists() else None
     report_md = run_dir / "summary.md" if run_dir and (run_dir / "summary.md").exists() else None
     log_path = None
-    raw_output = run_dir / "manifest.json" if run_dir and (run_dir / "manifest.json").exists() else None
+    raw_output = manifest_path if manifest_path and manifest_path.exists() else None
     return TypecheckOutcome(
         run_dir=run_dir,
         report_json=report_json,
         report_md=report_md,
         log_path=log_path,
         raw_output=raw_output,
-        payload=payload,
+        payload=payload if isinstance(payload, dict) else None,
     )
 
 
@@ -1153,16 +1205,20 @@ def _summarize_markdown(
     import_status = import_summary.get("status") if isinstance(import_summary, dict) else None
 
     placeholder_total = None
+    placeholder_unallowlisted = None
     if placeholder.payload:
         placeholder_total = placeholder.payload.get("total_matches")
+        placeholder_unallowlisted = placeholder.payload.get("unallowlisted_matches")
 
     typecheck_status = None
     typecheck_errors = None
+    typecheck_files_with_issues = None
     if typecheck and isinstance(typecheck.payload, dict):
         typecheck_status = typecheck.payload.get("status")
         summary = typecheck.payload.get("summary")
         if isinstance(summary, dict):
             typecheck_errors = summary.get("error_count")
+            typecheck_files_with_issues = summary.get("files_with_issues")
 
     baseline_status = baselines.status if baselines else None
 
@@ -1178,6 +1234,9 @@ def _summarize_markdown(
     else:
         lines.append("- import_graph_status: skipped")
     lines.append(f"- placeholder_matches: {placeholder_total if placeholder_total is not None else 'unknown'}")
+    lines.append(
+        f"- placeholder_unallowlisted_matches: {placeholder_unallowlisted if placeholder_unallowlisted is not None else 'unknown'}"
+    )
     if cleanup:
         lines.append(f"- batch_cleanup_status: {cleanup.status or 'unknown'}")
     else:
@@ -1185,9 +1244,13 @@ def _summarize_markdown(
     if typecheck:
         lines.append(f"- typecheck_status: {typecheck_status or 'unknown'}")
         lines.append(f"- typecheck_error_count: {typecheck_errors if typecheck_errors is not None else 'unknown'}")
+        lines.append(
+            f"- typecheck_files_with_issues: {typecheck_files_with_issues if typecheck_files_with_issues is not None else 'unknown'}"
+        )
     else:
         lines.append("- typecheck_status: skipped")
         lines.append("- typecheck_error_count: skipped")
+        lines.append("- typecheck_files_with_issues: skipped")
     if baselines:
         lines.append(f"- mypy_baseline_status: {baseline_status or 'unknown'}")
     else:
@@ -1297,14 +1360,15 @@ def run(argv: Sequence[str] | None = None) -> int:
         detail = f"status {status}" if status else "typecheck completed"
         if status == "skipped" and isinstance(notes, str) and notes:
             detail = notes
-        payload = {
-            "status": status,
-            "summary": summary,
-        } if isinstance(summary, dict) else {"status": status}
-        if notes:
+        payload = {"status": status}
+        if isinstance(summary, dict):
+            payload["summary"] = summary
+        if isinstance(notes, str) and notes:
             payload["notes"] = notes
         if status == "skipped":
-            return step_skipped(detail=detail, payload=payload)
+            if options.allow_missing_typecheck_targets:
+                return step_skipped(detail=detail, payload=payload)
+            return step_failed(detail=f"typecheck targets missing: {detail}", payload=payload)
         if status not in {"ok"}:
             return step_failed(detail=detail, payload=payload)
         return step_success(detail=detail, payload=payload)
@@ -1357,9 +1421,9 @@ def run(argv: Sequence[str] | None = None) -> int:
         "dependency_report": _relativize(dependency_outcome.report_json, paths.repo_root),
         "dependency_markdown": _relativize(dependency_outcome.report_md, paths.repo_root),
         "dependency_log": _relativize(dependency_outcome.log_path, paths.repo_root),
-        "placeholder_report": _relativize(placeholder_outcome.report_json, paths.repo_root),
-        "placeholder_matches": _relativize(placeholder_outcome.matches_json, paths.repo_root),
-        "placeholder_log": _relativize(placeholder_outcome.log_path, paths.repo_root),
+        "placeholder_manifest": _relativize(placeholder_outcome.manifest_json, paths.repo_root),
+        "placeholder_telemetry": _relativize(placeholder_outcome.telemetry_json, paths.repo_root),
+        "placeholder_summary": _relativize(placeholder_outcome.summary_md, paths.repo_root),
     }
     if import_outcome:
         artifacts_section["import_graph_report"] = _relativize(import_outcome.report_json, paths.repo_root)
@@ -1422,11 +1486,11 @@ def run(argv: Sequence[str] | None = None) -> int:
     result_artifacts = write_report_artifacts(
         stem=HEALTHVIEW_TOPIC,
         timestamp=options.run_timestamp,
-        output_dir=paths.healthview_root,
+        output_dir=paths.orchestrator_output_dir,
         artifacts=artifacts,
         keep=options.artifacts_to_keep,
-        viewer=VIEWER_SLUG,
-        topic=HEALTHVIEW_TOPIC,
+        viewer="",
+        topic="",
     )
 
     artifact_metrics = measure_artifact_directory(result_artifacts.run_dir)

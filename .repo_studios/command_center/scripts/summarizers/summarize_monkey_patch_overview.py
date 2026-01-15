@@ -297,23 +297,6 @@ def _read_json(path: Path | None) -> Any | None:
     except (json.JSONDecodeError, OSError):
         return None
 
-
-def _latest_pointer(base: Path, name: str) -> Path | None:
-    """Resolve a latest pointer file if it exists.
-
-    Args:
-        base: Base directory containing the pointer file.
-        name: Name of the pointer file.
-
-    Returns:
-        Resolved path if the pointer exists, None otherwise.
-    """
-    pointer = base / name
-    if pointer.exists():
-        return pointer.resolve()
-    return None
-
-
 def _latest_run_artifact(base: Path, stem: str, filename: str) -> Path | None:
     """Find the latest artifact file from timestamped run directories.
 
@@ -404,15 +387,15 @@ def _collect_monkey_patch_files(matches_payload: Any) -> set[str]:
     return files
 
 
-def _ensure_path(source: Path | None, *, base: Path, pointer_name: str, stem: str | None, filename: str) -> Path | None:
+def _ensure_path(source: Path | None, *, base: Path, stem: str | None, filename: str) -> Path | None:
     """Resolve an artifact path with fallback strategies.
 
-    Try the source path first, then pointer file, then latest run artifact.
+    Prefer explicit overrides, otherwise locate the latest run artifact from
+    timestamped run directories.
 
     Args:
         source: Explicit source path or None.
         base: Base directory for fallback searches.
-        pointer_name: Name of the pointer file to check.
         stem: Directory stem prefix for run directory search.
         filename: Artifact filename to look for.
 
@@ -421,9 +404,6 @@ def _ensure_path(source: Path | None, *, base: Path, pointer_name: str, stem: st
     """
     if source and source.exists():
         return source
-    pointer = _latest_pointer(base, pointer_name)
-    if pointer:
-        return pointer
     if stem:
         return _latest_run_artifact(base, stem, filename)
     return None
@@ -536,49 +516,42 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     consumer_summary_path = _ensure_path(
         options.consumer_summary_override,
         base=paths.consumer_output_dir,
-        pointer_name="latest_summary.json",
         stem="monkey_patch_risk-",
         filename="summary.json",
     )
     consumer_bundle_summary_path = _ensure_path(
         options.consumer_bundle_summary_override,
         base=paths.consumer_output_dir,
-        pointer_name="latest_bundle_summary.json",
         stem="monkey_patch_risk-",
         filename="bundle_summary.json",
     )
     trend_json_path = _ensure_path(
         options.trend_json_override,
         base=paths.aggregator_output_dir,
-        pointer_name="latest_trend.json",
         stem="monkey_patch_trends-",
         filename="trend.json",
     )
     trend_markdown_path = _ensure_path(
         options.trend_markdown_override,
         base=paths.aggregator_output_dir,
-        pointer_name="latest_trend.md",
         stem="monkey_patch_trends-",
         filename="trend.md",
     )
     trend_bundle_summary_path = _ensure_path(
         options.trend_bundle_summary_override,
         base=paths.aggregator_output_dir,
-        pointer_name="latest_bundle_summary.json",
         stem="monkey_patch_trends-",
         filename="bundle_summary.json",
     )
     producer_report_path = _ensure_path(
         options.producer_report_override,
         base=paths.producer_output_dir,
-        pointer_name="latest_report.json",
         stem="monkey_patch_scan-",
         filename="report.json",
     )
     producer_matches_path = _ensure_path(
         options.producer_matches_override,
         base=paths.producer_output_dir,
-        pointer_name="latest_matches.json",
         stem="monkey_patch_scan-",
         filename="matches.json",
     )

@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "viewer": "healthview",
+  "topic": "code_placeholders",
+  "status": "ok",
+  "timestamp": "2026-01-07T16:25:33.513566+00:00",
+  "generated_utc": "2026-01-07T16:25:33.513566+00:00",
+  "run_timestamp": "20260107-1625",
+  "run_id": "20260107-1625",
+  "repo_root": "C:\\Users\\genet\\repo_studios",
+  "bundle_dir": ".repo_studios/reports/healthview/producer_reports/code_placeholders/20260107-1625",
+  "scan_root": ".",
+  "include_extensions": [
+    ".js",
+    ".json",
+    ".md",
+    ".py",
+    ".ts",
+    ".txt",
+    ".yaml",
+    ".yml"
+  ],
+  "patterns": [
+    "FIXME",
+    "NOTE",
+    "OPTIMIZE",
+    "REVIEW",
+    "TODO",
+    "XXX"
+  ],
+  "allowlist_size": 0,
+  "exclude_prefixes": [
+    ".venv/",
+    "node_modules/"
+  ],
+  "exclude_segments": [
+    "site-packages"
+  ],
+  "default_exclusions_applied": true,
+  "total_matches": 4,
+  "summary": {
+    "by_pattern": {
+      "NOTE": 1,
+      "XXX": 3
+    },
+    "by_extension": {
+      ".md": 3,
+      ".py": 1
+    }
+  },
+  "log": "status=ok\nrun_timestamp=20260107-1625\nscan_root=.\ntotal_matches=4\npatterns=FIXME,NOTE,OPTIMIZE,REVIEW,TODO,XXX\nextensions=.js,.json,.md,.py,.ts,.txt,.yaml,.yml\nallowlist_size=0\nby_pattern_NOTE=1\nby_pattern_XXX=3\n",
+  "matches_total": 4,
+  "matches_sample_limit": 200,
+  "matches_sample_truncated": false,
+  "matches_sample": [
+    {
+      "path": ".repo_studios/command_center/docs/db_integration_template.md",
+      "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\docs\\db_integration_template.md",
+      "line": 161,
+      "pattern": "XXX",
+      "text": "# Line ~XXX in main() or run()"
+    },
+    {
+      "path": ".repo_studios/command_center/docs/db_integration_template.md",
+      "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\docs\\db_integration_template.md",
+      "line": 172,
+      "pattern": "XXX",
+      "text": "# Line ~XXX - write manifest"
+    },
+    {
+      "path": ".repo_studios/command_center/docs/db_integration_template.md",
+      "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\docs\\db_integration_template.md",
+      "line": 175,
+      "pattern": "XXX",
+      "text": "# Line ~XXX - write telemetry"
+    },
+    {
+      "path": ".repo_studios/command_center/scripts/libraries/retention_policy.py",
+      "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\scripts\\libraries\\retention_policy.py",
+      "line": 244,
+      "pattern": "NOTE",
+      "text": "# NOTE: We intentionally do NOT call get_script_retention(script_key) here."
+    }
+  ]
+}

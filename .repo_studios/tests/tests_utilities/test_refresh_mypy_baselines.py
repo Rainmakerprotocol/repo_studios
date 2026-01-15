@@ -66,10 +66,13 @@ def test_refresh_success(tmp_path: Path, monkeypatch):
     run_dir = Path(result["run_dir"])
     assert run_dir.exists()
 
-    pointer = output_dir / "latest_mypy_agents_full.txt"
-    assert pointer.exists()
-    content = pointer.read_text(encoding="utf-8")
+    baseline = run_dir / "mypy_agents_full.txt"
+    assert baseline.exists()
+    content = baseline.read_text(encoding="utf-8")
     assert "# Refreshed: 2025-11-27_120000" in content
+
+    assert not (output_dir / "latest_mypy_agents_full.txt").exists()
+    assert not (output_dir / "latest_bundle_summary.json").exists()
 
     summary_path = run_dir / "bundle_summary.json"
     summary = json.loads(summary_path.read_text(encoding="utf-8"))
@@ -106,10 +109,8 @@ def test_refresh_failure_skips_pointer(tmp_path: Path, monkeypatch):
 
     assert result["status"] == "error"
 
-    success_pointer = output_dir / "latest_mypy_agents_full.txt"
-    assert success_pointer.exists()
-    fail_pointer = output_dir / "latest_mypy_monitoring_full.txt"
-    assert not fail_pointer.exists()
+    assert not (output_dir / "latest_mypy_agents_full.txt").exists()
+    assert not (output_dir / "latest_mypy_monitoring_full.txt").exists()
 
     run_dir = Path(result["run_dir"])
     err_file = run_dir / "mypy_monitoring_full_error.txt"
@@ -143,9 +144,12 @@ def test_refresh_custom_target(tmp_path: Path, monkeypatch):
 
     assert result["status"] == "ok"
     run_dir = Path(result["run_dir"])
-    pointer = output_dir / "latest_docs_baseline.txt"
-    assert pointer.exists()
-    assert "custom ok" in pointer.read_text(encoding="utf-8")
+
+    baseline = run_dir / "docs_baseline.txt"
+    assert baseline.exists()
+    assert "custom ok" in baseline.read_text(encoding="utf-8")
+
+    assert not (output_dir / "latest_docs_baseline.txt").exists()
 
     bundle_json = json.loads((run_dir / "bundle_summary.json").read_text(encoding="utf-8"))
     assert "docs" in bundle_json["targets_meta"]

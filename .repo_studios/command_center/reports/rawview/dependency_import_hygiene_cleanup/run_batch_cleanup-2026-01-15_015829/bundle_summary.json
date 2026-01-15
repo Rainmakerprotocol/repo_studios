@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-01-15T01:58:29.802551+00:00",
+  "status": "success",
+  "bundle_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\reports\\rawview\\dependency_import_hygiene_cleanup\\run_batch_cleanup-2026-01-15_015829",
+  "artifacts": {
+    "cleanup_summary": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\reports\\rawview\\dependency_import_hygiene_cleanup\\run_batch_cleanup-2026-01-15_015829\\cleanup_summary.json",
+    "cleanup_log": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\reports\\rawview\\dependency_import_hygiene_cleanup\\run_batch_cleanup-2026-01-15_015829\\cleanup_log.txt"
+  }
+}

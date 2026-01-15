@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""Refresh mypy baselines and emit structured artifacts."""
+"""Refresh mypy baselines and emit structured artifacts.
+
+This utility runs mypy across configured targets and writes timestamped report bundles
+under `.repo_studios/command_center/reports/rawview/mypy_baselines/`. It intentionally
+avoids emitting mutable `latest_*` pointer artifacts.
+"""
 
 from __future__ import annotations
 
@@ -28,10 +33,8 @@ try:  # pragma: no cover - preferred import when executed via orchestrators
         PathSpec,
         PathsConfig,
         ReportArtifact,
-        WriteReportArtifactsResult,
         build_standard_options,
         build_standard_paths,
-        copy_latest_artifact,
         write_report_artifacts,
     )
     from libraries.retention_policy import get_keep
@@ -44,10 +47,8 @@ except ModuleNotFoundError:  # pragma: no cover - fallback for direct execution
         PathSpec,
         PathsConfig,
         ReportArtifact,
-        WriteReportArtifactsResult,
         build_standard_options,
         build_standard_paths,
-        copy_latest_artifact,
         write_report_artifacts,
     )
     from libraries.retention_policy import get_keep
@@ -426,14 +427,12 @@ def _render_markdown(summary: dict[str, Any], outcomes: Sequence[TargetOutcome])
     lines.append(f"- status: {summary['status']}\n")
     lines.append(f"- repo_root: {summary['repo_root']}\n")
     lines.append("\n## Targets\n\n")
-    lines.append("| Label | Mypy Path | Exit Code | Duration (s) | Latest Pointer |\n")
-    lines.append("| --- | --- | ---: | ---: | --- |\n")
+    lines.append("| Label | Mypy Path | Exit Code | Duration (s) |\n")
+    lines.append("| --- | --- | ---: | ---: |\n")
     for outcome in outcomes:
-        targets_meta = summary["targets_meta"]
-        pointer = targets_meta[outcome.spec.label]["latest_pointer"]
         lines.append(
             f"| {outcome.spec.label} | {outcome.spec.mypy_arg} | {outcome.exit_code} | "
-            f"{outcome.duration_seconds:.2f} | {pointer or '(none)'} |\n"
+            f"{outcome.duration_seconds:.2f} |\n"
         )
     return "".join(lines)
 
@@ -445,7 +444,6 @@ def _build_summary(
     repo_root: Path,
     run_slug: str,
     append_timestamp: bool,
-    output_dir: Path,
 ) -> dict[str, Any]:
     """Build the summary dictionary for the baseline refresh run.
 
@@ -455,21 +453,16 @@ def _build_summary(
         repo_root: Repository root directory.
         run_slug: Timestamp-based run identifier.
         append_timestamp: Whether timestamps were appended to files.
-        output_dir: Output directory for baseline artifacts.
-
     Returns:
         Summary dictionary with metadata and target results.
     """
     meta: dict[str, dict[str, Any]] = {}
     for outcome in outcomes:
-        pointer_name = f"latest_{outcome.spec.filename}"
-        pointer_path = output_dir / pointer_name
         meta[outcome.spec.label] = {
             "filename": outcome.spec.filename,
             "command": outcome.command,
             "exit_code": outcome.exit_code,
             "duration_seconds": round(outcome.duration_seconds, 3),
-            "latest_pointer": str(pointer_path) if pointer_path.exists() else None,
             "append_timestamp": append_timestamp,
         }
     status = _summary_status(outcomes)
@@ -502,7 +495,6 @@ def _build_status_payload(summary: dict[str, Any]) -> dict[str, Any]:
                 "label": label,
                 "filename": data["filename"],
                 "exit_code": data["exit_code"],
-                "latest_pointer": data["latest_pointer"],
             }
             for label, data in summary["targets_meta"].items()
         ],
@@ -531,13 +523,12 @@ def _build_artifacts(
     """
     timestamp_marker = f"\n# Refreshed: {generated_at.strftime('%Y-%m-%d_%H%M%S')}\n" if append_timestamp else ""
     artifacts: list[ReportArtifact] = [
-        ReportArtifact(filename="bundle_summary.json", kind="json", content=lambda: summary, pointer="latest_bundle_summary.json"),
-        ReportArtifact(filename="status.json", kind="json", content=lambda: status_payload, pointer="latest_status.json"),
+        ReportArtifact(filename="bundle_summary.json", kind="json", content=lambda: summary),
+        ReportArtifact(filename="status.json", kind="json", content=lambda: status_payload),
         ReportArtifact(
             filename="SUMMARY.md",
             kind="text",
             content=lambda: _render_markdown(summary, outcomes),
-            pointer="latest_SUMMARY.md",
         ),
     ]
     for outcome in outcomes:
@@ -559,29 +550,6 @@ def _build_artifacts(
                 )
             )
     return artifacts
-
-
-def _update_latest_pointers(
-    *,
-    outcomes: Sequence[TargetOutcome],
-    artifact_result: WriteReportArtifactsResult,
-    output_dir: Path,
-) -> None:
-    """Update latest pointer files for successful target outputs.
-
-    Args:
-        outcomes: Sequence of target execution outcomes.
-        artifact_result: Result from write_report_artifacts.
-        output_dir: Output directory for pointer files.
-    """
-    for outcome in outcomes:
-        if not outcome.succeeded:
-            continue
-        src = artifact_result.artifacts.get(outcome.spec.filename)
-        if not src:
-            continue
-        pointer = output_dir / f"latest_{outcome.spec.filename}"
-        copy_latest_artifact(src, pointer)
 
 
 def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
@@ -620,7 +588,6 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
         repo_root=paths.repo_root,
         run_slug=run_slug,
         append_timestamp=options.append_timestamp,
-        output_dir=paths.output_dir,
     )
     status_payload = _build_status_payload(summary)
 
@@ -639,13 +606,6 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
         artifacts=artifacts,
         keep=options.artifacts_to_keep,
     )
-
-    _update_latest_pointers(outcomes=outcomes, artifact_result=result, output_dir=paths.output_dir)
-
-    targets_meta = summary["targets_meta"]
-    for outcome in outcomes:
-        pointer = paths.output_dir / f"latest_{outcome.spec.filename}"
-        targets_meta[outcome.spec.label]["latest_pointer"] = str(pointer) if pointer.exists() else None
 
     summary["run_dir"] = str(result.run_dir)
     summary["artifacts"] = {name: str(path) for name, path in result.artifacts.items()}

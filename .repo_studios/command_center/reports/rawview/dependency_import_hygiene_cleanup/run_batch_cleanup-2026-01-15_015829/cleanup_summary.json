@@ -1,0 +1,124 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-01-15T01:58:29.802551+00:00",
+  "status": "success",
+  "options": {
+    "targets": [
+      "C:\\Users\\genet\\repo_studios"
+    ],
+    "mode": "all",
+    "dry_run": true,
+    "backup": false,
+    "refresh_only": false,
+    "skip_pytest": true,
+    "artifacts_to_keep": 5
+  },
+  "steps": [
+    {
+      "label": "Ruff format",
+      "command": [
+        "ruff",
+        "format",
+        "C:\\Users\\genet\\repo_studios",
+        "--config",
+        "C:\\Users\\genet\\repo_studios\\.repo_studios\\ruff_clean.toml"
+      ],
+      "status": "skipped",
+      "returncode": null,
+      "stdout": "",
+      "stderr": "",
+      "duration_seconds": 0.0,
+      "skipped_reason": "dry-run planning; legacy shim retired"
+    },
+    {
+      "label": "Ruff check --fix",
+      "command": [
+        "ruff",
+        "check",
+        "C:\\Users\\genet\\repo_studios",
+        "--fix",
+        "--config",
+        "C:\\Users\\genet\\repo_studios\\.repo_studios\\ruff_clean.toml"
+      ],
+      "status": "skipped",
+      "returncode": null,
+      "stdout": "",
+      "stderr": "",
+      "duration_seconds": 0.0,
+      "skipped_reason": "dry-run planning; legacy shim retired"
+    },
+    {
+      "label": "markdownlint --fix (npx)",
+      "command": [
+        "npx",
+        "--yes",
+        "markdownlint-cli@0.39.0",
+        "**/*.md",
+        "--fix",
+        "--config",
+        "C:\\Users\\genet\\repo_studios\\.markdownlint.json"
+      ],
+      "status": "skipped",
+      "returncode": null,
+      "stdout": "",
+      "stderr": "",
+      "duration_seconds": 0.0,
+      "skipped_reason": "dry-run planning; legacy shim retired"
+    },
+    {
+      "label": "markdownlint check (npx)",
+      "command": [
+        "npx",
+        "--yes",
+        "markdownlint-cli@0.39.0",
+        "**/*.md",
+        "--config",
+        "C:\\Users\\genet\\repo_studios\\.markdownlint.json"
+      ],
+      "status": "skipped",
+      "returncode": null,
+      "stdout": "",
+      "stderr": "",
+      "duration_seconds": 0.0,
+      "skipped_reason": "dry-run planning; legacy shim retired"
+    },
+    {
+      "label": "Mypy",
+      "command": [
+        "mypy"
+      ],
+      "status": "skipped",
+      "returncode": null,
+      "stdout": "",
+      "stderr": "",
+      "duration_seconds": 0.0,
+      "skipped_reason": "dry-run planning; legacy shim retired"
+    },
+    {
+      "label": "Pytest",
+      "command": [
+        "pytest",
+        "-q"
+      ],
+      "status": "skipped",
+      "returncode": null,
+      "stdout": "",
+      "stderr": "",
+      "duration_seconds": 0.0,
+      "skipped_reason": "dry-run planning; legacy shim retired"
+    }
+  ],
+  "tree_refresh": {
+    "markdown_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\docs\\project_tree_overview.md",
+    "root": "C:\\Users\\genet\\repo_studios",
+    "updated": false,
+    "found_markers": true,
+    "timestamp": "01/15/2026_01:58:29"
+  },
+  "backups": [],
+  "notes": [
+    "dry-run mode executed; no cleanup commands were invoked",
+    "legacy batch cleanup shim removed; dependency/import hygiene orchestrator now emits plan"
+  ],
+  "exception": null
+}

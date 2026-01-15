@@ -1,0 +1,13 @@
+# 🧼 dependency cleanup dry-run
+Timestamp: 2026-01-15T01:58:29.802551+00:00
+Repo root: C:\Users\genet\repo_studios
+
+Legacy run_batch_cleanup shim removed; commands recorded for operator reference only.
+
+## Planned steps
+- Ruff format: ruff format C:\Users\genet\repo_studios --config C:\Users\genet\repo_studios\.repo_studios\ruff_clean.toml
+- Ruff check --fix: ruff check C:\Users\genet\repo_studios --fix --config C:\Users\genet\repo_studios\.repo_studios\ruff_clean.toml
+- markdownlint --fix (npx): npx --yes markdownlint-cli@0.39.0 **/*.md --fix --config C:\Users\genet\repo_studios\.markdownlint.json
+- markdownlint check (npx): npx --yes markdownlint-cli@0.39.0 **/*.md --config C:\Users\genet\repo_studios\.markdownlint.json
+- Mypy: mypy
+- Pytest: pytest -q

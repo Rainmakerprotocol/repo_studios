@@ -142,7 +142,7 @@ Authoritative entry points for Tier-1 routing and agent discovery are:
 **Current evidence (repo-observed):**
 
 - Output root currently observed:
-  `.repo_studios/command_center/reports/healthview/dependency_import_hygiene/<YYYYMMDD-HHMM>/`
+  `.repo_studios/reports/healthview/orchestrator_reports/dependency_import_hygiene/<YYYYMMDD-HHMM>/`
 - Timestamp/run slug shape observed:
   `YYYYMMDD-HHMM` (UTC)
 - Artifact set observed in current runs:
@@ -185,7 +185,7 @@ A compact, mechanism-oriented summary of pruning surfaces and how pruning is enf
   - `_prune_cleanup_history(... keep=...)`
 - **Pruning mechanism:** `prune_by_keep_budget` (directory pruning by keep-budget)
 - **Pruning targets:**
-  - `.repo_studios/command_center/reports/healthview/dependency_import_hygiene/<YYYYMMDD-HHMM>/`
+  - `.repo_studios/reports/healthview/orchestrator_reports/dependency_import_hygiene/<YYYYMMDD-HHMM>/`
   - `.repo_studios/reports/producer_reports/healthview/dependency_hygiene/<YYYYMMDD-HHMM>/`
   - `.repo_studios/reports/producer_reports/healthview/import_graph/<YYYYMMDD-HHMM>/`
   - `.repo_studios/reports/producer_reports/code_placeholder_scans/healthview/code_placeholders/<YYYYMMDD-HHMM>/`
@@ -317,29 +317,22 @@ io_contract:
   inputs:
     - "repo_root + output roots + feature flags + timestamp"
   outputs:
-    current:
-      root: ".repo_studios/command_center/reports/healthview/dependency_import_hygiene/<YYYYMMDD-HHMM>/"
-      artifacts:
-        - "manifest.json"
-        - "summary.md"
-        - "telemetry.json"
-    target:
-      root: ".repo_studios/reports/healthview/orchestrators/dependency_import_hygiene/<YYYYMMDD-HHMM>/"
-      artifacts:
-        - "manifest.json"
-        - "summary.md"
-        - "telemetry.json"
-    status: "partial HOP — orchestrator layout"
-    note: "Uses command_center/reports/healthview (not canonical .repo_studios/reports/healthview)"
+    root: ".repo_studios/reports/healthview/orchestrator_reports/dependency_import_hygiene/<YYYYMMDD-HHMM>/"
+    artifacts:
+      - "manifest.json"
+      - "summary.md"
+      - "telemetry.json"
+    status: "HOP-compliant"
+    note: "--healthview-root remains as a deprecated legacy output mode."
 retention:
   surfaces:
     - "--artifacts-to-keep"
-    - "write_report_artifacts(... keep=options.artifacts_to_keep, viewer=healthview, topic=dependency_import_hygiene)"
+    - "write_report_artifacts(... keep=options.artifacts_to_keep, output_dir=orchestrator_output_dir)"
     - "--cleanup-artifacts-to-keep"
     - "_prune_cleanup_history(... keep=options.cleanup_keep)"
   mechanism: "prune_by_keep_budget"
   targets:
-    - ".repo_studios/command_center/reports/healthview/dependency_import_hygiene"
+    - ".repo_studios/reports/healthview/orchestrator_reports/dependency_import_hygiene"
     - ".repo_studios/command_center/reports/rawview/dependency_import_hygiene_cleanup"
   guardrails:
     - "write_report_artifacts respects .keep sentinel"
@@ -363,7 +356,7 @@ evidence:
   qa:
     mypy: "Success: no issues found (9 errors fixed: added cast, Callable types, TopicStepOutcome return annotations)"
     pytest: "3 passed in 0.20s"
-    last_verified: "2026-01-02"
+    last_verified: "2026-01-15"
   bugfix: "Fixed variable shadowing at L778 (candidate -> run_dir_candidate/summary_candidate)"
 notes:
   - "Orchestrates dependency hygiene, import graph, placeholder scan, typecheck, and baseline refresh"
@@ -377,8 +370,8 @@ notes:
 Workstream A — Discovery
 
 - [x] Inspect outputs + pruning/retention surfaces; record findings
-  - Output: `.repo_studios/command_center/reports/healthview/dependency_import_hygiene/<YYYYMMDD-HHMM>/`
-  - Status: Partial HOP — uses command_center/reports/healthview (not canonical)
+  - Output: `.repo_studios/reports/healthview/orchestrator_reports/dependency_import_hygiene/<YYYYMMDD-HHMM>/`
+  - Status: HOP-compliant
   - Delegates to HOP-compliant producers (S41R-002 through S41R-005)
   - Uses non-HOP utility for baseline refresh (S41R-006)
 

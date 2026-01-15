@@ -4,8 +4,7 @@
 
 `refresh_mypy_baselines.py` standardises the stored mypy output snapshots that agents and
 soft gates consume. It runs mypy for each configured target, writes structured
-artifacts into `.repo_studios/command_center/reports/rawview/mypy_baselines/`, and maintains
-`latest_*.txt` pointers only when the run succeeds.
+artifacts into `.repo_studios/command_center/reports/rawview/mypy_baselines/`.
 
 ## Invocation
 
@@ -37,8 +36,8 @@ contains:
 - `mypy_<label>.txt` – raw mypy output per target, with optional refreshed stamp.
 - `<label>_error.txt` – only when the mypy invocation failed.
 
-Successful runs refresh `latest_*.txt` pointers alongside `latest_bundle_summary.json`
-and `latest_SUMMARY.md`. Failed targets leave existing pointers untouched.
+No mutable pointer artifacts (for example, `latest_*`) are emitted; consumers should
+discover the newest timestamped run directory instead.
 
 ## Retention
 

@@ -48,7 +48,6 @@ def test_run_emits_healthview_bundle(tmp_path: Path, monkeypatch: pytest.MonkeyP
 
     timestamp = "2025-12-01T12:34:00+00:00"
     run_dt = datetime.fromisoformat(timestamp)
-    run_slug = run_dt.strftime("%Y%m%d_%H%M%S")
 
     def _fake_loader(script_path: Path, module_name: str, attribute: str):
         if module_name == hygiene_module.DEPENDENCY_MODULE:
@@ -103,18 +102,27 @@ def test_run_emits_healthview_bundle(tmp_path: Path, monkeypatch: pytest.MonkeyP
 
         if module_name == hygiene_module.PLACEHOLDER_MODULE:
             def _fake_placeholder_run(argv: list[str]) -> dict[str, object]:
-                # HOP-compliant: run_id is just timestamp slug
                 ts_slug = run_dt.strftime("%Y%m%d-%H%M")
                 run_dir = placeholder_dir / ts_slug
                 run_dir.mkdir(parents=True, exist_ok=True)
-                payload = {
-                    "run_id": ts_slug,
-                    "total_matches": 5,
+                telemetry = {
+                    "generated_utc": run_dt.isoformat(),
+                    "payload": {
+                        "summary": {
+                            "status": "ok",
+                            "issue_count": 5,
+                        }
+                    },
                 }
-                (run_dir / "report.json").write_text(json.dumps(payload), encoding="utf-8")
-                (run_dir / "matches.json").write_text(json.dumps([]), encoding="utf-8")
-                (run_dir / "log.txt").write_text("status=ok\n", encoding="utf-8")
-                return payload
+                (run_dir / "manifest.json").write_text(
+                    json.dumps({"topic": "code_placeholders", "status": "ok"}),
+                    encoding="utf-8",
+                )
+                (run_dir / "telemetry.json").write_text(json.dumps(telemetry), encoding="utf-8")
+                (run_dir / "summary.md").write_text("# Placeholders\n", encoding="utf-8")
+                return {
+                    "run_id": ts_slug,
+                }
 
             return _fake_placeholder_run
 
@@ -125,7 +133,7 @@ def test_run_emits_healthview_bundle(tmp_path: Path, monkeypatch: pytest.MonkeyP
                 ts_slug = datetime.fromisoformat(report_ts).strftime("%Y%m%d-%H%M")
                 run_dir = typecheck_dir / ts_slug
                 run_dir.mkdir(parents=True, exist_ok=True)
-                payload = {
+                manifest = {
                     "generated_utc": report_ts,
                     "status": "ok",
                     "summary": {
@@ -133,9 +141,9 @@ def test_run_emits_healthview_bundle(tmp_path: Path, monkeypatch: pytest.MonkeyP
                         "files_with_issues": 0,
                     },
                 }
-                (run_dir / "telemetry.json").write_text(json.dumps(payload), encoding="utf-8")
+                (run_dir / "telemetry.json").write_text(json.dumps({"payload": manifest}), encoding="utf-8")
                 (run_dir / "summary.md").write_text("# Typecheck\n", encoding="utf-8")
-                (run_dir / "manifest.json").write_text(json.dumps(payload), encoding="utf-8")
+                (run_dir / "manifest.json").write_text(json.dumps(manifest), encoding="utf-8")
                 return 0
 
             return _fake_typecheck_main
@@ -220,6 +228,8 @@ def test_run_emits_healthview_bundle(tmp_path: Path, monkeypatch: pytest.MonkeyP
     assert artifacts["dependency_report"].endswith("telemetry.json")
     assert artifacts["typecheck_report"].endswith("telemetry.json")
     assert artifacts["mypy_baseline_summary"].endswith("bundle_summary.json")
+    assert artifacts["placeholder_telemetry"].endswith("telemetry.json")
+    assert artifacts["placeholder_summary"].endswith("summary.md")
 
     summary_text = summary_path.read_text(encoding="utf-8")
     assert "dependency_issue_count" in summary_text
@@ -242,37 +252,46 @@ def test_run_respects_skip_flags(tmp_path: Path, monkeypatch: pytest.MonkeyPatch
     def _fake_loader(script_path: Path, module_name: str, attribute: str):
         if module_name == hygiene_module.DEPENDENCY_MODULE:
             def _dependency_main(argv: list[str]) -> int:
-                run_slug = datetime.fromisoformat(argv[argv.index("--timestamp") + 1]).strftime("%Y%m%d_%H%M%S")
-                run_dir = dependency_dir / f"{hygiene_module.DEPENDENCY_RUN_PREFIX}-{run_slug}"
+                ts_slug = datetime.fromisoformat(argv[argv.index("--timestamp") + 1]).strftime("%Y%m%d-%H%M")
+                run_dir = dependency_dir / ts_slug
                 run_dir.mkdir(parents=True, exist_ok=True)
-                payload = {
-                    "generated_utc": argv[argv.index("--timestamp") + 1],
-                    "summary": {
-                        "status": "ok",
-                        "issue_count": 0,
+                report_ts = argv[argv.index("--timestamp") + 1]
+                telemetry = {
+                    "generated_utc": report_ts,
+                    "payload": {
+                        "summary": {
+                            "status": "ok",
+                            "issue_count": 0,
+                        },
                     },
                 }
-                (dependency_dir / "latest_report.json").write_text(json.dumps(payload), encoding="utf-8")
-                (run_dir / "report.json").write_text(json.dumps(payload), encoding="utf-8")
-                (run_dir / "report.md").write_text("# Dependency\n", encoding="utf-8")
-                (run_dir / "log.txt").write_text("status=ok\n", encoding="utf-8")
+                (run_dir / "telemetry.json").write_text(json.dumps(telemetry), encoding="utf-8")
+                (run_dir / "summary.md").write_text("# Dependency\n", encoding="utf-8")
                 return 0
 
             return _dependency_main
 
         if module_name == hygiene_module.PLACEHOLDER_MODULE:
             def _placeholder_run(argv: list[str]) -> dict[str, object]:
-                run_slug = datetime(2025, 12, 1, 1, 0, tzinfo=timezone.utc).strftime("%Y%m%d_%H%M%S")
-                run_dir = placeholder_dir / f"{hygiene_module.PLACEHOLDER_RUN_PREFIX}-{run_slug}"
+                ts_slug = datetime(2025, 12, 1, 1, 0, tzinfo=timezone.utc).strftime("%Y%m%d-%H%M")
+                run_dir = placeholder_dir / ts_slug
                 run_dir.mkdir(parents=True, exist_ok=True)
-                payload = {
-                    "run_id": f"{hygiene_module.PLACEHOLDER_RUN_PREFIX}-{run_slug}",
-                    "total_matches": 0,
+                telemetry = {
+                    "generated_utc": datetime(2025, 12, 1, 1, 0, tzinfo=timezone.utc).isoformat(),
+                    "payload": {
+                        "summary": {
+                            "status": "ok",
+                            "issue_count": 0,
+                        }
+                    },
                 }
-                (run_dir / "report.json").write_text(json.dumps(payload), encoding="utf-8")
-                (run_dir / "matches.json").write_text(json.dumps([]), encoding="utf-8")
-                (run_dir / "log.txt").write_text("status=ok\n", encoding="utf-8")
-                return payload
+                (run_dir / "manifest.json").write_text(
+                    json.dumps({"topic": "code_placeholders", "status": "ok"}),
+                    encoding="utf-8",
+                )
+                (run_dir / "telemetry.json").write_text(json.dumps(telemetry), encoding="utf-8")
+                (run_dir / "summary.md").write_text("# Placeholders\n", encoding="utf-8")
+                return {"run_id": ts_slug}
 
             return _placeholder_run
 
@@ -328,7 +347,7 @@ def test_batch_cleanup_plan_writes_bundle(tmp_path: Path, hygiene_module) -> Non
         batch_cleanup_output_base=cleanup_base,
         typecheck_output_dir=tmp_path / "typecheck",
         mypy_baselines_output_dir=tmp_path / "baselines",
-        healthview_root=tmp_path / "healthview",
+        orchestrator_output_dir=tmp_path / "healthview",
     )
 
     options = hygiene_module.Options(
@@ -351,6 +370,8 @@ def test_batch_cleanup_plan_writes_bundle(tmp_path: Path, hygiene_module) -> Non
         placeholder_extensions=(),
         placeholder_patterns=(),
         placeholder_exclude_prefixes=None,
+        typecheck_targets=(".repo_studios",),
+        allow_missing_typecheck_targets=False,
     )
 
     outcome = hygiene_module._batch_cleanup(paths, options)
@@ -364,5 +385,6 @@ def test_batch_cleanup_plan_writes_bundle(tmp_path: Path, hygiene_module) -> Non
     assert summary_payload["steps"]
     assert all(step["status"] == "skipped" for step in summary_payload["steps"])
 
-    latest_summary = cleanup_base / "latest_cleanup_summary.json"
-    assert latest_summary.exists()
+    assert not (cleanup_base / "latest_cleanup_summary.json").exists()
+    assert not (cleanup_base / "latest_cleanup_log.txt").exists()
+    assert not (cleanup_base / "latest_bundle_summary.json").exists()

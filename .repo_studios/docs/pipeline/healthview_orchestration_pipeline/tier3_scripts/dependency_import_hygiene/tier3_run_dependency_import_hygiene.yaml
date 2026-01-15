@@ -1,7 +1,7 @@
 # Tier-3 Script Specification — run_dependency_import_hygiene.py
 # Schema: ScriptInspectionRecordV1
 # Stage: 4.1 — Dependency & Import Hygiene
-# Last verified: 2026-01-02
+# Last verified: 2026-01-15
 
 schema: ScriptInspectionRecordV1
 record_id: S41R-001
@@ -19,12 +19,13 @@ tier3:
   exists: true
   name: tier3_run_dependency_import_hygiene.yaml
   meets_template: "yes"
-  last_updated: "2026-01-02"
+  last_updated: "2026-01-15"
 
 cli_surfaces:
   run_entrypoint: run(argv)
   key_flags:
     - --repo-root
+    - --orchestrator-output-dir
     - --healthview-root
     - --dependency-output-dir
     - --import-graph-output-dir
@@ -41,6 +42,8 @@ cli_surfaces:
     - --artifacts-to-keep
     - --skip-import-graph
     - --skip-typecheck
+    - --typecheck-target
+    - --allow-missing-typecheck-targets
     - --trigger-batch-cleanup
     - --refresh-mypy-baselines
     - --timestamp
@@ -53,20 +56,13 @@ io_contract:
     - feature flags — skip-import-graph, skip-typecheck, trigger-batch-cleanup, refresh-mypy-baselines
     - timestamp — ISO8601 timestamp forwarded to producers
   outputs:
-    current:
-      root: .repo_studios/command_center/reports/healthview/dependency_import_hygiene/<YYYYMMDD-HHMM>/
-      artifacts:
-        - manifest.json
-        - summary.md
-        - telemetry.json
-    target:
-      root: .repo_studios/reports/healthview/orchestrators/dependency_import_hygiene/<YYYYMMDD-HHMM>/
-      artifacts:
-        - manifest.json
-        - summary.md
-        - telemetry.json
-    status: partial HOP — orchestrator layout
-    note: Uses command_center/reports/healthview (not canonical .repo_studios/reports/healthview)
+    root: .repo_studios/reports/healthview/orchestrator_reports/dependency_import_hygiene/<YYYYMMDD-HHMM>/
+    artifacts:
+      - manifest.json
+      - summary.md
+      - telemetry.json
+    status: HOP-compliant
+    note: --healthview-root remains as a deprecated legacy output mode.
 
 orchestrated_producers:
   - S41R-002: generate_dependency_hygiene_report.py (HOP-compliant)
@@ -83,7 +79,7 @@ retention:
   mechanism: prune_by_keep_budget
   default_keep: 3
   targets:
-    - .repo_studios/command_center/reports/healthview/dependency_import_hygiene
+    - .repo_studios/reports/healthview/orchestrator_reports/dependency_import_hygiene
     - .repo_studios/command_center/reports/rawview/dependency_import_hygiene_cleanup
   guardrails:
     - write_report_artifacts respects .keep sentinel
@@ -113,6 +109,7 @@ notes:
   - Orchestrates dependency hygiene, import graph, placeholder scan, typecheck, and baseline refresh
   - Calls HOP-compliant producers for most steps (S41R-002 through S41R-005)
   - Uses non-HOP utility for baseline refresh (S41R-006)
+  - Option A enforced: typecheck must run unless --skip-typecheck is provided
   - Fixed mypy type error from variable shadowing (2026-01-02)
   - Typical runs take 7-11 minutes in CI
   - Mypy debt: 1 no-any-return at L326 (non-blocking)

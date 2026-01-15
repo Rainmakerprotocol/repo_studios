@@ -424,7 +424,7 @@ def _execute_diff(paths: Paths, options: Options, index_outcome: IndexOutcome) -
     if options.diff_old_index is None:
         return DiffOutcome(run_dir=None, report_path=None, payload=None, exit_code=None)
     if index_outcome.index_path is None or not index_outcome.index_path.exists():
-        raise RuntimeError("standards index pointer missing for diff step")
+        raise RuntimeError("standards index YAML missing for diff step")
     if not options.diff_old_index.exists():
         raise RuntimeError(f"Baseline index not found: {options.diff_old_index}")
 
@@ -448,20 +448,43 @@ def _execute_diff(paths: Paths, options: Options, index_outcome: IndexOutcome) -
         argv.extend(["--timestamp", options.run_timestamp.isoformat()])
     exit_code = _invoke_main(main_callable, argv)
 
-    latest_report = paths.diff_output_dir / "latest_report.json"
-    payload = _read_json(latest_report)
-    run_dir = None
-    report_path = None
-    if payload is not None:
-        # Diff script uses YYYYMMDD-HHMM slug directly (no prefix)
-        slug = str(payload.get("timestamp") or "")
-        candidate = paths.diff_output_dir / slug if slug else None
-        if candidate and candidate.exists():
-            run_dir = candidate
-            report_candidate = candidate / "report.json"
-            if report_candidate.exists():
-                report_path = report_candidate
-    return DiffOutcome(run_dir=run_dir, report_path=report_path, payload=payload, exit_code=exit_code)
+    def _is_run_slug(value: str) -> bool:
+        return len(value) == 13 and value[8] == "-" and (value[:8] + value[9:]).isdigit()
+
+    def _coerce_payload(telemetry: dict[str, Any]) -> dict[str, Any]:
+        metrics = telemetry.get("metrics")
+        metrics_dict: dict[str, Any] = metrics if isinstance(metrics, dict) else {}
+        payload: dict[str, Any] = {
+            "status": telemetry.get("status"),
+            "change_count": metrics_dict.get("change_count"),
+            "should_fail": metrics_dict.get("should_fail"),
+        }
+        return payload
+
+    # Prefer the deterministic directory name derived from the orchestrator timestamp.
+    run_slug = _format_run_slug(options.run_timestamp)
+    candidates: list[Path] = []
+    preferred = paths.diff_output_dir / run_slug
+    if preferred.exists():
+        candidates.append(preferred)
+    if paths.diff_output_dir.exists():
+        for child in paths.diff_output_dir.iterdir():
+            if child.is_dir() and _is_run_slug(child.name):
+                candidates.append(child)
+    candidates = sorted({candidate.resolve() for candidate in candidates}, key=lambda p: p.name)
+
+    for candidate in reversed(candidates):
+        telemetry_path = candidate / "telemetry.json"
+        telemetry = _read_json(telemetry_path)
+        if isinstance(telemetry, dict):
+            return DiffOutcome(
+                run_dir=candidate,
+                report_path=telemetry_path,
+                payload=_coerce_payload(telemetry),
+                exit_code=exit_code,
+            )
+
+    return DiffOutcome(run_dir=None, report_path=None, payload=None, exit_code=exit_code)
 
 
 def _execute_prompts(paths: Paths, options: Options) -> PromptOutcome:
@@ -498,7 +521,7 @@ def _execute_prompts(paths: Paths, options: Options) -> PromptOutcome:
 
 def _execute_summary(paths: Paths, *, index_outcome: IndexOutcome) -> SummaryOutcome:
     if index_outcome.index_path is None or not index_outcome.index_path.exists():
-        raise RuntimeError("standards index pointer missing for summary step")
+        raise RuntimeError("standards index YAML missing for summary step")
     summarize_callable = _load_callable(paths.repo_root / SUMMARY_SCRIPT, SUMMARY_MODULE, "summarize")
     exit_code = summarize_callable("summary", index_outcome.index_path, paths.pending_path)
     return SummaryOutcome(exit_code=exit_code if isinstance(exit_code, int) else 0)

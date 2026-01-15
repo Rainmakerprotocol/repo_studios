@@ -14,7 +14,7 @@
 | Input | Source | Description |
 |-------|--------|-------------|
 | `--repo-root` | CLI | Repository root override |
-| `--target` | CLI | Scan target relative to repo root (default: `.repo_studios`) |
+| `--targets` | CLI | Explicit mypy targets (overrides discovery); defaults to `.repo_studios` when discovery is used |
 | `--output-dir` | CLI | Output directory override |
 | `--artifacts-to-keep` | CLI | Number of timestamped runs to retain (default: 10) |
 | `--log-level` | CLI | Logging verbosity (DEBUG, INFO, WARNING, ERROR, CRITICAL) |
@@ -29,13 +29,13 @@
 | telemetry.json | `<output_dir>/<YYYYMMDD-HHMM>/telemetry.json` | Execution telemetry |
 | mypy_raw.txt | `<output_dir>/<YYYYMMDD-HHMM>/mypy_raw.txt` | Raw mypy output |
 
-**Default Output Directory**: `.repo_studios/reports/producer_reports/healthview/typecheck_report/`
+**Default Output Directory**: `.repo_studios/reports/healthview/producer_reports/typecheck_report/`
 
 ## CLI Arguments
 
 ```text
 --repo-root PATH         Repository root override
---target PATH            Scan target relative to repo root (default: .repo_studios)
+--targets PATH [PATH...]  Explicit mypy targets (overrides discovery)
 --output-dir PATH        Output directory override
 --artifacts-to-keep N    Number of timestamped runs to retain (default: 10)
 --log-level LEVEL        Logging verbosity (default: INFO)
@@ -54,7 +54,7 @@
 ```bash
 python .repo_studios/scripts/producers/generate_typecheck_report.py \
   --repo-root . \
-  --target .repo_studios \
+  --targets .repo_studios \
   --log-level INFO
 ```
 
