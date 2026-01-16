@@ -44,8 +44,12 @@ try:
 except ModuleNotFoundError:  # pragma: no cover - CLI fallback
     SCRIPT_DIR = Path(__file__).resolve().parent
     SCRIPTS_ROOT = SCRIPT_DIR.parent
+    COMMAND_CENTER_ROOT = SCRIPTS_ROOT.parent
+    REPO_STUDIOS_ROOT = COMMAND_CENTER_ROOT.parent
     if str(SCRIPTS_ROOT) not in sys.path:
         sys.path.insert(0, str(SCRIPTS_ROOT))
+    if str(REPO_STUDIOS_ROOT) not in sys.path:
+        sys.path.insert(0, str(REPO_STUDIOS_ROOT))
     from libraries import (  # type: ignore  # noqa: E402
         ReportArtifact,
         WriteReportArtifactsResult,
@@ -58,6 +62,7 @@ except ModuleNotFoundError:  # pragma: no cover - CLI fallback
 DEFAULT_SIMILARITY_THRESHOLD = 0.85
 DEFAULT_MIN_LINES = 3
 DEFAULT_KEEP_RUNS = get_keep("scan_duplicates")
+MAX_KEEP_RUNS = 5
 DEFAULT_TARGET_RELATIVE = Path(".repo_studios/command_center/scripts/producers")
 DEFAULT_OUTPUT_DIR = Path(".repo_studios/command_center/reports")
 
@@ -270,10 +275,12 @@ def build_paths(args: argparse.Namespace) -> Paths:
 
 def build_options(args: argparse.Namespace) -> Options:
     analysis_path = Path(args.analysis_file).resolve() if args.analysis_file else None
+    keep_runs = int(args.keep_runs)
+    keep_runs = max(1, min(keep_runs, MAX_KEEP_RUNS))
     return Options(
         similarity_threshold=float(args.similarity_threshold),
         min_lines=int(args.min_lines),
-        keep_runs=int(args.keep_runs),
+        keep_runs=keep_runs,
         analysis_path=analysis_path,
         log_level=args.log_level,
         skip_upstream=bool(args.skip_upstream),
@@ -777,7 +784,14 @@ def generate_summary(
     paths: Paths,
     matrix: Sequence[dict[str, Any]],
 ) -> str:
-    lines = ["# Duplicate Scan Summary", "", "## Overview", ""]
+    lines = [
+        "<!-- markdownlint-disable MD013 -->",
+        "",
+        "# Duplicate Scan Summary",
+        "",
+        "## Overview",
+        "",
+    ]
     lines.extend(
         [
             f"- Target directory: `{_to_repo_relative(paths.target, paths.repo_root)}`",
@@ -836,6 +850,7 @@ def generate_summary(
             "- Prioritise groups with high duplicate counts or similarity for extraction.",
         ]
     )
+    lines.extend(["", "<!-- markdownlint-enable MD013 -->"])
     return "\n".join(lines) + "\n"
 
 
@@ -899,18 +914,23 @@ def _prune_index_artifacts(paths: Paths, *, keep: int) -> None:
     keep = max(keep, 1)
     pattern = f"{paths.source_name}_duplicate_matrix-*.json"
     matrix_files = sorted(paths.target_index_dir.glob(pattern), key=lambda item: item.name, reverse=True)
+    pruned = 0
     for stale in matrix_files[keep:]:
         slug = stale.stem.replace(f"{paths.source_name}_duplicate_matrix-", "")
         summary_path = paths.target_index_dir / f"{paths.source_name}_duplicate_summary-{slug}.md"
         try:
             stale.unlink()
+            pruned += 1
         except FileNotFoundError:
             pass
         if summary_path.exists():
             try:
                 summary_path.unlink()
+                pruned += 1
             except FileNotFoundError:
                 pass
+    if pruned:
+        logging.debug("Pruned %d stale duplicate scan index artifact(s)", pruned)
 
 
 def write_outputs(
@@ -921,6 +941,7 @@ def write_outputs(
     timestamp: datetime | None = None,
     keep: int = DEFAULT_KEEP_RUNS,
 ) -> RunArtifacts:
+    keep = max(1, min(int(keep), MAX_KEEP_RUNS))
     moment = timestamp or datetime.now(timezone.utc)
     matrix_filename = f"{paths.source_name}_duplicate_matrix.json"
     summary_filename = f"{paths.source_name}_duplicate_summary.md"
@@ -943,7 +964,7 @@ def write_outputs(
             ReportArtifact(filename=matrix_filename, writer=_write_matrix),
             ReportArtifact(filename=summary_filename, writer=_write_summary),
         ],
-        keep=max(keep, 1),
+        keep=keep,
         viewer=VIEWER_SLUG,
         topic=TOPIC_SLUG,
     )

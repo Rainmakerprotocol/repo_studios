@@ -344,7 +344,38 @@ studio-aggregate-docs-health:
 
 .PHONY: studio-generate-function-index
 studio-generate-function-index:
-	@$(PYTHON) -c "import sys; sys.exit(0 if '$(path)' else 1)" || (echo "path variable required (make studio-generate-function-index path=...)" && exit 1)
-	$(PYTHON) scripts/producers/generate_commandview_inventory.py --repo-root .. "$(path)"
-	$(PYTHON) scripts/producers/generate_function_analysis.py --repo-root .. "$(path)"
+
+ifeq ($(strip $(path)),)
+	cd "$(CURDIR)" && $(PYTHONPATH_EXPORT) $(PYTHON) \
+		"command_center/scripts/producers/generate_commandview_inventory.py" \
+		--repo-root .. \
+		--log-level "$(LOG_LEVEL)" \
+		".repo_studios/"
+	cd "$(CURDIR)" && $(PYTHONPATH_EXPORT) $(PYTHON) \
+		"command_center/scripts/summarizers/generate_function_analysis.py" \
+		--repo-root .. \
+		--log-level "$(LOG_LEVEL)" \
+		".repo_studios/"
+	cd "$(CURDIR)" && $(PYTHONPATH_EXPORT) $(PYTHON) \
+		"command_center/scripts/producers/generate_commandview_inventory.py" \
+		--repo-root .. \
+		--log-level "$(LOG_LEVEL)" \
+		".repo_studios/scripts/"
+	cd "$(CURDIR)" && $(PYTHONPATH_EXPORT) $(PYTHON) \
+		"command_center/scripts/summarizers/generate_function_analysis.py" \
+		--repo-root .. \
+		--log-level "$(LOG_LEVEL)" \
+		".repo_studios/scripts/"
+else
+	cd "$(CURDIR)" && $(PYTHONPATH_EXPORT) $(PYTHON) \
+		"command_center/scripts/producers/generate_commandview_inventory.py" \
+		--repo-root .. \
+		--log-level "$(LOG_LEVEL)" \
+		"$(patsubst /%,%,$(path))"
+	cd "$(CURDIR)" && $(PYTHONPATH_EXPORT) $(PYTHON) \
+		"command_center/scripts/summarizers/generate_function_analysis.py" \
+		--repo-root .. \
+		--log-level "$(LOG_LEVEL)" \
+		"$(patsubst /%,%,$(path))"
+endif
 

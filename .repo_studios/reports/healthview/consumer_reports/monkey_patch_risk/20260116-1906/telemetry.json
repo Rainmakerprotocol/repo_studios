@@ -1,0 +1,23 @@
+{
+  "artifacts": {
+    "bundle_summary_json": "bundle_summary.json",
+    "summary_json": "summary.json",
+    "summary_md": "summary.md"
+  },
+  "counts_by_risk": {
+    "HIGH": 14,
+    "MODERATE": 52,
+    "SAFE": 56
+  },
+  "generated_at": "2026-01-16T19:06:58+00:00",
+  "producer_report": null,
+  "repo_root": "C:\\Users\\genet\\repo_studios",
+  "run_timestamp": "20260116-1906",
+  "scan_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\producer_reports\\monkey_patch_scans\\20260116-1906",
+  "schema_version": 1,
+  "source": "structured",
+  "status": "ok",
+  "topic": "monkey_patch_risk",
+  "total_findings": 122,
+  "viewer": "healthview"
+}

@@ -6,9 +6,10 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import re
 import sys
 from dataclasses import dataclass
-from datetime import datetime, timezone
+from datetime import UTC, datetime, timezone
 from pathlib import Path
 from typing import Any, Iterable, Mapping, Sequence, cast
 
@@ -56,6 +57,8 @@ TOPIC_SLUG = "monkey_patch_overview"
 SCHEMA_VERSION = 1
 
 DEFAULT_ARTIFACTS_TO_KEEP = get_keep("summarize_monkey_patch_overview")
+
+_HOP_RUN_SLUG_RE = re.compile(r"^\d{8}-\d{4}$")
 
 
 @dataclass(frozen=True)
@@ -308,15 +311,17 @@ def _read_json(path: Path | None) -> Any | None:
     except (json.JSONDecodeError, OSError):
         return None
 
-def _latest_run_artifact(base: Path, stem: str, filename: str) -> Path | None:
-    """Find the latest artifact file from timestamped run directories.
 
-    Search for directories matching the stem prefix and return the
-    requested artifact from the most recent run.
+def _latest_run_artifact(base: Path, stem: str | None, filename: str) -> Path | None:
+    """Find the latest artifact file under timestamped run directories.
+
+    Prefer HOP timestamp-only directory names (YYYYMMDD-HHMM). When stem is
+    supplied, legacy prefixed runs (e.g., <stem><timestamp>) are also supported
+    for compatibility.
 
     Args:
         base: Base directory containing run directories.
-        stem: Directory name prefix to match.
+        stem: Optional directory name prefix to match.
         filename: Artifact filename to look for.
 
     Returns:
@@ -324,11 +329,40 @@ def _latest_run_artifact(base: Path, stem: str, filename: str) -> Path | None:
     """
     if not base.exists():
         return None
-    candidates = [child for child in base.iterdir() if child.is_dir() and child.name.startswith(stem)]
-    if not candidates:
+
+    def _dir_timestamp(name: str) -> datetime | None:
+        candidate = name.strip()
+        if not candidate:
+            return None
+        if stem:
+            candidate = candidate[len(stem) :] if candidate.startswith(stem) else candidate
+        if _HOP_RUN_SLUG_RE.fullmatch(candidate):
+            try:
+                return datetime.strptime(candidate, "%Y%m%d-%H%M").replace(tzinfo=UTC)
+            except ValueError:
+                return None
+        for fmt in ("%Y-%m-%d_%H%M%S", "%Y%m%d%H%M%S"):
+            try:
+                return datetime.strptime(candidate, fmt).replace(tzinfo=UTC)
+            except ValueError:
+                continue
         return None
-    candidates.sort(key=lambda node: node.name)
-    latest = candidates[-1] / filename
+
+    run_dirs: list[Path] = []
+    for child in base.iterdir():
+        if not child.is_dir():
+            continue
+        if stem and child.name.startswith(stem):
+            run_dirs.append(child)
+            continue
+        if _dir_timestamp(child.name) is not None:
+            run_dirs.append(child)
+
+    if not run_dirs:
+        return None
+
+    run_dirs.sort(key=lambda node: (_dir_timestamp(node.name) or datetime.min.replace(tzinfo=UTC), node.name))
+    latest = run_dirs[-1] / filename
     return latest.resolve() if latest.exists() else None
 
 
@@ -415,7 +449,7 @@ def _ensure_path(source: Path | None, *, base: Path, stem: str | None, filename:
     """
     if source and source.exists():
         return source
-    if stem:
+    if stem is not None:
         return _latest_run_artifact(base, stem, filename)
     return None
 
@@ -430,6 +464,9 @@ def _build_markdown(
     consumer_summary: str | None,
     trend_json: str | None,
     trend_markdown: str | None,
+    trend_signals: Mapping[str, Any] | None,
+    top_files: list[tuple[str, int]],
+    top_categories: list[tuple[str, int]],
     duplicate_matrix: str | None,
     overlap: list[dict[str, Any]],
     notes: list[str],
@@ -448,6 +485,9 @@ def _build_markdown(
         consumer_summary: Relative path to consumer summary.
         trend_json: Relative path to trend JSON.
         trend_markdown: Relative path to trend markdown.
+        trend_signals: Optional signals payload from trend.json.
+        top_files: Top file finding counts from consumer bundle summary.
+        top_categories: Top category counts from consumer bundle summary.
         duplicate_matrix: Relative path to duplicate matrix.
         overlap: List of overlapping file entries.
         notes: List of informational notes.
@@ -455,6 +495,14 @@ def _build_markdown(
     Returns:
         Markdown-formatted overview string.
     """
+
+    def _format_pct(value: object) -> str:
+        if value is None:
+            return "n/a"
+        if isinstance(value, (int, float)):
+            return f"{value * 100:+.1f}%"
+        return "n/a"
+
     lines: list[str] = ["# Monkey Patch Oversight Overview", ""]
     lines.append(f"Generated (UTC): {generated_at.isoformat(timespec='seconds')}")
     lines.append("")
@@ -480,7 +528,78 @@ def _build_markdown(
         lines.append(f"- Trend JSON: `{trend_json}`")
     else:
         lines.append("- Trend JSON: unavailable")
+
+    latest_signal: Mapping[str, Any] | None = None
+    if isinstance(trend_signals, Mapping):
+        maybe_latest = trend_signals.get("latest")
+        if isinstance(maybe_latest, Mapping):
+            latest_signal = cast(Mapping[str, Any], maybe_latest)
+
+    if latest_signal is not None:
+        delta_total = latest_signal.get("delta_total")
+        delta_by_risk = latest_signal.get("delta_by_risk")
+        pct_total = latest_signal.get("pct_total")
+        changed = latest_signal.get("changed")
+        changed_levels = latest_signal.get("changed_levels")
+        if isinstance(delta_total, int):
+            lines.append(f"- Delta Total: {delta_total:+d}")
+        else:
+            lines.append("- Delta Total: n/a")
+        if isinstance(delta_by_risk, Mapping):
+            high = int(delta_by_risk.get("HIGH", 0))
+            moderate = int(delta_by_risk.get("MODERATE", 0))
+            safe = int(delta_by_risk.get("SAFE", 0))
+            lines.append(f"- Delta HIGH/MODERATE/SAFE: {high:+d} / {moderate:+d} / {safe:+d}")
+        lines.append(f"- Percent Total: {_format_pct(pct_total)}")
+        lines.append(f"- Changed: {str(bool(changed)).lower()}")
+        if isinstance(changed_levels, list) and changed_levels:
+            lines.append(f"- Changed Levels: {', '.join(str(v) for v in changed_levels)}")
+        else:
+            lines.append("- Changed Levels: none")
+
+    rolling_3 = trend_signals.get("rolling_3") if isinstance(trend_signals, Mapping) else None
+    if isinstance(rolling_3, Mapping) and "total_avg" in rolling_3:
+        try:
+            lines.append(f"- Rolling(3) Total Avg: {float(rolling_3['total_avg']):.2f}")
+        except Exception:
+            pass
     lines.append("")
+
+    lines.append("## Top Drivers")
+    lines.append("")
+    if top_files:
+        lines.append("### Top Files")
+        lines.append("")
+        lines.append("| File | Findings |")
+        lines.append("|---|---:|")
+        for file_path, count in top_files:
+            lines.append(f"| {file_path} | {count} |")
+        lines.append("")
+    if top_categories:
+        lines.append("### Top Categories")
+        lines.append("")
+        lines.append("| Category | Findings |")
+        lines.append("|---|---:|")
+        for category, count in top_categories:
+            lines.append(f"| {category} | {count} |")
+        lines.append("")
+
+    lines.append("## Actions")
+    lines.append("")
+    if latest_signal is not None and isinstance(latest_signal.get("delta_by_risk"), Mapping):
+        delta_high = int(cast(Mapping[str, Any], latest_signal["delta_by_risk"]).get("HIGH", 0))
+        if delta_high > 0:
+            lines.append("- HIGH risk increased: open the trend markdown and review top HIGH files.")
+        elif bool(latest_signal.get("changed")):
+            lines.append("- Risk profile changed: review deltas and reconcile drivers listed above.")
+        else:
+            lines.append("- No risk deltas detected: spot-check HIGH findings and monitor trend.")
+    else:
+        lines.append("- Trend signals unavailable: open the trend JSON/markdown if present.")
+    if not duplicate_matrix:
+        lines.append("- Provide a duplicate matrix to enable overlap cross-checking (optional).")
+    lines.append("")
+
     lines.append("## Duplicate Follow-up")
     lines.append("")
     if duplicate_matrix:
@@ -527,43 +646,43 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     consumer_summary_path = _ensure_path(
         options.consumer_summary_override,
         base=paths.consumer_output_dir,
-        stem="monkey_patch_risk-",
+        stem="",
         filename="summary.json",
     )
     consumer_bundle_summary_path = _ensure_path(
         options.consumer_bundle_summary_override,
         base=paths.consumer_output_dir,
-        stem="monkey_patch_risk-",
+        stem="",
         filename="bundle_summary.json",
     )
     trend_json_path = _ensure_path(
         options.trend_json_override,
         base=paths.aggregator_output_dir,
-        stem="monkey_patch_trends-",
+        stem="",
         filename="trend.json",
     )
     trend_markdown_path = _ensure_path(
         options.trend_markdown_override,
         base=paths.aggregator_output_dir,
-        stem="monkey_patch_trends-",
+        stem="",
         filename="trend.md",
     )
     trend_bundle_summary_path = _ensure_path(
         options.trend_bundle_summary_override,
         base=paths.aggregator_output_dir,
-        stem="monkey_patch_trends-",
+        stem="",
         filename="bundle_summary.json",
     )
     producer_report_path = _ensure_path(
         options.producer_report_override,
         base=paths.producer_output_dir,
-        stem="monkey_patch_scan-",
+        stem="",
         filename="report.json",
     )
     producer_matches_path = _ensure_path(
         options.producer_matches_override,
         base=paths.producer_output_dir,
-        stem="monkey_patch_scan-",
+        stem="",
         filename="matches.json",
     )
 
@@ -594,6 +713,36 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
                 if isinstance(total, (int, float)):
                     total_findings = int(total)
     counts = {"HIGH": counts.get("HIGH", 0), "MODERATE": counts.get("MODERATE", 0), "SAFE": counts.get("SAFE", 0)}
+
+    trend_signals: Mapping[str, Any] | None = None
+    if isinstance(trend_payload, Mapping):
+        maybe_signals = trend_payload.get("signals")
+        if isinstance(maybe_signals, Mapping):
+            trend_signals = cast(Mapping[str, Any], maybe_signals)
+
+    top_files: list[tuple[str, int]] = []
+    top_categories: list[tuple[str, int]] = []
+    if isinstance(consumer_bundle_payload, Mapping):
+        maybe_files = consumer_bundle_payload.get("top_files")
+        if isinstance(maybe_files, list):
+            for entry in maybe_files[:5]:
+                if (
+                    isinstance(entry, list)
+                    and len(entry) == 2
+                    and isinstance(entry[0], str)
+                    and isinstance(entry[1], (int, float))
+                ):
+                    top_files.append((entry[0].replace("\\\\", "/"), int(entry[1])))
+        maybe_categories = consumer_bundle_payload.get("top_categories")
+        if isinstance(maybe_categories, list):
+            for entry in maybe_categories[:5]:
+                if (
+                    isinstance(entry, list)
+                    and len(entry) == 2
+                    and isinstance(entry[0], str)
+                    and isinstance(entry[1], (int, float))
+                ):
+                    top_categories.append((entry[0], int(entry[1])))
 
     duplicate_targets = _collect_duplicate_targets(duplicate_payload) if duplicate_payload is not None else set()
     monkey_patch_files = _collect_monkey_patch_files(matches_payload)
@@ -655,6 +804,9 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
         consumer_summary=artifacts_dict.get("consumer_summary"),
         trend_json=artifacts_dict.get("trend_json"),
         trend_markdown=artifacts_dict.get("trend_markdown"),
+        trend_signals=trend_signals,
+        top_files=top_files,
+        top_categories=top_categories,
         duplicate_matrix=artifacts_dict.get("duplicate_matrix"),
         overlap=overlap,
         notes=notes,

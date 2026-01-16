@@ -361,3 +361,21 @@ class TestOutputMirroring:
         assert len(run_dirs) == 2
         viewer_slugs = sorted(node.name for node in run_dirs)
         assert viewer_slugs == expected_slugs
+
+    def test_retention_caps_keep_at_five(self, tmp_path: Path) -> None:
+        repo_root = tmp_path / "repo"
+        repo_root.mkdir()
+        target = repo_root / "src"
+        target.mkdir()
+        reports_root = repo_root / "reports"
+        paths = self._build_paths(repo_root, target, reports_root)
+        payload = {"metadata": {"target": "src"}, "stats": {}, "entries": []}
+        summary = "# Summary\n"
+
+        for offset in range(7):
+            moment = datetime(2025, 10, 1 + offset, 12, 0, tzinfo=timezone.utc)
+            write_outputs(payload, summary, paths, timestamp=moment, keep=10)
+
+        topic_dir = reports_root / VIEWER_SLUG / TOPIC_SLUG
+        run_dirs = sorted(node for node in topic_dir.iterdir() if node.is_dir())
+        assert len(run_dirs) == 5

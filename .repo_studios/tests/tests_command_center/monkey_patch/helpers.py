@@ -111,7 +111,7 @@ def write_consumer_bundle(
     counts: MutableMapping[str, int],
     scan_dir: Path,
 ) -> Path:
-    name = f"monkey_patch_risk-{dt.strftime('%Y-%m-%d_%H%M%S')}"
+    name = dt.strftime("%Y%m%d-%H%M")
     bundle_dir = root / name
     bundle_dir.mkdir(parents=True, exist_ok=True)
     summary = {

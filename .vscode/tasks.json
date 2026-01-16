@@ -1,0 +1,216 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Command Center: Viewer Server",
+			"type": "shell",
+			"command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+			"args": [
+				"-u",
+				"${workspaceFolder}\\.repo_studios\\command_center\\viewer\\serve_viewer.py"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}",
+				"env": {
+					"PYTHONPATH": ".repo_studios"
+				}
+			},
+			"isBackground": true,
+			"problemMatcher": []
+		},
+		{
+			"label": "Command Center: Scan Duplicates (scripts)",
+			"type": "shell",
+			"command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+			"args": [
+				"-u",
+				"${workspaceFolder}\\.repo_studios\\command_center\\scripts\\aggregators\\scan_duplicates.py",
+				"--repo-root",
+				".",
+				"--log-level",
+				"DEBUG",
+				"--target",
+				".repo_studios\\scripts",
+				"--keep-runs",
+				"10"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "test"
+		},
+		{
+			"label": "Command Center: Scan Duplicates (scripts)",
+			"type": "shell",
+			"command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+			"args": [
+				"-u",
+				"${workspaceFolder}\\.repo_studios\\command_center\\scripts\\aggregators\\scan_duplicates.py",
+				"--repo-root",
+				".",
+				"--log-level",
+				"DEBUG",
+				"--target",
+				".repo_studios\\scripts",
+				"--keep-runs",
+				"10"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "test"
+		},
+		{
+			"label": "Debug: import command_center",
+			"type": "shell",
+			"command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+			"args": [
+				"-c",
+				"import sys; from pathlib import Path; p=Path(r'${workspaceFolder}')/'.repo_studios'; sys.path.insert(0,str(p)); import importlib; m=importlib.import_module('command_center'); print('command_center ok', m, 'path', list(getattr(m,'__path__',[])))"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Debug: import reports_naming_audit",
+			"type": "shell",
+			"command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+			"args": [
+				"-c",
+				"import sys; from pathlib import Path; sys.path.insert(0, str(Path.cwd()/'.repo_studios')); import command_center.scripts.utilities.reports_naming_audit as m; print(m.__file__)"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Debug: import reports_naming_audit",
+			"type": "shell",
+			"command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+			"args": [
+				"-c",
+				"import sys; from pathlib import Path; sys.path.insert(0, str(Path.cwd()/\".repo_studios\")); import command_center.scripts.utilities.reports_naming_audit as m; print(m.__file__)"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Debug: import reports_naming_audit v2",
+			"type": "shell",
+			"command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+			"args": [
+				"-c",
+				"import sys; from pathlib import Path; sys.path.insert(0, str(Path.cwd()/\".repo_studios\")); import command_center.scripts.utilities.reports_naming_audit as m; print(m.__file__)"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		},
+		{
+			"label": "Command Center: Scan Duplicates (scripts)",
+			"type": "shell",
+			"command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+			"args": [
+				"-u",
+				"${workspaceFolder}\\.repo_studios\\command_center\\scripts\\aggregators\\scan_duplicates.py",
+				"--repo-root",
+				".",
+				"--log-level",
+				"DEBUG",
+				"--target",
+				".repo_studios\\scripts",
+				"--keep-runs",
+				"10"
+			],
+			"options": {
+				"cwd": "${workspaceFolder}",
+				"env": {
+					"PYTHONPATH": ".repo_studios"
+				}
+			},
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "test"
+		},
+		{
+			"label": "Command Center: Scan Duplicates (scripts)",
+			"type": "shell",
+			"command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+			"args": [
+				"-u",
+				"${workspaceFolder}\\.repo_studios\\command_center\\scripts\\aggregators\\scan_duplicates.py",
+				"--repo-root",
+				".",
+				"--log-level",
+				"DEBUG",
+				"--target",
+				".repo_studios\\scripts",
+				"--keep-runs",
+				"10"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "test"
+		},
+		{
+			"label": "Command Center: Scan Duplicates (scripts) clean",
+			"type": "shell",
+			"command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+			"args": [
+				"-u",
+				"${workspaceFolder}\\.repo_studios\\command_center\\scripts\\aggregators\\scan_duplicates.py",
+				"--repo-root",
+				".",
+				"--log-level",
+				"DEBUG",
+				"--target",
+				".repo_studios\\scripts",
+				"--keep-runs",
+				"10"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "test"
+		},
+		{
+			"label": "Pytest: scan_duplicates retention",
+			"type": "shell",
+			"command": "C:\\Program Files\\PowerShell\\7\\pwsh.exe",
+			"args": [
+				"-NoProfile",
+				"-Command",
+				"Set-Location -Path \"${workspaceFolder}\"; $env:PYTHONPATH='.repo_studios'; & \"${workspaceFolder}\\.venv\\Scripts\\python.exe\" -m pytest .\\.repo_studios\\tests\\tests_library_integration\\duplicates\\test_scan_duplicates.py -k retention_caps_keep_at_five"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "test"
+		},
+		{
+			"label": "Command Center: Viewer Server",
+			"type": "shell",
+			"command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+			"args": [
+				"-u",
+				"${workspaceFolder}\\.repo_studios\\command_center\\viewer\\serve_viewer.py"
+			],
+			"isBackground": true,
+			"problemMatcher": []
+		},
+		{
+			"label": "Scan Duplicates: scripts",
+			"type": "shell",
+			"command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+			"args": [
+				"-u",
+				"${workspaceFolder}\\.repo_studios\\command_center\\scripts\\aggregators\\scan_duplicates.py",
+				"--repo-root",
+				".",
+				"--log-level",
+				"DEBUG",
+				"--target",
+				".repo_studios\\scripts",
+				"--keep-runs",
+				"5"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "test"
+		}
+	]
+}

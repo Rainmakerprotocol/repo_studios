@@ -91,10 +91,11 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when running standalo
     from libraries.retention_policy import get_keep
 
 # Defaults (repo-root-relative)
-DEFAULT_OUTPUT_DIR = build_topic_path("producer", "monkey_patches")
+# NOTE: Keep the producer default topic aligned with the Stage 5.1 orchestrator naming.
+DEFAULT_OUTPUT_DIR = build_topic_path("producer", "monkey_patch_scans")
 DEFAULT_KEEP = get_keep("scan_monkey_patches")
 SCHEMA_VERSION = 1
-TOPIC_SLUG = "monkey_patches"
+TOPIC_SLUG = "monkey_patch_scans"
 DEFAULT_EXCLUDES = {
     ".git",
     ".venv",

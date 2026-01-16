@@ -1,0 +1,48 @@
+{
+  "entries": [
+    {
+      "options": [
+        {
+          "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\reports\\index_scan\\repo_studios_index\\.repo_studios_commandview_20260116-0210.json",
+          "category": "index_scan",
+          "label": ".repo_studios (2026-01-16 02:10 UTC)",
+          "relative_path": "index_scan/repo_studios_index/.repo_studios_commandview_20260116-0210.json",
+          "slug": ".repo_studios",
+          "target_path": "C:\\Users\\genet\\repo_studios\\.repo_studios",
+          "target_repo_relative": ".repo_studios",
+          "timestamp": "20260116-0210",
+          "timestamp_iso": "2026-01-16T02:10:00+00:00"
+        }
+      ],
+      "slug": ".repo_studios"
+    },
+    {
+      "options": [
+        {
+          "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\reports\\index_scan\\repo_studios__scripts_index\\scripts_commandview_20260116-1127.json",
+          "category": "index_scan",
+          "label": "scripts (2026-01-16 11:27 UTC)",
+          "relative_path": "index_scan/repo_studios__scripts_index/scripts_commandview_20260116-1127.json",
+          "slug": "scripts",
+          "target_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\scripts",
+          "target_repo_relative": ".repo_studios/scripts",
+          "timestamp": "20260116-1127",
+          "timestamp_iso": "2026-01-16T11:27:00+00:00"
+        },
+        {
+          "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\reports\\index_scan\\repo_studios__command_center__scripts_index\\scripts_commandview_20260116-0157.json",
+          "category": "index_scan",
+          "label": "scripts (2026-01-16 01:57 UTC)",
+          "relative_path": "index_scan/repo_studios__command_center__scripts_index/scripts_commandview_20260116-0157.json",
+          "slug": "scripts",
+          "target_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\scripts",
+          "target_repo_relative": ".repo_studios/command_center/scripts",
+          "timestamp": "20260116-0157",
+          "timestamp_iso": "2026-01-16T01:57:00+00:00"
+        }
+      ],
+      "slug": "scripts"
+    }
+  ],
+  "generated_at": "2026-01-16T11:27:35.835590+00:00"
+}

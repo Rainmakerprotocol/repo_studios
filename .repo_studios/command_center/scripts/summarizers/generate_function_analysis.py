@@ -26,7 +26,7 @@ try:
 except ModuleNotFoundError:  # pragma: no cover - CLI fallback
     script_dir = Path(__file__).resolve().parent
     scripts_root = script_dir.parent
-    repo_studios_root = scripts_root.parents[2]
+    repo_studios_root = scripts_root.parents[1]
     for candidate in (repo_studios_root, scripts_root):
         if str(candidate) not in sys.path:
             sys.path.insert(0, str(candidate))

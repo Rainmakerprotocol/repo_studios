@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import re
 import sys
 from dataclasses import dataclass
 from datetime import UTC, datetime
@@ -64,6 +65,7 @@ class TrendRun:
 
     Attributes:
         ts_label: Human-readable timestamp label.
+        run_slug: HOP-compatible run slug (YYYYMMDD-HHMM).
         sort_key: Datetime used for chronological sorting.
         total: Total number of findings in this run.
         counts: Risk level counts (HIGH, MODERATE, SAFE).
@@ -76,6 +78,7 @@ class TrendRun:
     """
 
     ts_label: str
+    run_slug: str
     sort_key: datetime
     total: int
     counts: dict[str, int]
@@ -215,13 +218,72 @@ def _dir_timestamp(name: str) -> datetime | None:
         stem = stem[len(CONSUMER_BUNDLE_PREFIX) :]
     if stem.startswith(AGGREGATOR_PREFIX):
         stem = stem[len(AGGREGATOR_PREFIX) :]
-    for fmt in ("%Y-%m-%d_%H%M%S", "%Y%m%d%H%M%S"):
+    for fmt in ("%Y%m%d-%H%M", "%Y-%m-%d_%H%M%S", "%Y%m%d%H%M%S"):
         try:
             parsed = datetime.strptime(stem, fmt)
         except ValueError:
             continue
         return parsed.replace(tzinfo=UTC)
     return None
+
+
+_HOP_RUN_SLUG_RE = re.compile(r"^\d{8}-\d{4}$")
+
+
+def _looks_like_hop_run_slug(value: str) -> bool:
+    """Return whether a string matches the HOP run slug pattern.
+
+    Args:
+        value: Candidate directory name.
+
+    Returns:
+        True if the candidate matches YYYYMMDD-HHMM.
+    """
+    return bool(_HOP_RUN_SLUG_RE.fullmatch(value.strip()))
+
+
+def _run_slug_for_bundle_dir(dir_name: str, timestamp: datetime) -> str:
+    """Resolve a HOP-compatible run slug for a bundle directory.
+
+    Prefer the directory name when it is already a HOP slug; otherwise fall back
+    to formatting the derived timestamp.
+
+    Args:
+        dir_name: Bundle directory name.
+        timestamp: Derived timestamp for the bundle.
+
+    Returns:
+        Run slug formatted as YYYYMMDD-HHMM.
+    """
+    if _looks_like_hop_run_slug(dir_name):
+        return dir_name
+    if dir_name.startswith(CONSUMER_BUNDLE_PREFIX):
+        suffix = dir_name[len(CONSUMER_BUNDLE_PREFIX) :]
+        parsed = _dir_timestamp(suffix)
+        if parsed is not None:
+            return parsed.strftime("%Y%m%d-%H%M")
+    return timestamp.strftime("%Y%m%d-%H%M")
+
+
+def _maybe_repo_relative(path: Path | None, *, repo_root: Path) -> str | None:
+    """Return repo-relative POSIX path when possible.
+
+    Args:
+        path: Absolute path or None.
+        repo_root: Repository root directory.
+
+    Returns:
+        POSIX path relative to repo_root if the path is inside the repo,
+        otherwise the absolute path string.
+    """
+    if path is None:
+        return None
+    resolved = path.expanduser().resolve()
+    try:
+        relative = resolved.relative_to(repo_root.resolve())
+    except Exception:
+        return str(resolved)
+    return relative.as_posix()
 
 
 def _classify(findings: Iterable[dict[str, Any]]) -> dict[str, int]:
@@ -282,7 +344,9 @@ def _load_consumer_runs(
     candidates: dict[Path, Path] = {}
     if base_dir.exists():
         for child in base_dir.iterdir():
-            if child.is_dir() and child.name.startswith(CONSUMER_BUNDLE_PREFIX):
+            if not child.is_dir():
+                continue
+            if child.name.startswith(CONSUMER_BUNDLE_PREFIX) or _dir_timestamp(child.name) is not None:
                 candidates[child.resolve()] = child
     if summary_override is not None:
         target = summary_override
@@ -319,6 +383,7 @@ def _load_consumer_runs(
             or datetime.fromtimestamp(bundle_dir.stat().st_mtime, UTC)
         )
         ts_label = bundle_metadata.get("generated_at") or timestamp.isoformat(timespec="seconds")
+        run_slug = _run_slug_for_bundle_dir(bundle_dir.name, timestamp)
         counts_raw = summary_data.get("counts_by_risk", {})
         counts = _complete_counts(counts_raw if isinstance(counts_raw, dict) else {})
         total = int(summary_data.get("total_findings", sum(counts.values())))
@@ -330,6 +395,7 @@ def _load_consumer_runs(
         runs.append(
             TrendRun(
                 ts_label=ts_label,
+                run_slug=run_slug,
                 sort_key=timestamp,
                 total=total,
                 counts=counts,
@@ -381,9 +447,11 @@ def _load_producer_runs(base_dir: Path, logger: logging.Logger) -> list[TrendRun
         counts = _classify(data)
         timestamp = _dir_timestamp(child.name) or datetime.fromtimestamp(child.stat().st_mtime, UTC)
         ts_label = timestamp.isoformat(timespec="seconds")
+        run_slug = _run_slug_for_bundle_dir(child.name, timestamp)
         runs.append(
             TrendRun(
                 ts_label=ts_label,
+            run_slug=run_slug,
                 sort_key=timestamp,
                 total=sum(counts.values()),
                 counts=_complete_counts(counts),
@@ -429,9 +497,106 @@ def _latest_delta(runs: list[TrendRun]) -> dict[str, Any] | None:
     }
 
 
+def _pct_change(prev: int, cur: int) -> float | None:
+    """Compute percent change from prev to cur.
+
+    Return (cur - prev) / prev when prev is non-zero. When prev is zero, return
+    0.0 if both prev and cur are zero, otherwise return None because the percent
+    change is undefined.
+
+    Args:
+        prev: Previous value.
+        cur: Current value.
+
+    Returns:
+        Percent change as a float, or None when undefined.
+    """
+    prev_int = int(prev)
+    cur_int = int(cur)
+    if prev_int == 0:
+        return 0.0 if cur_int == 0 else None
+    return (cur_int - prev_int) / prev_int
+
+
+def _compute_run_signals(prev: TrendRun | None, cur: TrendRun) -> dict[str, Any]:
+    """Compute agent-friendly signal metrics for a run.
+
+    The signal payload is designed to reduce downstream recomputation by agents
+    and tools. When a previous run is available, includes absolute and percent
+    deltas plus a summary of which risk levels changed.
+
+    Args:
+        prev: Previous run or None when cur is the first run.
+        cur: Current run.
+
+    Returns:
+        Signal dictionary suitable for embedding in trend.json.
+    """
+    if prev is None:
+        return {
+            "has_previous": False,
+            "prev_run_slug": None,
+            "prev_ts": None,
+            "delta_total": None,
+            "delta_by_risk": None,
+            "pct_total": None,
+            "pct_by_risk": None,
+            "changed": None,
+            "changed_levels": [],
+        }
+
+    prev_counts = _complete_counts(prev.counts)
+    cur_counts = _complete_counts(cur.counts)
+    delta_by_risk = {level: int(cur_counts[level]) - int(prev_counts[level]) for level in RISK_LEVELS}
+    changed_levels = [level for level in RISK_LEVELS if delta_by_risk[level] != 0]
+
+    pct_by_risk = {level: _pct_change(prev_counts[level], cur_counts[level]) for level in RISK_LEVELS}
+
+    return {
+        "has_previous": True,
+        "prev_run_slug": prev.run_slug,
+        "prev_ts": prev.ts_label,
+        "delta_total": int(cur.total) - int(prev.total),
+        "delta_by_risk": delta_by_risk,
+        "pct_total": _pct_change(prev.total, cur.total),
+        "pct_by_risk": pct_by_risk,
+        "changed": bool(changed_levels),
+        "changed_levels": changed_levels,
+    }
+
+
+def _compute_rolling_averages(runs: list[TrendRun], *, window: int) -> dict[str, Any] | None:
+    """Compute a rolling average summary over the latest runs.
+
+    Args:
+        runs: Chronologically ordered runs.
+        window: Window size to average (uses the last N runs).
+
+    Returns:
+        Rolling average dictionary, or None when no runs exist.
+    """
+    if not runs:
+        return None
+    window_int = max(int(window), 1)
+    sample = runs[-window_int:]
+    sample_size = len(sample)
+    totals = [int(run.total) for run in sample]
+    counts_series = [_complete_counts(run.counts) for run in sample]
+    counts_avg = {
+        level: (sum(int(counts[level]) for counts in counts_series) / sample_size) for level in RISK_LEVELS
+    }
+    return {
+        "window": window_int,
+        "sample_size": sample_size,
+        "total_avg": sum(totals) / sample_size,
+        "counts_by_risk_avg": counts_avg,
+    }
+
+
 def _render_markdown(
     *,
     generated_at: datetime,
+    repo_root: Path,
     mode: str,
     runs: list[TrendRun],
     latest: dict[str, Any] | None,
@@ -465,12 +630,12 @@ def _render_markdown(
     lines.append("## Run Overview")
     lines.append("")
     if runs:
-        lines.append("| Run | Total | HIGH | MODERATE | SAFE |")
-        lines.append("|---|---:|---:|---:|---:|")
+        lines.append("| Run Slug | Generated At (UTC) | Total | HIGH | MODERATE | SAFE |")
+        lines.append("|---|---|---:|---:|---:|---:|")
         for run in runs:
             counts = _complete_counts(run.counts)
             lines.append(
-                f"| {run.ts_label} | {run.total} | {counts['HIGH']} | {counts['MODERATE']} | {counts['SAFE']} |"
+                f"| {run.run_slug} | {run.ts_label} | {run.total} | {counts['HIGH']} | {counts['MODERATE']} | {counts['SAFE']} |"
             )
         lines.append("")
     else:
@@ -480,14 +645,15 @@ def _render_markdown(
         latest_run = runs[-1]
         lines.append("## Latest Run Detail")
         lines.append("")
-        lines.append(f"- Run: {latest_run.ts_label}")
+        lines.append(f"- Run Slug: {latest_run.run_slug}")
+        lines.append(f"- Generated At: {latest_run.ts_label}")
         lines.append(f"- Source: {latest_run.source}")
         if latest_run.scan_dir:
-            lines.append(f"- Scan Dir: `{latest_run.scan_dir}`")
+            lines.append(f"- Scan Dir: `{_maybe_repo_relative(latest_run.scan_dir, repo_root=repo_root)}`")
         if latest_run.summary_path:
-            lines.append(f"- Summary: `{latest_run.summary_path}`")
+            lines.append(f"- Summary: `{_maybe_repo_relative(latest_run.summary_path, repo_root=repo_root)}`")
         if latest_run.bundle_dir:
-            lines.append(f"- Bundle: `{latest_run.bundle_dir}`")
+            lines.append(f"- Bundle: `{_maybe_repo_relative(latest_run.bundle_dir, repo_root=repo_root)}`")
         lines.append("")
     if latest:
         lines.append("## Delta vs Previous")
@@ -611,20 +777,34 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     trend_md_path = bundle_dir / TREND_MD_NAME
     trend_bundle_summary_path = bundle_dir / AGGREGATOR_BUNDLE_SUMMARY_NAME
 
-    runs_payload = [
-        {
+    runs_payload: list[dict[str, Any]] = []
+    prev_run: TrendRun | None = None
+    for run in runs:
+        run_payload = {
             "ts": run.ts_label,
+            "run_slug": run.run_slug,
             "total_findings": run.total,
             "counts_by_risk": _complete_counts(run.counts),
             "bundle_dir": str(run.bundle_dir.resolve()) if run.bundle_dir else None,
+            "bundle_dir_rel": _maybe_repo_relative(run.bundle_dir, repo_root=repo_root),
             "summary_path": str(run.summary_path.resolve()) if run.summary_path else None,
+            "summary_path_rel": _maybe_repo_relative(run.summary_path, repo_root=repo_root),
             "bundle_summary": str(run.bundle_summary_path.resolve()) if run.bundle_summary_path else None,
+            "bundle_summary_rel": _maybe_repo_relative(run.bundle_summary_path, repo_root=repo_root),
             "scan_dir": str(run.scan_dir) if run.scan_dir else None,
+            "scan_dir_rel": _maybe_repo_relative(run.scan_dir, repo_root=repo_root),
             "source": run.source,
             "metadata": run.metadata,
+            "signals": _compute_run_signals(prev_run, run),
         }
-        for run in runs
-    ]
+        runs_payload.append(run_payload)
+        prev_run = run
+
+    signals_payload: dict[str, Any] = {
+        "latest": runs_payload[-1]["signals"] if runs_payload else None,
+        "rolling_3": _compute_rolling_averages(runs, window=3),
+        "rolling_5": _compute_rolling_averages(runs, window=5),
+    }
 
     trend_payload = {
         "generated_at": generated_at.isoformat(timespec="seconds"),
@@ -633,11 +813,19 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
         "runs": runs_payload,
         "runs_considered": len(runs_payload),
         "latest": latest,
+        "signals": signals_payload,
         "notes": notes,
     }
     trend_json_path.write_text(json.dumps(trend_payload, indent=2) + "\n", encoding="utf-8")
 
-    trend_md = _render_markdown(generated_at=generated_at, mode=mode, runs=runs, latest=latest, notes=notes)
+    trend_md = _render_markdown(
+        generated_at=generated_at,
+        repo_root=repo_root,
+        mode=mode,
+        runs=runs,
+        latest=latest,
+        notes=notes,
+    )
     trend_md_path.write_text(trend_md, encoding="utf-8")
 
     # HOP base artifacts

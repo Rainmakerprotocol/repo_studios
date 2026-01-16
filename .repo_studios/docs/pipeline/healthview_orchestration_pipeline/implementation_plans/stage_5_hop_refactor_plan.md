@@ -187,6 +187,9 @@ CONSUMER_BUNDLE_PREFIX = "monkey_patch_risk-"  # L19
 CONSUMER_SUMMARY_NAME = "summary.json"  # L20
 ```
 
+Note: The consumer bundles now follow the HOP run slug format (`YYYYMMDD-HHMM`) without the
+`monkey_patch_risk-` prefix.
+
 **Required changes:**
 
 | Constant | Current | Expected | Line |
@@ -516,13 +519,13 @@ Run command:
 | Script | Expected Output Path | Verified |
 |--------|---------------------|----------|
 | Producer | `.repo_studios/reports/healthview/producer_reports/monkey_patch_scans/20260103-0141/` | ✅ |
-| Consumer | `.repo_studios/reports/healthview/consumer_reports/monkey_patch_risk/monkey_patch_risk-2026-01-03_014114/` | ✅ |
-| Aggregator | `.repo_studios/reports/healthview/aggregator_reports/monkey_patch_trends/monkey_patch_trends-2026-01-03_014114/` | ✅ |
-| Summarizer | `.repo_studios/reports/healthview/summarizer_reports/monkey_patch_overview/monkey_patch_overview-20260103_014112/` | ✅ |
+| Consumer | `.repo_studios/reports/healthview/consumer_reports/monkey_patch_risk/20260103-0141/` | ✅ |
+| Aggregator | `.repo_studios/reports/healthview/aggregator_reports/monkey_patch_trends/20260103-0141/` | ✅ |
+| Summarizer | `.repo_studios/reports/healthview/summarizer_reports/monkey_patch_overview/20260103-0141/` | ✅ |
 | Orchestrator | `.repo_studios/reports/healthview/orchestrator_reports/monkey_patch_oversight/20260103-0141/` | ✅ |
 
-**Note:** Consumer, Aggregator, and Summarizer use non-standard slug formats. This is a minor issue
-for a follow-up task but does not affect HOP path compliance.
+**Note:** Consumer, Aggregator, and Summarizer now use the standard HOP run slug format
+(`YYYYMMDD-HHMM`).
 
 ---
 

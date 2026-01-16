@@ -144,7 +144,7 @@ COMPLEXITY_NODE_TYPES = (
 )
 
 LIBRARIES_ROOT = Path(__file__).resolve().parents[1]
-REPO_STUDIOS_ROOT = LIBRARIES_ROOT.parents[2]
+REPO_STUDIOS_ROOT = LIBRARIES_ROOT.parents[1]
 
 try:
     from libraries import resolve_repo_root, slugify_relative
