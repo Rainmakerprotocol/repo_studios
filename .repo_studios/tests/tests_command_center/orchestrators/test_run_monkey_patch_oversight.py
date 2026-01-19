@@ -58,10 +58,12 @@ def test_monkey_patch_oversight_pipeline(tmp_path: Path, monkeypatch: pytest.Mon
 
     producer_dir = paths.producer_output_dir / "producer_run"
     producer_dir.mkdir(parents=True, exist_ok=True)
-    producer_report = producer_dir / "report.json"
-    producer_report.write_text("{}", encoding="utf-8")
-    producer_matches = producer_dir / "matches.json"
-    producer_matches.write_text("[]", encoding="utf-8")
+    producer_manifest = producer_dir / "manifest.json"
+    producer_manifest.write_text("{}", encoding="utf-8")
+    producer_summary = producer_dir / "summary.md"
+    producer_summary.write_text("# producer\n", encoding="utf-8")
+    producer_telemetry = producer_dir / "telemetry.json"
+    producer_telemetry.write_text("{}", encoding="utf-8")
 
     consumer_dir = paths.consumer_output_dir / "consumer_run"
     consumer_dir.mkdir(parents=True, exist_ok=True)
@@ -83,16 +85,18 @@ def test_monkey_patch_oversight_pipeline(tmp_path: Path, monkeypatch: pytest.Mon
 
     summarizer_dir = paths.summarizer_output_dir / "overview_run"
     summarizer_dir.mkdir(parents=True, exist_ok=True)
-    overview_md = summarizer_dir / "overview.md"
-    overview_md.write_text("# overview\n", encoding="utf-8")
-    overview_json = summarizer_dir / "overview.json"
-    overview_json.write_text("{}", encoding="utf-8")
+    overview_summary = summarizer_dir / "summary.md"
+    overview_summary.write_text("# overview\n", encoding="utf-8")
+    overview_manifest = summarizer_dir / "manifest.json"
+    overview_manifest.write_text("{}", encoding="utf-8")
+    overview_telemetry = summarizer_dir / "telemetry.json"
+    overview_telemetry.write_text("{}", encoding="utf-8")
 
     producer_outcome = oversight.ProducerOutcome(
         payload={"status": "ok", "total_findings": 2, "run_id": "producer_run"},
         run_dir=producer_dir,
-        report_path=producer_report,
-        matches_path=producer_matches,
+        report_path=None,
+        matches_path=None,
         status="ok",
         total_findings=2,
         run_id="producer_run",
@@ -118,8 +122,9 @@ def test_monkey_patch_oversight_pipeline(tmp_path: Path, monkeypatch: pytest.Mon
         payload={"status": "ok", "slug": "overview_run", "artifacts": {}},
         run_dir=summarizer_dir,
         artifacts={
-            "overview.md": overview_md,
-            "overview.json": overview_json,
+            "summary.md": overview_summary,
+            "manifest.json": overview_manifest,
+            "telemetry.json": overview_telemetry,
         },
         slug="overview_run",
     )
@@ -192,8 +197,19 @@ def test_monkey_patch_oversight_pipeline(tmp_path: Path, monkeypatch: pytest.Mon
     exit_code = oversight.run(["--repo-root", str(repo_root)])
 
     assert exit_code == 0
-    assert manifest_path.read_text(encoding="utf-8").strip().startswith("{")
+    manifest_payload = json.loads(manifest_path.read_text(encoding="utf-8"))
+    assert isinstance(manifest_payload, dict)
+    assert manifest_payload["run_slug"] == "20251201-1234"
+    artifacts = manifest_payload.get("artifacts")
+    assert isinstance(artifacts, dict)
+    assert artifacts.get("producer_bundle") is not None
+    assert artifacts.get("producer_manifest.json") is not None
+    assert artifacts.get("producer_summary.md") is not None
+    assert artifacts.get("producer_telemetry.json") is not None
+
     assert telemetry_path.read_text(encoding="utf-8").strip().startswith("{")
     summary_text = summary_path.read_text(encoding="utf-8")
     assert "Monkey Patch Oversight Run" in summary_text
-    assert "producer" in summary_text
+    assert "## Key Links" in summary_text
+    assert "## Portfolio Snapshot" in summary_text
+    assert "## Trend Snapshot" in summary_text

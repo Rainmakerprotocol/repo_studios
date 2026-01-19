@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
-"""Topic orchestrator for the Monkey Patch Oversight workflow.
+"""Run the Monkey Patch Oversight HealthView orchestrator.
 
-Outputs Healthview bundles at
-`.repo_studios/command_center/reports/healthview/monkey_patch_oversight/<timestamp>/` and replaces the
-monkey patch stages that previously lived inside `orchestrate_health_suite.py` alongside the
-standalone summarizer invocation. The pipeline scans, classifies, aggregates, and summarizes monkey
-patch risk before emitting manifest, summary, and telemetry artifacts. Runs usually finish within
-four to seven minutes when Git history enrichment is enabled; trend aggregation scales with the
-configured history window.
+The orchestrator chains a four-step pipeline (producer → consumer → aggregator → summarizer) to scan
+for monkey patches, classify their risk, compute multi-run trends, and emit an overview summary.
+
+Outputs are written as HealthView bundles under:
+`.repo_studios/reports/healthview/orchestrator_reports/monkey_patch_oversight/<YYYYMMDD-HHMM>/`.
+
+Each orchestrator bundle contains the HOP base package: `manifest.json`, `summary.md`, and
+`telemetry.json`.
 """
 
 from __future__ import annotations
@@ -524,6 +525,20 @@ def _relativize(path: Path | None, repo_root: Path) -> str | None:
         return path.resolve().as_posix()
 
 
+def _existing(path: Path | None) -> Path | None:
+    """Return the path only if it exists.
+
+    Args:
+        path: Candidate path.
+
+    Returns:
+        The path when it exists, otherwise None.
+    """
+    if path is None:
+        return None
+    return path if path.exists() else None
+
+
 def _execute_producer(paths: Paths, options: Options) -> ProducerOutcome:
     """Execute the monkey patch scanner producer.
 
@@ -540,6 +555,7 @@ def _execute_producer(paths: Paths, options: Options) -> ProducerOutcome:
         RuntimeError: If producer returns unexpected payload.
     """
     run_callable = _load_callable(paths.repo_root / PRODUCER_SCRIPT, PRODUCER_MODULE, "run")
+    run_slug = options.run_timestamp.strftime("%Y%m%d-%H%M")
     argv: list[str] = [
         "--repo-root",
         str(paths.repo_root),
@@ -547,6 +563,8 @@ def _execute_producer(paths: Paths, options: Options) -> ProducerOutcome:
         str(paths.scan_root),
         "--output-dir",
         str(paths.producer_output_dir),
+        "--timestamp",
+        run_slug,
         "--context-lines",
         str(options.producer_context_lines),
         "--artifacts-to-keep",
@@ -568,9 +586,12 @@ def _execute_producer(paths: Paths, options: Options) -> ProducerOutcome:
     if not isinstance(payload, dict):
         raise RuntimeError("scan_monkey_patches returned unexpected payload")
     run_id = payload.get("run_id")
-    run_dir = None
+    run_dir: Path | None = None
     if isinstance(run_id, str):
         candidate = (paths.producer_output_dir / run_id).resolve()
+        run_dir = candidate if candidate.exists() else None
+    if run_dir is None:
+        candidate = (paths.producer_output_dir / run_slug).resolve()
         run_dir = candidate if candidate.exists() else None
     report_path = None
     matches_path = None
@@ -592,7 +613,7 @@ def _execute_producer(paths: Paths, options: Options) -> ProducerOutcome:
         matches_path=matches_path,
         status=status,
         total_findings=total_findings,
-        run_id=run_id if isinstance(run_id, str) else None,
+        run_id=run_id if isinstance(run_id, str) else run_slug,
     )
 
 
@@ -824,10 +845,136 @@ def _summarize_steps(result_steps: Sequence[Any]) -> str:
     Returns:
         Markdown-formatted summary string.
     """
-    lines = ["# Monkey Patch Oversight Run", ""]
+    lines = ["## Step Status", ""]
     for step in result_steps:
         detail = f" ({step.detail})" if step.detail else ""
         lines.append(f"- {step.name}: {step.status}{detail}")
+    return "\n".join(lines) + "\n"
+
+
+def _load_json_payload(path: Path) -> dict[str, Any] | None:
+    """Load a JSON file into a dictionary.
+
+    Args:
+        path: JSON file path.
+
+    Returns:
+        Parsed JSON dictionary, or None when the file is missing or unreadable.
+    """
+    try:
+        if not path.exists():
+            return None
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return None
+    if isinstance(data, dict):
+        return cast(dict[str, Any], data)
+    return None
+
+
+def _format_markdown_link(path: str) -> str:
+    """Format a repo-relative path as a Markdown link.
+
+    Args:
+        path: Repo-relative (preferred) or absolute path string.
+
+    Returns:
+        Markdown link string.
+    """
+    if not path:
+        return ""
+    return f"[{path}]({path})"
+
+
+def _build_orchestrator_summary(
+    result_steps: Sequence[Any],
+    *,
+    repo_root: Path,
+    run_slug: str,
+    artifacts: dict[str, str | None],
+    producer: ProducerOutcome | None,
+    consumer: ConsumerOutcome | None,
+    aggregator: AggregatorOutcome | None,
+) -> str:
+    """Build the orchestrator summary markdown.
+
+    The orchestrator bundle should stay lightweight but provide a fast path to the downstream
+    artifacts (producer/consumer/trend/overview) plus a few headline metrics.
+
+    Args:
+        result_steps: Pipeline steps from the topic pipeline runner.
+        repo_root: Repository root for resolving relative artifact paths.
+        run_slug: Orchestrator run slug.
+        artifacts: Relativized artifact section from the manifest.
+        producer: Producer outcome.
+        consumer: Consumer outcome.
+        aggregator: Aggregator outcome.
+
+    Returns:
+        Rendered Markdown string.
+    """
+    lines: list[str] = ["# Monkey Patch Oversight Run", "", f"Run Slug: `{run_slug}`", ""]
+    lines.append("## Key Links")
+    lines.append("")
+    lines.append("<!-- markdownlint-disable MD013 -->")
+    lines.append("")
+    for label, key in [
+        ("Producer Summary", "producer_summary.md"),
+        ("Producer Manifest", "producer_manifest.json"),
+        ("Consumer Summary (JSON)", "consumer_summary"),
+        ("Consumer Summary (MD)", "consumer_summary_md"),
+        ("Consumer Bundle Summary", "consumer_bundle_summary"),
+        ("Trend Markdown", "trend_markdown"),
+        ("Trend JSON", "trend_json"),
+        ("Overview Summary", "overview_summary.md"),
+        ("Overview Manifest", "overview_manifest.json"),
+        ("Overview Telemetry", "overview_telemetry.json"),
+    ]:
+        value = artifacts.get(key)
+        if value:
+            lines.append(f"- {label}: {_format_markdown_link(value)}")
+    lines.append("")
+    lines.append("<!-- markdownlint-enable MD013 -->")
+    lines.append("")
+
+    lines.append("## Portfolio Snapshot")
+    lines.append("")
+    if producer and producer.total_findings is not None:
+        lines.append(f"- Producer Findings: {producer.total_findings}")
+
+    if consumer and consumer.bundle_summary is not None:
+        bundle_summary_payload = _load_json_payload(consumer.bundle_summary)
+        counts = bundle_summary_payload.get("counts_by_risk") if bundle_summary_payload else None
+        if isinstance(counts, dict):
+            high = counts.get("HIGH")
+            moderate = counts.get("MODERATE")
+            safe = counts.get("SAFE")
+            if all(isinstance(val, int) for val in [high, moderate, safe]):
+                lines.append(f"- Risk Counts: HIGH={high}, MODERATE={moderate}, SAFE={safe}")
+    lines.append("")
+
+    lines.append("## Trend Snapshot")
+    lines.append("")
+    if aggregator and aggregator.trend_json is not None:
+        trend_payload = _load_json_payload(aggregator.trend_json)
+        signals = trend_payload.get("signals") if trend_payload else None
+        if isinstance(signals, dict):
+            latest = signals.get("latest")
+            rolling_3 = signals.get("rolling_3")
+            if isinstance(latest, dict):
+                delta_total = latest.get("delta_total")
+                changed = latest.get("changed")
+                if isinstance(delta_total, int):
+                    lines.append(f"- Delta Total: {delta_total:+d}")
+                if isinstance(changed, bool):
+                    lines.append(f"- Changed: {str(changed).lower()}")
+            if isinstance(rolling_3, dict):
+                total_avg = rolling_3.get("total_avg")
+                if isinstance(total_avg, (int, float)):
+                    lines.append(f"- Rolling(3) Total Avg: {total_avg:.2f}")
+    lines.append("")
+
+    lines.append(_summarize_steps(result_steps).rstrip("\n"))
     return "\n".join(lines) + "\n"
 
 
@@ -960,11 +1107,38 @@ def run(argv: Sequence[str] | None = None) -> int:
 
     artifacts_section = {
         "producer_report": _relativize(producer_outcome.report_path if producer_outcome else None, paths.repo_root),
-        "producer_matches": _relativize(
-            producer_outcome.matches_path if producer_outcome else None, paths.repo_root
+        "producer_matches": _relativize(producer_outcome.matches_path if producer_outcome else None, paths.repo_root),
+        "producer_bundle": _relativize(producer_outcome.run_dir if producer_outcome else None, paths.repo_root),
+        "producer_manifest.json": _relativize(
+            _existing(
+                (producer_outcome.run_dir / "manifest.json")
+                if producer_outcome and producer_outcome.run_dir is not None
+                else None
+            ),
+            paths.repo_root,
+        ),
+        "producer_summary.md": _relativize(
+            _existing(
+                (producer_outcome.run_dir / "summary.md")
+                if producer_outcome and producer_outcome.run_dir is not None
+                else None
+            ),
+            paths.repo_root,
+        ),
+        "producer_telemetry.json": _relativize(
+            _existing(
+                (producer_outcome.run_dir / "telemetry.json")
+                if producer_outcome and producer_outcome.run_dir is not None
+                else None
+            ),
+            paths.repo_root,
         ),
         "consumer_bundle": _relativize(consumer_outcome.bundle_dir if consumer_outcome else None, paths.repo_root),
-        "consumer_summary": _relativize(
+        "consumer_summary": _relativize(consumer_outcome.summary_json if consumer_outcome else None, paths.repo_root),
+        "consumer_summary_md": _relativize(
+            consumer_outcome.summary_markdown if consumer_outcome else None, paths.repo_root
+        ),
+        "consumer_bundle_summary": _relativize(
             consumer_outcome.bundle_summary if consumer_outcome else None, paths.repo_root
         ),
         "trend_dir": _relativize(aggregator_outcome.trend_dir if aggregator_outcome else None, paths.repo_root),
@@ -998,7 +1172,15 @@ def run(argv: Sequence[str] | None = None) -> int:
         "catalog": [entry.__dict__ for entry in registry.all_entries()],
     }
 
-    summary_markdown = _summarize_steps(result.steps)
+    summary_markdown = _build_orchestrator_summary(
+        result.steps,
+        repo_root=paths.repo_root,
+        run_slug=run_slug,
+        artifacts=artifacts_section,
+        producer=producer_outcome,
+        consumer=consumer_outcome,
+        aggregator=aggregator_outcome,
+    )
 
     artifacts = [
         ReportArtifact(filename="manifest.json", kind="json", content=lambda: manifest),
