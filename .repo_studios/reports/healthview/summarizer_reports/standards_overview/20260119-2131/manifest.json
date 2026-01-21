@@ -1,0 +1,25 @@
+{
+  "artifacts": {
+    "index_yaml": ".repo_studios/scripts/repo_standards_index.yaml",
+    "legacy_index_yaml": null,
+    "pending_yaml": null
+  },
+  "generated_at": "2026-01-19T21:31:53+00:00",
+  "label": "summary",
+  "markdown_rule_sample": [],
+  "metrics": {
+    "auto_accept": false,
+    "extracted_count": 0,
+    "markdown_rule_count": 0,
+    "rule_count": 0
+  },
+  "notes": [
+    "Pending file missing or unreadable; pending line count unavailable."
+  ],
+  "pending_lines": null,
+  "run_slug": "20260119-2131",
+  "schema_version": 1,
+  "timestamp_slug": "2026-01-19_2131",
+  "topic": "standards_overview",
+  "viewer": "healthview"
+}

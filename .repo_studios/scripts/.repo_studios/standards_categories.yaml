@@ -1,0 +1,39 @@
+categories:
+  global:
+    title: Global Standards
+    description: Cross-cutting standards applicable to all code
+    tags: [standard, global]
+  python:
+    title: Python Standards
+    description: Python-specific coding and engineering standards
+    tags: [standard, python, code]
+  markdown:
+    title: Markdown Standards
+    description: Markdown authoring and formatting standards
+    tags: [standard, markdown, docs]
+  html:
+    title: HTML Standards
+    description: HTML coding and accessibility standards
+    tags: [standard, html, code]
+  cleanup:
+    title: Code Cleanup Standards
+    description: Technical debt and refactoring standards
+    tags: [standard, cleanup, refactor]
+  project:
+    title: Project Standards
+    description: Project-specific operating standards
+    tags: [standard, project]
+
+sources:
+  - path: .repo_studios/docs/standards/global/std-global-python-engineering.md
+    categories: [global, python]
+  - path: .repo_studios/docs/standards/global/std-global-markdown-authoring.md
+    categories: [global, markdown]
+  - path: .repo_studios/docs/standards/global/std-global-html-coding.md
+    categories: [global, html]
+  - path: .repo_studios/docs/standards/global/std-global-code-cleanup.md
+    categories: [global, cleanup]
+  - path: .repo_studios/docs/standards/project/std-project-operating-standard.md
+    categories: [project]
+  - path: .repo_studios/docs/standards/project/std-project-python-instructions.md
+    categories: [project, python]

@@ -1,0 +1,125 @@
+rules:
+  - id: py-google-style-docstrings
+    category_ids:
+      - python
+    summary: Use Google-style docstrings for Python modules, public classes, and public functions.
+    rationale: Standardized docstrings improve readability, IDE support, and agent navigation.
+    severity: error
+    applies_to:
+      - "**/*.py"
+    source: .github/instructions/docstring.instructions.md
+    last_updated: 2026-01-20
+
+  - id: md-l1-frontmatter-h1
+    category_ids:
+      - markdown
+    summary: Start every AI-operational Markdown file with YAML front matter followed by a single H1.
+    rationale: Stable metadata and predictable heading structure keep doc-index ingestion and agent routing reliable.
+    severity: error
+    applies_to:
+      - "**/*.md"
+    source: .github/instructions/markdown.instructions.md
+    last_updated: 2026-01-20
+
+  - id: md-l2-section-order
+    category_ids:
+      - markdown
+    summary: Preserve canonical section order and ensure Goals + Agent Instructions + Update Log exist when relevant.
+    rationale: Normalized sections help humans and agents scan intent and keep doc-index slices predictable.
+    severity: warn
+    applies_to:
+      - "**/*.md"
+    source: .github/instructions/markdown.instructions.md
+    last_updated: 2026-01-20
+
+  - id: md-l3-link-hygiene
+    category_ids:
+      - markdown
+    summary: Links must be relative, descriptive, newline-free, and shorter than 2048 characters.
+    rationale: Link hygiene prevents ingestion failures and keeps navigation within the repo.
+    severity: warn
+    applies_to:
+      - "**/*.md"
+    source: .github/instructions/markdown.instructions.md
+    last_updated: 2026-01-20
+
+  - id: md-l4-code-fence-language
+    category_ids:
+      - markdown
+    summary: All fenced code blocks and agent instruction blocks must specify their language (usually yaml).
+    rationale: Explicit languages enable reliable rendering and automation parsing.
+    severity: error
+    applies_to:
+      - "**/*.md"
+    source: .github/instructions/markdown.instructions.md
+    last_updated: 2026-01-20
+
+  - id: md-l5-standards-linking
+    category_ids:
+      - markdown
+    summary: Cross-reference other markdown standards by relative path and include the last reviewed date.
+    rationale: Explicit cross-links keep the standards graph navigable and prevent orphaned guidance.
+    severity: info
+    applies_to:
+      - "**/*.md"
+    source: .github/instructions/markdown.instructions.md
+    last_updated: 2026-01-20
+
+  - id: md-agent-block-delimiters
+    category_ids:
+      - markdown
+    summary: Wrap agent automation payloads between '<!-- agents:begin -->' and '<!-- agents:end -->' markers.
+    rationale: Stable delimiters let tooling and agents extract machine-readable instructions without ambiguity.
+    severity: warn
+    applies_to:
+      - "**/*.md"
+    source: .github/instructions/markdown.instructions.md
+    last_updated: 2026-01-20
+
+  - id: pipeline-doc-tiering-contract
+    category_ids:
+      - project
+      - markdown
+    summary: Pipeline documentation must follow Tier-1/Tier-2/Tier-3 responsibilities and evidence workflow.
+    rationale: Tier boundaries preserve a stable pipeline narrative while enabling deeper vertical and horizontal specs.
+    severity: warn
+    applies_to:
+      - "docs/pipeline/**/*.md"
+    source: .github/instructions/pipeline_doc_tiers.instructions.md
+    last_updated: 2026-01-20
+
+  - id: pipeline-doc-index-evidence
+    category_ids:
+      - project
+      - markdown
+    summary: After meaningful pipeline doc edits, regenerate doc-index artifacts and verify headings/tier labels.
+    rationale: The doc index is a primary discovery surface for Copilot and automation; stale indexes misroute work.
+    severity: warn
+    applies_to:
+      - "docs/pipeline/**/*.md"
+    source: .github/instructions/pipeline_doc_tiers.instructions.md
+    last_updated: 2026-01-20
+
+  - id: pipeline-doc-no-placeholders
+    category_ids:
+      - project
+      - markdown
+    summary: Pipeline tier docs must not contain placeholder headings, TODO markers, or inline chat transcripts.
+    rationale: Placeholders break ingestion and create ambiguous guidance for future contributors and agents.
+    severity: error
+    applies_to:
+      - "docs/pipeline/**/*.md"
+    source: .github/instructions/pipeline_doc_tiers.instructions.md
+    last_updated: 2026-01-20
+
+  - id: pipeline-doc-no-runtime-edits
+    category_ids:
+      - project
+      - markdown
+    summary: Tier pipeline docs coordinate implementation but must not directly modify runtime behavior.
+    rationale: Keeping docs advisory prevents accidental behavioral changes and preserves review discipline.
+    severity: warn
+    applies_to:
+      - "docs/pipeline/**/*.md"
+    source: .github/instructions/tier_doc_operating_model.instructions.md
+    last_updated: 2026-01-20

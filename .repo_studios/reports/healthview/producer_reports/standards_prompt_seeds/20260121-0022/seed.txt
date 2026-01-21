@@ -1,0 +1,12 @@
+Integrity: 77a0c3584bf8ade2b6996d0c4ef2be774cdc384fad559ad84274d9503f33f503
+
+Category: Markdown Standards (markdown)
+  - [ERROR] md-l1-frontmatter-h1: Start every AI-operational Markdown file with YAML front matter followed by a single H1.
+  - [ERROR] md-l4-code-fence-language: All fenced code blocks and agent instruction blocks must specify their language (usually yaml).
+  - [ERROR] pipeline-doc-no-placeholders: Pipeline tier docs must not contain placeholder headings, TODO markers, or inline chat transcripts.
+
+Category: Project Standards (project)
+  - [ERROR] pipeline-doc-no-placeholders: Pipeline tier docs must not contain placeholder headings, TODO markers, or inline chat transcripts.
+
+Category: Python Standards (python)
+  - [ERROR] py-google-style-docstrings: Use Google-style docstrings for Python modules, public classes, and public functions.
