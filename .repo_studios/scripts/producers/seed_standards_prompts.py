@@ -225,13 +225,17 @@ def summarize_seed(seed: dict[str, Any]) -> dict[str, Any]:
     categories = seed.get("categories", {}) or {}
     category_count = len(categories)
     category_summaries: list[dict[str, Any]] = []
-    seen_rules: dict[tuple[str | None, str | None], str] = {}
+    seen_rules: dict[str, str] = {}
+    assignment_count = 0
     for category_id, data in sorted(categories.items()):
         rules = data.get("rules", [])
+        assignment_count += len(rules) if isinstance(rules, list) else 0
         for rule in rules:
-            key = (rule.get("id"), rule.get("summary"))
+            rule_id = rule.get("id")
+            if not rule_id:
+                continue
             severity = rule.get("severity") or "unknown"
-            seen_rules.setdefault(key, severity)
+            seen_rules.setdefault(str(rule_id), str(severity))
         category_summaries.append(
             {
                 "id": category_id,
@@ -243,7 +247,10 @@ def summarize_seed(seed: dict[str, Any]) -> dict[str, Any]:
     severity_counts = Counter(seen_rules.values())
     return {
         "category_count": category_count,
+        # Backward compatible field name used by orchestrators and tests.
         "total_rules": unique_total,
+        "unique_rule_count": unique_total,
+        "assignment_count": assignment_count,
         "severity_counts": dict(sorted(severity_counts.items())),
         "categories": category_summaries,
     }
@@ -298,7 +305,8 @@ def render_markdown_report(payload: dict[str, Any]) -> str:
         f"- Index Path: `{payload.get('index_path', '')}`\n",
         f"- Include Warn: `{payload.get('include_warn', False)}`\n",
         f"- Total Categories: {summary.get('category_count', 0)}\n",
-        f"- Total Rules: {summary.get('total_rules', 0)}\n\n",
+        f"- Unique Rules: {summary.get('unique_rule_count', summary.get('total_rules', 0))}\n",
+        f"- Assignment Count: {summary.get('assignment_count', 0)}\n\n",
     ]
     if severity_counts:
         lines.append("## Rules by Severity\n\n")
@@ -328,11 +336,43 @@ def render_log(payload: dict[str, Any]) -> str:
         f"index_path={payload.get('index_path', '')}",
         f"include_warn={str(payload.get('include_warn', False)).lower()}",
         f"categories={summary.get('category_count', 0)}",
+        f"unique_rule_count={summary.get('unique_rule_count', summary.get('total_rules', 0))}",
+        f"assignment_count={summary.get('assignment_count', 0)}",
         f"total_rules={summary.get('total_rules', 0)}",
     ]
     for severity, count in sorted(severity_counts.items()):
         entries.append(f"severity_{severity}={count}")
     return "\n".join(entries) + "\n"
+
+
+def build_telemetry(payload: dict[str, Any]) -> dict[str, Any]:
+    """Build a JSON telemetry envelope for the prompt seed bundle.
+
+    Args:
+        payload: The prompt seed run payload returned by ``run``.
+
+    Returns:
+        A JSON-serializable mapping containing a small ``metrics`` summary and the full ``payload``.
+    """
+
+    summary = payload.get("summary", {}) if isinstance(payload, dict) else {}
+    summary_dict: dict[str, Any] = summary if isinstance(summary, dict) else {}
+
+    metrics = {
+        "status": payload.get("status"),
+        "category_count": summary_dict.get("category_count", 0),
+        "total_rules": summary_dict.get("total_rules", 0),
+        "unique_rule_count": summary_dict.get("unique_rule_count", summary_dict.get("total_rules", 0)),
+        "assignment_count": summary_dict.get("assignment_count", 0),
+        "include_warn": bool(payload.get("include_warn", False)),
+    }
+
+    return {
+        "schema_version": SCHEMA_VERSION,
+        "generated_utc": payload.get("timestamp"),
+        "metrics": metrics,
+        "payload": payload,
+    }
 
 
 def write_artifacts(
@@ -352,7 +392,10 @@ def write_artifacts(
         encoding="utf-8",
     )
     (run_dir / "summary.md").write_text(render_markdown_report(payload), encoding="utf-8")
-    (run_dir / "telemetry.json").write_text(render_log(payload), encoding="utf-8")
+    (run_dir / "telemetry.json").write_text(
+        json.dumps(build_telemetry(payload), indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
     write_seed_files(run_dir, seed, formats)
 
 

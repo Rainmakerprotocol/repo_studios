@@ -1,0 +1,45 @@
+{
+  "categories": {
+    "markdown": {
+      "rules": [
+        {
+          "id": "md-l1-frontmatter-h1",
+          "severity": "error",
+          "summary": "Start every AI-operational Markdown file with YAML front matter followed by a single H1."
+        },
+        {
+          "id": "md-l4-code-fence-language",
+          "severity": "error",
+          "summary": "All fenced code blocks and agent instruction blocks must specify their language (usually yaml)."
+        },
+        {
+          "id": "pipeline-doc-no-placeholders",
+          "severity": "error",
+          "summary": "Pipeline tier docs must not contain placeholder headings, TODO markers, or inline chat transcripts."
+        }
+      ],
+      "title": "Markdown Standards"
+    },
+    "project": {
+      "rules": [
+        {
+          "id": "pipeline-doc-no-placeholders",
+          "severity": "error",
+          "summary": "Pipeline tier docs must not contain placeholder headings, TODO markers, or inline chat transcripts."
+        }
+      ],
+      "title": "Project Standards"
+    },
+    "python": {
+      "rules": [
+        {
+          "id": "py-google-style-docstrings",
+          "severity": "error",
+          "summary": "Use Google-style docstrings for Python modules, public classes, and public functions."
+        }
+      ],
+      "title": "Python Standards"
+    }
+  },
+  "integrity_hash": "77a0c3584bf8ade2b6996d0c4ef2be774cdc384fad559ad84274d9503f33f503"
+}

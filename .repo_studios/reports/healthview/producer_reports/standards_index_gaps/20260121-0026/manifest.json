@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "viewer": "healthview",
+  "topic": "standards_index_gaps",
+  "run_timestamp": "20260121-0026",
+  "generated_utc": "2026-01-21T00:26:03.135855+00:00",
+  "git_sha": "da810d28f240d0d482a1a83478b6a249e9e93555",
+  "status": "ok",
+  "catalog": [
+    {
+      "script_path": ".repo_studios/command_center/scripts/producers/analyze_standards_index_gaps.py",
+      "role": "producer",
+      "topic": "standards_index_gaps"
+    }
+  ],
+  "inputs": {
+    "repo_root": "C:\\Users\\genet\\repo_studios",
+    "index_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\scripts\\repo_standards_index.yaml",
+    "categories_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\scripts\\.repo_studios\\standards_categories.yaml",
+    "max_show": 8,
+    "artifacts_to_keep": 5
+  },
+  "provenance": {
+    "requested_by": "genet",
+    "trigger_type": "make"
+  }
+}

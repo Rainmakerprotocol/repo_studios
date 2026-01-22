@@ -231,7 +231,12 @@ def _extract_markdown_rules(rules: Any) -> list[str]:
     for entry in rules:
         if isinstance(entry, Mapping):
             rule_id = entry.get("id")
-            if isinstance(rule_id, str) and rule_id.startswith("markdown-"):
+            category_ids = entry.get("category_ids")
+            if isinstance(category_ids, list) and "markdown" in category_ids:
+                if isinstance(rule_id, str):
+                    collected.append(rule_id)
+                continue
+            if isinstance(rule_id, str) and (rule_id.startswith("markdown-") or rule_id.startswith("md-")):
                 collected.append(rule_id)
     return sorted(set(collected))
 

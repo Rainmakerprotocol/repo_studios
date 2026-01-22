@@ -366,9 +366,16 @@ def _execute_index(paths: Paths, options: Options) -> IndexOutcome:
     run_slug = _format_run_slug(options.run_timestamp)
     candidate_dir = paths.index_output_dir / run_slug
     telemetry_path = candidate_dir / "telemetry.json"
-    payload = _read_json(telemetry_path)
-    if payload is None:
+    telemetry = _read_json(telemetry_path)
+    if telemetry is None:
         raise RuntimeError("standards index telemetry missing after run")
+
+    payload: dict[str, Any] | None
+    if isinstance(telemetry.get("payload"), dict):
+        payload = cast(dict[str, Any], telemetry.get("payload"))
+    else:
+        # Backward compatible fallback when producers emit payload directly.
+        payload = telemetry
 
     index_path = paths.index_latest_path if paths.index_latest_path.exists() else None
     return IndexOutcome(run_dir=candidate_dir, report_path=telemetry_path, payload=payload, index_path=index_path)
@@ -591,6 +598,10 @@ def _summarize_markdown(
     raw_prompt_summary = prompt_payload.get("summary")
     prompt_summary: dict[str, Any] = raw_prompt_summary if isinstance(raw_prompt_summary, dict) else {}
     lines.append(f"- prompt_total_rules: {prompt_summary.get('total_rules', 'unknown')}")
+    if prompt_summary.get("unique_rule_count") is not None:
+        lines.append(f"- prompt_unique_rule_count: {prompt_summary.get('unique_rule_count', 'unknown')}")
+    if prompt_summary.get("assignment_count") is not None:
+        lines.append(f"- prompt_assignment_count: {prompt_summary.get('assignment_count', 'unknown')}")
     lines.append(f"- prompt_category_count: {prompt_summary.get('category_count', 'unknown')}")
 
     summary_code = summary_outcome.exit_code if summary_outcome else None
@@ -703,10 +714,18 @@ def run(argv: Sequence[str] | None = None) -> int:
         raw_summary = payload.get("summary")
         summary: dict[str, Any] = raw_summary if isinstance(raw_summary, dict) else {}
         total_rules = summary.get("total_rules")
-        detail = f"rules={total_rules}" if total_rules is not None else "prompt seed generated"
+        unique_rule_count = summary.get("unique_rule_count")
+        assignment_count = summary.get("assignment_count")
+        detail = "prompt seed generated"
+        if unique_rule_count is not None and assignment_count is not None and unique_rule_count != assignment_count:
+            detail = f"unique={unique_rule_count} assignments={assignment_count}"
+        elif total_rules is not None:
+            detail = f"rules={total_rules}"
         step_payload = {
             "run_id": payload.get("run_id"),
             "total_rules": total_rules,
+            "unique_rule_count": unique_rule_count,
+            "assignment_count": assignment_count,
             "category_count": summary.get("category_count"),
         }
         status = payload.get("status")
