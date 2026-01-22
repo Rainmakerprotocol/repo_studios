@@ -51,3 +51,24 @@ def test_prune_skips_unmatched_prefix(tmp_path: Path) -> None:
     assert extra in result.skipped
     assert not result.removed
     assert not result.failures
+
+
+def test_prune_timestamp_dirs_uses_name_sort_over_mtime(tmp_path: Path) -> None:
+    base_dir = tmp_path / "runs"
+    base_dir.mkdir()
+
+    oldest_by_name = _make_run(base_dir, "20240101-0000")
+    middle_by_name = _make_run(base_dir, "20240102-0000")
+    newest_by_name = _make_run(base_dir, "20240103-0000")
+
+    # Make mtimes misleading: set the oldest name to have the newest mtime.
+    os.utime(oldest_by_name, (2000000000, 2000000000))
+    os.utime(middle_by_name, (1500000000, 1500000000))
+    os.utime(newest_by_name, (1000000000, 1000000000))
+
+    result = prune_run_directories(base_dir, keep=1)
+
+    assert newest_by_name in result.kept
+    assert oldest_by_name in result.removed
+    assert middle_by_name in result.removed
+    assert not result.failures

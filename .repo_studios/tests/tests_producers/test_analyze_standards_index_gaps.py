@@ -232,24 +232,43 @@ def test_command_center_load_index_rejects_missing_file(tmp_path):
         raise AssertionError("Expected missing file to raise")
 
 
-def test_command_center_ensure_index_path_prefers_legacy_snapshot(tmp_path, caplog):
+def test_command_center_run_does_not_fall_back_to_legacy_snapshot(tmp_path):
     from command_center.scripts.producers import analyze_standards_index_gaps as producer
 
     repo_root = tmp_path / "repo"
     repo_root.mkdir()
-    legacy = repo_root / producer.LEGACY_INDEX_PATH
+
+    legacy = (
+        repo_root
+        / ".repo_studios"
+        / "reports"
+        / "producer_reports"
+        / "standards_index_reports"
+        / "latest_index.yaml"
+    )
     legacy.parent.mkdir(parents=True)
     legacy.write_text("sources: []\n", encoding="utf-8")
 
-    paths = producer.Paths(
-        repo_root=repo_root,
-        output_dir=repo_root / "out",
-        index_path=repo_root / "missing_index.yaml",
-        categories_path=repo_root / "missing_categories.yaml",
-    )
-    logger = producer.logging.getLogger("test")
-    updated = producer._ensure_index_path(paths, logger)
-    assert updated.index_path == legacy.resolve()
+    missing_index = repo_root / ".repo_studios" / "scripts" / "repo_standards_index.yaml"
+    assert not missing_index.exists()
+
+    try:
+        producer.run(
+            [
+                "--repo-root",
+                str(repo_root),
+                "--index-path",
+                str(missing_index),
+                "--output-dir",
+                str(repo_root / "out"),
+                "--log-level",
+                "ERROR",
+            ]
+        )
+    except RuntimeError as exc:
+        assert "Standards index not found" in str(exc)
+    else:  # pragma: no cover
+        raise AssertionError("Expected run() to fail when canonical index is missing")
 
 
 def test_command_center_detect_git_sha_prefers_env(monkeypatch, tmp_path):

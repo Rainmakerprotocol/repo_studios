@@ -386,6 +386,151 @@ This turns the findings into a small, ordered change list.
 - Inspect the latest run:
   - Open the orchestrator bundle’s `summary.md`, then follow `manifest.json` links.
 
+## Pruning & Retention (HOP compliance audit)
+
+This review previously referenced retention budgets, but did not document the pruning surfaces and
+their HOP compliance properties. This section captures the concrete pruning behavior for Stage 6.1
+across the Make target, orchestrator, and upstream scripts.
+
+**HOP pruning contract (for this topic)**
+
+- Bundles live in timestamped run directories (`YYYYMMDD-HHMM`).
+- No mutable pointer artifacts (`latest_*`, `current_*`) are created in the HealthView roots.
+- Pruning is bounded by a `keep` count.
+- The current run directory is never pruned (even if timestamps are overridden/out-of-order). If enforcing the `keep` cap would otherwise delete the current run, pruning will retain it and prune other runs instead.
+- `.keep` sentinel directories are never deleted.
+
+### Pruning surfaces table
+
+| Component | Output root (HealthView) | Pruning mechanism | Retention knob | Default keep | Current run protected | `.keep` honored | Pointer artifacts | Notes |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Make target `studio-orchestrate-standards` | Orchestrator + upstream defaults | Indirect (invokes orchestrator only) | N/A (relies on orchestrator defaults unless CLI overrides used) | N/A | N/A | N/A | N/A | Does not pass `--*-artifacts-to-keep`; operator can pass overrides manually. |
+| Orchestrator `run_standards_integrity.py` | `.repo_studios/reports/healthview/orchestrator_reports/standards_integrity/<run_slug>/` | `write_report_artifacts()` → topic-dir pruning by name sort | `--artifacts-to-keep` | 3 | Yes (explicit current_run protection in helper) | Yes | No | Uses `write_report_artifacts(... viewer="", topic="")`, which is hierarchical layout without writing pointers. |
+| Index producer `generate_standards_index.py` | `.repo_studios/reports/healthview/producer_reports/standards_index/<run_slug>/` | `prune_run_directories()` (mtime sort) | `--artifacts-to-keep` | (script default) | Yes | Yes | No | Uses timestamped run dir `YYYYMMDD-HHMM` and passes `current_run=bundle_dir`. |
+| Gap producer `analyze_standards_index_gaps.py` | `.repo_studios/reports/healthview/producer_reports/standards_index_gaps/<run_slug>/` | `prune_run_directories()` (mtime sort) | `--artifacts-to-keep` | from `retention_policy.get_keep("analyze_standards_index_gaps")` | Yes | Yes | No | Uses Command Center storage helper to write `manifest.json`, `summary.md`, `telemetry.json` then prunes. |
+| Diff producer `diff_standards_index.py` (optional) | `.repo_studios/reports/healthview/producer_reports/standards_index_diff/<run_slug>/` | `prune_run_directories()` (mtime sort) | `--artifacts-to-keep` | 10 (orchestrator default) | Yes | Yes | No | Orchestrator passes `--fail-on` policy; pruning is independent of fail behavior. |
+| Prompt seed producer `seed_standards_prompts.py` | `.repo_studios/reports/healthview/producer_reports/standards_prompt_seeds/<run_slug>/` | `prune_run_directories()` (mtime sort) | `--artifacts-to-keep` | from `retention_policy.get_keep("seed_standards_prompts")` | Yes | Yes | No | Supports optional legacy output; avoid using legacy outputs for HealthView roots. |
+| Overview summarizer `summarize_standards.py` | `.repo_studios/reports/healthview/summarizer_reports/standards_overview/<run_slug>/` | `write_report_artifacts()` → topic-dir pruning by name sort | `--artifacts-to-keep` | (script default) | Yes (explicit current_run protection in helper) | Yes | No | Uses hierarchical layout without pointer artifacts. |
+
+### Compliance notes
+
+- The shared `write_report_artifacts()` helper now explicitly protects the current run directory in
+  hierarchical mode (viewer/topic layout), matching the existing `current_run` protection in
+  `prune_run_directories()`.
+- Several upstream producers use `prune_run_directories()` which sorts by mtime. This is typically
+  consistent with directory creation time, but can drift if older directories are touched. If this
+  becomes a practical issue, prefer name-based sorting for `YYYYMMDD-HHMM` slug directories.
+
+## Professional assessment (as of 2026-01-22)
+
+Based on the post-fix validation runs referenced above, the Stage 6.1 scripts are now
+substantially aligned with current repo standards.
+
+- The HealthView bundles are consistent (canonical `manifest.json`, `summary.md`, `telemetry.json`)
+  and the retention behavior is now deterministic and safe (explicit current-run protection).
+- The major “agent usability” defects observed in the baseline run (telemetry unwrapping,
+  misleading prompt seed counts, markdown count mismatch) are resolved in the inspected runs.
+- Remaining concerns are mostly “polish and alignment” rather than correctness:
+  - Documentation drift (automation docs vs current HealthView conventions).
+  - Cross-platform path normalization in emitted YAML/JSON (Windows separators).
+  - A missing or hard-to-locate Tier-3 runbook for this topic (see next section).
+
+## Tier-3 + DB integration paired docs (drift audit notes)
+
+This section captures the doc/contract mismatches discovered during the discovery pass, and turns
+them into a next-pass checklist.
+
+### Confirmed doc drift (needs update)
+
+1) `.repo_studios/docs/automation/seed_standards_prompts.md`
+
+- Describes a legacy-ish output root and run-dir naming (example: `standards_prompt_seed-<ts>`)
+  plus mutable `latest_*` pointer artifacts.
+- Current Stage 6.1/HOP behavior (as validated in this review) is:
+  - HealthView output root: `.repo_studios/reports/healthview/producer_reports/standards_prompt_seeds/<run_slug>/`
+  - No `latest_*` pointer artifacts in that HealthView root
+  - Run directory slug format: `YYYYMMDD-HHMM`
+
+2) `.repo_studios/docs/automation/generate_standards_index.md`
+
+- Describes a producer output directory rooted in a non-HealthView `standards_index_reports/...`
+  layout and references `latest_*` pointer semantics.
+- Current Stage 6.1 behavior is:
+  - Canonical index file: `.repo_studios/scripts/repo_standards_index.yaml`
+  - HealthView producer bundle: `.repo_studios/reports/healthview/producer_reports/standards_index/<run_slug>/`
+  - No `latest_*` pointer artifacts in the HealthView root
+
+3) `.repo_studios/scripts/script_inventory_architecture.md`
+
+- The Stage 6.1 rows should be treated as the “inventory contract,” but at least one entry is
+  inconsistent with the current HealthView roots / pointer policy.
+- Next pass should reconcile the inventory rows for:
+  - `seed_standards_prompts.py` output root + pointer policy
+  - `generate_standards_index.py` output root + canonical index location
+  - `diff_standards_index.py` output root (ensure it matches the HealthView paths used in this
+    review)
+
+4) `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md`
+
+- Stage 6.1 is labeled as “(5 scripts)” but the stage chain is 6 scripts (1 orchestrator, 4
+  producers, 1 summarizer).
+- Next pass should update the Stage 6.1 synopsis count to reflect the current chain.
+
+5) `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_standards_integrity_roster.md`
+
+- The “Current evidence” output-root list references `command_center/reports/...` for the
+  orchestrator bundle.
+- Current Stage 6.1 evidence (and this review) uses the HealthView orchestrator root:
+  `.repo_studios/reports/healthview/orchestrator_reports/standards_integrity/<run_slug>/`.
+
+### Tier-3 runbook status
+
+- A Tier-3 document for this topic was not located by the current filename/keyword searches.
+- Next pass should either:
+  - locate the canonical Tier-3 document (if it exists under a different naming convention), or
+  - create a Tier-3 runbook for Stage 6.1 that captures:
+    - primary invocation(s) (`make studio-orchestrate-standards` + direct orchestrator CLI)
+    - output roots and artifact bundle contract
+    - retention knobs / defaults (policy-driven)
+    - troubleshooting notes (common failure modes and where to look)
+
+### DB integration docs status
+
+- The Command Center DB integration docs for the Stage 6.1 components reviewed appear consistent
+  with the HealthView bundle conventions and current output roots:
+  - `.repo_studios/command_center/docs/db_integrations/db_integration_standards_prompts.md`
+  - `.repo_studios/command_center/docs/db_integrations/db_integration_summarize_standards.md`
+  - `.repo_studios/command_center/docs/db_integrations/db_integration_standards_integrity.md`
+
+### Next-pass checklist (doc updates to consider)
+
+- Update `.repo_studios/docs/automation/seed_standards_prompts.md` to:
+  - reflect the HealthView output root and run slug naming
+  - remove or clearly label legacy output roots and any `latest_*` pointer references
+  - align artifact naming to the canonical bundle contract plus `seed.*`
+- Update `.repo_studios/docs/automation/generate_standards_index.md` to:
+  - reference `.repo_studios/scripts/repo_standards_index.yaml` as the canonical index output
+  - remove or clearly label any `latest_*` pointer references
+  - align the bundle path to `.repo_studios/reports/healthview/producer_reports/standards_index/<run_slug>/`
+- Update `.repo_studios/scripts/script_inventory_architecture.md` Stage 6.1 entries to match:
+  - current HealthView output roots
+  - current pointer policy (no `latest_*` artifacts in HealthView roots)
+- Locate or add a Tier-3 runbook for Stage 6.1 and ensure it matches the current orchestration
+  behavior and retention defaults.
+- Optional (index usability): document the current path normalization expectation (forward slashes)
+  and either enforce it in producers or document it as “known Windows-only variance.”
+
+## Remaining work (as of 2026-01-22)
+
+- Confirm and document Stage 6.1 retention defaults from config:
+  - `.repo_studios/config/retention_policy.yaml` entries for `seed_standards_prompts` and
+    `analyze_standards_index_gaps` should match operator expectations.
+- Decide whether to normalize all pruning to name-based sorting for slugged run directories.
+- Address the remaining minor telemetry gaps in the overview summarizer:
+  - When `repo_standards_pending.yaml` is missing/unreadable, decide whether to emit `pending_lines: 0`
+    or keep the current `unknown` semantics and document why.
+- Consider adding an optional machine-usable output for gaps (TSV/JSONL) for programmatic triage.
+
 ## Update Log
 
 - 2026-01-21 — Initial review based on run `20260121-0026`.
@@ -393,3 +538,4 @@ This turns the findings into a small, ordered change list.
   counting corrected; prompt seed unique vs assignment counts clarified).
 - 2026-01-21 — Validated orchestrator prompt rollups against run `20260121-1132`.
 - 2026-01-21 — Validated prompt seed telemetry.json JSON envelope against run `20260121-1138`.
+- 2026-01-22 — Updated paired documentation to match current Stage 6.1 HealthView/HOP behavior (removed legacy `latest_*` pointer descriptions, corrected output roots and script count).

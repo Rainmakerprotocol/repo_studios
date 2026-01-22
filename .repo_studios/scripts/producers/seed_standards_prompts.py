@@ -48,9 +48,6 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when running standalo
 
 # Constants moved after imports to resolve dependency on get_keep()
 DEFAULT_RELATIVE_INDEX = Path(".repo_studios/scripts/repo_standards_index.yaml")
-LEGACY_INDEX_PATH = Path(
-    ".repo_studios/reports/producer_reports/standards_index_reports/latest_index.yaml"
-)
 DEFAULT_OUTPUT_DIR = build_topic_path("producer", "standards_prompt_seeds")
 RUN_PREFIX = "standards_prompt_seed"
 DEFAULT_ARTIFACTS_TO_KEEP = get_keep("seed_standards_prompts")
@@ -160,18 +157,7 @@ def configure_logging(level: str) -> None:
 
 
 def build_paths(args: argparse.Namespace) -> Paths:
-    paths = cast(Paths, build_standard_paths(args, PATH_CONFIG, origin=Path(__file__)))
-    if paths.index_path.exists():
-        return paths
-    legacy_candidate = (paths.repo_root / LEGACY_INDEX_PATH).resolve()
-    if legacy_candidate.exists():
-        logging.warning(
-            "standards index missing at %s; falling back to legacy snapshot %s",
-            paths.index_path,
-            legacy_candidate,
-        )
-        return replace(paths, index_path=legacy_candidate)
-    return paths
+    return cast(Paths, build_standard_paths(args, PATH_CONFIG, origin=Path(__file__)))
 
 
 def build_options(args: argparse.Namespace) -> Options:
@@ -467,6 +453,20 @@ def run(argv: list[str] | None = None) -> dict[str, Any]:
     logger.info("Output directory: %s", paths.output_dir)
     logger.info("Include warn: %s", options.include_warn)
     logger.info("Artifact formats: %s", ", ".join(options.artifact_formats))
+
+    if not paths.index_path.exists():
+        message = (
+            "Standards index not found at "
+            f"{paths.index_path}. Generate it with generate_standards_index.py (or the "
+            "corresponding make target), or pass --index-path explicitly."
+        )
+        logger.error(message)
+        return {
+            "schema_version": SCHEMA_VERSION,
+            "status": "error",
+            "error": message,
+            "index_path": str(paths.index_path),
+        }
 
     try:
         index = load_index(paths.index_path)

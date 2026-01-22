@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "viewer_slug": "healthview",
+  "topic": "standards_index_diff",
+  "run_timestamp": "20260122-1133",
+  "generated_at": "2026-01-22T11:33:59.830763+00:00",
+  "status": "error",
+  "metrics": {
+    "change_count": 0,
+    "applies_changed": 0,
+    "rationale_changed": 0,
+    "added": 0,
+    "other_changed": 0,
+    "summary_changed": 0,
+    "removed": 0,
+    "severity_changed": 0,
+    "categories_changed": 0,
+    "integrity_hash_changed": false,
+    "should_fail": false
+  },
+  "inputs": {
+    "old_index": ".repo_studios\\.repo_studios\\scripts\\repo_standards_index.yaml",
+    "new_index": ".repo_studios\\.repo_studios\\scripts\\repo_standards_index.yaml",
+    "fail_policy": "any"
+  },
+  "payload": {
+    "summary": {},
+    "changes": [],
+    "integrity_hash_old": null,
+    "integrity_hash_new": null,
+    "integrity_hash_changed": null,
+    "notes": "Missing input files: C:\\Users\\genet\\repo_studios\\.repo_studios\\.repo_studios\\scripts\\repo_standards_index.yaml, C:\\Users\\genet\\repo_studios\\.repo_studios\\.repo_studios\\scripts\\repo_standards_index.yaml"
+  }
+}

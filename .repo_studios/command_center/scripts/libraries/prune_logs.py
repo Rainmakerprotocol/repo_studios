@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+import re
 import shutil
 from dataclasses import dataclass
 from pathlib import Path
@@ -41,8 +42,8 @@ def prune_run_directories(
         When provided, only matching directories are considered for pruning.
     current_run:
         Path to the run that triggered pruning, if known. When the run lives
-        inside ``base_dir`` it is always retained and does not count toward the
-        ``keep`` budget.
+        inside ``base_dir`` it is always retained. Retaining it may displace
+        other runs when enforcing the ``keep`` cap.
     honor_keep_sentinel:
         When ``True``, directories containing a ``.keep`` file are never
         deleted, regardless of position.
@@ -84,14 +85,25 @@ def prune_run_directories(
             continue
         filtered.append(candidate)
 
-    def _sort_key(path: Path) -> tuple[float, str]:
-        try:
-            stat = path.stat()
-            return (stat.st_mtime, path.name)
-        except OSError:
-            return (0.0, path.name)
+    timestamp_slug = re.compile(r"^\d{8}[-_]\d{4,6}$")
+    if stem_prefix:
+        escaped_prefix = re.escape(stem_prefix)
+        prefixed_slug = re.compile(rf"^{escaped_prefix}\d{{8}}[-_]\d{{4,6}}$")
+        use_name_sort = all(prefixed_slug.match(node.name) for node in filtered)
+    else:
+        use_name_sort = all(timestamp_slug.match(node.name) for node in filtered)
 
-    filtered.sort(key=_sort_key, reverse=True)
+    if use_name_sort:
+        filtered.sort(key=lambda node: node.name, reverse=True)
+    else:
+        def _sort_key(path: Path) -> tuple[float, str]:
+            try:
+                stat = path.stat()
+                return (stat.st_mtime, path.name)
+            except OSError:
+                return (0.0, path.name)
+
+        filtered.sort(key=_sort_key, reverse=True)
 
     remaining_slots = max(keep, 0)
     if kept:

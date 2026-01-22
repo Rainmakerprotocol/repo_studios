@@ -141,7 +141,7 @@ Authoritative entry points for Tier-1 routing and agent discovery are:
 
 - Output roots currently observed (all HOP-compliant):
   - Orchestrator bundle:
-    `.repo_studios/command_center/reports/healthview/standards_integrity/<YYYYMMDD-HHMM>/`
+    `.repo_studios/reports/healthview/orchestrator_reports/standards_integrity/<YYYYMMDD-HHMM>/`
   - Standards index bundle:
     `.repo_studios/reports/healthview/producer_reports/standards_index/<YYYYMMDD-HHMM>/`
   - Gap analysis bundle:
@@ -211,7 +211,7 @@ A compact, mechanism-oriented summary of pruning surfaces and how pruning is enf
   - `prune_run_directories` for timestamped run folders.
   - `write_report_artifacts` for viewer/topic run folders.
 - **Pruning targets:**
-  - `.repo_studios/command_center/reports/healthview/standards_integrity/` (orchestrator bundle)
+  - `.repo_studios/reports/healthview/orchestrator_reports/standards_integrity/` (orchestrator bundle)
   - `.repo_studios/reports/healthview/producer_reports/standards_index/` (index bundle)
   - `.repo_studios/reports/healthview/producer_reports/standards_index_gaps/` (gap bundle)
   - `.repo_studios/reports/healthview/producer_reports/standards_index_diff/` (diff bundle)
@@ -339,7 +339,7 @@ io_contract:
     - "Reads standards index + categories + optional baseline index for diffs."
   outputs:
     current:
-      root: ".repo_studios/command_center/reports/healthview/standards_integrity/<YYYYMMDD-HHMM>/"
+      root: ".repo_studios/reports/healthview/orchestrator_reports/standards_integrity/<YYYYMMDD-HHMM>/"
       artifacts:
         - "manifest.json"
         - "summary.md"
@@ -356,7 +356,7 @@ retention:
     - "Per-step keep flags forwarded to delegated scripts"
   mechanism: "prune_by_timestamp"
   targets:
-    - ".repo_studios/command_center/reports/healthview/standards_integrity/"
+    - ".repo_studios/reports/healthview/orchestrator_reports/standards_integrity/"
   guardrails:
     - "Shared pruning enforces keep>=1 and protects current run"
   evidence:
@@ -1109,5 +1109,6 @@ checks:
 
 | Date | Change | Author | Doc-index timestamp | Regression suites |
 | --- | --- | --- | --- | --- |
+| 2026-01-22 | 6.1: corrected orchestrator output root references to use `.repo_studios/reports/healthview/orchestrator_reports/standards_integrity/` (aligned with current evidence); regenerated doc-index. | GitHub Copilot | 20260122-1218 | doc-index |
 | 2026-01-03 | 6.1: HOP refactor complete — S61R-005/006 artifacts, orchestrator paths, stop-gates closed. | repo_studios_ai | pending | 26 passed |
 | 2025-12-20 | 6.1: per-record workstreams; doc-index. | repo_studios_ai | 20251220-1636 | Not run |

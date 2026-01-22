@@ -111,3 +111,32 @@ def test_write_report_artifacts_hierarchical_layout(tmp_path: Path) -> None:
     remaining = sorted(child.name for child in topic_dir.iterdir())
     assert old_run.name in remaining  # protected by .keep
     assert "20250102-0000" not in remaining
+
+
+def test_write_report_artifacts_hierarchical_layout_never_prunes_current_run(tmp_path: Path) -> None:
+    output_dir = tmp_path / "reports"
+    topic_dir = output_dir / "healthview" / "docs_health"
+
+    newer_1 = topic_dir / "20251201-1230"
+    newer_1.mkdir(parents=True)
+    newer_2 = topic_dir / "20251201-1240"
+    newer_2.mkdir(parents=True)
+
+    # Write a run with an older timestamp than existing runs.
+    timestamp = datetime(2025, 1, 1, 0, 0, tzinfo=timezone.utc)
+    result = artifacts.write_report_artifacts(
+        stem="docs_health",
+        timestamp=timestamp,
+        output_dir=output_dir,
+        artifacts=[
+            artifacts.ReportArtifact(filename="manifest.json", kind="json", content={"ok": True}),
+        ],
+        keep=1,
+        viewer="healthview",
+        topic="docs_health",
+    )
+
+    assert result.run_dir.exists()
+
+    remaining = {child.name for child in topic_dir.iterdir() if child.is_dir()}
+    assert remaining == {"20250101-0000"}

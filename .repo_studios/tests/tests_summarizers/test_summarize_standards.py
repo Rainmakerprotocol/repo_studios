@@ -6,7 +6,6 @@ import importlib.util
 import json
 import sys
 import uuid
-from datetime import datetime, timezone
 from pathlib import Path
 
 import yaml
@@ -101,12 +100,14 @@ def test_run_emits_healthview_bundle(tmp_path: Path) -> None:
     assert telemetry_path.exists()
 
 
-def test_resolve_index_path_falls_back_to_legacy(tmp_path: Path) -> None:
+def test_missing_index_does_not_fall_back_to_legacy(tmp_path: Path) -> None:
     module = _load_module()
     repo_root = tmp_path / "repo"
     repo_root.mkdir()
 
     candidate_path = repo_root / ".repo_studios" / "scripts" / "repo_standards_index.yaml"
+    assert not candidate_path.exists()
+
     legacy_path = (
         repo_root
         / ".repo_studios"
@@ -116,22 +117,30 @@ def test_resolve_index_path_falls_back_to_legacy(tmp_path: Path) -> None:
         / "latest_index.yaml"
     )
     legacy_path.parent.mkdir(parents=True, exist_ok=True)
-    legacy_payload = {"rules": []}
+    legacy_payload = {"rules": [{"id": "LEGACY-001"}]}
     legacy_path.write_text(yaml.safe_dump(legacy_payload, sort_keys=False), encoding="utf-8")
 
-    paths = module.Paths(
-        repo_root=repo_root,
-        index_path=candidate_path,
-        pending_path=legacy_path,
-        output_dir=repo_root / "out",
-    )
-    options = module.Options(
-        label="summary",
-        log_level="INFO",
-        artifacts_to_keep=1,
-        run_timestamp=datetime.now(timezone.utc),
+    pending_path = repo_root / ".repo_studios" / "scripts" / "repo_standards_pending.yaml"
+    pending_path.parent.mkdir(parents=True, exist_ok=True)
+    pending_path.write_text("line1\n", encoding="utf-8")
+
+    output_dir = repo_root / "artifacts"
+    result = module.run(
+        [
+            "--repo-root",
+            str(repo_root),
+            "--index-path",
+            str(candidate_path),
+            "--pending-path",
+            str(pending_path),
+            "--output-dir",
+            str(output_dir),
+            "--timestamp",
+            FIXED_TIMESTAMP,
+        ]
     )
 
-    resolved = module._resolve_index_path(paths, options)  # type: ignore[attr-defined]
-
-    assert resolved == legacy_path.resolve()
+    assert result["status"] == "ok"
+    manifest = json.loads(Path(result["artifacts"]["manifest.json"]).read_text(encoding="utf-8"))
+    assert manifest["metrics"]["rule_count"] == 0
+    assert any("Standards index not found" in note for note in manifest.get("notes", []))

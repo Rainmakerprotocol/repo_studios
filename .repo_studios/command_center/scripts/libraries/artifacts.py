@@ -128,7 +128,7 @@ def _prune_old_runs(output_dir: Path, *, stem: str, keep: int, current_run: Path
         shutil.rmtree(node, ignore_errors=True)
 
 
-def _prune_topic_runs(topic_dir: Path, *, keep: int) -> None:
+def _prune_topic_runs(topic_dir: Path, *, keep: int, current_run: Path | None = None) -> None:
     """Prune old topic run directories.
 
     Uses name-based sorting since directory names encode timestamps in a sortable format
@@ -137,10 +137,37 @@ def _prune_topic_runs(topic_dir: Path, *, keep: int) -> None:
     keep = max(keep, 1)
     if not topic_dir.exists():
         return
+
     candidates = [node for node in topic_dir.iterdir() if node.is_dir()]
-    candidates.sort(key=lambda node: node.name, reverse=True)
-    for index, node in enumerate(candidates):
-        if index < keep:
+
+    kept: list[Path] = []
+    filtered: list[Path] = []
+
+    if current_run is not None:
+        try:
+            resolved_current = current_run.resolve()
+        except OSError:
+            resolved_current = None
+    else:
+        resolved_current = None
+
+    for candidate in candidates:
+        if resolved_current is not None:
+            try:
+                if candidate.resolve() == resolved_current:
+                    kept.append(candidate)
+                    continue
+            except OSError:
+                pass
+        filtered.append(candidate)
+
+    filtered.sort(key=lambda node: node.name, reverse=True)
+
+    remaining_slots = max(keep - len(kept), 0)
+    for node in filtered:
+        if remaining_slots > 0:
+            kept.append(node)
+            remaining_slots -= 1
             continue
         if (node / ".keep").exists():
             continue
@@ -185,7 +212,7 @@ def write_report_artifacts(
         slug = normalized.strftime("%Y%m%d-%H%M")
         run_dir = output_dir / viewer / topic / slug
         run_dir.mkdir(parents=True, exist_ok=True)
-        _prune_topic_runs(run_dir.parent, keep=keep)
+        _prune_topic_runs(run_dir.parent, keep=keep, current_run=run_dir)
     else:
         slug = normalized.strftime("%Y%m%d_%H%M%S")
         output_dir.mkdir(parents=True, exist_ok=True)

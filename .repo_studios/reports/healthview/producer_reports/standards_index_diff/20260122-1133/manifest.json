@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "viewer": "healthview",
+  "topic": "standards_index_diff",
+  "run_timestamp": "20260122-1133",
+  "generated_at": "2026-01-22T11:33:59.830763+00:00",
+  "status": "error",
+  "git_sha": null,
+  "repo_root": "C:\\Users\\genet\\repo_studios",
+  "inputs": {
+    "old_index": ".repo_studios\\.repo_studios\\scripts\\repo_standards_index.yaml",
+    "new_index": ".repo_studios\\.repo_studios\\scripts\\repo_standards_index.yaml",
+    "fail_policy": "any",
+    "artifacts_to_keep": 10,
+    "run_timestamp": "20260122-1133"
+  },
+  "catalog": [
+    {
+      "artifact": "manifest.json",
+      "path": ".repo_studios\\reports\\healthview\\producer_reports\\standards_index_diff\\20260122-1133\\manifest.json"
+    },
+    {
+      "artifact": "summary.md",
+      "path": ".repo_studios\\reports\\healthview\\producer_reports\\standards_index_diff\\20260122-1133\\summary.md"
+    },
+    {
+      "artifact": "telemetry.json",
+      "path": ".repo_studios\\reports\\healthview\\producer_reports\\standards_index_diff\\20260122-1133\\telemetry.json"
+    }
+  ],
+  "provenance": {
+    "script": "diff_standards_index.py",
+    "trigger": "cli"
+  }
+}

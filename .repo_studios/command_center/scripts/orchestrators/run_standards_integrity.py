@@ -45,6 +45,7 @@ from libraries import (
     step_success,
     write_report_artifacts,
 )
+from libraries.retention_policy import get_orchestrator_config
 from libraries.report_paths import build_topic_path
 
 LOGGER = logging.getLogger(__name__)
@@ -218,18 +219,42 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
         choices=("text", "yaml", "json"),
         help="Artifact formats to materialize for the prompt seed",
     )
-    parser.add_argument("--artifacts-to-keep", type=int, default=3, help="Retention budget for topic artifacts")
+
+    orch_config = get_orchestrator_config("run_standards_integrity")
+    script_defaults: dict[str, int] = {}
+    if orch_config is not None:
+        for key, retention in orch_config.scripts.items():
+            script_defaults[key] = retention.keep
+
     parser.add_argument(
-        "--index-artifacts-to-keep", type=int, default=5, help="Retention budget for standards index runs"
+        "--artifacts-to-keep",
+        type=int,
+        default=(orch_config.artifacts_to_keep if orch_config is not None else 3),
+        help="Retention budget for topic artifacts",
     )
     parser.add_argument(
-        "--gap-artifacts-to-keep", type=int, default=5, help="Retention budget for gap analysis runs"
+        "--index-artifacts-to-keep",
+        type=int,
+        default=script_defaults.get("generate_standards_index", 5),
+        help="Retention budget for standards index runs",
     )
     parser.add_argument(
-        "--diff-artifacts-to-keep", type=int, default=10, help="Retention budget for diff runs"
+        "--gap-artifacts-to-keep",
+        type=int,
+        default=script_defaults.get("analyze_standards_index_gaps", 5),
+        help="Retention budget for gap analysis runs",
     )
     parser.add_argument(
-        "--prompt-artifacts-to-keep", type=int, default=5, help="Retention budget for prompt seed runs"
+        "--diff-artifacts-to-keep",
+        type=int,
+        default=script_defaults.get("diff_standards_index", 10),
+        help="Retention budget for diff runs",
+    )
+    parser.add_argument(
+        "--prompt-artifacts-to-keep",
+        type=int,
+        default=script_defaults.get("seed_standards_prompts", 5),
+        help="Retention budget for prompt seed runs",
     )
     parser.add_argument("--timestamp", help="ISO8601 timestamp for delegated scripts")
     parser.add_argument(

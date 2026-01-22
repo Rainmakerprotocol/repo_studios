@@ -1,10 +1,10 @@
 # seed_standards_prompts.py
 
-**Last updated:** 2025-11-27
+**Last updated:** 2026-01-22
 
 ## Purpose
 
-`seed_standards_prompts.py` distills the standards index into compact prompt seeds for AI workflows. It selects critical, error, and optionally warn rules, groups them by category, and publishes structured bundles so downstream agents can ingest the data without re-parsing the full index. The refactor introduces structured artifacts, historical pruning, latest pointers, and compatibility with the legacy stdout/file interface.
+`seed_standards_prompts.py` distills the standards index into compact prompt seeds for AI workflows. It selects critical, error, and optionally warn rules, groups them by category, and publishes HealthView/HOP-compliant bundles so downstream agents can ingest the data without re-parsing the full index. The producer also preserves the legacy stdout/file interface via `--format` / `--out`.
 
 ## Invocation
 
@@ -21,33 +21,29 @@ From `.repo_studios/`, run `make studio-seed-standards-prompts` to execute the p
 ### Key arguments
 
 - `--repo-root`: repository root used to resolve relative paths (defaults to four levels up from the script location).
-- `--index-path`: override path to the canonical standards index (defaults to `.repo_studios/reports/producer_reports/standards_index_reports/latest_index.yaml`).
-- `--output-dir`: destination for structured artifacts (defaults to `.repo_studios/reports/producer_reports/standards_prompt_seeds`).
+- `--index-path`: override path to the canonical standards index (defaults to `.repo_studios/scripts/repo_standards_index.yaml`).
+- `--output-dir`: destination for HealthView producer bundles (defaults to `.repo_studios/reports/healthview/producer_reports/standards_prompt_seeds`).
 - `--include-warn`: include warn-severity rules in the seed (default is critical + error only).
 - `--artifact-formats`: formats persisted in the run bundle (`text`, `yaml`, `json`; default emits all three).
 - `--format` / `--out`: retain legacy behavior by streaming a single format to stdout or writing it to a specific path.
-- `--artifacts-to-keep`: count of historical runs preserved after pruning (minimum 1, default 10).
+- `--artifacts-to-keep`: count of historical runs preserved after pruning (minimum 1; default is policy-driven).
 - `--log-level`: logging verbosity (`INFO` by default).
 
 ## Outputs
 
-Each run creates `.repo_studios/reports/producer_reports/standards_prompt_seeds/standards_prompt_seed-<timestamp>/` with:
+Each run creates a HOP-compliant bundle under:
 
-- `report.json`: structured payload containing configuration, severity counts, and category summaries.
-- `report.md`: human-readable synopsis with next-step guidance.
-- `log.txt`: key-value diagnostics suitable for CI parsing.
+`.repo_studios/reports/healthview/producer_reports/standards_prompt_seeds/<YYYYMMDD-HHMM>/`
+
+with:
+
+- `manifest.json`: run payload (status, paths, counts, integrity hash).
+- `summary.md`: human-readable synopsis with next-step guidance.
+- `telemetry.json`: telemetry envelope (`metrics` + `payload`).
 - `seed.txt`, `seed.yaml`, `seed.json`: serialized prompt seed in the requested artifact formats.
 
-The script also refreshes `.repo_studios/reports/producer_reports/standards_prompt_seeds/latest/` with copies:
-
-- `latest_report.json`
-- `latest_report.md`
-- `latest_log.txt`
-- `latest_seed.txt`
-- `latest_seed.yaml`
-- `latest_seed.json`
-
 Historical run directories are pruned to the configured retention window after each execution.
+No mutable pointer artifacts (`latest_*`) are written in the HealthView output root.
 
 ## Diagnostics
 
@@ -64,7 +60,7 @@ The suite validates artifact creation, seed contents, latest pointers, legacy ou
 
 ## Operational notes
 
-- The script always emits the canonical JSON representation, even when the legacy `--format` is set to text or yaml for stdout/file consumers.
+- The script always emits a canonical telemetry envelope (`telemetry.json`) in the run bundle, even when the legacy `--format` is set to text or yaml for stdout/file consumers.
 - Use `--artifact-formats` to trim the bundle (e.g., keep JSON-only for minimal storage) while still writing a specific legacy format via `--out` when needed.
 - The seed mirrors the integrity hash from the standards index, enabling quick drift detection if the index changes between runs.
-- When integrating into CI, gate on the structured `report.json` payload to detect unexpected rule count drops or missing categories.
+- When integrating into CI, gate on `telemetry.json` metrics + payload rather than scraping `summary.md`.

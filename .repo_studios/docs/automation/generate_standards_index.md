@@ -1,33 +1,34 @@
 # generate_standards_index.py
 
-**Last updated:** 2025-11-27
+**Last updated:** 2026-01-22
 
 ## Purpose
 
-`generate_standards_index.py` assembles the canonical standards index and refreshes the `latest_index.yaml` pointer by blending curated seed rules with optional heuristic extractions from markdown sources. The producer now emits a structured artifact bundle (JSON/Markdown/log/raw copies) so agents can audit build metadata, extraction diagnostics, and integrity hashes without scraping the YAML directly.
+`generate_standards_index.py` assembles the canonical standards index by blending curated seed rules with optional heuristic extractions from markdown sources. The producer emits a HealthView/HOP-compliant artifact bundle so agents can audit build metadata, extraction diagnostics, and integrity hashes without scraping the YAML directly.
 
 ## Invocation
 
 ```bash
 python .repo_studios/scripts/producers/generate_standards_index.py \
   --repo-root . \
-  --output-dir .repo_studios/reports/producer_reports/standards_index_reports \
+  --output-dir .repo_studios/reports/healthview/producer_reports/standards_index \
   --categories-path .repo_studios/scripts/.repo_studios/standards_categories.yaml \
   --seed-path .repo_studios/scripts/.repo_studios/standards_seed.yaml \
+  --index-path .repo_studios/scripts/repo_standards_index.yaml \
   --artifacts-to-keep 10
 ```
 
 ### Key arguments
 
 - `--repo-root` (default repo checkout): base directory used to resolve all relative inputs/outputs.
-- `--output-dir` (default `.repo_studios/reports/producer_reports/standards_index_reports`): structured run directory home. Created automatically.
+- `--output-dir` (default `.repo_studios/reports/healthview/producer_reports/standards_index`): HealthView producer bundle root. Created automatically.
 - `--categories-path`: YAML mapping of standards categories and markdown sources.
 - `--seed-path`: seed rules merged into the index before extraction.
 - `--extraction-module` (optional): path to `standards_extraction.py` providing `extract_rules(...)`. When missing, the producer records a diagnostic and continues.
-- `--index-path` (default `.repo_studios/reports/producer_reports/standards_index_reports/latest_index.yaml`): canonical YAML pointer updated after each run.
+- `--index-path` (default `.repo_studios/scripts/repo_standards_index.yaml`): canonical index output path.
 - `--pending-path` (default `.repo_studios/scripts/repo_standards_pending.yaml`): draft queue populated when extraction runs but auto-accept is disabled.
 - `--timestamp`: ISO8601 value used for the run slug. When omitted the script captures current UTC.
-- `--artifacts-to-keep` (default `10`): retention window applied after each run (minimum of one directory).
+- `--artifacts-to-keep` (default is policy-driven): retention window applied after each run (minimum of one directory).
 - `--log-level` (default `INFO`): Python logging verbosity.
 
 Environment flags:
@@ -39,29 +40,24 @@ PyYAML must be available in the active Python environment.
 
 ## Outputs
 
-Every invocation creates `.repo_studios/reports/producer_reports/standards_index_reports/standards_index-<timestamp>/` containing:
+Every invocation:
 
-- `report.json`: canonical payload with fields
-  - `schema_version`: currently `1`.
-  - `status`: `ok`, `pending_extractions`, or `error`.
-  - `timestamp` / `generated_utc`: sanitized slug and UTC build time.
-  - `index_path`, `output_dir`, `pending_path`, `integrity_hash`, `version`.
-  - `summary`: rule/category/source counts.
-  - `extraction`: flags for enable/auto_accept, extracted and accepted counts, diagnostics, pending file location.
-  - `notes`: condensation of extraction diagnostics or failure message.
-- `report.md`: human-friendly rundown that surfaces counts, integrity hash, and detailed extraction diagnostics (when present).
-- `log.txt`: key=value digest suitable for diff-friendly monitoring.
-- `index.yaml`: exact YAML committed to the canonical location when the build succeeds.
-- `raw.yaml` / `raw.txt`: identical YAML copies stored alongside the run for archival diffing. (`raw.txt` provides a plain-text representation for simple consumers.)
+1) Writes/refreshes the canonical index YAML at:
 
-The output directory also maintains convenience links:
+- `.repo_studios/scripts/repo_standards_index.yaml`
 
-- `latest_report.json`, `latest_report.md`, `latest_report.log`.
-- `latest_index.yaml`, `latest_raw.yaml`, `latest_raw.txt`.
+2) Emits a HOP-compliant producer bundle under:
 
-When extraction is disabled or accepts no rules, the script writes `latest_index.yaml` (and related `latest_*` pointers) only. If extraction discovers rules but auto-accept is disabled, the producer also saves `repo_standards_pending.yaml` with metadata and diagnostics.
+- `.repo_studios/reports/healthview/producer_reports/standards_index/<YYYYMMDD-HHMM>/`
+
+Bundle artifacts:
+
+- `manifest.json`
+- `summary.md`
+- `telemetry.json`
 
 Historical run directories are pruned down to the configured retention window after each execution.
+No mutable pointer artifacts (`latest_*`) are written in the HealthView output root.
 
 ## Status semantics
 
@@ -76,7 +72,7 @@ verifies structured artifact creation, canonical YAML copies, failure telemetry,
 
 ## Operational notes
 
-- The producer enforces deterministic hashing on rule IDs (`id|last_updated|severity`) so regressions are easy to detect.
+- The producer enforces deterministic hashing over rule fragments so regressions are easy to detect.
 - Extraction modules run in a sandbox via `runpy.run_path`; they must expose `extract_rules(path, categories, known_ids, today)`.
-- Downstream agents should ingest `report.json` first and consult `index.yaml`/`raw.yaml` for rule contents.
-- Because failure cases still populate artifact bundles, CI can rely on the presence of `report.json` and `status=error` to detect regressions without parsing stderr.
+- Downstream agents should ingest `telemetry.json` first and consult `.repo_studios/scripts/repo_standards_index.yaml` for rule contents.
+- Because failure cases still populate the HealthView bundle, CI can rely on `telemetry.json` + status to detect regressions without parsing stderr.

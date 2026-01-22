@@ -55,7 +55,6 @@ except ModuleNotFoundError:  # pragma: no cover - fallback for direct execution
     from libraries.retention_policy import get_keep
 
 DEFAULT_INDEX_PATH = Path(".repo_studios/scripts/repo_standards_index.yaml")
-LEGACY_INDEX_PATH = Path(".repo_studios/reports/producer_reports/standards_index_reports/latest_index.yaml")
 DEFAULT_PENDING_PATH = Path(".repo_studios/scripts/repo_standards_pending.yaml")
 DEFAULT_OUTPUT_DIR = build_topic_path("summarizer", "standards_overview")
 SUMMARY_STEM = "standards_overview"
@@ -188,22 +187,6 @@ def _normalize_relative(path: Path | None, repo_root: Path) -> str | None:
         return path.resolve().as_posix()
 
 
-def _resolve_index_path(paths: Paths, options: Options) -> Path:
-    candidate = paths.index_path
-    if candidate.exists():
-        return candidate
-    legacy_candidate = (paths.repo_root / LEGACY_INDEX_PATH).resolve()
-    if legacy_candidate.exists():
-        logging.warning(
-            "[standards-%s] index missing at %s; falling back to legacy snapshot %s",
-            options.label,
-            candidate,
-            legacy_candidate,
-        )
-        return legacy_candidate
-    return candidate
-
-
 def _load_index_payload(path: Path) -> Mapping[str, Any] | None:
     if yaml is None or not path.exists():
         return None
@@ -289,7 +272,7 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     logger = logging.getLogger("summarize_standards")
 
     repo_root = paths.repo_root
-    index_path = _resolve_index_path(paths, options)
+    index_path = paths.index_path
     pending_path = paths.pending_path
     run_slug = options.run_timestamp.astimezone(timezone.utc).strftime("%Y%m%d-%H%M")
     timestamp_slug = options.run_timestamp.astimezone(timezone.utc).strftime("%Y-%m-%d_%H%M")
@@ -324,10 +307,6 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     artifact_paths = {
         "index_yaml": _normalize_relative(index_path if index_path.exists() else None, repo_root),
         "pending_yaml": _normalize_relative(pending_path if pending_path.exists() else None, repo_root),
-        "legacy_index_yaml": _normalize_relative(
-            (repo_root / LEGACY_INDEX_PATH).resolve() if (repo_root / LEGACY_INDEX_PATH).exists() else None,
-            repo_root,
-        ),
     }
 
     summary_payload = {
