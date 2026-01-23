@@ -50,7 +50,7 @@ Review each script for current path patterns:
 
 | Script | Current Output Root | HOP Target |
 |--------|---------------------|------------|
-| `run_standards_integrity.py` | `.repo_studios/command_center/reports/healthview/standards_integrity/<ts>` | `healthview/orchestrator_reports/standards_integrity/<ts>` |
+| `run_standards_integrity.py` | `.repo_studios/reports/healthview/orchestrator_reports/standards_integrity/<ts>` | `.repo_studios/reports/healthview/orchestrator_reports/standards_integrity/<ts>` |
 | `generate_standards_index.py` | `.repo_studios/reports/producer_reports/rawview/standards_index/<ts>` | `healthview/producer_reports/standards_index/<ts>` |
 | `analyze_standards_index_gaps.py` | `.repo_studios/command_center/reports/commandview/standards_index_gaps/<ts>` | `healthview/producer_reports/standards_index_gaps/<ts>` |
 | `diff_standards_index.py` | `.repo_studios/command_center/reports/rawview/standards_index_diff/<ts>` | `healthview/producer_reports/standards_index_diff/<ts>` |

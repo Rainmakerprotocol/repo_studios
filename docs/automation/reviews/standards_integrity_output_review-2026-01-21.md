@@ -5,7 +5,7 @@ role: [review, quality]
 owners: [repo_studios]
 status: draft
 version: 1
-updated_at: 2026-01-21
+updated_at: 2026-01-22
 tags: [healthview, standards, orchestrator, stage-6.1, agent-ux]
 related_files:
   - .repo_studios/command_center/scripts/orchestrators/run_standards_integrity.py
@@ -538,4 +538,4 @@ them into a next-pass checklist.
   counting corrected; prompt seed unique vs assignment counts clarified).
 - 2026-01-21 — Validated orchestrator prompt rollups against run `20260121-1132`.
 - 2026-01-21 — Validated prompt seed telemetry.json JSON envelope against run `20260121-1138`.
-- 2026-01-22 — Updated paired documentation to match current Stage 6.1 HealthView/HOP behavior (removed legacy `latest_*` pointer descriptions, corrected output roots and script count).
+- 2026-01-22 — Updated paired documentation to match current Stage 6.1 HealthView/HOP behavior (removed legacy pointer descriptions, corrected output roots and script count; doc-index: `20260123-0152`).

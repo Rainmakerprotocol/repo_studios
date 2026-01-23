@@ -27,7 +27,6 @@
 ### Default Index Locations
 
 - **Primary**: `.repo_studios/scripts/repo_standards_index.yaml`
-- **Legacy fallback**: `.repo_studios/reports/producer_reports/standards_index_reports/latest_index.yaml`
 
 ### Outputs
 

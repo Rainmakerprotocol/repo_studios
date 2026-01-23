@@ -2,12 +2,16 @@
 """Topic orchestrator for standards integrity.
 
 Publishes consolidated manifest, summary, and telemetry files to
-`.repo_studios/command_center/reports/healthview/standards_integrity/<timestamp>/` and supersedes both
+`.repo_studios/reports/healthview/orchestrator_reports/standards_integrity/<timestamp>/`.
+
+The pipeline regenerates the standards index, performs gap analysis and diffing, seeds prompt
+packs, and invokes the summarizer so HealthView and CommandView stay aligned. Runtime typically
+lands between five and eight minutes, with diff scopes and prompt generation driving the upper
+bound.
+
+Historical note: this Stage 6.1 orchestrator supersedes older entry points (now retired):
 `scripts/orchestrators/run_standards_gap_suite.py` and
-`scripts/orchestrators/run_standards_index_cli.py`. The pipeline regenerates the standards index,
-performs gap analysis and diffing, seeds prompt packs, and invokes the summarizer so Healthview and
-CommandView stay aligned. Runtime typically lands between five and eight minutes, with diff scopes
-and prompt generation driving the upper bound.
+`scripts/orchestrators/run_standards_index_cli.py`.
 """
 
 from __future__ import annotations

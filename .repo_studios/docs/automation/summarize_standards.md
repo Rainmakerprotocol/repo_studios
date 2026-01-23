@@ -9,8 +9,7 @@ catalog. It reads the canonical standards index YAML (`.repo_studios/scripts/rep
 and the optional pending extraction queue, then emits a 3-artifact bundle (`manifest.json`,
 `summary.md`, `telemetry.json`) suitable for CI telemetry and human review.
 
-This subsystem does not use `latest_*` pointer artifacts and does not fall back to legacy
-`latest_index.yaml` snapshots.
+This subsystem does not use mutable pointer artifacts and does not fall back to legacy snapshots.
 
 ## Invocation
 
@@ -51,5 +50,5 @@ current before downstream automation runs.
 
 `pytest .repo_studios/tests/tests_summarizers/test_summarize_standards.py`
 
-The regression tests cover successful bundle emission and verify that legacy `latest_index.yaml`
-snapshots are not used.
+The regression tests cover successful bundle emission and verify that legacy snapshots are not
+used.

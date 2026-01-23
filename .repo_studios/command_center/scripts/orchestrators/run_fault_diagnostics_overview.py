@@ -48,10 +48,13 @@ from libraries.report_paths import build_topic_path, HEALTHVIEW_ROOT
 
 LOGGER = logging.getLogger(__name__)
 
-TOPIC_SLUG = "fault_diagnostics_overview"
+# TOPIC_SLUG is the hyphenated CLI/catalog token.
+TOPIC_SLUG = "fault-diagnostics"
+# HEALTHVIEW_TOPIC is the on-disk bundle directory token used under healthview/*_reports/<topic>/.
+HEALTHVIEW_TOPIC = "fault_diagnostics_overview"
 PRODUCER_TOPIC_SLUG = "faulthandler_reports"
 CONSUMER_TOPIC_SLUG = "fault_artifacts"
-SUMMARIZER_TOPIC_SLUG = "fault_diagnostics_overview"
+SUMMARIZER_TOPIC_SLUG = HEALTHVIEW_TOPIC
 SCHEMA_VERSION = 1
 
 PRODUCER_SCRIPT = Path(".repo_studios/scripts/producers/collect_faulthandler_reports.py")
@@ -66,7 +69,7 @@ DEFAULT_RUNS_DIR = build_topic_path("rawview", "fault_diagnostics")
 DEFAULT_PRODUCER_OUTPUT = build_topic_path("producer", PRODUCER_TOPIC_SLUG)
 DEFAULT_CONSUMER_OUTPUT = build_topic_path("consumer", CONSUMER_TOPIC_SLUG)
 DEFAULT_SUMMARIZER_OUTPUT = build_topic_path("summarizer", SUMMARIZER_TOPIC_SLUG)
-DEFAULT_ORCHESTRATOR_OUTPUT = build_topic_path("orchestrator", TOPIC_SLUG)
+DEFAULT_ORCHESTRATOR_OUTPUT = build_topic_path("orchestrator", HEALTHVIEW_TOPIC)
 
 
 @dataclass(frozen=True)
@@ -927,7 +930,7 @@ def run(argv: Sequence[str] | None = None) -> int:
     manifest = {
         "schema_version": SCHEMA_VERSION,
         "viewer": "healthview",
-        "topic": TOPIC_SLUG,
+        "topic": HEALTHVIEW_TOPIC,
         "run_slug": run_slug,
         "generated_at": completed_at.isoformat(),
         "telemetry": telemetry_payload,

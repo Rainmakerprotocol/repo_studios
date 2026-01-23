@@ -1266,11 +1266,12 @@ These are Stage 6.1 readiness gates after all Tier-2 DONE script gates are close
   Stage gate checklist (after all Tier-2 DONEs) → Overview/Orchestrator/Invoked Scripts.
 
 **Overview:**  
-The Standards Integrity orchestrator chains five scripts in sequence
-(index generation → gap analysis → diff → prompt seeding → summarization) that scan standards
-markdown files, analyze coverage gaps, track changes over time, seed standards prompts for AI
-agents, and synthesize compliance metrics. Runtime typically lands between 5-8 minutes, with
-diff scopes and prompt generation driving the upper bound. Supersedes legacy
+The Standards Integrity orchestrator chains five delegated scripts in sequence
+(index generation → gap analysis → diff → prompt seeding → summarization). Together (six scripts
+including the orchestrator), they scan standards markdown files, analyze coverage gaps, track
+changes over time, seed standards prompts for AI agents, and synthesize compliance metrics.
+Runtime typically lands between 5-8 minutes, with diff scopes and prompt generation driving the
+upper bound. This Stage 6.1 orchestrator supersedes older ad-hoc entry points (now retired):
 `orchestrators/run_standards_gap_suite.py` and `orchestrators/run_standards_index_cli.py`.
 (817 lines)
 
@@ -1291,8 +1292,8 @@ diff scopes and prompt generation driving the upper bound. Supersedes legacy
 
 - `--index-output-dir`: Index artifact directory
   (default: `.repo_studios/reports/healthview/producer_reports/standards_index/`)
-- `--index-path`: Latest index pointer path
-  (default: `.repo_studios/scripts/repo_standards_index.yaml`)
+- `--index-path`: Path to the canonical standards index YAML
+  (default: `.repo_studios/scripts/repo_standards_index.yaml`; no legacy pointer fallback)
 - `--categories-path`: Standards categories YAML
   (default: `.repo_studios/scripts/standards_categories.yaml`)
 - `--gap-output-dir`: Gap analysis output directory
@@ -1313,7 +1314,7 @@ diff scopes and prompt generation driving the upper bound. Supersedes legacy
 **Outputs:**
 
 - Orchestrator bundle:
-  `.repo_studios/command_center/reports/healthview/standards_integrity/<YYYYMMDD-HHMM>/`
+  `.repo_studios/reports/healthview/orchestrator_reports/standards_integrity/<YYYYMMDD-HHMM>/`
   - `manifest.json`, `summary.md`, `telemetry.json`
 - Index artifacts:
   `.repo_studios/reports/healthview/producer_reports/standards_index/<YYYYMMDD-HHMM>/`
@@ -1799,6 +1800,7 @@ All gaps have logical explanations:
 
 | Date | Author / Steward | Change | Doc-index timestamp | Regression suites |
 | --- | --- | --- | --- | --- |
+| 2026-01-23 | GitHub Copilot | Stage 6.1 reality sync: corrected orchestrator output root and removed legacy index-pointer language from Tier-1 Stage 6.1 narrative and inputs/outputs. | 20260123-0152 | pytest Stage 6.1 focused suites (11 passed); doc-index |
 | 2026-01-22 | GitHub Copilot | Stage 6.1 follow-up: corrected Stage Matrix script count for Standards Integrity to reflect current 6-script chain; regenerated doc-index artifacts after paired-doc drift cleanup. | 20260122-1218 | doc-index |
 | 2026-01-06 | GitHub Copilot | Stage 3.1 follow-up: corrected Tier-1 Inputs/Outputs for `collect_faulthandler_reports.py` to use HealthView rawview + HOP bundle roots; verified Make target `studio-collect-faulthandler-reports` runs successfully (requires explicit `--repo-root` because `.repo_studios/scripts/.repo_studios/` exists and can confuse repo-root discovery). | 20260106-1502 | make studio-collect-faulthandler-reports; doc-index producer |
 | 2026-01-04 | GitHub Copilot | Updated Stage 1.1 Inputs/Execution notes to reflect repo-root coverage defaults (`coverage.xml`) and snapshot-mode coverage refresh behavior (continue-on-error + recorded exit codes). | 20260104-1710 | doc-index; make studio-orchestrate-test-execution-telemetry |

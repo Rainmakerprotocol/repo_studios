@@ -10,7 +10,7 @@
 - hardening_high_severity: unknown
 - coverage_status: ok
 - health_report_source: none
-- completed_at: 2026-01-04T16:32:01+00:00
+- completed_at: 2026-01-23T19:02:41+00:00
 
 ## Runtime Metrics
 
@@ -27,7 +27,7 @@
 ## Artifact Locations
 
 - log_report: (missing)
-- coverage_report: `C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-1856/test_run_handles_missing_logs0/telemetry_missing/coverage/test_coverage-20251201_010100`
+- coverage_report: `C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-1913/test_run_handles_missing_logs0/telemetry_missing/coverage/test_coverage-20251201_010100`
 - heatmap: (missing)
 - hardening: (missing)
 - health_report: (missing)

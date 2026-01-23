@@ -2,8 +2,8 @@
   "schema_version": 1,
   "viewer_slug": "producer_reports",
   "topic": "doc_index",
-  "run_timestamp": "20260122-1218",
-  "generated_utc": "2026-01-22T12:18:13.961476+00:00",
+  "run_timestamp": "20260123-1958",
+  "generated_utc": "2026-01-23T19:58:17.442517+00:00",
   "status": "ok",
   "metrics": {
     "total_documents": 332,
@@ -16,7 +16,7 @@
   },
   "payload": {
     "schema_version": 1,
-    "generated_utc": "2026-01-22T12:18:13.961476+00:00",
+    "generated_utc": "2026-01-23T19:58:17.442517+00:00",
     "repo_root": "C:\\Users\\genet\\repo_studios",
     "summary": {
       "total_documents": 332,
@@ -6075,43 +6075,43 @@
           {
             "title": "CLI Arguments",
             "slug": "cli-arguments",
-            "line": 47,
+            "line": 46,
             "parent_title": "DB Integration: Standards Prompt Seeds Producer",
             "parent_slug": "db-integration-standards-prompt-seeds-producer"
           },
           {
             "title": "Storage Integration",
             "slug": "storage-integration",
-            "line": 61,
+            "line": 60,
             "parent_title": "DB Integration: Standards Prompt Seeds Producer",
             "parent_slug": "db-integration-standards-prompt-seeds-producer"
           },
           {
             "title": "Invocation Pattern",
             "slug": "invocation-pattern",
-            "line": 66,
+            "line": 65,
             "parent_title": "DB Integration: Standards Prompt Seeds Producer",
             "parent_slug": "db-integration-standards-prompt-seeds-producer"
           },
           {
             "title": "Dependencies",
             "slug": "dependencies",
-            "line": 81,
+            "line": 80,
             "parent_title": "DB Integration: Standards Prompt Seeds Producer",
             "parent_slug": "db-integration-standards-prompt-seeds-producer"
           },
           {
             "title": "Notes",
             "slug": "notes",
-            "line": 86,
+            "line": 85,
             "parent_title": "DB Integration: Standards Prompt Seeds Producer",
             "parent_slug": "db-integration-standards-prompt-seeds-producer"
           }
         ],
         "links": [],
         "description": "Invoked by `run_standards_integrity.py` as part of the standards pipeline.",
-        "size_bytes": 3134,
-        "modified_utc": "2026-01-03T01:14:30.533249+00:00",
+        "size_bytes": 3027,
+        "modified_utc": "2026-01-23T18:46:56.701426+00:00",
         "tags": [],
         "owners": [],
         "status": null,
@@ -6298,43 +6298,43 @@
           {
             "title": "CLI Arguments",
             "slug": "cli-arguments",
-            "line": 51,
+            "line": 50,
             "parent_title": "DB Integration: Standards Summarizer",
             "parent_slug": "db-integration-standards-summarizer"
           },
           {
             "title": "Storage Integration",
             "slug": "storage-integration",
-            "line": 64,
+            "line": 63,
             "parent_title": "DB Integration: Standards Summarizer",
             "parent_slug": "db-integration-standards-summarizer"
           },
           {
             "title": "Invocation Pattern",
             "slug": "invocation-pattern",
-            "line": 69,
+            "line": 68,
             "parent_title": "DB Integration: Standards Summarizer",
             "parent_slug": "db-integration-standards-summarizer"
           },
           {
             "title": "Dependencies",
             "slug": "dependencies",
-            "line": 83,
+            "line": 82,
             "parent_title": "DB Integration: Standards Summarizer",
             "parent_slug": "db-integration-standards-summarizer"
           },
           {
             "title": "Notes",
             "slug": "notes",
-            "line": 88,
+            "line": 87,
             "parent_title": "DB Integration: Standards Summarizer",
             "parent_slug": "db-integration-standards-summarizer"
           }
         ],
         "links": [],
         "description": "Invoked by `run_standards_integrity.py` as the final summarization step.",
-        "size_bytes": 3032,
-        "modified_utc": "2026-01-03T01:14:30.533249+00:00",
+        "size_bytes": 2929,
+        "modified_utc": "2026-01-23T18:46:56.701426+00:00",
         "tags": [],
         "owners": [],
         "status": null,
@@ -14386,7 +14386,7 @@
         "links": [],
         "description": "`generate_standards_index.py` assembles the canonical standards index by blending curated seed rules with optional heuristic extractions from markdown sources. The producer emits a HealthView/HOP-compliant artifact bundle so agents can\u2026",
         "size_bytes": 4026,
-        "modified_utc": "2026-01-22T12:16:13.528234+00:00",
+        "modified_utc": "2026-01-22T13:00:37.145386+00:00",
         "tags": [],
         "owners": [],
         "status": null,
@@ -15377,8 +15377,8 @@
         ],
         "links": [],
         "description": "The legacy CLI wrapper was removed during Phase 8 of the orchestrator rollout. All automation should now invoke `command_center/scripts/orchestrators/run_standards_integrity.py` or the meta orchestrator instead of the shim. Historical\u2026",
-        "size_bytes": 2281,
-        "modified_utc": "2025-12-11T01:51:15.211609+00:00",
+        "size_bytes": 2201,
+        "modified_utc": "2026-01-22T15:09:58.851052+00:00",
         "tags": [],
         "owners": [],
         "status": null,
@@ -15619,36 +15619,36 @@
           {
             "title": "Outputs",
             "slug": "outputs",
-            "line": 33,
+            "line": 32,
             "parent_title": "seed_standards_prompts.py",
             "parent_slug": "seedstandardspromptspy"
           },
           {
             "title": "Diagnostics",
             "slug": "diagnostics",
-            "line": 49,
+            "line": 48,
             "parent_title": "seed_standards_prompts.py",
             "parent_slug": "seedstandardspromptspy"
           },
           {
             "title": "Testing",
             "slug": "testing",
-            "line": 56,
+            "line": 55,
             "parent_title": "seed_standards_prompts.py",
             "parent_slug": "seedstandardspromptspy"
           },
           {
             "title": "Operational notes",
             "slug": "operational-notes",
-            "line": 62,
+            "line": 61,
             "parent_title": "seed_standards_prompts.py",
             "parent_slug": "seedstandardspromptspy"
           }
         ],
         "links": [],
         "description": "`seed_standards_prompts.py` distills the standards index into compact prompt seeds for AI workflows. It selects critical, error, and optionally warn rules, groups them by category, and publishes HealthView/HOP-compliant bundles so\u2026",
-        "size_bytes": 3793,
-        "modified_utc": "2026-01-22T12:15:49.298905+00:00",
+        "size_bytes": 3595,
+        "modified_utc": "2026-01-22T15:09:58.851052+00:00",
         "tags": [],
         "owners": [],
         "status": null,
@@ -15927,9 +15927,9 @@
           }
         ],
         "links": [],
-        "description": "This specification defines the structure of the standards index YAML (surfaced via the `latest_index.yaml` pointer), which aggregates normalized rule objects for Repo Studios automation and agent workflows.",
-        "size_bytes": 5316,
-        "modified_utc": "2025-11-27T17:20:15.678074+00:00",
+        "description": "This specification defines the structure of the standards index YAML (written to `.repo_studios/scripts/repo_standards_index.yaml`), which aggregates normalized rule objects for Repo Studios automation and agent workflows.",
+        "size_bytes": 5348,
+        "modified_utc": "2026-01-22T15:09:58.851052+00:00",
         "tags": [
           "standards",
           "schema",
@@ -15951,7 +15951,7 @@
           "status": "draft",
           "version": "0.2.0",
           "updated": "2025-11-27",
-          "summary": "Schema contract for the standards index bundle referenced by `latest_index.yaml`, detailing the deterministic structure consumed by Repo Studios automation and agents.",
+          "summary": "Schema contract for the standards index YAML (`.repo_studios/scripts/repo_standards_index.yaml`), detailing the deterministic structure consumed by Repo Studios automation and agents.",
           "tags": [
             "standards",
             "schema",
@@ -15983,7 +15983,7 @@
           {
             "title": "Invocation",
             "slug": "invocation",
-            "line": 13,
+            "line": 14,
             "parent_title": "summarize_standards.py",
             "parent_slug": "summarizestandardspy"
           },
@@ -15997,15 +15997,15 @@
           {
             "title": "Testing",
             "slug": "testing",
-            "line": 40,
+            "line": 49,
             "parent_title": "summarize_standards.py",
             "parent_slug": "summarizestandardspy"
           }
         ],
         "links": [],
-        "description": "`summarize_standards.py` provides a lightweight telemetry probe for the standards catalog. It reads the canonical standards index (surfaced through the `latest_index.yaml` pointer) and the optional pending extraction queue, then emits log\u2026",
-        "size_bytes": 1878,
-        "modified_utc": "2025-11-27T17:28:24.141509+00:00",
+        "description": "`summarize_standards.py` provides a lightweight HealthView/HOP-compliant summary of the standards catalog. It reads the canonical standards index YAML (`.repo_studios/scripts/repo_standards_index.yaml`) and the optional pending extraction\u2026",
+        "size_bytes": 1984,
+        "modified_utc": "2026-01-23T18:46:56.704427+00:00",
         "tags": [],
         "owners": [],
         "status": null,
@@ -17585,8 +17585,8 @@
         ],
         "links": [],
         "description": "on pending work.",
-        "size_bytes": 7611,
-        "modified_utc": "2026-01-22T12:18:12.868185+00:00",
+        "size_bytes": 7607,
+        "modified_utc": "2026-01-23T19:58:16.298161+00:00",
         "tags": [
           "checkbox-report",
           "repo-todo"
@@ -17607,7 +17607,7 @@
           ],
           "status": "active",
           "version": 1.0,
-          "updated_at": "2026-01-22",
+          "updated_at": "2026-01-23",
           "tags": [
             "checkbox-report",
             "repo-todo"
@@ -18405,8 +18405,8 @@
           "../tier2_roster/tier2_standards_integrity_roster.md"
         ],
         "description": "All 6 scripts migrated to HOP-compliant output paths using `build_topic_path()`.",
-        "size_bytes": 7884,
-        "modified_utc": "2025-12-31T13:00:10.915425+00:00",
+        "size_bytes": 7912,
+        "modified_utc": "2026-01-23T18:46:56.704427+00:00",
         "tags": [],
         "owners": [],
         "status": null,
@@ -18616,49 +18616,49 @@
           {
             "title": "10. Stage 7 \u2013 Running the Complete Suite",
             "slug": "10-stage-7-running-the-complete-suite",
-            "line": 1416,
+            "line": 1417,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "11. Stage 11 \u2013 Available Scripts (Holding Area)",
             "slug": "11-stage-11-available-scripts-holding-area",
-            "line": 1539,
+            "line": 1540,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "12. Snapshot & Stage Matrix",
             "slug": "12-snapshot-stage-matrix",
-            "line": 1640,
+            "line": 1641,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "13. Contradiction Registry",
             "slug": "13-contradiction-registry",
-            "line": 1712,
+            "line": 1713,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "14. Tier-2 Document Index",
             "slug": "14-tier-2-document-index",
-            "line": 1731,
+            "line": 1732,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "15. Working / Future Notes",
             "slug": "15-working-future-notes",
-            "line": 1781,
+            "line": 1782,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           },
           {
             "title": "16. Update Log & Evidence Tracking",
             "slug": "16-update-log-evidence-tracking",
-            "line": 1798,
+            "line": 1799,
             "parent_title": "HealthView Orchestration Pipeline",
             "parent_slug": "healthview-orchestration-pipeline"
           }
@@ -18806,8 +18806,8 @@
           "../../../tests/tests_aggregators/"
         ],
         "description": "stage content so evidence capture is ready from the first edit.",
-        "size_bytes": 117949,
-        "modified_utc": "2026-01-22T12:16:30.719199+00:00",
+        "size_bytes": 118629,
+        "modified_utc": "2026-01-23T18:46:56.700428+00:00",
         "tags": [
           "pipeline",
           "healthview",
@@ -19483,63 +19483,63 @@
           {
             "title": "0. Instruction Block for Editors & AI Assistants",
             "slug": "0-instruction-block-for-editors-ai-assistants",
-            "line": 47,
+            "line": 49,
             "parent_title": "Tier-2 Roster \u2014 Stage 7 Running the Complete Suite",
             "parent_slug": "tier-2-roster-stage-7-running-the-complete-suite"
           },
           {
             "title": "1. Goals & Success Criteria",
             "slug": "1-goals-success-criteria",
-            "line": 71,
+            "line": 73,
             "parent_title": "Tier-2 Roster \u2014 Stage 7 Running the Complete Suite",
             "parent_slug": "tier-2-roster-stage-7-running-the-complete-suite"
           },
           {
             "title": "2. System Context",
             "slug": "2-system-context",
-            "line": 91,
+            "line": 93,
             "parent_title": "Tier-2 Roster \u2014 Stage 7 Running the Complete Suite",
             "parent_slug": "tier-2-roster-stage-7-running-the-complete-suite"
           },
           {
             "title": "3. Stage Narrative \u2014 Stage 7 Running the Complete Suite",
             "slug": "3-stage-narrative-stage-7-running-the-complete-suite",
-            "line": 157,
+            "line": 182,
             "parent_title": "Tier-2 Roster \u2014 Stage 7 Running the Complete Suite",
             "parent_slug": "tier-2-roster-stage-7-running-the-complete-suite"
           },
           {
             "title": "4. Signals & Telemetry",
             "slug": "4-signals-telemetry",
-            "line": 1088,
+            "line": 994,
             "parent_title": "Tier-2 Roster \u2014 Stage 7 Running the Complete Suite",
             "parent_slug": "tier-2-roster-stage-7-running-the-complete-suite"
           },
           {
             "title": "5. Dependencies & Stop-Gates",
             "slug": "5-dependencies-stop-gates",
-            "line": 1106,
+            "line": 1020,
             "parent_title": "Tier-2 Roster \u2014 Stage 7 Running the Complete Suite",
             "parent_slug": "tier-2-roster-stage-7-running-the-complete-suite"
           },
           {
             "title": "6. Instruction Block (Required by Tier Rules)",
             "slug": "6-instruction-block-required-by-tier-rules",
-            "line": 1127,
+            "line": 1040,
             "parent_title": "Tier-2 Roster \u2014 Stage 7 Running the Complete Suite",
             "parent_slug": "tier-2-roster-stage-7-running-the-complete-suite"
           },
           {
             "title": "7. Agent Automation Block",
             "slug": "7-agent-automation-block",
-            "line": 1139,
+            "line": 1052,
             "parent_title": "Tier-2 Roster \u2014 Stage 7 Running the Complete Suite",
             "parent_slug": "tier-2-roster-stage-7-running-the-complete-suite"
           },
           {
             "title": "8. Update Log",
             "slug": "8-update-log",
-            "line": 1168,
+            "line": 1081,
             "parent_title": "Tier-2 Roster \u2014 Stage 7 Running the Complete Suite",
             "parent_slug": "tier-2-roster-stage-7-running-the-complete-suite"
           }
@@ -19554,8 +19554,8 @@
           "#s7r-007-standards-integrity"
         ],
         "description": "`tier1_healthview_orchestration_pipeline.md`.",
-        "size_bytes": 42490,
-        "modified_utc": "2026-01-04T17:12:44.661358+00:00",
+        "size_bytes": 45571,
+        "modified_utc": "2026-01-23T19:58:02.088530+00:00",
         "tags": [
           "pipeline",
           "healthview",
@@ -19582,7 +19582,7 @@
           ],
           "status": "seeded",
           "version": "0.1.0",
-          "updated_at": "2026-01-04",
+          "updated_at": "2026-01-23",
           "tags": [
             "pipeline",
             "healthview",
@@ -20057,8 +20057,8 @@
           "#s61r-006-standards-overview-summarizer"
         ],
         "description": "`tier1_healthview_orchestration_pipeline.md`.",
-        "size_bytes": 41283,
-        "modified_utc": "2026-01-22T12:17:12.701980+00:00",
+        "size_bytes": 41537,
+        "modified_utc": "2026-01-22T13:00:37.144387+00:00",
         "tags": [
           "pipeline",
           "healthview",
@@ -24074,8 +24074,8 @@
         ],
         "links": [],
         "description": "Purpose: this template inventories Repo Studios scripts by functional role so agents can migrate legacy assets, document dependencies, and prepare YAML catalog entries. Fill sections as you classify each script. Keep formatting consistent\u2026",
-        "size_bytes": 81414,
-        "modified_utc": "2026-01-22T12:17:48.774157+00:00",
+        "size_bytes": 80876,
+        "modified_utc": "2026-01-22T15:09:58.851052+00:00",
         "tags": [],
         "owners": [],
         "status": null,
@@ -25008,8 +25008,8 @@
         ],
         "links": [],
         "description": "See `.github/instructions/markdown.instructions.md` for repo-wide rules.",
-        "size_bytes": 31018,
-        "modified_utc": "2026-01-22T12:17:54.910628+00:00",
+        "size_bytes": 31035,
+        "modified_utc": "2026-01-23T18:46:56.704427+00:00",
         "tags": [
           "healthview",
           "standards",
@@ -25037,7 +25037,7 @@
           ],
           "status": "draft",
           "version": 1,
-          "updated_at": "2026-01-21",
+          "updated_at": "2026-01-22",
           "tags": [
             "healthview",
             "standards",
