@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "status": "error",
+  "timestamp": "20260123-2342",
+  "generated_utc": "2026-01-23T23:42:58.517909+00:00",
+  "repo_root": "C:\\Users\\genet\\repo_studios\\.repo_studios\\scripts",
+  "output_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\scripts\\.repo_studios\\reports\\healthview\\producer_reports\\validate_inventory\\20260123-2342",
+  "inputs": {
+    "schema_root": "C:\\Users\\genet\\AppData\\Local\\Temp\\pytest-of-genet\\pytest-1915\\test_json_output0\\inventory_schema",
+    "config_path": "C:\\Users\\genet\\AppData\\Local\\Temp\\pytest-of-genet\\pytest-1915\\test_json_output0\\inventory_schema\\validator_config.yaml",
+    "enums_path": "C:\\Users\\genet\\AppData\\Local\\Temp\\pytest-of-genet\\pytest-1915\\test_json_output0\\inventory_schema\\enums.yaml"
+  },
+  "summary": {
+    "files_checked": 1,
+    "records_checked": 1,
+    "issue_counts": {
+      "total": 1,
+      "errors": 1,
+      "warnings": 0
+    }
+  },
+  "issues": {
+    "all": [
+      {
+        "level": "error",
+        "file": "C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-1915/test_json_output0/inventory_schema/invalid.yaml",
+        "message": "Value 'not_real' is not allowed for enum 'status'",
+        "context": {
+          "record_id": "scripts.invalid",
+          "enum": "status"
+        }
+      }
+    ],
+    "errors": [
+      {
+        "level": "error",
+        "file": "C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-1915/test_json_output0/inventory_schema/invalid.yaml",
+        "message": "Value 'not_real' is not allowed for enum 'status'",
+        "context": {
+          "record_id": "scripts.invalid",
+          "enum": "status"
+        }
+      }
+    ],
+    "warnings": []
+  }
+}

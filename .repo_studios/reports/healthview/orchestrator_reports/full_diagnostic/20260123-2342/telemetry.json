@@ -1,0 +1,70 @@
+{
+  "finished_at": "2026-01-23T23:44:28.243932+00:00",
+  "metrics": {
+    "artifact_bytes": 43937,
+    "artifact_files": 12,
+    "meta_artifact_bytes": 7339,
+    "meta_artifact_files": 3,
+    "runtime_seconds": 94.38611,
+    "topics_duration_seconds": 94.30863599999999,
+    "topics_failed": 1,
+    "topics_skipped": 2,
+    "topics_succeeded": 3,
+    "topics_total": 6
+  },
+  "run_slug": "20260123-2342",
+  "started_at": "2026-01-23T23:42:53.857779+00:00",
+  "success": false,
+  "topic": "full_diagnostic",
+  "topics": [
+    {
+      "artifact_bytes": 8448,
+      "artifact_files": 3,
+      "duration_seconds": 82.412069,
+      "exit_code": 0,
+      "slug": "test-execution-telemetry",
+      "status": "succeeded"
+    },
+    {
+      "artifact_bytes": 18405,
+      "artifact_files": 3,
+      "duration_seconds": 4.12189,
+      "exit_code": 0,
+      "slug": "docs-health",
+      "status": "succeeded"
+    },
+    {
+      "artifact_bytes": 7704,
+      "artifact_files": 3,
+      "duration_seconds": 0.1161,
+      "exit_code": 0,
+      "slug": "fault-diagnostics",
+      "status": "succeeded"
+    },
+    {
+      "artifact_bytes": 9380,
+      "artifact_files": 3,
+      "duration_seconds": 7.658577,
+      "exit_code": 1,
+      "slug": "dependency-import-hygiene",
+      "status": "failed"
+    },
+    {
+      "artifact_bytes": 0,
+      "artifact_files": 0,
+      "duration_seconds": null,
+      "exit_code": null,
+      "slug": "monkey-patch-oversight",
+      "status": "skipped"
+    },
+    {
+      "artifact_bytes": 0,
+      "artifact_files": 0,
+      "duration_seconds": null,
+      "exit_code": null,
+      "slug": "standards-integrity",
+      "status": "skipped"
+    }
+  ],
+  "viewer": "healthview"
+}

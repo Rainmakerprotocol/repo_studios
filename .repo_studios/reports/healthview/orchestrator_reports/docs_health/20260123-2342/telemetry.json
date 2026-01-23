@@ -1,0 +1,121 @@
+{
+  "finished_at": "2026-01-23T23:44:20.289611+00:00",
+  "metrics": {
+    "artifact_bytes": 14541,
+    "artifact_files": 3,
+    "runtime_seconds": 3.970583,
+    "step_count": 8,
+    "steps_failed": 0,
+    "steps_skipped": 0,
+    "steps_succeeded": 8
+  },
+  "run_slug": "20260123-2342",
+  "started_at": "2026-01-23T23:44:16.319028+00:00",
+  "steps": [
+    {
+      "detail": "docs=333, headings=2465",
+      "finished_at": "2026-01-23T23:44:17.887208+00:00",
+      "name": "doc-index",
+      "payload": {
+        "run_dir": ".repo_studios/reports/healthview/producer_reports/doc_index/20260123-2342",
+        "slug": "20260123-2342"
+      },
+      "started_at": "2026-01-23T23:44:16.319033+00:00",
+      "status": "success"
+    },
+    {
+      "detail": "docs=144, missing_h1=7, missing_h2=3, slugs=794, duplicates=81, cross_file_docs=115, repeated_docs=0",
+      "finished_at": "2026-01-23T23:44:17.991881+00:00",
+      "name": "anchor-inventory",
+      "payload": {
+        "run_dir": ".repo_studios/reports/healthview/producer_reports/anchor_inventory/20260123-2342",
+        "slug": "20260123-2342"
+      },
+      "started_at": "2026-01-23T23:44:17.887222+00:00",
+      "status": "success"
+    },
+    {
+      "detail": "status=ok, issues=0",
+      "finished_at": "2026-01-23T23:44:18.327978+00:00",
+      "name": "anchor-validation",
+      "payload": {
+        "issues": 0,
+        "report": ".repo_studios/reports/healthview/producer_reports/markdown_anchor_validation/20260123-2342/telemetry.json",
+        "status": "ok"
+      },
+      "started_at": "2026-01-23T23:44:17.991901+00:00",
+      "status": "success"
+    },
+    {
+      "detail": "status=ok, mismatches=0",
+      "finished_at": "2026-01-23T23:44:18.346831+00:00",
+      "name": "docs-integrity",
+      "payload": {
+        "mismatches": 0,
+        "run_dir": ".repo_studios/reports/healthview/producer_reports/docs_integrity_validation/20260123-2344",
+        "status": "ok"
+      },
+      "started_at": "2026-01-23T23:44:18.327990+00:00",
+      "status": "success"
+    },
+    {
+      "detail": "status=ok, missing=0",
+      "finished_at": "2026-01-23T23:44:18.635133+00:00",
+      "name": "metrics-stub",
+      "payload": {
+        "missing": 0,
+        "run_dir": null,
+        "status": "ok"
+      },
+      "started_at": "2026-01-23T23:44:18.346841+00:00",
+      "status": "success"
+    },
+    {
+      "detail": "missing_docs=1",
+      "finished_at": "2026-01-23T23:44:19.921994+00:00",
+      "name": "code-doc-churn",
+      "payload": {
+        "run_dir": ".repo_studios/reports/healthview/producer_reports/code_doc_churn/20260123-2344",
+        "summary": {
+          "allowlisted_modules": [],
+          "modules_with_code_churn": 3,
+          "modules_with_doc_updates": 2,
+          "modules_without_doc_updates": 1
+        }
+      },
+      "started_at": "2026-01-23T23:44:18.635142+00:00",
+      "status": "success"
+    },
+    {
+      "detail": "modules_with_findings=40",
+      "finished_at": "2026-01-23T23:44:20.264440+00:00",
+      "name": "undocumented-logic",
+      "payload": {
+        "run_dir": ".repo_studios/reports/healthview/producer_reports/undocumented_logic/20260123-2344",
+        "summary": {
+          "docstring_coverage_percent": 56.3,
+          "entities_missing_docs": 392,
+          "entities_scanned": 897,
+          "modules_scanned": 84,
+          "modules_with_findings": 40
+        }
+      },
+      "started_at": "2026-01-23T23:44:19.922006+00:00",
+      "status": "success"
+    },
+    {
+      "detail": "overall=62.52",
+      "finished_at": "2026-01-23T23:44:20.289601+00:00",
+      "name": "aggregate",
+      "payload": {
+        "overall_score": 62.52,
+        "run_dir": ".repo_studios/reports/healthview/aggregator_reports/docs_health_signals/20260123-2344"
+      },
+      "started_at": "2026-01-23T23:44:20.264448+00:00",
+      "status": "success"
+    }
+  ],
+  "success": true,
+  "topic": "docs_health",
+  "viewer": "orchestrator_reports"
+}

@@ -546,6 +546,10 @@ def main(argv: Sequence[str] | None = None) -> None:
     raise SystemExit(run(argv))
 
 
+if __name__ == "__main__":
+    main()
+
+
 __all__ = [
     "run",
     "main",

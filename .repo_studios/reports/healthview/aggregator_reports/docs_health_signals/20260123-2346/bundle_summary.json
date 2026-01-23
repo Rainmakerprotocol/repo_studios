@@ -1,0 +1,17 @@
+{
+  "category_scores": {
+    "coverage": 56.3,
+    "freshness": 66.66666666666666,
+    "hygiene": 75.0,
+    "integrity": 100.0,
+    "structure": 36.54439546599495
+  },
+  "overall_score": 62.27,
+  "statuses": {
+    "coverage": "critical",
+    "freshness": "warning",
+    "hygiene": "warning",
+    "integrity": "healthy",
+    "structure": "critical"
+  }
+}

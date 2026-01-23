@@ -1,0 +1,1001 @@
+{
+  "viewer_slug": "producer_reports",
+  "topic": "code_doc_churn",
+  "run_timestamp": "20260123-2346",
+  "generated_utc": "2026-01-23T23:46:02.682200+00:00",
+  "metrics": {
+    "generated_utc": "2026-01-23T23:46:02.682200+00:00",
+    "modules_missing_docs": 1,
+    "modules_with_docs": 2,
+    "commits_examined": 8,
+    "distinct_authors": 1,
+    "allowlisted_modules": 0
+  },
+  "payload": {
+    "schema_version": 1,
+    "generated_utc": "2026-01-23T23:46:02.682200+00:00",
+    "repo_root": "C:\\Users\\genet\\repo_studios",
+    "git": {
+      "window": "14 days",
+      "commits_examined": 8,
+      "distinct_authors": 1,
+      "authors": [
+        "stormmasterext"
+      ],
+      "head_commit": "7f43967cfef8cdb84cf01b05369c4926a893421f"
+    },
+    "summary": {
+      "modules_with_code_churn": 3,
+      "modules_without_doc_updates": 1,
+      "modules_with_doc_updates": 2,
+      "allowlisted_modules": []
+    },
+    "modules_missing_docs": [
+      {
+        "module": "tests",
+        "code_paths": [
+          ".repo_studios/tests/tests_aggregators/test_analyze_monkey_patch_trends.py",
+          ".repo_studios/tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py",
+          ".repo_studios/tests/tests_command_center/monkey_patch/helpers.py",
+          ".repo_studios/tests/tests_command_center/monkey_patch/test_summarize_monkey_patch_overview_content.py",
+          ".repo_studios/tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py",
+          ".repo_studios/tests/tests_command_center/test_artifacts.py",
+          ".repo_studios/tests/tests_command_center/test_prune_logs.py",
+          ".repo_studios/tests/tests_library_integration/duplicates/test_scan_duplicates.py",
+          ".repo_studios/tests/tests_producers/test_analyze_standards_index_gaps.py",
+          ".repo_studios/tests/tests_producers/test_scan_monkey_patches.py",
+          ".repo_studios/tests/tests_summarizers/test_summarize_standards.py",
+          ".repo_studios/tests/tests_utilities/test_refresh_mypy_baselines.py"
+        ],
+        "doc_paths": [],
+        "commit_hashes": [
+          "3b0c288619385a920f57d128eed27d64d6739be1",
+          "9c837c8062e4f29c813fee11bd872a19138f56a2",
+          "a6186363627a24f42dcda9a75457851e7901e0f1",
+          "f923c7242629d9c79ee2badb0cadc3e50881a871"
+        ],
+        "authors": [
+          "stormmasterext"
+        ],
+        "last_commit_utc": "2026-01-22T10:10:49-05:00",
+        "doc_candidates": []
+      }
+    ],
+    "modules_with_docs": [
+      {
+        "module": "command_center",
+        "code_paths": [
+          ".repo_studios/command_center/scripts/aggregators/scan_duplicates.py",
+          ".repo_studios/command_center/scripts/libraries/artifacts.py",
+          ".repo_studios/command_center/scripts/libraries/prune_logs.py",
+          ".repo_studios/command_center/scripts/orchestrators/run_dependency_import_hygiene.py",
+          ".repo_studios/command_center/scripts/orchestrators/run_fault_diagnostics_overview.py",
+          ".repo_studios/command_center/scripts/orchestrators/run_monkey_patch_oversight.py",
+          ".repo_studios/command_center/scripts/orchestrators/run_standards_integrity.py",
+          ".repo_studios/command_center/scripts/producers/analyze_standards_index_gaps.py",
+          ".repo_studios/command_center/scripts/producers/generate_commandview_inventory.py",
+          ".repo_studios/command_center/scripts/summarizers/generate_function_analysis.py",
+          ".repo_studios/command_center/scripts/summarizers/summarize_monkey_patch_overview.py"
+        ],
+        "doc_paths": [
+          ".repo_studios/command_center/docs/db_integrations/db_integration_standards_prompts.md",
+          ".repo_studios/command_center/docs/db_integrations/db_integration_summarize_standards.md",
+          ".repo_studios/command_center/docs/db_integrations/db_integration_typecheck_report.md"
+        ],
+        "commit_hashes": [
+          "2dcc89c0eae22b47c3b166f9a663e47704e64a72",
+          "3b0c288619385a920f57d128eed27d64d6739be1",
+          "7f43967cfef8cdb84cf01b05369c4926a893421f",
+          "9c837c8062e4f29c813fee11bd872a19138f56a2",
+          "a6186363627a24f42dcda9a75457851e7901e0f1",
+          "dbd4e3c9083b34fbcc20d736f60a8f5cfcf73c8b",
+          "f923c7242629d9c79ee2badb0cadc3e50881a871"
+        ],
+        "authors": [
+          "stormmasterext"
+        ],
+        "last_commit_utc": "2026-01-23T18:33:16-05:00",
+        "doc_candidates": [
+          {
+            "path": ".repo_studios/command_center/README.md",
+            "owners": [],
+            "modified_utc": "2025-12-28T18:59:14.317464+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/checklists/2025-10-24.md",
+            "owners": [],
+            "modified_utc": "2025-12-28T22:10:03.393816+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/command_center_architecture.md",
+            "owners": [],
+            "modified_utc": "2025-11-06T09:44:23.975246+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/build_paths_extraction_brief.md",
+            "owners": [],
+            "modified_utc": "2025-10-30T11:23:59.998614+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/code_library/code_library_status.md",
+            "owners": [],
+            "modified_utc": "2025-12-25T00:29:14.501467+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/code_library/helper_usage_patterns.md",
+            "owners": [],
+            "modified_utc": "2025-12-25T05:20:40.605582+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/db_integration_guide.md",
+            "owners": [],
+            "modified_utc": "2025-12-28T22:10:03.376369+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/db_integration_quickstart.md",
+            "owners": [],
+            "modified_utc": "2025-12-11T14:31:25.544782+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/db_integration_template.md",
+            "owners": [],
+            "modified_utc": "2025-12-28T22:29:59.942281+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/db_integration_test_execution_telemetry.md",
+            "owners": [],
+            "modified_utc": "2025-12-28T22:29:59.942281+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/db_integrations/db_integration_aggregate_docs_health_signals.md",
+            "owners": [
+              "repo_studios_ai"
+            ],
+            "modified_utc": "2026-01-02T13:11:37.011222+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/db_integrations/db_integration_analyze_standards_index_gaps.md",
+            "owners": [
+              "command_center"
+            ],
+            "modified_utc": "2025-12-28T23:09:07.256636+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/db_integrations/db_integration_analyze_test_hardening.md",
+            "owners": [
+              "command_center"
+            ],
+            "modified_utc": "2025-12-15T23:19:53.795575+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/db_integrations/db_integration_anchor_health_report.md",
+            "owners": [],
+            "modified_utc": "2026-01-02T13:59:06.578202+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/db_integrations/db_integration_anchor_inventory.md",
+            "owners": [
+              "repo_studios_ai"
+            ],
+            "modified_utc": "2026-01-02T13:11:37.011222+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/db_integrations/db_integration_check_inventory_health.md",
+            "owners": [
+              "command_center"
+            ],
+            "modified_utc": "2025-12-15T23:19:27.032216+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/db_integrations/db_integration_code_doc_churn.md",
+            "owners": [
+              "repo_studios_team@rainmakerprotocol.dev"
+            ],
+            "modified_utc": "2026-01-02T12:21:24.126703+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/db_integrations/db_integration_code_placeholders.md",
+            "owners": [
+              "repo_studios_team@rainmakerprotocol.dev"
+            ],
+            "modified_utc": "2026-01-02T12:21:24.122706+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/db_integrations/db_integration_collect_faulthandler_reports.md",
+            "owners": [
+              "command_center"
+            ],
+            "modified_utc": "2025-12-15T22:59:11.634268+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/db_integrations/db_integration_dependency_hygiene.md",
+            "owners": [
+              "repo_studios_team@rainmakerprotocol.dev"
+            ],
+            "modified_utc": "2026-01-02T12:21:24.122706+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/db_integrations/db_integration_dependency_import_hygiene.md",
+            "owners": [],
+            "modified_utc": "2026-01-02T13:43:58.010748+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/db_integrations/db_integration_diff_standards_index.md",
+            "owners": [
+              "Repo Studios"
+            ],
+            "modified_utc": "2025-12-16T12:48:04.404541+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/db_integrations/db_integration_doc_index.md",
+            "owners": [
+              "repo_studios_team@rainmakerprotocol.dev"
+            ],
+            "modified_utc": "2026-01-02T12:21:24.126703+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/db_integrations/db_integration_docs_health_overview.md",
+            "owners": [
+              "repo_studios_ai"
+            ],
+            "modified_utc": "2026-01-02T13:11:37.011222+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/db_integrations/db_integration_docs_integrity_validation.md",
+            "owners": [
+              "repo_studios_team@rainmakerprotocol.dev"
+            ],
+            "modified_utc": "2026-01-02T12:21:24.126703+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/db_integrations/db_integration_fault_artifacts.md",
+            "owners": [
+              "repo_studios_ai"
+            ],
+            "modified_utc": "2026-01-02T13:11:37.023673+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/db_integrations/db_integration_fault_diagnostics_overview.md",
+            "owners": [
+              "repo_studios_ai"
+            ],
+            "modified_utc": "2026-01-02T13:11:37.023673+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/db_integrations/db_integration_fault_diagnostics_overview_orchestrator.md",
+            "owners": [
+              "repo_studios_ai"
+            ],
+            "modified_utc": "2026-01-07T14:47:54.385649+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/db_integrations/db_integration_fault_run_analysis.md",
+            "owners": [],
+            "modified_utc": "2026-01-02T13:59:06.584832+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/db_integrations/db_integration_faulthandler_runtime.md",
+            "owners": [],
+            "modified_utc": "2026-01-02T13:59:06.582150+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/db_integrations/db_integration_faulthandler_snapshot.md",
+            "owners": [],
+            "modified_utc": "2026-01-02T13:59:06.582150+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/db_integrations/db_integration_full_diagnostic.md",
+            "owners": [],
+            "modified_utc": "2026-01-02T13:59:06.578202+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/db_integrations/db_integration_generate_churn_complexity_heatmap.md",
+            "owners": [
+              "repo_studios_ai"
+            ],
+            "modified_utc": "2026-01-02T12:21:24.121698+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/db_integrations/db_integration_generate_standards_index.md",
+            "owners": [
+              "Repo Studios"
+            ],
+            "modified_utc": "2025-12-28T23:09:07.269454+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/db_integrations/db_integration_generate_test_coverage_inventory.md",
+            "owners": [
+              "repo_studios_ai"
+            ],
+            "modified_utc": "2026-01-02T12:21:24.126703+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/db_integrations/db_integration_generate_test_log_health_report.md",
+            "owners": [
+              "repo_studios_ai"
+            ],
+            "modified_utc": "2025-12-28T23:09:07.276131+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/db_integrations/db_integration_import_boundaries.md",
+            "owners": [],
+            "modified_utc": "2026-01-02T13:59:06.586785+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/db_integrations/db_integration_import_graph.md",
+            "owners": [
+              "repo_studios_team@rainmakerprotocol.dev"
+            ],
+            "modified_utc": "2026-01-02T12:21:24.121698+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/db_integrations/db_integration_lizard_report.md",
+            "owners": [
+              "repo_studios_team@rainmakerprotocol.dev"
+            ],
+            "modified_utc": "2026-01-02T12:21:24.121698+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/db_integrations/db_integration_markdown_anchor_validation.md",
+            "owners": [
+              "repo_studios_team@rainmakerprotocol.dev"
+            ],
+            "modified_utc": "2026-01-02T12:21:24.126703+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/db_integrations/db_integration_metrics_anchor_stub_validation.md",
+            "owners": [
+              "repo_studios_team@rainmakerprotocol.dev"
+            ],
+            "modified_utc": "2026-01-02T12:21:24.126703+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/db_integrations/db_integration_monkey_patch_classification.md",
+            "owners": [],
+            "modified_utc": "2026-01-03T02:09:16.214370+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/db_integrations/db_integration_monkey_patch_oversight.md",
+            "owners": [],
+            "modified_utc": "2026-01-03T02:12:51.928753+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/db_integrations/db_integration_monkey_patch_overview.md",
+            "owners": [],
+            "modified_utc": "2026-01-03T02:09:16.218375+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/db_integrations/db_integration_monkey_patch_risk.md",
+            "owners": [],
+            "modified_utc": "2026-01-02T13:43:58.025099+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/db_integrations/db_integration_monkey_patch_trends.md",
+            "owners": [],
+            "modified_utc": "2026-01-03T02:09:16.218375+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/db_integrations/db_integration_monkey_patches.md",
+            "owners": [
+              "repo_studios_team@rainmakerprotocol.dev"
+            ],
+            "modified_utc": "2026-01-02T12:21:24.126703+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/db_integrations/db_integration_mypy_baselines.md",
+            "owners": [],
+            "modified_utc": "2026-01-02T13:43:58.010748+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/db_integrations/db_integration_render_inventory_views.md",
+            "owners": [
+              "repo_studios_team@rainmakerprotocol.dev"
+            ],
+            "modified_utc": "2026-01-02T12:21:24.126703+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/db_integrations/db_integration_standards_integrity.md",
+            "owners": [],
+            "modified_utc": "2026-01-03T01:14:30.537249+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/db_integrations/db_integration_standards_prompts.md",
+            "owners": [],
+            "modified_utc": "2026-01-23T18:46:56.701426+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/db_integrations/db_integration_standards_rules.md",
+            "owners": [],
+            "modified_utc": "2026-01-02T13:59:06.586785+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/db_integrations/db_integration_summarize_health_suite.md",
+            "owners": [],
+            "modified_utc": "2026-01-02T13:59:06.588793+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/db_integrations/db_integration_summarize_standards.md",
+            "owners": [],
+            "modified_utc": "2026-01-23T18:46:56.701426+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/db_integrations/db_integration_summarize_test_execution_telemetry.md",
+            "owners": [
+              "repo_studios_ai"
+            ],
+            "modified_utc": "2025-12-28T23:53:05.133135+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/db_integrations/db_integration_test_execution_telemetry.md",
+            "owners": [
+              "repo_studios_ai"
+            ],
+            "modified_utc": "2026-01-02T12:53:42.076399+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/db_integrations/db_integration_test_log_analysis.md",
+            "owners": [],
+            "modified_utc": "2026-01-02T13:59:06.588793+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/db_integrations/db_integration_test_log_reports.md",
+            "owners": [
+              "repo_studios_team@rainmakerprotocol.dev"
+            ],
+            "modified_utc": "2025-12-16T01:14:17.153692+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/db_integrations/db_integration_typecheck_report.md",
+            "owners": [],
+            "modified_utc": "2026-01-15T01:43:07.549073+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/db_integrations/db_integration_undocumented_logic.md",
+            "owners": [
+              "repo_studios_team@rainmakerprotocol.dev"
+            ],
+            "modified_utc": "2026-01-02T12:21:24.126703+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/db_integrations/db_integration_validate_inventory.md",
+            "owners": [],
+            "modified_utc": "2026-01-02T13:59:06.586785+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/db_integrations/db_integrations_master_list.md",
+            "owners": [
+              "repo_studios_team@rainmakerprotocol.dev"
+            ],
+            "modified_utc": "2026-01-02T13:59:06.578202+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/decision_log.md",
+            "owners": [],
+            "modified_utc": "2025-12-05T02:36:35.387302+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/duplicate_detection_schema_alignment.md",
+            "owners": [],
+            "modified_utc": "2025-10-25T14:24:46.937636+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/duplicate_target_mappings.md",
+            "owners": [],
+            "modified_utc": "2025-10-24T20:30:48.568785+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/groundwork_and_db_alignment.md",
+            "owners": [],
+            "modified_utc": "2025-12-28T18:59:14.317464+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/guardrails/automation_manifest_schema.md",
+            "owners": [],
+            "modified_utc": "2025-11-04T14:15:55.969230+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/guardrails/library_extraction_guardrails.md",
+            "owners": [],
+            "modified_utc": "2025-12-28T22:29:59.930119+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/library_integration_checklist.md",
+            "owners": [],
+            "modified_utc": "2025-12-28T18:59:14.320303+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/library_readme_adjustments.md",
+            "owners": [],
+            "modified_utc": "2025-10-25T14:24:46.937636+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/manual_extraction_checklist.md",
+            "owners": [],
+            "modified_utc": "2025-10-30T11:20:16.293146+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/manual_extraction_operator_brief.md",
+            "owners": [],
+            "modified_utc": "2025-12-17T01:38:22.486199+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/mermaid/README.md",
+            "owners": [],
+            "modified_utc": "2025-11-23T11:14:18.336713+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/mermaid/decision_log.md",
+            "owners": [],
+            "modified_utc": "2025-12-28T18:59:14.320303+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/mermaid/inventory_migration_notes.md",
+            "owners": [],
+            "modified_utc": "2025-11-13T12:19:47.720289+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/mermaid/mermaid_integration_checklist.md",
+            "owners": [],
+            "modified_utc": "2025-12-28T18:59:14.320303+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/mermaid/mermaid_viewer.md",
+            "owners": [],
+            "modified_utc": "2025-12-28T18:59:14.320303+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/mermaid/view_specs/callback_registration_map.md",
+            "owners": [],
+            "modified_utc": "2025-11-11T18:09:33.893527+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/mermaid/view_specs/circular_import_detection.md",
+            "owners": [],
+            "modified_utc": "2025-11-10T23:44:51.556360+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/mermaid/view_specs/class_inheritance_hierarchy.md",
+            "owners": [],
+            "modified_utc": "2025-11-12T00:31:56.863013+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/mermaid/view_specs/complexity_heatmap.md",
+            "owners": [],
+            "modified_utc": "2025-11-09T18:47:12.657650+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/mermaid/view_specs/cross_module_function_references.md",
+            "owners": [],
+            "modified_utc": "2025-11-13T00:44:40.567019+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/mermaid/view_specs/cyclomatic_complexity_map.md",
+            "owners": [],
+            "modified_utc": "2025-11-12T21:30:49.588627+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/mermaid/view_specs/dead_code_detection.md",
+            "owners": [],
+            "modified_utc": "2025-11-25T19:41:38.796364+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/mermaid/view_specs/decorator_usage_map.md",
+            "owners": [],
+            "modified_utc": "2025-11-10T02:50:17.687901+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/mermaid/view_specs/documentation_coverage_map.md",
+            "owners": [],
+            "modified_utc": "2025-11-09T13:52:08.599860+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/mermaid/view_specs/dynamic_code_watchlist.md",
+            "owners": [],
+            "modified_utc": "2025-11-11T19:18:20.042571+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/mermaid/view_specs/entrypoint_trace_diagram.md",
+            "owners": [],
+            "modified_utc": "2025-11-11T20:50:52.234611+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/mermaid/view_specs/exception_flow_map.md",
+            "owners": [],
+            "modified_utc": "2025-11-12T17:19:01.353505+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/mermaid/view_specs/export_contract_matrix.md",
+            "owners": [],
+            "modified_utc": "2025-11-10T22:16:35.884664+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/mermaid/view_specs/external_vs_internal_dependency_map.md",
+            "owners": [],
+            "modified_utc": "2025-11-11T14:21:33.164689+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/mermaid/view_specs/function_call_graph.md",
+            "owners": [],
+            "modified_utc": "2025-11-09T12:22:54.577880+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/mermaid/view_specs/function_inventory_overview.md",
+            "owners": [],
+            "modified_utc": "2025-11-09T12:03:21.554136+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/mermaid/view_specs/git_churn_risk_map.md",
+            "owners": [],
+            "modified_utc": "2025-11-13T13:02:43.504541+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/mermaid/view_specs/global_variable_usage_map.md",
+            "owners": [],
+            "modified_utc": "2025-11-12T02:31:03.545393+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/mermaid/view_specs/import_chain_depth.md",
+            "owners": [],
+            "modified_utc": "2025-11-13T01:18:18.407063+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/mermaid/view_specs/io_effects_diagram.md",
+            "owners": [],
+            "modified_utc": "2025-11-12T02:58:12.165922+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/mermaid/view_specs/layer_architecture_validation.md",
+            "owners": [],
+            "modified_utc": "2025-11-11T12:06:51.981977+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/mermaid/view_specs/logging_flow.md",
+            "owners": [],
+            "modified_utc": "2025-11-09T22:40:49.131670+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/mermaid/view_specs/method_call_chain.md",
+            "owners": [],
+            "modified_utc": "2025-11-12T01:21:25.043349+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/mermaid/view_specs/module_dependency_graph.md",
+            "owners": [],
+            "modified_utc": "2025-11-10T17:21:33.634574+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/mermaid/view_specs/public_vs_private_api.md",
+            "owners": [],
+            "modified_utc": "2025-11-12T17:58:50.934758+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/mermaid/view_specs/screening_signal_timeline.md",
+            "owners": [],
+            "modified_utc": "2025-11-08T22:44:05.280184+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/mermaid/view_specs/test_coverage_mapping.md",
+            "owners": [],
+            "modified_utc": "2025-11-13T11:50:20.803023+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/mermaid/view_specs/type_coverage_map.md",
+            "owners": [],
+            "modified_utc": "2025-11-09T14:42:20.042563+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/metrics/library_integration_metrics.md",
+            "owners": [],
+            "modified_utc": "2025-11-04T14:15:56.326050+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/metrics/metrics_summary_schema.md",
+            "owners": [],
+            "modified_utc": "2025-11-04T14:15:56.479204+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/metrics/weighted_progress_briefing_template.md",
+            "owners": [],
+            "modified_utc": "2025-12-17T01:38:22.486199+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/naming_conventions.md",
+            "owners": [],
+            "modified_utc": "2025-11-06T09:44:23.975246+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/orchestrator_migration_notes.md",
+            "owners": [],
+            "modified_utc": "2025-12-01T13:19:36.912676+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/phase_4/AUTOMATION_PLANNING_NOTES.md",
+            "owners": [],
+            "modified_utc": "2025-12-28T22:10:03.392815+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/phase_4/HELPER_ADOPTION_CLI_SPEC.md",
+            "owners": [],
+            "modified_utc": "2025-11-08T23:02:05.500300+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/phase_4/POST_RUN_TEST_MATRIX.md",
+            "owners": [],
+            "modified_utc": "2025-11-04T14:15:52.461168+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/phase_4/PR_CHECKLIST_TEMPLATE.md",
+            "owners": [],
+            "modified_utc": "2025-11-04T14:29:02.463000+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/phase_4/dry_run_samples/README.md",
+            "owners": [],
+            "modified_utc": "2025-11-04T14:15:52.700940+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/phase_5/MAKE_TARGET_DESIGN.md",
+            "owners": [],
+            "modified_utc": "2025-12-28T22:10:03.392815+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/phase_6/PROMPT_AUDIT_NOTES.md",
+            "owners": [],
+            "modified_utc": "2025-11-04T14:15:53.173199+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/phase_6/PROMPT_CHANGE_CONTROL_WORKFLOW.md",
+            "owners": [],
+            "modified_utc": "2025-11-04T14:45:22.717422+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/phase_6/PROMPT_DELTA_DRAFTS.md",
+            "owners": [],
+            "modified_utc": "2025-11-04T14:45:22.717422+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/phase_6/PROMPT_GUARDRAIL_MATRIX.md",
+            "owners": [],
+            "modified_utc": "2025-11-04T14:15:53.527503+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/phase_6/PROMPT_ROLLBACK_PLAYBOOK.md",
+            "owners": [],
+            "modified_utc": "2025-11-04T14:45:22.718420+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/phase_6/PROMPT_VALIDATION_PLAN.md",
+            "owners": [],
+            "modified_utc": "2025-11-04T14:15:53.865969+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/phase_6/PROMPT_VALIDATION_RESULTS.md",
+            "owners": [],
+            "modified_utc": "2025-12-05T18:36:00.308240+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/phase_6/validation_runs/2025-11-04-after_coding_alignment.md",
+            "owners": [],
+            "modified_utc": "2025-11-04T14:45:22.721421+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/phase_6/validation_runs/2025-11-04-bundle_review.md",
+            "owners": [],
+            "modified_utc": "2025-11-04T14:15:54.514396+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/phase_6/validation_runs/2025-11-04-session_primer.md",
+            "owners": [],
+            "modified_utc": "2025-11-04T14:45:22.722420+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/phase_6/validation_runs/2025-11-04-update_docs.md",
+            "owners": [],
+            "modified_utc": "2025-11-04T14:29:02.467513+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/phase_6/validation_runs/2025-12-05-healthview_prompt_review.md",
+            "owners": [],
+            "modified_utc": "2025-12-05T18:36:00.308240+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/phase_7/CI_INTEGRATION_STRATEGY.md",
+            "owners": [],
+            "modified_utc": "2025-11-23T20:48:09.158067+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/phase_7/CI_ROLLOUT_LOG.md",
+            "owners": [],
+            "modified_utc": "2025-11-24T23:59:30.979170+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/phase_7/COLLECT_TEST_LOG_REPORTS_BLUEPRINT.md",
+            "owners": [],
+            "modified_utc": "2025-12-15T23:01:54.708637+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/phase_7/FALSE_POSITIVE_FEEDBACK_LOOP.md",
+            "owners": [],
+            "modified_utc": "2025-11-04T14:45:22.719421+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/phase_7/METRIC_BASELINE_PLAN.md",
+            "owners": [],
+            "modified_utc": "2025-11-04T14:45:22.720423+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/phase_7/PLACEHOLDER_DEBT_PLAN.md",
+            "owners": [],
+            "modified_utc": "2025-11-24T23:59:30.979170+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/phase_7/PRODUCER_CONSUMER_TRACEABILITY_AUDIT.md",
+            "owners": [],
+            "modified_utc": "2025-11-24T14:58:19.684270+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/phase_7/REPORTING_INTERFACE_PLAN.md",
+            "owners": [],
+            "modified_utc": "2025-11-04T14:15:55.276656+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/phase_7/RETENTION_POLICY_UPDATE.md",
+            "owners": [],
+            "modified_utc": "2025-11-04T14:15:55.420232+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/phase_7/placeholder_scan_blocking_transition_brief.md",
+            "owners": [],
+            "modified_utc": "2025-11-24T23:59:30.988190+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/run_folder_summary_template.md",
+            "owners": [],
+            "modified_utc": "2025-10-28T21:57:52.001815+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/docs/run_log_template.md",
+            "owners": [],
+            "modified_utc": "2025-10-30T20:01:02.588368+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/scripts/orchestrators/README.md",
+            "owners": [],
+            "modified_utc": "2025-12-02T21:11:59.771284+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/scripts/script_inventory.md",
+            "owners": [],
+            "modified_utc": "2025-10-25T14:43:05.753999+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-20260104-1632.md",
+            "owners": [],
+            "modified_utc": "2026-01-04T16:32:44.203277+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-20260123-2343.md",
+            "owners": [],
+            "modified_utc": "2026-01-23T23:43:56.406995+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/scripts/scripts_index/scripts_duplicate_summary-20260123-2345.md",
+            "owners": [],
+            "modified_utc": "2026-01-23T23:45:39.260339+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/viewer/README.md",
+            "owners": [],
+            "modified_utc": "2025-11-28T14:18:05.271026+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/viewer/SCREENING_TIMELINE_VERIFICATION.md",
+            "owners": [],
+            "modified_utc": "2025-12-28T22:29:59.942281+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/viewer/TROUBLESHOOTING.md",
+            "owners": [],
+            "modified_utc": "2025-12-28T22:10:03.394815+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/viewer/VIEW_PACK_PERSISTENCE_FIX.md",
+            "owners": [],
+            "modified_utc": "2025-11-09T14:10:49.671386+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/viewer/WIRING_TRACE_REPORT.md",
+            "owners": [],
+            "modified_utc": "2025-12-28T22:10:03.395813+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/viewer/cache/README.md",
+            "owners": [],
+            "modified_utc": "2025-11-08T23:01:49.217319+00:00"
+          },
+          {
+            "path": ".repo_studios/command_center/viewer/viewer-wiring-trace.md",
+            "owners": [],
+            "modified_utc": "2025-11-08T23:01:54.913598+00:00"
+          },
+          {
+            "path": "command_center/reports/healthview/inventory_health/20251217-1810/summary.md",
+            "owners": [],
+            "modified_utc": "2025-12-17T18:10:12.443661+00:00"
+          }
+        ]
+      },
+      {
+        "module": "scripts",
+        "code_paths": [
+          ".repo_studios/scripts/aggregators/analyze_monkey_patch_trends.py",
+          ".repo_studios/scripts/consumers/classify_monkey_patches.py",
+          ".repo_studios/scripts/producers/scan_monkey_patches.py",
+          ".repo_studios/scripts/producers/seed_standards_prompts.py",
+          ".repo_studios/scripts/summarizers/summarize_standards.py",
+          ".repo_studios/scripts/utilities/refresh_mypy_baselines.py"
+        ],
+        "doc_paths": [
+          ".repo_studios/scripts/script_inventory_architecture.md",
+          ".repo_studios/scripts/scripts_index/scripts_duplicate_summary-20260116-1500.md"
+        ],
+        "commit_hashes": [
+          "2dcc89c0eae22b47c3b166f9a663e47704e64a72",
+          "3b0c288619385a920f57d128eed27d64d6739be1",
+          "a6186363627a24f42dcda9a75457851e7901e0f1",
+          "da810d28f240d0d482a1a83478b6a249e9e93555",
+          "dbd4e3c9083b34fbcc20d736f60a8f5cfcf73c8b",
+          "f923c7242629d9c79ee2badb0cadc3e50881a871"
+        ],
+        "authors": [
+          "stormmasterext"
+        ],
+        "last_commit_utc": "2026-01-22T10:10:49-05:00",
+        "doc_candidates": [
+          {
+            "path": ".repo_studios/scripts/.repo_studios/reports/healthview/producer_reports/validate_inventory/20260123-2342/report.md",
+            "owners": [],
+            "modified_utc": "2026-01-23T23:42:58.524824+00:00"
+          },
+          {
+            "path": ".repo_studios/scripts/.repo_studios/reports/healthview/producer_reports/validate_inventory/20260123-2344/report.md",
+            "owners": [],
+            "modified_utc": "2026-01-23T23:44:52.214149+00:00"
+          },
+          {
+            "path": ".repo_studios/scripts/README.md",
+            "owners": [],
+            "modified_utc": "2025-11-04T09:50:54.154871+00:00"
+          },
+          {
+            "path": ".repo_studios/scripts/legacy_repo_scripts_overview.md",
+            "owners": [],
+            "modified_utc": "2025-10-21T16:07:43.334091+00:00"
+          },
+          {
+            "path": ".repo_studios/scripts/orchestrator_refactor_plan_temp.md",
+            "owners": [],
+            "modified_utc": "2025-12-01T13:19:36.908675+00:00"
+          },
+          {
+            "path": ".repo_studios/scripts/producers/producers_index/producers_duplicate_summary-2025-11-05-1125.md",
+            "owners": [],
+            "modified_utc": "2025-11-05T11:25:43.763687+00:00"
+          },
+          {
+            "path": ".repo_studios/scripts/script_inventory_architecture.md",
+            "owners": [],
+            "modified_utc": "2026-01-22T15:09:58.851052+00:00"
+          },
+          {
+            "path": ".repo_studios/scripts/scripts_index/scripts_duplicate_summary-20260116-1500.md",
+            "owners": [],
+            "modified_utc": "2026-01-16T15:00:32.516122+00:00"
+          }
+        ]
+      }
+    ],
+    "doc_index_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\producer_reports\\doc_index",
+    "anchor_inventory_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\producer_reports\\anchor_inventory"
+  }
+}
