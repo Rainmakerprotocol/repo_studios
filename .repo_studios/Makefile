@@ -107,7 +107,6 @@ studio-generate-typecheck-report:
 		"scripts/producers/generate_typecheck_report.py" \
 		--repo-root .. \
 		--all \
-		--artifacts-to-keep 10 \
 		--log-level "$(LOG_LEVEL)"
 
 .PHONY: typecheck

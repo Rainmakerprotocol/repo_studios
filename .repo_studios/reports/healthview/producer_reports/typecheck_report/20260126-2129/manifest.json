@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "viewer": "healthview",
+  "topic": "typecheck_report",
+  "status": "skipped",
+  "run_timestamp": "20260126-2129",
+  "generated_utc": "2026-01-26T21:29:59.248520+00:00",
+  "repo_root": "C:\\Users\\genet\\repo_studios",
+  "reports_root": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\producer_reports\\typecheck_report",
+  "topic_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\producer_reports\\typecheck_report",
+  "bundle_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\producer_reports\\typecheck_report\\20260126-2129",
+  "invocation": [
+    "C:\\Python313\\python.exe",
+    "-m",
+    "mypy",
+    "--show-error-codes",
+    "--no-color-output",
+    "--hide-error-context"
+  ],
+  "mypy_version": "mypy 1.11.1 (compiled: no)",
+  "summary": {
+    "error_count": 0,
+    "files_with_issues": 0,
+    "files_checked": 0,
+    "paths_checked": []
+  },
+  "error_samples": [],
+  "notes": "No typecheck targets discovered; skipping mypy execution.",
+  "strict": false,
+  "fast_mode": false,
+  "return_code": 0,
+  "log": "status=skipped\nrun_timestamp=20260126-2129\nerror_count=0\nfiles_with_issues=0\nfiles_checked=0\npaths_checked=0\nmypy_version=mypy 1.11.1 (compiled: no)\n",
+  "raw_output": "No typecheck targets discovered; skipping mypy execution.\n"
+}

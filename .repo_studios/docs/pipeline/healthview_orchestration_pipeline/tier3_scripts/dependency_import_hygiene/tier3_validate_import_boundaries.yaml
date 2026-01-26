@@ -78,24 +78,33 @@ db_integration:
   marker_required: true
   marker_string: "DB_INTEGRATION_MARKER:"
   markers_present:
-    - L425 — manifest.json write
-    - L429 — summary.md write
-    - L447 — telemetry.json write
+    - L441 — manifest.json write
+    - L445 — summary.md write
+    - L463 — telemetry.json write
 
 evidence:
   code_refs:
+    - .repo_studios/scripts/producers/validate_import_boundaries.py#L24 — DEFAULT_RELATIVE_GRAPH_DIR (FIXED path order)
     - .repo_studios/scripts/producers/validate_import_boundaries.py#L61 — build_topic_path
-    - .repo_studios/scripts/producers/validate_import_boundaries.py#L468 — prune_run_directories
-    - .repo_studios/scripts/producers/validate_import_boundaries.py#L425-L447 — DB_INTEGRATION_MARKER writes
-    - .repo_studios/scripts/producers/validate_import_boundaries.py#L559-L578 — run(argv) entrypoint
+    - .repo_studios/scripts/producers/validate_import_boundaries.py#L484 — prune_run_directories
+    - .repo_studios/scripts/producers/validate_import_boundaries.py#L441-L463 — DB_INTEGRATION_MARKER writes
+    - .repo_studios/scripts/producers/validate_import_boundaries.py#L575-L594 — run(argv) entrypoint
   tests:
     - path: .repo_studios/tests/tests_producers/test_validate_import_boundaries.py
       result: 2/2 passed
-      duration: 0.19s
+      duration: 0.17s
   qa:
     mypy: "Success: no issues found in 1 source file"
-    pytest: "2 passed in 0.19s"
+    pytest: "2 passed in 0.17s"
     last_verified: "2026-01-26"
+  output_truth_verification:
+    verified: true
+    verified_date: "2026-01-26"
+    checks:
+      - import_graph_found: true
+      - claims_verified: true
+      - summary_md_relative_paths: true
+      - markdownlint_pass: true
 
 notes:
   - Script uses build_topic_path('producer', 'import_boundary') — HOP-compliant
@@ -105,3 +114,5 @@ notes:
   - Has both run(argv) importable entry and main(argv) CLI wrapper
   - Emits base package (manifest.json, summary.md, telemetry.json) plus supplementary (violations.json, log.txt)
   - summary.md uses relative paths (not absolute) for portability — fixed 2026-01-26
+  - "Bug fix (2026-01-26): Corrected DEFAULT_RELATIVE_GRAPH_DIR path order from producer_reports/healthview to healthview/producer_reports"
+  - "Output truth verification: All claims in summary.md verified TRUE (import graph loaded, 0 violations correct)"

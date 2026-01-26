@@ -1,0 +1,30 @@
+{
+  "viewer": "healthview",
+  "topic": "typecheck_report",
+  "run_timestamp": "20260126-2131",
+  "generated_utc": "2026-01-26T21:31:07.586557+00:00",
+  "metrics": {
+    "status": "error",
+    "error_count": 465,
+    "files_with_issues": 84,
+    "files_checked": 260,
+    "files_checked_repo_studios": 212,
+    "files_checked_command_center": 48,
+    "paths_checked": 1,
+    "strict": false,
+    "fast_mode": false,
+    "return_code": 2
+  },
+  "payload": {
+    "mypy_version": "mypy 1.11.1 (compiled: no)",
+    "invocation": [
+      "C:\\Users\\genet\\repo_studios\\.venv\\Scripts\\python.exe",
+      "-m",
+      "mypy",
+      "--show-error-codes",
+      "--no-color-output",
+      "--hide-error-context",
+      "<all python files (batched)>"
+    ]
+  }
+}

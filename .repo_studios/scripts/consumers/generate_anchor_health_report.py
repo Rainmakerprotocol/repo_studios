@@ -95,24 +95,56 @@ def build_database_placeholder(target: str) -> dict[str, str]:
     }
 
 
-def collect_h1_h2_slugs(skip: set[str] | None = None, *, docs_root: Path | None = None) -> dict[str, list[str]]:
-    root = docs_root or Path("docs")
-    if not root.exists():
-        raise FileNotFoundError(f"docs directory missing: {root}")
+def collect_h1_h2_slugs(
+    skip: set[str] | None = None,
+    *,
+    docs_roots: list[Path] | None = None,
+) -> dict[str, list[str]]:
+    """Collect H1/H2 heading slugs from markdown files in one or more docs directories.
+
+    Args:
+        skip: Set of slug names to exclude from collection.
+        docs_roots: List of documentation root directories to scan. Each file's
+            location is prefixed with the root's name for disambiguation when
+            multiple roots exist.
+
+    Returns:
+        Mapping of slug -> list of "root_name/relative_path:lineno" locations.
+    """
+    all_roots = docs_roots or [Path("docs")]
+    # Filter to only existing roots
+    roots = [r for r in all_roots if r.exists()]
+    if not roots:
+        return {}
+
     mapping: dict[str, list[str]] = {}
-    for md in root.rglob("*.md"):
-        if any(p in md.parts for p in ("coverage_history",)):
-            continue
-        for lineno, line in enumerate(md.read_text(encoding="utf-8", errors="replace").splitlines(), 1):
-            m = HEADING_RE.match(line)
-            if not m:
+    use_prefix = len(roots) > 1  # Only prefix when multiple roots exist
+    for root in roots:
+        # Use parent name to disambiguate when roots share the same name
+        # e.g., "docs" vs ".repo_studios/docs"
+        if use_prefix and root.parent.name == ".repo_studios":
+            root_prefix = ".repo_studios/docs"
+        else:
+            root_prefix = root.name
+        for md in root.rglob("*.md"):
+            if any(p in md.parts for p in ("coverage_history",)):
                 continue
-            if len(m.group(1)) > 2:
-                continue
-            slug = _slugify(m.group(2))
-            if skip and slug in skip:
-                continue
-            mapping.setdefault(slug, []).append(f"{md.relative_to(root)}:{lineno}")
+            for lineno, line in enumerate(md.read_text(encoding="utf-8", errors="replace").splitlines(), 1):
+                m = HEADING_RE.match(line)
+                if not m:
+                    continue
+                if len(m.group(1)) > 2:
+                    continue
+                slug = _slugify(m.group(2))
+                if skip and slug in skip:
+                    continue
+                # Include root prefix in location for multi-root disambiguation
+                rel_path = md.relative_to(root)
+                if use_prefix:
+                    location = f"{root_prefix}/{rel_path}:{lineno}"
+                else:
+                    location = f"{rel_path}:{lineno}"
+                mapping.setdefault(slug, []).append(location)
     return mapping
 
 
@@ -170,8 +202,16 @@ def _clusters_from_inventory(inventory: dict) -> list[Cluster]:
     return clusters
 
 
-def _clusters_from_scan(*, docs_root: Path) -> list[Cluster]:
-    strict_map = collect_h1_h2_slugs(GENERIC_ALLOWED, docs_root=docs_root)
+def _clusters_from_scan(*, docs_roots: list[Path]) -> list[Cluster]:
+    """Build duplicate clusters by scanning multiple docs directories.
+
+    Args:
+        docs_roots: List of documentation root directories to scan.
+
+    Returns:
+        List of Cluster objects representing cross-file duplicate anchors.
+    """
+    strict_map = collect_h1_h2_slugs(GENERIC_ALLOWED, docs_roots=docs_roots)
     strict_dupes = multi_file_duplicates(strict_map)
     clusters: list[Cluster] = []
     for slug, locs in strict_dupes.items():
@@ -186,8 +226,19 @@ def build_report(
     inventory: dict | None,
     inventory_path: Path | None,
     baseline_path: Path,
-    docs_root: Path,
+    docs_roots: list[Path],
 ) -> dict:
+    """Build anchor health report from inventory or direct scan.
+
+    Args:
+        inventory: Optional pre-loaded inventory payload.
+        inventory_path: Path to inventory file (for provenance).
+        baseline_path: Path to baseline JSON for delta calculation.
+        docs_roots: List of documentation root directories to scan when no inventory.
+
+    Returns:
+        Report dictionary with duplicate clusters and metrics.
+    """
     if inventory is not None:
         clusters = _clusters_from_inventory(inventory)
         source = "inventory"
@@ -195,7 +246,7 @@ def build_report(
         base_summary = inventory.get("summary", {}) if isinstance(inventory, dict) else {}
         cross_file_duplicates = base_summary.get("cross_file_duplicates")
     else:
-        clusters = _clusters_from_scan(docs_root=docs_root)
+        clusters = _clusters_from_scan(docs_roots=docs_roots)
         source = "scan"
         strict_count = len(clusters)
         cross_file_duplicates = None
@@ -527,7 +578,12 @@ def run(
 
     resolved_repo_root = resolve_repo_root(getattr(args, "repo_root", None), origin=Path(__file__))
     baseline_path = (resolved_repo_root / BASELINE_PATH).resolve()
-    docs_root = (resolved_repo_root / "docs").resolve()
+
+    # Scan both repo root docs/ and .repo_studios/docs/
+    docs_roots = [
+        (resolved_repo_root / "docs").resolve(),
+        (resolved_repo_root / ".repo_studios" / "docs").resolve(),
+    ]
 
     log_level = getattr(logging, str(args.log_level).upper(), logging.INFO)
     logging.basicConfig(level=log_level, format="%(levelname)s %(message)s", force=True)
@@ -543,7 +599,7 @@ def run(
         inventory=inventory_payload,
         inventory_path=inventory_path,
         baseline_path=baseline_path,
-        docs_root=docs_root,
+        docs_roots=docs_roots,
     )
 
     target_output = args.output_dir if args.output_dir is not None else OUTPUT_DIR
@@ -573,6 +629,8 @@ def run(
 
 
 def main(argv: Sequence[str] | None = None) -> None:  # pragma: no cover - CLI side effect
+    if argv is None:
+        argv = sys.argv[1:]
     result = run(argv=argv)
     report = result["report"]
     bundle_dir = result["bundle_dir"]

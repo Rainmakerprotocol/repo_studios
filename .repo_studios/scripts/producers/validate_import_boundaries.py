@@ -21,7 +21,8 @@ from dataclasses import dataclass, replace
 from pathlib import Path
 from typing import Any, cast
 
-DEFAULT_RELATIVE_GRAPH_DIR = Path(".repo_studios/reports/producer_reports/healthview/import_graph")
+# HOP-compliant path: healthview/producer_reports (not producer_reports/healthview)
+DEFAULT_RELATIVE_GRAPH_DIR = Path(".repo_studios/reports/healthview/producer_reports/import_graph")
 # HOP-compliant output root - set after imports
 TOPIC_SLUG = "import_boundary"
 DEFAULT_ALLOWLIST = Path(".repo_studios/scripts/producers/import_rules_allowlist.json")

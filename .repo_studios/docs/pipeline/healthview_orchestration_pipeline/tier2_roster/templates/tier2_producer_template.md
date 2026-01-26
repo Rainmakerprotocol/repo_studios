@@ -111,6 +111,16 @@ usage: <SCRIPT_NAME> [-h] [--repo-root REPO_ROOT] ...
 
 ### 2.5 Output Quality Assessment
 
+> **⚠️ MANDATORY STOP-GATE — DO NOT SKIP**
+>
+> This section is the **PROOF OF THE SCRIPT**. A script that passes mypy/pytest but produces
+> incorrect, misleading, or unverifiable output is **WORTHLESS**. Every claim in the output
+> artifacts MUST be verified against ground truth. If any claim is false, the script is BROKEN
+> regardless of test results.
+>
+> **Agent Instruction:** You MUST run the script, read every output file, and verify each claim
+> against the actual filesystem/codebase state. Do not proceed until all claims are TRUE.
+
 **MANDATORY: Run script and inspect actual output before completing this section.**
 
 #### 2.5.1 QA Verification
@@ -152,6 +162,23 @@ usage: <SCRIPT_NAME> [-h] [--repo-root REPO_ROOT] ...
 | Marker at manifest.json write | ⚠️/✅ | L<xxx> |
 | Marker at summary.md write | ⚠️/✅ | L<xxx> |
 | Marker at telemetry.json write | ⚠️/✅ | L<xxx> |
+
+#### 2.5.5 Output Truth Verification (CRITICAL)
+
+> **⚠️ THIS IS THE MOST IMPORTANT CHECK**
+>
+> Read every claim in summary.md and manifest.json. Verify each against ground truth.
+> A script that reports "0 violations" when it failed to load input data is **LYING**.
+> A script that references paths that don't exist is **BROKEN**.
+
+| Claim in Output | Verification Method | Ground Truth | Verdict |
+|-----------------|---------------------|--------------|---------|
+| <claim from summary.md> | <how to verify> | <actual state> | ✅/❌ |
+| <input file path exists> | `Test-Path <path>` | <true/false> | ✅/❌ |
+| <upstream data loaded> | Check logs for "loaded" vs "not found" | <loaded/skipped> | ✅/❌ |
+| <count/metric is accurate> | Manual count or cross-reference | <actual count> | ✅/❌ |
+
+**If ANY claim is FALSE, the script is BROKEN. Fix it before proceeding.**
 
 ---
 

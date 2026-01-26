@@ -332,6 +332,9 @@ notes:
   - "Entry surface: CLI and importable (run(argv) returns payload dict)."
   - "Primary purpose: generates H1/H2 markdown anchor duplication summary; emits structured artifacts for dashboarding/human review."
   - "Phase 4 processing: Completed 2026-01-25 — artifact names updated, tests passing (3/3)."
+  - "Bug fix (2026-01-26): main() now properly passes sys.argv[1:] to run() when argv is None."
+  - "Output truth verification (2026-01-26): Strict Duplicate Count verified against clusters.tsv data."
+  - "Feature enhancement (2026-01-26): Multi-root scanning — now scans both `docs/` and `.repo_studios/docs/` with prefixed paths for disambiguation."
 ```
 
 ##### Promotion Mapping — generate_anchor_health_report.py
@@ -351,8 +354,13 @@ notes:
 - [x] B. Plan — artifact renaming to HOP base package
 - [x] C. Implement — docstring update, artifact names changed, return keys updated
 - [x] D. Evidence — tests passing (3/3)
-- [ ] E. Promote — move to Stage 2.2 when orchestrator is implemented
-- [x] DONE — record updated, Phase 4 processing complete (2026-01-25)
+- [x] E. Bug fix — `main()` now properly passes `sys.argv[1:]` to `run()` (2026-01-26)
+- [x] F. Output truth verification — script run, output claims verified TRUE:
+  - "Strict Duplicate Count: 8" verified against clusters.tsv ✅
+  - Output location HOP-compliant ✅
+  - summary.md markdownlint 0 errors ✅
+- [ ] G. Promote — move to Stage 2.2 when orchestrator is implemented
+- [x] **DONE** — Phase 4 complete with output truth verification (2026-01-26)
 
 ##### ASR-002: configure_faulthandler_runtime.py
 
@@ -654,14 +662,15 @@ db_integration:
   marker_required: true
   marker_string: "DB_INTEGRATION_MARKER:"
   markers_present:
-    - "L425 — manifest.json write"
-    - "L429 — summary.md write"  
-    - "L447 — telemetry.json write"
+    - "L441 — manifest.json write"
+    - "L445 — summary.md write"  
+    - "L463 — telemetry.json write"
 evidence:
   code_refs:
     - ".repo_studios/scripts/producers/validate_import_boundaries.py#L61 (build_topic_path HOP path)"
-    - ".repo_studios/scripts/producers/validate_import_boundaries.py#L425-L447 (DB_INTEGRATION_MARKER writes)"
-    - ".repo_studios/scripts/producers/validate_import_boundaries.py#L468 (prune_run_directories)"
+    - ".repo_studios/scripts/producers/validate_import_boundaries.py#L24 (DEFAULT_RELATIVE_GRAPH_DIR — FIXED path order)"
+    - ".repo_studios/scripts/producers/validate_import_boundaries.py#L441-L463 (DB_INTEGRATION_MARKER writes)"
+    - ".repo_studios/scripts/producers/validate_import_boundaries.py#L484 (prune_run_directories)"
   tests:
     - ".repo_studios/tests/tests_producers/test_validate_import_boundaries.py::test_emits_structured_artifacts_without_violations (PASSED)"
     - ".repo_studios/tests/tests_producers/test_validate_import_boundaries.py::test_detects_violations_and_honors_allowlist (PASSED)"
@@ -676,8 +685,10 @@ notes:
   - "Contract status: ✅ aligned with HOP base package (manifest.json, summary.md, telemetry.json)"
   - "Entry surface: CLI (exits non-zero when violations exist); also importable (run(argv))."
   - "Primary purpose: reads a module-level import graph (when available) + performs a repo walk to detect forbidden static import patterns; applies a JSON allowlist to filter accepted exceptions; emits structured reports."
-  - "Phase 4 processing: Completed 2026-01-26 — DB_INTEGRATION_MARKERs added, Tier-3 YAML created, mypy/pytest verified."
+  - "Phase 4 processing: Completed 2026-01-26 — DB_INTEGRATION_MARKERs added (L441, L445, L463), Tier-3 YAML created, mypy/pytest verified."
   - "Output quality: summary.md uses relative paths (not absolute), passes markdownlint, JSON artifacts validated."
+  - "Bug fix (2026-01-26): Corrected DEFAULT_RELATIVE_GRAPH_DIR path order from producer_reports/healthview to healthview/producer_reports — import graph now loaded correctly."
+  - "Output truth verification: All claims in summary.md verified TRUE against filesystem and graph data."
 ```
 
 ##### Promotion Mapping — validate_import_boundaries.py
@@ -697,11 +708,18 @@ notes:
 - [x] B. Gap analysis — identify delta between current and target contract
 - [x] C. Modification — apply HOP alignment (docstring, artifact naming, telemetry.json)
 - [x] D. Evidence — capture tests and representative payload examples
-- [x] E. DB markers — added DB_INTEGRATION_MARKER comments to artifact writes (L425, L429, L447)
+- [x] E. DB markers — added DB_INTEGRATION_MARKER comments to artifact writes (L441, L445, L463)
 - [x] F. Tier-3 YAML — created tier3_validate_import_boundaries.yaml with ScriptInspectionRecordV1 schema
 - [x] G. QA verification — mypy --strict PASSED, pytest 2/2 PASSED, CLI execution verified
-- [ ] H. Promote — wrap in Stage 4.2 orchestrator (pending Stage 4.2 implementation)
-- [x] DONE — record outcome in Tier-2 roster, Tier-3 YAML created, Phase 4 complete (2026-01-26)
+- [x] H. Output truth verification — script run via make target, output claims verified TRUE:
+  - Import graph found and loaded from correct HOP path ✅
+  - "0 violations" claim verified against rules and graph data ✅
+  - summary.md uses relative paths (not absolute) ✅
+  - markdownlint 0 errors ✅
+  - Bug fix: corrected DEFAULT_RELATIVE_GRAPH_DIR path from `producer_reports/healthview`
+    to `healthview/producer_reports` (L24)
+- [ ] I. Promote — wrap in Stage 4.2 orchestrator (pending Stage 4.2 implementation)
+- [x] **DONE** — Phase 4 complete with full output truth verification (2026-01-26)
 
 ##### ASR-006: extract_standards_rules.py
 
@@ -1192,7 +1210,7 @@ notes:
 
 #### Implementation Workstreams (checkbox-driven) — test_log_analysis.py
 
-- [x] A. Discovery — confirmed library module with __all__ exports
+- [x] A. Discovery — confirmed library module with `__all__` exports
 - [x] B. Plan — library-only, no HOP alignment needed
 - [x] C. Implement — N/A (library module)
 - [x] D. Evidence — tests passing 2/2 (test_build_test_log_report_parses_artifacts, test_select_junit_artifact_skips_internal_only)

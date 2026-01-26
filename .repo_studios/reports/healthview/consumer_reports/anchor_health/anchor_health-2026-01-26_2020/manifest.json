@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-01-26T20:20:55+00:00",
+  "source": "scan",
+  "inventory_report": null,
+  "artifacts": {
+    "telemetry_json": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\consumer_reports\\anchor_health\\anchor_health-2026-01-26_2020\\telemetry.json",
+    "summary_md": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\consumer_reports\\anchor_health\\anchor_health-2026-01-26_2020\\summary.md",
+    "legacy_report_json": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\consumer_reports\\anchor_health\\anchor_health-2026-01-26_2020\\anchor_report.json",
+    "legacy_report_md": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\consumer_reports\\anchor_health\\anchor_health-2026-01-26_2020\\anchor_report.md",
+    "clusters_tsv": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\consumer_reports\\anchor_health\\anchor_health-2026-01-26_2020\\clusters.tsv"
+  },
+  "metrics": {
+    "strict_duplicate_count": 8,
+    "baseline_cross_file_duplicates": null,
+    "delta_vs_baseline": null,
+    "inventory_cross_file_duplicates": null,
+    "total_clusters": 8
+  },
+  "database_placeholder": {
+    "target": "anchor_health_snapshot",
+    "status": "not_implemented",
+    "note": "Database sink placeholder; no data persisted during this run."
+  }
+}
