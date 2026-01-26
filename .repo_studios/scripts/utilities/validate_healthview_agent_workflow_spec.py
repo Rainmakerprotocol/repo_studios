@@ -27,7 +27,7 @@ LIBRARIES_ROOT = REPO_ROOT / ".repo_studios" / "command_center" / "scripts"
 if str(LIBRARIES_ROOT) not in sys.path:
     sys.path.insert(0, str(LIBRARIES_ROOT))
 
-from libraries.cli import resolve_repo_root  # type: ignore
+from libraries.cli import resolve_repo_root
 
 LOG = logging.getLogger(__name__)
 LOG.addHandler(logging.NullHandler())

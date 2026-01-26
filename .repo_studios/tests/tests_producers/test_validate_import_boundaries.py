@@ -65,8 +65,11 @@ def test_emits_structured_artifacts_without_violations(tmp_path, monkeypatch):
     output_dir = Path(payload["output_dir"])
     run_dir = output_dir / payload["run_id"]
     assert run_dir.exists()
-    assert (run_dir / "report.json").exists()
-    assert (run_dir / "report.md").exists()
+    # HOP base package artifacts
+    assert (run_dir / "manifest.json").exists()
+    assert (run_dir / "summary.md").exists()
+    assert (run_dir / "telemetry.json").exists()
+    # Supplementary artifacts
     assert (run_dir / "log.txt").exists()
     assert (run_dir / "violations.json").exists()
 
@@ -153,6 +156,7 @@ def test_detects_violations_and_honors_allowlist(tmp_path, monkeypatch):
     assert payload_second["summary"]["violation_count"] == 0
 
     output_dir = Path(payload_second["output_dir"])
-    run_dirs = [p for p in output_dir.iterdir() if p.is_dir() and p.name.startswith(mod.RUN_PREFIX)]
+    # HOP-compliant: run directories are timestamp-only (YYYYMMDD-HHMM), not prefixed
+    run_dirs = [p for p in output_dir.iterdir() if p.is_dir() and p.name[0].isdigit()]
     assert len(run_dirs) == 1
     assert run_dirs[0].name == payload_second["run_id"]

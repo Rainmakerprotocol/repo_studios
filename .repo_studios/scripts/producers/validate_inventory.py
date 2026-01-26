@@ -1,5 +1,25 @@
 #!/usr/bin/env python3
-"""Validate Repo Studios inventory entries and emit structured artifacts."""
+"""Validate Repo Studios inventory entries and emit structured artifacts.
+
+HOP-Compliant Producer Script
+=============================
+Emits base package artifacts: manifest.json, summary.md, telemetry.json
+
+Entry Points:
+    - main(argv): CLI entry, returns int exit code
+    - run(argv): Orchestrator entry, returns payload dict
+
+Output Root:
+    .repo_studios/reports/healthview/producer/validate_inventory/<timestamp>/
+
+Base Package:
+    - manifest.json: Full validation report payload
+    - summary.md: Human-readable markdown summary
+    - telemetry.json: Structured metrics for dashboarding
+
+Supplementary:
+    - raw.json: Detailed issue records for debugging
+"""
 
 from __future__ import annotations
 
@@ -23,6 +43,12 @@ RUN_PREFIX = "validate_inventory"
 TOPIC_SLUG = "validate_inventory"
 SCHEMA_VERSION = 1
 
+# HOP-compliant artifact names (base package)
+MANIFEST_JSON_NAME = "manifest.json"
+SUMMARY_MD_NAME = "summary.md"
+TELEMETRY_JSON_NAME = "telemetry.json"
+RAW_JSON_NAME = "raw.json"  # supplementary artifact
+
 LIBRARIES_ROOT = DEFAULT_REPO_ROOT / ".repo_studios" / "command_center" / "scripts"
 
 try:
@@ -42,7 +68,7 @@ try:
 except ModuleNotFoundError:  # pragma: no cover - fallback when executed as script
     if str(LIBRARIES_ROOT) not in sys.path:
         sys.path.insert(0, str(LIBRARIES_ROOT))
-    from libraries import (  # type: ignore
+    from libraries import (
         KeepSpec,
         PathSpec,
         OptionsConfig,
@@ -53,8 +79,8 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when executed as scri
         prune_run_directories,
         resolve_path,
     )
-    from libraries.retention_policy import get_keep  # type: ignore
-    from libraries.report_paths import build_topic_path  # type: ignore
+    from libraries.retention_policy import get_keep
+    from libraries.report_paths import build_topic_path
 
 # HOP-compliant output path
 DEFAULT_OUTPUT_DIR = build_topic_path("producer", TOPIC_SLUG)
@@ -309,14 +335,17 @@ def _check_list_fields(record: Dict[str, Any], file: Path, report: ValidationRep
 
 def _check_enums(record: Dict[str, Any], file: Path, registry: EnumRegistry, report: ValidationReport) -> None:
     record_id = record.get("id")
-    enum_map = {
-        "asset_kind": [record.get("asset_kind")],
-        "maturity": [record.get("maturity")],
-        "status": [record.get("status")],
-    }
-    for enum_name, values in enum_map.items():
-        if values[0] is not None:
-            registry.ensure(enum_name, values, report, file, record_id)
+    asset_kind = record.get("asset_kind")
+    if isinstance(asset_kind, str) and asset_kind:
+        registry.ensure("asset_kind", [asset_kind], report, file, record_id)
+
+    maturity = record.get("maturity")
+    if isinstance(maturity, str) and maturity:
+        registry.ensure("maturity", [maturity], report, file, record_id)
+
+    status = record.get("status")
+    if isinstance(status, str) and status:
+        registry.ensure("status", [status], report, file, record_id)
 
     if "roles" in record:
         registry.ensure("roles", record["roles"], report, file, record_id)
@@ -460,29 +489,68 @@ def render_markdown(report_payload: Dict[str, Any]) -> str:
     return "".join(lines)
 
 
-def render_log(report_payload: Dict[str, Any]) -> str:
+def compose_telemetry(report_payload: Dict[str, Any]) -> Dict[str, Any]:
+    """Compose telemetry data for the HOP base package.
+
+    Args:
+        report_payload: The main report payload containing status and summary.
+
+    Returns:
+        Dictionary with telemetry data (status, timestamp, metrics).
+    """
     summary = report_payload.get("summary", {})
     issue_counts = summary.get("issue_counts", {})
-    return (
-        "\n".join(
-            [
-                f"status={report_payload['status']}",
-                f"timestamp={report_payload['timestamp']}",
-                f"files_checked={summary.get('files_checked', 0)}",
-                f"records_checked={summary.get('records_checked', 0)}",
-                f"errors={issue_counts.get('errors', 0)}",
-                f"warnings={issue_counts.get('warnings', 0)}",
-            ]
-        )
-        + "\n"
+    return {
+        "status": report_payload["status"],
+        "timestamp": report_payload["timestamp"],
+        "metrics": {
+            "files_checked": summary.get("files_checked", 0),
+            "records_checked": summary.get("records_checked", 0),
+            "errors": issue_counts.get("errors", 0),
+            "warnings": issue_counts.get("warnings", 0),
+        },
+    }
+
+
+def write_run_artifacts(
+    run_dir: Path, report_payload: Dict[str, Any], raw_payload: Dict[str, Any]
+) -> Dict[str, Path]:
+    """Write HOP-compliant run artifacts to the run directory.
+
+    Emits the HOP base package (manifest.json, summary.md, telemetry.json)
+    plus supplementary artifacts.
+
+    Args:
+        run_dir: Path to the timestamped run directory.
+        report_payload: Main report payload for manifest.json.
+        raw_payload: Raw validation data for supplementary raw.json.
+
+    Returns:
+        Dictionary mapping artifact names to their paths.
+    """
+    manifest_path = run_dir / MANIFEST_JSON_NAME
+    summary_path = run_dir / SUMMARY_MD_NAME
+    telemetry_path = run_dir / TELEMETRY_JSON_NAME
+    raw_path = run_dir / RAW_JSON_NAME
+
+    manifest_path.write_text(
+        json.dumps(report_payload, indent=2) + "\n", encoding="utf-8"
+    )
+    summary_path.write_text(render_markdown(report_payload), encoding="utf-8")
+    telemetry_path.write_text(
+        json.dumps(compose_telemetry(report_payload), indent=2) + "\n", encoding="utf-8"
+    )
+    raw_path.write_text(
+        json.dumps(raw_payload, indent=2) + "\n", encoding="utf-8"
     )
 
+    return {
+        "manifest": manifest_path,
+        "summary": summary_path,
+        "telemetry": telemetry_path,
+        "raw": raw_path,
+    }
 
-def write_run_artifacts(run_dir: Path, report_payload: Dict[str, Any], raw_payload: Dict[str, Any]) -> None:
-    (run_dir / "report.json").write_text(json.dumps(report_payload, indent=2) + "\n", encoding="utf-8")
-    (run_dir / "report.md").write_text(render_markdown(report_payload), encoding="utf-8")
-    (run_dir / "log.txt").write_text(render_log(report_payload), encoding="utf-8")
-    (run_dir / "raw.json").write_text(json.dumps(raw_payload, indent=2) + "\n", encoding="utf-8")
 
 
 def compose_payload(
@@ -691,6 +759,16 @@ def build_options(args: argparse.Namespace) -> Options:
 
 
 def main(argv: Sequence[str] | None = None) -> int:
+    """CLI entry point for inventory validation.
+
+    Parses arguments, runs validation, writes artifacts, and returns exit code.
+
+    Args:
+        argv: Command-line arguments (defaults to sys.argv[1:]).
+
+    Returns:
+        Exit code: 0 if validation passed, 1 if errors found.
+    """
     parser = build_parser()
     args = parser.parse_args(argv)
 
@@ -742,7 +820,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     )
     raw_payload = compose_raw_payload(report_payload, report, paths.repo_root)
 
-    write_run_artifacts(run_dir, report_payload, raw_payload)
+    artifact_paths = write_run_artifacts(run_dir, report_payload, raw_payload)
     # HOP compliance: no pointer files created
     removed_runs = prune_history(
         paths.output_dir,
@@ -773,6 +851,119 @@ def main(argv: Sequence[str] | None = None) -> int:
     )
 
     return 0 if report_payload["summary"]["issue_counts"]["errors"] == 0 else 1
+
+
+def run(argv: Sequence[str] | None = None) -> Dict[str, Any]:
+    """Orchestrator-friendly entry point for inventory validation.
+
+    Executes validation and returns a payload dictionary suitable for
+    orchestrator chaining. Emits HOP-compliant base package artifacts.
+
+    Args:
+        argv: Command-line arguments (defaults to sys.argv[1:]).
+
+    Returns:
+        Dictionary containing:
+            - status: "pass" or "fail"
+            - exit_code: Integer exit code (0 for pass, 1 for fail)
+            - run_dir: Path to the timestamped run directory
+            - manifest: Path to manifest.json
+            - summary: Path to summary.md
+            - telemetry: Path to telemetry.json
+            - report_payload: Full report payload dict
+    """
+    parser = build_parser()
+    args = parser.parse_args(argv)
+
+    paths = build_paths(args)
+    options = build_options(args)
+
+    logging.basicConfig(
+        level=getattr(logging, options.log_level.upper(), logging.INFO),
+        format="%(levelname)s: %(message)s",
+        force=True,
+    )
+    logger = logging.getLogger(__name__)
+
+    generated_at = (
+        _current_time()
+        if options.timestamp is None
+        else datetime.fromisoformat(options.timestamp)
+    )
+    slug = _format_slug(generated_at)
+    run_dir = _prepare_run_dir(paths.output_dir, slug)
+
+    registry = EnumRegistry.load(paths.enums_path)
+    config = ValidatorConfig.load(paths.config_path)
+    report = ValidationReport()
+    stats = ValidationStats()
+    seen_ids: Dict[str, Path] = {}
+
+    for file in iterate_inventory_files(
+        paths.schema_root,
+        enums_path=paths.enums_path,
+        template_path=paths.template_path,
+        config_path=paths.config_path,
+    ):
+        validate_file(
+            file,
+            registry=registry,
+            report=report,
+            seen_ids=seen_ids,
+            config=config,
+            repo_root=paths.repo_root,
+            schema_root=paths.schema_root,
+            stats=stats,
+        )
+
+    report_payload = compose_payload(
+        repo_root=paths.repo_root,
+        run_dir=run_dir,
+        slug=slug,
+        generated_at=generated_at,
+        stats=stats,
+        report=report,
+        schema_root=paths.schema_root,
+        config_path=paths.config_path,
+        enums_path=paths.enums_path,
+    )
+    raw_payload = compose_raw_payload(report_payload, report, paths.repo_root)
+
+    artifact_paths = write_run_artifacts(run_dir, report_payload, raw_payload)
+
+    removed_runs = prune_history(
+        paths.output_dir,
+        keep=options.artifacts_to_keep,
+        current_run=run_dir,
+        logger=logger,
+    )
+    if removed_runs:
+        logger.debug(
+            "Pruned inventory runs: %s",
+            ", ".join(sorted(path.name for path in removed_runs)),
+        )
+
+    exit_code = 0 if report_payload["summary"]["issue_counts"]["errors"] == 0 else 1
+    status = "pass" if exit_code == 0 else "fail"
+
+    logging.info(
+        "validate_inventory status=%s files=%s records=%s errors=%s warnings=%s",
+        status,
+        report_payload["summary"].get("files_checked", 0),
+        report_payload["summary"].get("records_checked", 0),
+        report_payload["summary"]["issue_counts"].get("errors", 0),
+        report_payload["summary"]["issue_counts"].get("warnings", 0),
+    )
+
+    return {
+        "status": status,
+        "exit_code": exit_code,
+        "run_dir": run_dir,
+        "manifest": artifact_paths["manifest"],
+        "summary": artifact_paths["summary"],
+        "telemetry": artifact_paths["telemetry"],
+        "report_payload": report_payload,
+    }
 
 
 if __name__ == "__main__":  # pragma: no cover

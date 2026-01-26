@@ -147,12 +147,14 @@ def dump_snapshot(
         "dumped": False,
         "errors": [],
     }
+    fh_errors: list[str] = []
+    fh_status["errors"] = fh_errors
 
     try:
         fh = importlib.import_module("faulthandler")
         fh_status["imported"] = True
     except Exception as exc:
-        fh_status["errors"].append(f"import_failed:{exc}")
+        fh_errors.append(f"import_failed:{exc}")
         result["status"] = "warning"
         _write_bundle(settings, snapshot_path, fh_status, result, now, pruned=0)
         return result
@@ -162,14 +164,14 @@ def dump_snapshot(
         is_enabled = bool(getattr(fh, "is_enabled", lambda: False)())
         fh_status["enabled_before"] = is_enabled
     except Exception as exc:
-        fh_status["errors"].append(f"is_enabled_failed:{exc}")
+        fh_errors.append(f"is_enabled_failed:{exc}")
 
     if not is_enabled:
         try:
             fh.enable(all_threads=True)
             fh_status["enabled_after"] = True
         except Exception as exc:
-            fh_status["errors"].append(f"enable_failed:{exc}")
+            fh_errors.append(f"enable_failed:{exc}")
     else:
         fh_status["enabled_after"] = True
 
@@ -178,7 +180,7 @@ def dump_snapshot(
             fh.dump_traceback(file=handle, all_threads=True)
         fh_status["dumped"] = True
     except Exception as exc:
-        fh_status["errors"].append(f"dump_failed:{exc}")
+        fh_errors.append(f"dump_failed:{exc}")
         result["status"] = "warning"
 
     pruned = 0
@@ -235,13 +237,16 @@ def _write_bundle(
         f"- Generated: {manifest['ts']}",
         f"- Retention: keep {settings.artifacts_to_keep}, pruned {pruned}",
     ]
-    errors = fh_status.get("errors") or []
+    errors_raw = fh_status.get("errors")
+    errors: list[str] = []
+    if isinstance(errors_raw, list):
+        errors = [str(item) for item in errors_raw]
     if errors:
         summary_lines.append(f"- Errors: {', '.join(errors)}")
     (settings.outdir / "SUMMARY.md").write_text("\n".join(summary_lines), encoding="utf-8")
 
 
-def _write_json(path: Path, payload: Dict[str, object]) -> None:
+def _write_json(path: Path, payload: Mapping[str, object]) -> None:
     try:
         path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
     except Exception:

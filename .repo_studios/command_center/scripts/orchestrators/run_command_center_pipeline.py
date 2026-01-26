@@ -9,15 +9,15 @@ import logging
 import sys
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Callable, Iterable
+from typing import Callable, Sequence, cast
 
 try:
-    from libraries import resolve_repo_root  # type: ignore
+    from libraries import resolve_repo_root
 except ModuleNotFoundError:  # pragma: no cover - CLI fallback
     SCRIPTS_ROOT = Path(__file__).resolve().parents[1]
     if str(SCRIPTS_ROOT) not in sys.path:
         sys.path.insert(0, str(SCRIPTS_ROOT))
-    from libraries import resolve_repo_root  # type: ignore  # noqa: E402
+    from libraries import resolve_repo_root  # noqa: E402
 
 
 @dataclass(frozen=True)
@@ -26,7 +26,7 @@ class StepResult:
     artifacts: tuple[Path, ...] = ()
 
 
-INVENTORY_SCRIPT_RELATIVE = Path(".repo_studios/command_center/scripts/producers/generate_commandview_inventory.py")
+INVENTORY_SCRIPT_RELATIVE = Path(".repo_studios/command_center/scripts/cc_producers/generate_commandview_inventory.py")
 ANALYSIS_SCRIPT_RELATIVE = Path(".repo_studios/command_center/scripts/summarizers/generate_function_analysis.py")
 SCAN_SCRIPT_RELATIVE = Path(".repo_studios/command_center/scripts/aggregators/scan_duplicates.py")
 
@@ -42,7 +42,7 @@ class Options:
     log_level: str
 
 
-def parse_args(argv: Iterable[str] | None = None) -> argparse.Namespace:
+def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         prog="run_command_center_pipeline",
         description=__doc__ or "",
@@ -106,14 +106,14 @@ def _load_cli_module(script_path: Path, module_name: str):
     return module
 
 
-def _load_run_function(script_path: Path, module_name: str) -> Callable[[Iterable[str] | None], int]:
+def _load_run_function(script_path: Path, module_name: str) -> Callable[[Sequence[str] | None], int]:
     if not script_path.exists():
         raise FileNotFoundError(f"Required script not found: {script_path}")
     module = _load_cli_module(script_path, module_name)
     run_fn = getattr(module, "run", None)
     if not callable(run_fn):
         raise RuntimeError(f"Module {module_name} at {script_path} does not expose a callable run().")
-    return run_fn  # type: ignore[return-value]
+    return cast(Callable[[Sequence[str] | None], int], run_fn)
 
 
 def _latest_artifact(directory: Path, pattern: str, label: str) -> Path:
@@ -202,7 +202,7 @@ def _run_scan(paths: Paths, options: Options, analysis_path: Path | None) -> Ste
     return StepResult(exit_code=0, artifacts=(matrix_path, summary_path))
 
 
-def run(argv: Iterable[str] | None = None) -> int:
+def run(argv: Sequence[str] | None = None) -> int:
     args = parse_args(argv)
     options = build_options(args)
     configure_logging(options.log_level)

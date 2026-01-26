@@ -15,12 +15,12 @@ from pathlib import Path
 from typing import Iterable, Sequence
 
 try:
-    from libraries import resolve_repo_root  # type: ignore
+    from libraries import resolve_repo_root
 except ModuleNotFoundError:  # pragma: no cover - CLI fallback
     SCRIPTS_ROOT = Path(__file__).resolve().parents[1]
     if str(SCRIPTS_ROOT) not in sys.path:
         sys.path.insert(0, str(SCRIPTS_ROOT))
-    from libraries import resolve_repo_root  # type: ignore  # noqa: E402
+    from libraries import resolve_repo_root  # noqa: E402
 
 AUTOMATION_SCRIPT_RELATIVE = Path(".repo_studios/command_center/scripts/aggregators/generate_automation_manifest.py")
 DEFAULT_POST_RUN_MATRIX = Path("que_for_integration/refactor_library/phase_4/POST_RUN_TEST_MATRIX.md")

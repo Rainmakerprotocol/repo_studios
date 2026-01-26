@@ -1,0 +1,371 @@
+{
+  "schema_version": 1,
+  "viewer_slug": "producer_reports",
+  "topic": "test_coverage_inventory",
+  "run_timestamp": "20260124-1346",
+  "generated_at": "2026-01-24T13:46:46.378848+00:00",
+  "status": "ok",
+  "metrics": {
+    "total_files": 31,
+    "total_functions": 523,
+    "covered_functions": 452,
+    "overall_coverage_pct": 86.42,
+    "threshold": null,
+    "files_below_threshold_count": 0,
+    "min_file_coverage_pct": 0.0
+  },
+  "inputs": {
+    "coverage_source": "coverage.xml",
+    "include_empty": false,
+    "min_coverage": null
+  },
+  "payload": {
+    "schema_version": 1,
+    "generated_utc": "2026-01-24T13:46:42.263207+00:00",
+    "coverage_source": "coverage.xml",
+    "repo_root": "C:\\Users\\genet\\repo_studios",
+    "summary": {
+      "status": "ok",
+      "total_files": 31,
+      "total_functions": 523,
+      "covered_functions": 452,
+      "overall_coverage_pct": 86.42,
+      "files_below_threshold": [],
+      "threshold": null,
+      "include_empty": false
+    },
+    "files": [
+      {
+        "path": ".repo_studios/command_center/scripts/orchestrators/run_inventory_update.py",
+        "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\scripts\\orchestrators\\run_inventory_update.py",
+        "function_count": 5,
+        "functions_covered": 0,
+        "coverage_pct": 0.0,
+        "uncovered_functions": [
+          "build_parser",
+          "configure_logging",
+          "_ensure_target_allowed",
+          "run",
+          "main"
+        ]
+      },
+      {
+        "path": "tmp_generate_lizard_report_new.py",
+        "absolute_path": "C:\\Users\\genet\\repo_studios\\tmp_generate_lizard_report_new.py",
+        "function_count": 21,
+        "functions_covered": 0,
+        "coverage_pct": 0.0,
+        "uncovered_functions": [
+          "Offender.to_payload",
+          "_current_utc",
+          "_parse_timestamp",
+          "_timestamp_slug",
+          "_ensure_lizard_json_extension",
+          "_has_flag",
+          "_apply_default_extra_args",
+          "_build_command",
+          "_sanitize_command",
+          "_resolve_targets",
+          "_extract_file_path",
+          "_as_int",
+          "_collect_offenders",
+          "_render_markdown",
+          "_render_log",
+          "_format_raw_output",
+          "_compose_report",
+          "_append_note",
+          "_build_parser",
+          "configure_logging",
+          "main"
+        ]
+      },
+      {
+        "path": ".repo_studios/command_center/scripts/libraries/prune_logs.py",
+        "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\scripts\\libraries\\prune_logs.py",
+        "function_count": 3,
+        "functions_covered": 1,
+        "coverage_pct": 33.33,
+        "uncovered_functions": [
+          "_is_current",
+          "_sort_key"
+        ]
+      },
+      {
+        "path": ".repo_studios/command_center/scripts/orchestrators/run_standards_integrity.py",
+        "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\scripts\\orchestrators\\run_standards_integrity.py",
+        "function_count": 27,
+        "functions_covered": 20,
+        "coverage_pct": 74.07,
+        "uncovered_functions": [
+          "_is_run_slug",
+          "_coerce_payload",
+          "index_step",
+          "gap_step",
+          "diff_step",
+          "prompt_step",
+          "summary_step"
+        ]
+      },
+      {
+        "path": ".repo_studios/command_center/scripts/orchestrators/run_docs_health_overview.py",
+        "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\scripts\\orchestrators\\run_docs_health_overview.py",
+        "function_count": 46,
+        "functions_covered": 37,
+        "coverage_pct": 80.43,
+        "uncovered_functions": [
+          "_metric_int",
+          "doc_index_step",
+          "anchor_inventory_step",
+          "anchor_validation_step",
+          "docs_integrity_step",
+          "metrics_stub_step",
+          "churn_step",
+          "undocumented_step",
+          "aggregator_step"
+        ]
+      },
+      {
+        "path": ".repo_studios/command_center/scripts/orchestrators/run_fault_diagnostics_overview.py",
+        "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\scripts\\orchestrators\\run_fault_diagnostics_overview.py",
+        "function_count": 22,
+        "functions_covered": 18,
+        "coverage_pct": 81.82,
+        "uncovered_functions": [
+          "render_step_section",
+          "producer_step",
+          "consumer_step",
+          "summarizer_step"
+        ]
+      },
+      {
+        "path": ".repo_studios/command_center/scripts/orchestrators/run_monkey_patch_oversight.py",
+        "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\scripts\\orchestrators\\run_monkey_patch_oversight.py",
+        "function_count": 24,
+        "functions_covered": 20,
+        "coverage_pct": 83.33,
+        "uncovered_functions": [
+          "producer_step",
+          "consumer_step",
+          "aggregator_step",
+          "summarizer_step"
+        ]
+      },
+      {
+        "path": ".repo_studios/command_center/scripts/summarizers/summarize_monkey_patch_overview.py",
+        "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\scripts\\summarizers\\summarize_monkey_patch_overview.py",
+        "function_count": 17,
+        "functions_covered": 15,
+        "coverage_pct": 88.24,
+        "uncovered_functions": [
+          "_dir_timestamp",
+          "_format_pct"
+        ]
+      },
+      {
+        "path": ".repo_studios/command_center/scripts/summarizers/generate_function_analysis.py",
+        "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\scripts\\summarizers\\generate_function_analysis.py",
+        "function_count": 18,
+        "functions_covered": 16,
+        "coverage_pct": 88.89,
+        "uncovered_functions": [
+          "_append",
+          "_write_analysis"
+        ]
+      },
+      {
+        "path": ".repo_studios/command_center/scripts/cc_producers/generate_commandview_inventory.py",
+        "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\scripts\\cc_producers\\generate_commandview_inventory.py",
+        "function_count": 108,
+        "functions_covered": 98,
+        "coverage_pct": 90.74,
+        "uncovered_functions": [
+          "CoverageIndex.__bool__",
+          "_names",
+          "_dedupe",
+          "_iter_entries",
+          "_record_local",
+          "_iter_entries",
+          "_finalize",
+          "_append",
+          "_ingest",
+          "_capture_function"
+        ]
+      },
+      {
+        "path": ".repo_studios/command_center/scripts/aggregators/scan_duplicates.py",
+        "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\scripts\\aggregators\\scan_duplicates.py",
+        "function_count": 48,
+        "functions_covered": 44,
+        "coverage_pct": 91.67,
+        "uncovered_functions": [
+          "record_occurrence",
+          "_write_matrix",
+          "_write_summary",
+          "main"
+        ]
+      },
+      {
+        "path": ".repo_studios/command_center/scripts/libraries/test_log_analysis.py",
+        "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\scripts\\libraries\\test_log_analysis.py",
+        "function_count": 16,
+        "functions_covered": 15,
+        "coverage_pct": 93.75,
+        "uncovered_functions": [
+          "_totals_and_internal_only"
+        ]
+      },
+      {
+        "path": ".repo_studios/command_center/scripts/libraries/artifacts.py",
+        "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\scripts\\libraries\\artifacts.py",
+        "function_count": 6,
+        "functions_covered": 6,
+        "coverage_pct": 100.0,
+        "uncovered_functions": []
+      },
+      {
+        "path": ".repo_studios/command_center/scripts/libraries/build_commandview_selector.py",
+        "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\scripts\\libraries\\build_commandview_selector.py",
+        "function_count": 7,
+        "functions_covered": 7,
+        "coverage_pct": 100.0,
+        "uncovered_functions": []
+      },
+      {
+        "path": ".repo_studios/command_center/scripts/libraries/catalog_registry.py",
+        "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\scripts\\libraries\\catalog_registry.py",
+        "function_count": 8,
+        "functions_covered": 8,
+        "coverage_pct": 100.0,
+        "uncovered_functions": []
+      },
+      {
+        "path": ".repo_studios/command_center/scripts/libraries/cli.py",
+        "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\scripts\\libraries\\cli.py",
+        "function_count": 13,
+        "functions_covered": 13,
+        "coverage_pct": 100.0,
+        "uncovered_functions": []
+      },
+      {
+        "path": ".repo_studios/command_center/scripts/libraries/guardrails.py",
+        "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\scripts\\libraries\\guardrails.py",
+        "function_count": 4,
+        "functions_covered": 4,
+        "coverage_pct": 100.0,
+        "uncovered_functions": []
+      },
+      {
+        "path": ".repo_studios/command_center/scripts/libraries/manifest.py",
+        "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\scripts\\libraries\\manifest.py",
+        "function_count": 8,
+        "functions_covered": 8,
+        "coverage_pct": 100.0,
+        "uncovered_functions": []
+      },
+      {
+        "path": ".repo_studios/command_center/scripts/libraries/metrics.py",
+        "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\scripts\\libraries\\metrics.py",
+        "function_count": 7,
+        "functions_covered": 7,
+        "coverage_pct": 100.0,
+        "uncovered_functions": []
+      },
+      {
+        "path": ".repo_studios/command_center/scripts/libraries/pathing.py",
+        "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\scripts\\libraries\\pathing.py",
+        "function_count": 1,
+        "functions_covered": 1,
+        "coverage_pct": 100.0,
+        "uncovered_functions": []
+      },
+      {
+        "path": ".repo_studios/command_center/scripts/libraries/report_paths.py",
+        "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\scripts\\libraries\\report_paths.py",
+        "function_count": 7,
+        "functions_covered": 7,
+        "coverage_pct": 100.0,
+        "uncovered_functions": []
+      },
+      {
+        "path": ".repo_studios/command_center/scripts/libraries/retention_policy.py",
+        "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\scripts\\libraries\\retention_policy.py",
+        "function_count": 14,
+        "functions_covered": 14,
+        "coverage_pct": 100.0,
+        "uncovered_functions": []
+      },
+      {
+        "path": ".repo_studios/command_center/scripts/libraries/summarizer_runner.py",
+        "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\scripts\\libraries\\summarizer_runner.py",
+        "function_count": 2,
+        "functions_covered": 2,
+        "coverage_pct": 100.0,
+        "uncovered_functions": []
+      },
+      {
+        "path": ".repo_studios/command_center/scripts/libraries/telemetry_emitters.py",
+        "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\scripts\\libraries\\telemetry_emitters.py",
+        "function_count": 4,
+        "functions_covered": 4,
+        "coverage_pct": 100.0,
+        "uncovered_functions": []
+      },
+      {
+        "path": ".repo_studios/command_center/scripts/libraries/topic_pipeline.py",
+        "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\scripts\\libraries\\topic_pipeline.py",
+        "function_count": 9,
+        "functions_covered": 9,
+        "coverage_pct": 100.0,
+        "uncovered_functions": []
+      },
+      {
+        "path": ".repo_studios/command_center/scripts/orchestrators/run_command_center_pipeline.py",
+        "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\scripts\\orchestrators\\run_command_center_pipeline.py",
+        "function_count": 13,
+        "functions_covered": 13,
+        "coverage_pct": 100.0,
+        "uncovered_functions": []
+      },
+      {
+        "path": ".repo_studios/command_center/scripts/summarizers/summarize_fault_diagnostics_overview.py",
+        "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\scripts\\summarizers\\summarize_fault_diagnostics_overview.py",
+        "function_count": 18,
+        "functions_covered": 18,
+        "coverage_pct": 100.0,
+        "uncovered_functions": []
+      },
+      {
+        "path": ".repo_studios/command_center/scripts/summarizers/summarize_test_execution_telemetry.py",
+        "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\scripts\\summarizers\\summarize_test_execution_telemetry.py",
+        "function_count": 18,
+        "functions_covered": 18,
+        "coverage_pct": 100.0,
+        "uncovered_functions": []
+      },
+      {
+        "path": ".repo_studios/command_center/scripts/utilities/reports_naming_audit.py",
+        "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\scripts\\utilities\\reports_naming_audit.py",
+        "function_count": 14,
+        "functions_covered": 14,
+        "coverage_pct": 100.0,
+        "uncovered_functions": []
+      },
+      {
+        "path": ".repo_studios/command_center/viewer/refresh.py",
+        "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\viewer\\refresh.py",
+        "function_count": 6,
+        "functions_covered": 6,
+        "coverage_pct": 100.0,
+        "uncovered_functions": []
+      },
+      {
+        "path": ".repo_studios/command_center/viewer/update_service.py",
+        "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\viewer\\update_service.py",
+        "function_count": 9,
+        "functions_covered": 9,
+        "coverage_pct": 100.0,
+        "uncovered_functions": []
+      }
+    ]
+  }
+}

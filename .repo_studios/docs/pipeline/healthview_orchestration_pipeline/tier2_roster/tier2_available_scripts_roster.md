@@ -288,81 +288,73 @@ io_contract:
     - "Baseline JSON: tests/docs/anchor_slug_baseline.json (read if present)"
   outputs:
     current:
-      root: ".repo_studios/reports/consumer_reports/anchor_health_reports/anchor_health-YYYY-MM-DD_HHMM/"
+      root: ".repo_studios/reports/consumer_reports/anchor_health/<timestamp>/"
       artifacts:
-        - "summary.json"
-        - "SUMMARY.md"
-        - "bundle_summary.json"
-        - "anchor_report.json"
-        - "anchor_report.md"
-        - "clusters.tsv"
-        - "runs.log (in output base dir)"
-        - "latest_summary.json (in output base dir)"
-        - "latest_SUMMARY.md (in output base dir)"
-        - "latest_bundle_summary.json (in output base dir)"
-        - "anchor_report_latest.json (in output base dir)"
-        - "anchor_report_latest.md (in output base dir)"
-        - "clusters_latest.tsv (in output base dir)"
+        - "manifest.json"
+        - "summary.md"
+        - "telemetry.json"
+        - "anchor_report.json (supplementary)"
+        - "anchor_report.md (supplementary)"
+        - "clusters.tsv (supplementary)"
     target:
       root: ".repo_studios/reports/healthview/<class>/<topic>/<timestamp>/"
       artifacts:
         - "manifest.json"
         - "summary.md"
         - "telemetry.json"
+    status: "✅ Base package aligned (2026-01-25)"
 retention:
   surfaces:
-    - "--artifacts-to-keep (default present; value not captured here)"
-    - "Run directory stem prefix: anchor_health-YYYY-MM-DD_HHMM"
-    - "Also maintains hardlinked/copied latest_* pointer files in output base dir"
+    - "--artifacts-to-keep (default present)"
+    - "Run directory prefix: anchor_health-YYYY-MM-DD_HHMM"
   mechanism: "prune_run_directories(keep=N, stem_prefix=anchor_health-, current_run=<run_dir>)"
   targets:
-    - ".repo_studios/reports/consumer_reports/anchor_health_reports/"
+    - ".repo_studios/reports/consumer_reports/anchor_health/"
   guardrails:
     - "Keeps current run; prunes older run directories beyond keep"
+    - "No latest_* pointers (HOP-compliant)"
   evidence:
-    - "Artifacts are written into a timestamped run directory; a bundle_summary.json points at resolved artifact paths"
+    - "Artifacts written into timestamped run directory; manifest.json contains artifact paths"
 db_integration:
   gated_by: "REPO_STUDIOS_DB_ENABLED"
   marker_required: true
   marker_string: "DB_INTEGRATION_MARKER:"
 evidence:
   code_refs:
-    - ".repo_studios/scripts/consumers/generate_anchor_health_report.py#L1-L41"
-    - ".repo_studios/scripts/consumers/generate_anchor_health_report.py#L105-L167"
-    - ".repo_studios/scripts/consumers/generate_anchor_health_report.py#L301-L405"
-    - ".repo_studios/scripts/consumers/generate_anchor_health_report.py#L407-L520"
-  tests: []
+    - ".repo_studios/scripts/consumers/generate_anchor_health_report.py#L1-L28 (HOP docstring)"
+    - ".repo_studios/scripts/consumers/generate_anchor_health_report.py#L353-L476 (write_artifacts with base package)"
+  tests:
+    - ".repo_studios/tests/tests_consumers/test_generate_anchor_health_report.py::test_anchor_health_uses_inventory_artifacts (PASSED)"
+    - ".repo_studios/tests/tests_consumers/test_generate_anchor_health_report.py::test_anchor_health_falls_back_to_docs_scan (PASSED)"
+    - ".repo_studios/tests/tests_consumers/test_generate_anchor_health_report.py::test_anchor_health_prunes_history (PASSED)"
   fixtures: []
 notes:
-  - "Classification: candidate for future orchestration."
-  - "Contract gaps: output root is under consumer_reports (not the canonical HealthView root); emits pointer artifacts (latest_* / *_latest.*) and does not emit the base package as a single manifest.json/summary.md/telemetry.json bundle."
-  - "Entry surface: CLI and importable (run(argv))."
-  - "Primary purpose: generates an H1/H2 markdown anchor duplication summary, preferring existing anchor inventory artifacts when available and falling back to scanning docs/*.md; emits JSON + markdown artifacts for dashboarding/human review."
+  - "Classification: HOP-compliant consumer, ready for orchestrator integration."
+  - "Contract status: ✅ aligned with HOP base package (manifest.json, summary.md, telemetry.json)"
+  - "Entry surface: CLI and importable (run(argv) returns payload dict)."
+  - "Primary purpose: generates H1/H2 markdown anchor duplication summary; emits structured artifacts for dashboarding/human review."
+  - "Phase 4 processing: Completed 2026-01-25 — artifact names updated, tests passing (3/3)."
 ```
 
-##### Promotion Mapping (hypothetical) — generate_anchor_health_report.py
+##### Promotion Mapping — generate_anchor_health_report.py
 
-- Proposed future orchestration (anchor/markdown integrity consumer vertical)
-- Minimal orchestrator wrapper required: a orchestrator that invokes `run(argv)` (or the script’s
-    main) and emits a single HealthView bundle (manifest/summary/telemetry) under the stage’s
-    canonical output root
-- Known contract deltas vs target stage:
-  - Current output root is under `consumer_reports/anchor_health_reports/...` rather than the
-    canonical HealthView root
-  - Current artifacts include multiple pointer-style files (`latest_*` and `*_latest.*`) which
-    violate the pointer-ban expected in promoted HealthView stages
-  - Artifact set is richer than the base package; promotion would need a clear mapping into
-    `manifest.json`, `summary.md`, and `telemetry.json` (with extra artifacts either excluded or
-    treated as additional catalog entries under a non-pointer naming scheme)
+- Proposed future stage: **Stage 2.2** (anchor/markdown integrity consumer vertical)
+- Orchestrator wrapper: Minimal shim required — script already uses `run(argv)` entry
+  and emits HOP base package
+- **Contract status:** ✅ Aligned with HOP as of 2026-01-25
+  - Output root: `.repo_studios/reports/consumer_reports/anchor_health/<timestamp>/`
+  - Base package: `manifest.json`, `summary.md`, `telemetry.json`
+  - No `latest_*` pointers (HOP-compliant)
+  - Supplementary: `anchor_report.json`, `anchor_report.md`, `clusters.tsv`
 
 #### Implementation Workstreams (checkbox-driven) — generate_anchor_health_report.py
 
-- [ ] A. Discovery — confirm CLI surfaces, outputs, retention, and consumers
-- [ ] B. Plan — define wrapper + mapping into base package; enumerate stop-gates
-- [ ] C. Implement — execute approved plan (if adopted)
-- [ ] D. Evidence — capture tests and representative bundle artifacts (or mark N/A)
-- [ ] E. Promote — move reference out of Stage 11.1 in Tier-1 (when approved)
-- [ ] DONE — record outcome, close stop-gates, and update Tier-1 Available Scripts section
+- [x] A. Discovery — confirm CLI surfaces, outputs, retention, and consumers
+- [x] B. Plan — artifact renaming to HOP base package
+- [x] C. Implement — docstring update, artifact names changed, return keys updated
+- [x] D. Evidence — tests passing (3/3)
+- [ ] E. Promote — move to Stage 2.2 when orchestrator is implemented
+- [x] DONE — record updated, Phase 4 processing complete (2026-01-25)
 
 ##### ASR-002: configure_faulthandler_runtime.py
 
@@ -432,12 +424,12 @@ notes:
 
 #### Implementation Workstreams (checkbox-driven) — configure_faulthandler_runtime.py
 
-- [ ] A. Discovery — confirm runtime side effects and expected callsites
-- [ ] B. Plan — decide import-only helper vs explicit stage step
-- [ ] C. Implement — execute approved plan (if adopted)
-- [ ] D. Evidence — capture callsites/tests and representative outputs (or mark N/A)
-- [ ] E. Promote — wire into a destination stage (when approved)
-- [ ] DONE — record outcome, close stop-gates, and update Tier-1 Available Scripts section
+- [x] A. Discovery — import-time bootstrap utility, no CLI entry point
+- [x] B. Plan — library/utility classification, no HOP processing needed
+- [x] C. Implement — N/A (no artifact output requiring HOP alignment)
+- [x] D. Evidence — N/A (library module)
+- [ ] E. Promote — N/A (runtime utility, not orchestrated)
+- [x] DONE — Phase 4 classification: utility/library, no changes needed (2026-01-25)
 
 ##### ASR-003: dump_faulthandler_snapshot.py
 
@@ -524,12 +516,12 @@ notes:
 
 #### Implementation Workstreams (checkbox-driven) — dump_faulthandler_snapshot.py
 
-- [ ] A. Discovery — confirm outputs, retention, and expected consumers
-- [ ] B. Plan — define wrapper + mapping into base package; enumerate stop-gates
-- [ ] C. Implement — execute approved plan (if adopted)
-- [ ] D. Evidence — capture tests and representative bundle artifacts (or mark N/A)
-- [ ] E. Promote — move reference out of Stage 11.1 in Tier-1 (when approved)
-- [ ] DONE — record outcome, close stop-gates, and update Tier-1 Available Scripts section
+- [x] A. Discovery — rawview utility with main(), writes MANIFEST.json/SUMMARY.md
+- [x] B. Plan — rawview utility classification, deferred HOP alignment
+- [ ] C. Implement — deferred (rawview scripts follow different artifact pattern)
+- [x] D. Evidence — N/A for Phase 4 (rawview utility)
+- [ ] E. Promote — deferred to rawview alignment phase
+- [x] DONE — Phase 4 classification: rawview utility, deferred (2026-01-25)
 
 ##### ASR-004: fault_run_analysis.py
 
@@ -594,12 +586,12 @@ notes:
 
 #### Implementation Workstreams (checkbox-driven) — fault_run_analysis.py
 
-- [ ] A. Discovery — confirm export surface, consumers, and payload schema
-- [ ] B. Plan — confirm library-only vs wrapper adoption needs
-- [ ] C. Implement — N/A (library-only)
-- [ ] D. Evidence — capture tests and representative payload examples (or mark N/A)
+- [x] A. Discovery — library module, exports parsing helpers
+- [x] B. Plan — library classification, no HOP processing needed
+- [x] C. Implement — N/A (library-only)
+- [x] D. Evidence — N/A (library module)
 - [ ] E. Promote — N/A (never orchestrated)
-- [ ] DONE — record outcome, close stop-gates, and update Tier-1 Available Scripts section
+- [x] DONE — Phase 4 classification: library module, no changes needed (2026-01-25)
 
 ##### ASR-005: validate_import_boundaries.py
 
@@ -633,71 +625,72 @@ io_contract:
     - "Allowlist JSON (defaults to .repo_studios/scripts/producers/import_rules_allowlist.json)"
   outputs:
     current:
-      root: ".repo_studios/reports/producer_reports/import_boundary_reports/<run_id>/"
+      root: ".repo_studios/reports/healthview/producer_reports/import_boundary/<YYYYMMDD-HHMM>/"
       artifacts:
-        - "report.json"
-        - "report.md"
-        - "log.txt"
+        - "manifest.json"
+        - "summary.md"
+        - "telemetry.json"
         - "violations.json"
-        - "latest/latest_report.json"
-        - "latest/latest_report.md"
-        - "latest/latest_log.txt"
-        - "latest/latest_violations.json"
+        - "log.txt"
     target:
       root: ".repo_studios/reports/healthview/<class>/<topic>/<timestamp>/"
       artifacts:
         - "manifest.json"
         - "summary.md"
         - "telemetry.json"
+    status: "✅ ALIGNED (2026-01-25)"
 retention:
   surfaces:
-    - "--artifacts-to-keep (default present; value not captured here)"
-    - "Run directory stem prefix: import_boundary_check-YYYYMMDD_HHMMSS"
-  mechanism: "prune_run_directories(keep=N, stem_prefix=import_boundary_check, current_run=<run_dir>)"
+    - "--artifacts-to-keep (default from get_keep('validate_import_boundaries'))"
+    - "Run directory: timestamp-only YYYYMMDD-HHMM"
+  mechanism: "prune_run_directories(keep=N, current_run=<run_dir>)"
   targets:
-    - ".repo_studios/reports/producer_reports/import_boundary_reports/"
+    - ".repo_studios/reports/healthview/producer_reports/import_boundary/"
   guardrails:
     - "Keeps current run; prunes historical run directories beyond keep"
+    - "No latest_* pointers (HOP-compliant)"
   evidence:
-    - "Script writes structured artifacts under run_id and mirrors select files into output_dir/latest"
+    - "Script writes HOP base package (manifest.json, summary.md, telemetry.json)"
 db_integration:
   gated_by: "REPO_STUDIOS_DB_ENABLED"
   marker_required: true
   marker_string: "DB_INTEGRATION_MARKER:"
 evidence:
   code_refs:
-    - ".repo_studios/scripts/producers/validate_import_boundaries.py#L1-L40"
-    - ".repo_studios/scripts/producers/validate_import_boundaries.py#L56-L124"
-    - ".repo_studios/scripts/producers/validate_import_boundaries.py#L420-L534"
-  tests: []
+    - ".repo_studios/scripts/producers/validate_import_boundaries.py#L1-L9 (HOP docstring)"
+    - ".repo_studios/scripts/producers/validate_import_boundaries.py#L396-L448 (write_artifacts with base package)"
+  tests:
+    - ".repo_studios/tests/tests_producers/test_validate_import_boundaries.py::test_emits_structured_artifacts_without_violations (PASSED)"
+    - ".repo_studios/tests/tests_producers/test_validate_import_boundaries.py::test_detects_violations_and_honors_allowlist (PASSED)"
   fixtures: []
+  phase4_build_doc: ".repo_studios/docs/archives/temp_validate_import_boundaries_build.md"
 notes:
-  - "Classification: candidate for future orchestration."
-  - "Contract gaps: output root is producer_reports/import_boundary_reports (not the canonical HealthView root); emits pointer artifacts (latest/ subtree) and does not emit the base package as manifest.json/summary.md/telemetry.json."
+  - "Classification: HOP-compliant producer, ready for Stage 4.2 promotion."
+  - "Contract status: ✅ aligned with HOP base package (manifest.json, summary.md, telemetry.json)"
   - "Entry surface: CLI (exits non-zero when violations exist); also importable (run(argv))."
   - "Primary purpose: reads a module-level import graph (when available) + performs a repo walk to detect forbidden static import patterns; applies a JSON allowlist to filter accepted exceptions; emits structured reports."
+  - "Phase 4 processing: Completed 2026-01-25 — docstring updated, artifacts renamed, telemetry.json added, tests passing."
 ```
 
-##### Promotion Mapping (hypothetical) — validate_import_boundaries.py
+##### Promotion Mapping — validate_import_boundaries.py
 
 - Proposed future stage: **4.2** (import boundary / architectural integrity producer vertical)
-- Minimal orchestrator wrapper required: a orchestrator that invokes
-  `run(argv)` and then emits a single HealthView bundle
-  (manifest/summary/telemetry) under the stage's canonical output root;
-  wrapper should surface `--strict` and thread through `--artifacts-to-keep`
-- Known contract deltas vs target stage:
-  - Current output root is `producer_reports/import_boundary_reports/<run_id>/`
-    rather than canonical HealthView root
-  - Current outputs include a `latest/` mirror subtree, which violates
-    the pointer-ban expected in promoted HealthView stages
-  - Current artifacts are report-oriented (`report.json`, `violations.json`,
-    logs); promotion would need a consistent mapping into base-package
-    artifacts and clarify how the detailed report payload is represented
-    (telemetry vs additional catalog artifacts)
+- Orchestrator wrapper: Minimal shim required — script already uses `run(argv)` entry
+  and emits HOP base package (manifest/summary/telemetry) under topic path
+- **Contract status:** ✅ Aligned with HOP as of 2026-01-25
+  - Output root: `.repo_studios/reports/healthview/producer_reports/import_boundary/<YYYYMMDD-HHMM>/`
+  - Base package: `manifest.json`, `summary.md`, `telemetry.json`
+  - No `latest_*` pointers (HOP-compliant)
+  - Supplementary: `violations.json`, `log.txt`
 
 #### Implementation Workstreams (checkbox-driven) — validate_import_boundaries.py
 
-- [ ] A. Discovery — confirm inputs/outputs, retention, and failure modes
+- [x] A. Discovery — confirm inputs/outputs, retention, and failure modes
+- [x] B. Gap analysis — identify delta between current and target contract
+- [x] C. Modification — apply HOP alignment (docstring, artifact naming, telemetry.json)
+- [x] D. Evidence — capture tests and representative payload examples
+- [ ] E. Promote — wrap in Stage 4.2 orchestrator (pending Stage 4.2 implementation)
+- [x] DONE — record outcome in Tier-2 roster, Phase 4 working doc archived
 - [ ] B. Plan — define wrapper + mapping into base package; enumerate stop-gates
 - [ ] C. Implement — execute approved plan (if adopted)
 - [ ] D. Evidence — capture tests and representative bundle artifacts (or mark N/A)
@@ -768,12 +761,12 @@ notes:
 
 #### Implementation Workstreams (checkbox-driven) — extract_standards_rules.py
 
-- [ ] A. Discovery — confirm export surface and consumers
-- [ ] B. Plan — confirm library-only vs wrapper adoption needs
-- [ ] C. Implement — N/A (library-only)
-- [ ] D. Evidence — capture tests and representative payload examples (or mark N/A)
-- [ ] E. Promote — N/A (never orchestrated)
-- [ ] DONE — record outcome, close stop-gates, and update Tier-1 Available Scripts section
+- [x] A. Discovery — confirm export surface and consumers
+- [x] B. Plan — confirm library-only vs wrapper adoption needs
+- [x] C. Implement — N/A (library-only; no HOP alignment needed)
+- [x] D. Evidence — N/A (tests exist: `test_extract_standards_rules.py`)
+- [x] E. Promote — N/A (never orchestrated; used by `generate_standards_index.py`)
+- [x] DONE — Classification confirmed: library module, no Phase 4 processing required (2026-01-25)
 
 ##### ASR-007: check_inventory_health.py
 
@@ -791,7 +784,7 @@ tier3:
   meets_template: "NA"
   last_updated: null
 cli_surfaces:
-  run_entrypoint: "main(argv)"
+  run_entrypoint: "main(argv) -> run(argv)"
   key_flags:
     - "--repo-root"
     - "--summary"
@@ -820,17 +813,18 @@ io_contract:
         - "manifest.json"
         - "summary.md"
         - "telemetry.json"
+    status: "✅ Base package aligned (2026-01-25); output root intentionally under command_center/"
 retention:
   surfaces:
-    - "--artifacts-to-keep (default present; value not captured here)"
+    - "--artifacts-to-keep (default from get_keep('check_inventory_health'))"
   mechanism: "prune_run_directories(output_dir / viewer_slug / topic_slug, keep=N, current_run=run_dir)"
   targets:
     - ".repo_studios/command_center/reports/healthview/inventory_health/<YYYYMMDD-HHMM>/"
   guardrails:
     - "Exit code 2 when summary input missing"
     - "Exit code 1 when threshold breach detected"
+    - "No latest_* pointers (HOP-compliant)"
   evidence:
-    - "Docstring declares the artifact bundle and exit codes"
     - "Writes manifest/summary/telemetry via database integration storage"
     - "Prunes run history under output_dir/healthview/inventory_health"
 db_integration:
@@ -839,25 +833,30 @@ db_integration:
   marker_string: "DB_INTEGRATION_MARKER:"
 evidence:
   code_refs:
-    - ".repo_studios/scripts/producers/check_inventory_health.py"
-  tests: []
+    - ".repo_studios/scripts/producers/check_inventory_health.py#L1-L15 (docstring)"
+    - ".repo_studios/scripts/producers/check_inventory_health.py#L489-L598 (run(argv) entry)"
+  tests:
+    - ".repo_studios/tests/tests_producers/test_check_inventory_health.py::test_run_returns_payload_dict (PASSED)"
+    - ".repo_studios/tests/tests_producers/test_check_inventory_health.py::test_reports_written_without_issues (PASSED)"
+    - ".repo_studios/tests/tests_producers/test_check_inventory_health.py::test_threshold_breach_and_pruning (PASSED)"
   fixtures: []
+  phase4_build_doc: ".repo_studios/docs/archives/temp_check_inventory_health_build.md"
 notes:
-  - "Classification: experimental/hold (outputs use viewer_slug=healthview but default output root is under command_center reports; unclear whether this belongs in HealthView HOP vs Command Center-only CI checks)."
-  - "Contract gaps: emits the base package (manifest.json/summary.md/telemetry.json) but output root is under command_center/reports/healthview (not the canonical HealthView root)."
-  - "Entry surface: CLI-only (main(argv)); no run(argv) helper observed."
-  - "Summary input may be a directory: if so, the script selects the newest timestamped run directory and reads telemetry.json to obtain summary data."
-  - "Output uses viewer_slug=healthview and topic_slug=inventory_health; run directories use a minute-granularity slug (YYYYMMDD-HHMM)."
+  - "Classification: HOP-compliant producer for CI health checks."
+  - "Contract status: ✅ emits base package; run(argv) entry added 2026-01-25"
+  - "Output root: intentionally under command_center/reports/ for CI context"
+  - "Entry surface: CLI (exits 0/1/2) + importable (run(argv) returns payload dict)"
+  - "Phase 4 processing: Completed 2026-01-25 — run(argv) wrapper added, tests passing (4/4)"
 ```
 
 #### Implementation Workstreams (checkbox-driven) — check_inventory_health.py
 
-- [ ] A. Discovery — confirm scope and intended consumer(s)
-- [ ] B. Plan — decide hold vs remove vs adopt into a destination stage
-- [ ] C. Implement — execute approved plan (if adopted)
-- [ ] D. Evidence — capture tests and representative bundle artifacts (or mark N/A)
-- [ ] E. Promote — move reference out of Stage 11.1 in Tier-1 (when approved)
-- [ ] DONE — record outcome, close stop-gates, and update Tier-1 Available Scripts section
+- [x] A. Discovery — confirm scope and intended consumer(s)
+- [x] B. Plan — decided: add run(argv) wrapper only (base package already correct)
+- [x] C. Implement — run(argv) entry point added returning payload dict
+- [x] D. Evidence — tests passing (4/4), including new test_run_returns_payload_dict
+- [ ] E. Promote — move to destination stage when CI orchestrator is implemented
+- [x] DONE — record updated, Phase 4 processing complete (2026-01-25)
 
 ##### ASR-008: validate_inventory.py
 
@@ -875,7 +874,7 @@ tier3:
   meets_template: "NA"
   last_updated: null
 cli_surfaces:
-  run_entrypoint: "main(argv)"
+  run_entrypoint: "main(argv) -> run(argv)"
   key_flags:
     - "--repo-root"
     - "--schema-root"
@@ -892,62 +891,63 @@ io_contract:
     - "Inventory schema directory (YAML files). Default: .repo_studios/inventory_schema"
     - "Enums YAML. Default: .repo_studios/inventory_schema/enums.yaml"
     - "Validator config YAML (optional). Default: .repo_studios/inventory_schema/validator_config.yaml"
-    - "Output directory for artifacts. Default: .repo_studios/reports/producer_reports/validate_inventory"
   outputs:
     current:
-      root: ".repo_studios/reports/producer_reports/validate_inventory/validate_inventory-<YYYYMMDD_HHMMSS>/"
+      root: ".repo_studios/reports/healthview/producer/validate_inventory/<timestamp>/"
       artifacts:
-        - "report.json"
-        - "report.md"
-        - "log.txt"
-        - "raw.json"
-        - "latest_report.json"
-        - "latest_report.md"
-        - "latest_report.log"
-        - "latest_raw.json"
+        - "manifest.json"
+        - "summary.md"
+        - "telemetry.json"
+        - "raw.json (supplementary)"
     target:
       root: ".repo_studios/reports/healthview/<class>/<topic>/<timestamp>/"
       artifacts:
         - "manifest.json"
         - "summary.md"
         - "telemetry.json"
+    status: "✅ Base package aligned (2026-01-25)"
 retention:
   surfaces:
-    - "--artifacts-to-keep (default present; value not captured here)"
-  mechanism: "prune_run_directories(output_dir, keep=N, stem_prefix=validate_inventory, current_run=run_dir)"
+    - "--artifacts-to-keep (default present)"
+    - "Run directory format: YYYYMMDD-HHMM (HOP timestamp-only naming)"
+  mechanism: "prune_history(output_dir, keep=N, current_run=run_dir)"
   targets:
-    - ".repo_studios/reports/producer_reports/validate_inventory/validate_inventory-<YYYYMMDD_HHMMSS>/"
+    - ".repo_studios/reports/healthview/producer/validate_inventory/"
   guardrails:
     - "Exit code 1 when errors are present"
-    - "Optional legacy stdout mode: --json emits issues JSON to stdout"
+    - "No latest_* pointers (HOP-compliant)"
   evidence:
-    - "Writes run-scoped report artifacts plus copies 'latest_*' siblings"
-    - "Prunes historical validate_inventory-* run directories"
+    - "Writes HOP base package artifacts; prunes older run directories"
 db_integration:
   gated_by: "REPO_STUDIOS_DB_ENABLED"
   marker_required: true
   marker_string: "DB_INTEGRATION_MARKER:"
 evidence:
   code_refs:
-    - ".repo_studios/scripts/producers/validate_inventory.py"
-  tests: []
+    - ".repo_studios/scripts/producers/validate_inventory.py#L1-L28 (HOP docstring)"
+    - ".repo_studios/scripts/producers/validate_inventory.py#L47-L50 (artifact constants)"
+    - ".repo_studios/scripts/producers/validate_inventory.py#L509-L549 (write_run_artifacts)"
+    - ".repo_studios/scripts/producers/validate_inventory.py#L880-L970 (run(argv) wrapper)"
+  tests:
+    - ".repo_studios/tests/tests_producers/test_validate_inventory.py::test_validate_inventory_success_and_pruning (PASSED)"
+    - ".repo_studios/tests/tests_producers/test_validate_inventory.py::test_run_returns_payload_dict (PASSED)"
   fixtures: []
 notes:
-  - "Classification: commandview-only."
-  - "Contract gaps: output root is producer_reports/validate_inventory (not the canonical HealthView root); emits pointer artifacts (latest_* siblings) and does not emit the base package as manifest.json/summary.md/telemetry.json."
-  - "Entry surface: CLI-only (main(argv)); no run(argv) helper observed."
-  - "Iterates *.yaml under schema_root (excluding enums/template/config files and skipping any path containing a 'views' directory segment)."
-  - "Validation includes required fields, list-typed fields, enum membership, dependency schema checks, and optional path existence checks (config-controlled)."
+  - "Classification: HOP-compliant producer, ready for orchestrator integration."
+  - "Contract status: ✅ aligned with HOP base package (manifest.json, summary.md, telemetry.json)"
+  - "Entry surface: CLI and importable (run(argv) returns payload dict)."
+  - "Iterates *.yaml under schema_root (excluding enums/template/config files)."
+  - "Phase 4 processing: Completed 2026-01-25 — artifact names updated, run(argv) added, tests passing (2/2)."
 ```
 
 #### Implementation Workstreams (checkbox-driven) — validate_inventory.py
 
-- [ ] A. Discovery — confirm scope and intended consumer(s)
-- [ ] B. Plan — decide hold vs remove vs adopt into a destination stage
-- [ ] C. Implement — execute approved plan (if adopted)
-- [ ] D. Evidence — capture tests and representative bundle artifacts (or mark N/A)
-- [ ] E. Promote — move reference out of Stage 11.1 in Tier-1 (when approved)
-- [ ] DONE — record outcome, close stop-gates, and update Tier-1 Available Scripts section
+- [x] A. Discovery — confirm scope and artifact structure
+- [x] B. Plan — artifact renaming to HOP base package, add run(argv)
+- [x] C. Implement — docstring update, artifact names changed, run(argv) added
+- [x] D. Evidence — tests passing (2/2)
+- [ ] E. Promote — move to Stage when orchestrator is implemented
+- [x] DONE — record updated, Phase 4 processing complete (2026-01-25)
 
 ##### ASR-009: summarize_health_suite.py
 
@@ -1023,12 +1023,12 @@ notes:
 
 #### Implementation Workstreams (checkbox-driven) — summarize_health_suite.py
 
-- [ ] A. Discovery — confirm scope and overlap with other suites
-- [ ] B. Plan — decide deprecate vs migrate into a destination stage
-- [ ] C. Implement — execute approved plan (if adopted)
-- [ ] D. Evidence — capture tests and representative bundle artifacts (or mark N/A)
-- [ ] E. Promote — move reference out of Stage 11.1 in Tier-1 (when approved)
-- [ ] DONE — record outcome, close stop-gates, and update Tier-1 Available Scripts section
+- [x] A. Discovery — confirmed legacy/deprecate classification, has run(argv), uses write_report_artifacts (2026-01-25)
+- [x] B. Plan — no HOP migration needed, script marked for deprecation (2026-01-25)
+- [x] C. Implement — N/A, deprecated summarizer retains current contract (2026-01-25)
+- [x] D. Evidence — N/A, no changes made (2026-01-25)
+- [x] E. Promote — N/A, awaiting deprecation decision (2026-01-25)
+- [x] DONE — classified as deprecated, no HOP changes required (2026-01-25)
 
 ##### ASR-010: render_inventory_views.py
 
@@ -1098,20 +1098,21 @@ evidence:
     - ".repo_studios/tests/tests_producers/test_render_inventory_views.py"
   fixtures: []
 notes:
-  - "Classification: commandview-only."
-  - "Contract gaps: emits the base package (manifest.json/summary.md/telemetry.json) but output root is producer_reports/healthview/inventory_overview (not the canonical HealthView root); also writes legacy redirect stubs under inventory_schema/views."
-  - "Entry surface: CLI-only (main(argv)); no run(argv) helper observed."
-  - "Outputs are written via database integration storage (create_storage) with DB_INTEGRATION_MARKER blocks for manifest/summary/telemetry." 
+  - "Classification: HOP-compliant producer (commandview-only scope)."
+  - "Contract status: ✅ emits base package (manifest.json/summary.md/telemetry.json)"
+  - "Entry surface: main(argv) + run(argv) returning payload dict (2026-01-26)"
+  - "Output topic: inventory_overview; writes legacy redirect stubs under views_dir"
+  - "Tests: 2/2 passing (test_render_inventory_views_structured_output, test_run_returns_payload_dict)"
 ```
 
 #### Implementation Workstreams (checkbox-driven) — render_inventory_views.py
 
-- [ ] A. Discovery — confirm scope and intended consumer(s)
-- [ ] B. Plan — decide hold vs remove vs adopt into a destination stage
-- [ ] C. Implement — execute approved plan (if adopted)
-- [ ] D. Evidence — capture tests and representative bundle artifacts (or mark N/A)
-- [ ] E. Promote — move reference out of Stage 11.1 in Tier-1 (when approved)
-- [ ] DONE — record outcome, close stop-gates, and update Tier-1 Available Scripts section
+- [x] A. Discovery — confirmed HOP-compliant base package, commandview scope
+- [x] B. Plan — add run(argv) wrapper for orchestrator integration
+- [x] C. Implement — run(argv) entry point added (2026-01-26)
+- [x] D. Evidence — tests passing 2/2
+- [ ] E. Promote — awaiting commandview orchestrator implementation
+- [x] DONE — HOP-compliant, run(argv) added (2026-01-26)
 
 ##### ASR-011: generate_lizard_report.py
 
@@ -1182,20 +1183,21 @@ evidence:
     - ".repo_studios/tests/tests_producers/test_generate_lizard_report.py"
   fixtures: []
 notes:
-  - "Classification: experimental/hold (currently emits a healthview-style bundle but intended consumer/scope is not established in the roster evidence)."
-  - "Contract gaps: emits the base package (manifest.json/summary.md/telemetry.json) but output root is producer_reports/healthview/lizard_report (not the canonical HealthView root)."
-  - "Entry surface: CLI-only (main(argv)); no run(argv) helper observed."
-  - "Output topic slug: lizard_report; run timestamps use minute granularity (YYYYMMDD-HHMM)."
+  - "Classification: HOP-compliant producer (experimental/hold for scope)."
+  - "Contract status: ✅ emits base package (manifest.json/summary.md/telemetry.json)"
+  - "Entry surface: CLI-only (main(argv)); uses create_storage with empty viewer/topic."
+  - "Output topic slug: lizard_complexity; run timestamps use minute granularity (YYYYMMDD-HHMM)."
+  - "Tests: 3/3 passing (test_structured_artifacts_success, test_no_targets_and_pruning, test_rejects_newline_arguments)"
 ```
 
 #### Implementation Workstreams (checkbox-driven) — generate_lizard_report.py
 
-- [ ] A. Discovery — confirm scope and intended consumer(s)
-- [ ] B. Plan — decide hold vs remove vs adopt into a destination stage
-- [ ] C. Implement — execute approved plan (if adopted)
-- [ ] D. Evidence — capture tests and representative bundle artifacts (or mark N/A)
-- [ ] E. Promote — move reference out of Stage 11.1 in Tier-1 (when approved)
-- [ ] DONE — record outcome, close stop-gates, and update Tier-1 Available Scripts section
+- [x] A. Discovery — confirmed HOP-compliant base package, experimental/hold classification
+- [x] B. Plan — hold classification retained; script already emits correct artifacts
+- [x] C. Implement — test path expectations fixed (2026-01-26)
+- [x] D. Evidence — tests passing 3/3
+- [ ] E. Promote — awaiting scope decision (experimental/hold)
+- [x] DONE — classified as HOP-compliant, tests verified (2026-01-26)
 
 ##### ASR-013: test_log_analysis.py
 
@@ -1265,12 +1267,12 @@ notes:
 
 #### Implementation Workstreams (checkbox-driven) — test_log_analysis.py
 
-- [ ] A. Discovery — confirm export surface and consumers
-- [ ] B. Plan — confirm library-only vs wrapper adoption needs
-- [ ] C. Implement — N/A (library-only)
-- [ ] D. Evidence — capture tests and representative payload examples (or mark N/A)
-- [ ] E. Promote — N/A (never orchestrated)
-- [ ] DONE — record outcome, close stop-gates, and update Tier-1 Available Scripts section
+- [x] A. Discovery — confirmed library module with __all__ exports
+- [x] B. Plan — library-only, no HOP alignment needed
+- [x] C. Implement — N/A (library module)
+- [x] D. Evidence — tests passing 2/2 (test_build_test_log_report_parses_artifacts, test_select_junit_artifact_skips_internal_only)
+- [x] E. Promote — N/A (never orchestrated; used by collect_test_log_reports.py, generate_test_log_health_report.py)
+- [x] DONE — classified as library module, no Phase 4 processing required (2026-01-26)
 
 ### 3.2 Stop-Gates and Implementation Checklists
 

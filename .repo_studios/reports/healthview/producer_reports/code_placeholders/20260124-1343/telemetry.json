@@ -1,0 +1,63 @@
+{
+  "viewer": "healthview",
+  "topic": "code_placeholders",
+  "run_timestamp": "20260124-1343",
+  "generated_utc": "2026-01-24T13:43:12.528883+00:00",
+  "metrics": {
+    "status": "ok",
+    "total_matches": 5,
+    "allowlist_size": 0,
+    "unallowlisted_matches": 5
+  },
+  "summary": {
+    "schema_version": 1,
+    "viewer": "healthview",
+    "topic": "code_placeholders",
+    "status": "ok",
+    "timestamp": "2026-01-24T13:43:12.528883+00:00",
+    "generated_utc": "2026-01-24T13:43:12.528883+00:00",
+    "run_timestamp": "20260124-1343",
+    "run_id": "20260124-1343",
+    "repo_root": "C:\\Users\\genet\\repo_studios",
+    "bundle_dir": ".repo_studios/reports/healthview/producer_reports/code_placeholders/20260124-1343",
+    "scan_root": ".",
+    "include_extensions": [
+      ".js",
+      ".json",
+      ".md",
+      ".py",
+      ".ts",
+      ".txt",
+      ".yaml",
+      ".yml"
+    ],
+    "patterns": [
+      "FIXME",
+      "NOTE",
+      "OPTIMIZE",
+      "REVIEW",
+      "TODO",
+      "XXX"
+    ],
+    "allowlist_size": 0,
+    "exclude_prefixes": [
+      ".venv/",
+      "node_modules/"
+    ],
+    "exclude_segments": [
+      "site-packages"
+    ],
+    "default_exclusions_applied": true,
+    "total_matches": 5,
+    "summary": {
+      "by_pattern": {
+        "NOTE": 2,
+        "XXX": 3
+      },
+      "by_extension": {
+        ".md": 3,
+        ".py": 2
+      }
+    }
+  }
+}

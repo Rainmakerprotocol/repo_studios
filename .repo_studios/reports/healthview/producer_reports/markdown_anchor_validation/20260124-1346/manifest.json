@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "viewer_slug": "producer_reports",
+  "topic": "markdown_anchor_validation",
+  "run_timestamp": "20260124-1346",
+  "generated_utc": "2026-01-24T13:46:42.263207+00:00",
+  "status": "fail",
+  "inputs": {
+    "root": "C:\\Users\\genet\\repo_studios",
+    "patterns": [
+      "docs/**/*.md",
+      ".repo_studios/docs/**/*.md"
+    ],
+    "artifacts_to_keep": 5
+  },
+  "summary": {
+    "files_scanned": 144,
+    "issue_count": 1
+  },
+  "catalog": [
+    "scripts.utilities.check_markdown_anchors"
+  ],
+  "provenance": {
+    "requested_by": "cli",
+    "trigger_type": "manual"
+  }
+}

@@ -141,3 +141,42 @@ def test_render_inventory_views_structured_output(tmp_path: Path):
 
     remaining_runs = sorted(node.name for node in topic_dir.iterdir() if node.is_dir())
     assert remaining_runs == [slug]
+
+
+def test_run_returns_payload_dict(tmp_path: Path):
+    """Verify run(argv) returns structured payload dict."""
+    module = _load_module()
+    _seed_inventory(tmp_path)
+
+    output_dir = tmp_path / ".repo_studios" / "reports" / "producer_reports"
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    args = [
+        "--repo-root",
+        str(tmp_path),
+        "--schema-root",
+        str(Path(".repo_studios/inventory_schema")),
+        "--views-dir",
+        str(Path(".repo_studios/inventory_schema/views")),
+        "--reports-root",
+        str(Path(".repo_studios/reports")),
+        "--output-dir",
+        str(Path(".repo_studios/reports/producer_reports")),
+        "--timestamp",
+        "2025-11-15T10:00:00+00:00",
+        "--log-level",
+        "ERROR",
+    ]
+
+    result = module.run(args)
+
+    assert isinstance(result, dict)
+    assert result["status"] == "ok"
+    assert result["exit_code"] == 0
+    assert "run_dir" in result
+    assert result["run_dir"].endswith("20251115-1000")
+    assert "manifest_path" in result
+    assert "summary_path" in result
+    assert "telemetry_path" in result
+    assert "counts" in result
+    assert result["counts"]["totals"]["total"] == 3

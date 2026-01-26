@@ -1,0 +1,92 @@
+{
+  "finished_at": "2026-01-24T13:50:09.824699+00:00",
+  "metrics": {
+    "artifact_bytes": 9198,
+    "artifact_files": 3,
+    "runtime_seconds": 23.381231,
+    "step_count": 6,
+    "steps_failed": 1,
+    "steps_skipped": 2,
+    "steps_succeeded": 3
+  },
+  "run_slug": "20260124-1348",
+  "started_at": "2026-01-24T13:49:46.443468+00:00",
+  "steps": [
+    {
+      "detail": "dependency hygiene completed",
+      "finished_at": "2026-01-24T13:49:46.458148+00:00",
+      "name": "dependency",
+      "payload": {
+        "issue_count": 0,
+        "pyproject_scanned": true,
+        "requirements_scanned": 2,
+        "status": "passed"
+      },
+      "started_at": "2026-01-24T13:49:46.443471+00:00",
+      "status": "success"
+    },
+    {
+      "detail": "status ok",
+      "finished_at": "2026-01-24T13:49:46.837175+00:00",
+      "name": "import_graph",
+      "payload": {
+        "cycle_count": 0,
+        "edge_count": 1,
+        "files_scanned": 260,
+        "module_count": 7,
+        "status": "ok"
+      },
+      "started_at": "2026-01-24T13:49:46.458158+00:00",
+      "status": "success"
+    },
+    {
+      "detail": "total matches 0",
+      "finished_at": "2026-01-24T13:49:51.954816+00:00",
+      "name": "placeholders",
+      "payload": {
+        "allowlist_size": 5,
+        "status": "ok",
+        "total_matches": 0,
+        "unallowlisted_matches": 0
+      },
+      "started_at": "2026-01-24T13:49:46.837184+00:00",
+      "status": "success"
+    },
+    {
+      "detail": "batch cleanup skipped via flag",
+      "finished_at": "2026-01-24T13:49:51.954830+00:00",
+      "name": "cleanup",
+      "started_at": "2026-01-24T13:49:51.954826+00:00",
+      "status": "skipped"
+    },
+    {
+      "detail": "status error",
+      "finished_at": "2026-01-24T13:50:09.824458+00:00",
+      "name": "typecheck",
+      "payload": {
+        "status": "error",
+        "summary": {
+          "error_count": 151,
+          "files_checked": 85,
+          "files_with_issues": 30,
+          "paths_checked": [
+            ".repo_studios/scripts",
+            ".repo_studios/command_center/scripts"
+          ]
+        }
+      },
+      "started_at": "2026-01-24T13:49:51.954956+00:00",
+      "status": "failed"
+    },
+    {
+      "detail": "baseline refresh not requested",
+      "finished_at": "2026-01-24T13:50:09.824598+00:00",
+      "name": "refresh_baselines",
+      "started_at": "2026-01-24T13:50:09.824588+00:00",
+      "status": "skipped"
+    }
+  ],
+  "success": false,
+  "topic": "dependency-import-hygiene",
+  "viewer": "healthview"
+}

@@ -1,0 +1,258 @@
+{
+  "artifacts": {
+    "aggregator_bundle_summary": ".repo_studios/reports/healthview/aggregator_reports/docs_health_signals/20260124-1349/bundle_summary.json",
+    "aggregator_report_json": ".repo_studios/reports/healthview/aggregator_reports/docs_health_signals/20260124-1349/report.json",
+    "aggregator_report_md": ".repo_studios/reports/healthview/aggregator_reports/docs_health_signals/20260124-1349/report.md",
+    "aggregator_run": ".repo_studios/reports/healthview/aggregator_reports/docs_health_signals/20260124-1349",
+    "aggregator_signals_csv": ".repo_studios/reports/healthview/aggregator_reports/docs_health_signals/20260124-1349/signals.csv",
+    "aggregator_signals_tsv": ".repo_studios/reports/healthview/aggregator_reports/docs_health_signals/20260124-1349/signals.tsv",
+    "anchor_inventory_manifest": ".repo_studios/reports/healthview/producer_reports/anchor_inventory/20260124-1348/manifest.json",
+    "anchor_inventory_report": ".repo_studios/reports/healthview/producer_reports/anchor_inventory/20260124-1348/telemetry.json",
+    "anchor_inventory_run": ".repo_studios/reports/healthview/producer_reports/anchor_inventory/20260124-1348",
+    "anchor_inventory_summary": ".repo_studios/reports/healthview/producer_reports/anchor_inventory/20260124-1348/summary.md",
+    "anchor_validation_report": ".repo_studios/reports/healthview/producer_reports/markdown_anchor_validation/20260124-1348/telemetry.json",
+    "anchor_validation_run": ".repo_studios/reports/healthview/producer_reports/markdown_anchor_validation/20260124-1348",
+    "churn_report": ".repo_studios/reports/healthview/producer_reports/code_doc_churn/20260124-1349/telemetry.json",
+    "churn_run": ".repo_studios/reports/healthview/producer_reports/code_doc_churn/20260124-1349",
+    "doc_index_report": ".repo_studios/reports/healthview/producer_reports/doc_index/20260124-1348/telemetry.json",
+    "doc_index_run": ".repo_studios/reports/healthview/producer_reports/doc_index/20260124-1348",
+    "docs_integrity_report": ".repo_studios/reports/healthview/producer_reports/docs_integrity_validation/20260124-1349/telemetry.json",
+    "docs_integrity_run": ".repo_studios/reports/healthview/producer_reports/docs_integrity_validation/20260124-1349",
+    "metrics_stub_report": null,
+    "metrics_stub_run": null,
+    "undocumented_report": ".repo_studios/reports/healthview/producer_reports/undocumented_logic/20260124-1349/telemetry.json",
+    "undocumented_run": ".repo_studios/reports/healthview/producer_reports/undocumented_logic/20260124-1349"
+  },
+  "catalog": [
+    {
+      "role": "aggregator",
+      "script_path": ".repo_studios/scripts/aggregators/aggregate_docs_health_signals.py",
+      "topic": "docs-health"
+    },
+    {
+      "role": "orchestrator",
+      "script_path": ".repo_studios/command_center/scripts/orchestrators/run_docs_health_overview.py",
+      "topic": "docs-health"
+    },
+    {
+      "role": "producer",
+      "script_path": ".repo_studios/scripts/producers/generate_anchor_inventory.py",
+      "topic": "docs-health"
+    },
+    {
+      "role": "producer",
+      "script_path": ".repo_studios/scripts/producers/generate_code_doc_churn_report.py",
+      "topic": "docs-health"
+    },
+    {
+      "role": "producer",
+      "script_path": ".repo_studios/scripts/producers/generate_doc_index.py",
+      "topic": "docs-health"
+    },
+    {
+      "role": "producer",
+      "script_path": ".repo_studios/scripts/producers/generate_undocumented_logic_report.py",
+      "topic": "docs-health"
+    },
+    {
+      "role": "producer",
+      "script_path": ".repo_studios/scripts/producers/validate_markdown_anchors.py",
+      "topic": "docs-health"
+    },
+    {
+      "role": "producer",
+      "script_path": ".repo_studios/scripts/producers/validate_metrics_anchor_stubs.py",
+      "topic": "docs-health"
+    },
+    {
+      "role": "producer",
+      "script_path": ".repo_studios/scripts/producers/verify_docs_integrity.py",
+      "topic": "docs-health"
+    }
+  ],
+  "generated_at": "2026-01-24T13:49:46.214140+00:00",
+  "inputs": {
+    "aggregator_output_dir": ".repo_studios/reports/healthview/aggregator_reports/docs_health_signals",
+    "anchor_inventory_output_dir": ".repo_studios/reports/healthview/producer_reports/anchor_inventory",
+    "anchor_validation_output_dir": ".repo_studios/reports/healthview/producer_reports/markdown_anchor_validation",
+    "churn_output_dir": ".repo_studios/reports/healthview/producer_reports/code_doc_churn",
+    "doc_index_output_dir": ".repo_studios/reports/healthview/producer_reports/doc_index",
+    "docs_integrity_output_dir": ".repo_studios/reports/healthview/producer_reports/docs_integrity_validation",
+    "metrics_stub_output_dir": ".repo_studios/reports/healthview/producer_reports/metrics_anchor_stub_validation",
+    "monkey_patch_output_dir": ".repo_studios/reports/healthview/producer_reports/monkey_patches",
+    "placeholder_output_dir": ".repo_studios/reports/healthview/producer_reports/code_placeholders",
+    "skip_aggregator": false,
+    "skip_anchor_inventory": false,
+    "skip_anchor_validation": false,
+    "skip_churn": false,
+    "skip_doc_index": false,
+    "skip_docs_integrity": false,
+    "skip_hygiene_signals": false,
+    "skip_metrics_stub": false,
+    "skip_undocumented": false,
+    "undocumented_output_dir": ".repo_studios/reports/healthview/producer_reports/undocumented_logic"
+  },
+  "metrics": {
+    "artifact_bytes": 14542,
+    "artifact_files": 3,
+    "runtime_seconds": 4.156182,
+    "step_count": 8,
+    "steps_failed": 0,
+    "steps_skipped": 0,
+    "steps_succeeded": 8
+  },
+  "run_slug": "20260124-1348",
+  "schema_version": 1,
+  "summary": {
+    "category_scores": {
+      "coverage": 56.3,
+      "freshness": 66.66666666666666,
+      "hygiene": 100.0,
+      "integrity": 100.0,
+      "structure": 36.54439546599495
+    },
+    "overall_score": 63.52,
+    "status_counts": {
+      "critical": 2,
+      "healthy": 2,
+      "warning": 1
+    },
+    "statuses": {
+      "coverage": "critical",
+      "freshness": "warning",
+      "hygiene": "healthy",
+      "integrity": "healthy",
+      "structure": "critical"
+    },
+    "weights": {
+      "coverage": 0.35,
+      "freshness": 0.35,
+      "hygiene": 0.05,
+      "integrity": 0.1,
+      "structure": 0.15
+    }
+  },
+  "telemetry": {
+    "finished_at": "2026-01-24T13:49:46.214070+00:00",
+    "metrics": {
+      "artifact_bytes": 14542,
+      "artifact_files": 3,
+      "runtime_seconds": 4.156182,
+      "step_count": 8,
+      "steps_failed": 0,
+      "steps_skipped": 0,
+      "steps_succeeded": 8
+    },
+    "run_slug": "20260124-1348",
+    "started_at": "2026-01-24T13:49:42.057888+00:00",
+    "steps": [
+      {
+        "detail": "docs=335, headings=2471",
+        "finished_at": "2026-01-24T13:49:43.528769+00:00",
+        "name": "doc-index",
+        "payload": {
+          "run_dir": ".repo_studios/reports/healthview/producer_reports/doc_index/20260124-1348",
+          "slug": "20260124-1348"
+        },
+        "started_at": "2026-01-24T13:49:42.057892+00:00",
+        "status": "success"
+      },
+      {
+        "detail": "docs=144, missing_h1=7, missing_h2=3, slugs=794, duplicates=81, cross_file_docs=115, repeated_docs=0",
+        "finished_at": "2026-01-24T13:49:43.626494+00:00",
+        "name": "anchor-inventory",
+        "payload": {
+          "run_dir": ".repo_studios/reports/healthview/producer_reports/anchor_inventory/20260124-1348",
+          "slug": "20260124-1348"
+        },
+        "started_at": "2026-01-24T13:49:43.528781+00:00",
+        "status": "success"
+      },
+      {
+        "detail": "status=ok, issues=0",
+        "finished_at": "2026-01-24T13:49:43.925187+00:00",
+        "name": "anchor-validation",
+        "payload": {
+          "issues": 0,
+          "report": ".repo_studios/reports/healthview/producer_reports/markdown_anchor_validation/20260124-1348/telemetry.json",
+          "status": "ok"
+        },
+        "started_at": "2026-01-24T13:49:43.626506+00:00",
+        "status": "success"
+      },
+      {
+        "detail": "status=ok, mismatches=0",
+        "finished_at": "2026-01-24T13:49:43.939573+00:00",
+        "name": "docs-integrity",
+        "payload": {
+          "mismatches": 0,
+          "run_dir": ".repo_studios/reports/healthview/producer_reports/docs_integrity_validation/20260124-1349",
+          "status": "ok"
+        },
+        "started_at": "2026-01-24T13:49:43.925195+00:00",
+        "status": "success"
+      },
+      {
+        "detail": "status=ok, missing=0",
+        "finished_at": "2026-01-24T13:49:44.203764+00:00",
+        "name": "metrics-stub",
+        "payload": {
+          "missing": 0,
+          "run_dir": null,
+          "status": "ok"
+        },
+        "started_at": "2026-01-24T13:49:43.939581+00:00",
+        "status": "success"
+      },
+      {
+        "detail": "missing_docs=1",
+        "finished_at": "2026-01-24T13:49:45.857757+00:00",
+        "name": "code-doc-churn",
+        "payload": {
+          "run_dir": ".repo_studios/reports/healthview/producer_reports/code_doc_churn/20260124-1349",
+          "summary": {
+            "allowlisted_modules": [],
+            "modules_with_code_churn": 3,
+            "modules_with_doc_updates": 2,
+            "modules_without_doc_updates": 1
+          }
+        },
+        "started_at": "2026-01-24T13:49:44.203774+00:00",
+        "status": "success"
+      },
+      {
+        "detail": "modules_with_findings=40",
+        "finished_at": "2026-01-24T13:49:46.189094+00:00",
+        "name": "undocumented-logic",
+        "payload": {
+          "run_dir": ".repo_studios/reports/healthview/producer_reports/undocumented_logic/20260124-1349",
+          "summary": {
+            "docstring_coverage_percent": 56.3,
+            "entities_missing_docs": 392,
+            "entities_scanned": 897,
+            "modules_scanned": 85,
+            "modules_with_findings": 40
+          }
+        },
+        "started_at": "2026-01-24T13:49:45.857769+00:00",
+        "status": "success"
+      },
+      {
+        "detail": "overall=63.52",
+        "finished_at": "2026-01-24T13:49:46.214061+00:00",
+        "name": "aggregate",
+        "payload": {
+          "overall_score": 63.52,
+          "run_dir": ".repo_studios/reports/healthview/aggregator_reports/docs_health_signals/20260124-1349"
+        },
+        "started_at": "2026-01-24T13:49:46.189103+00:00",
+        "status": "success"
+      }
+    ],
+    "success": true,
+    "topic": "docs_health",
+    "viewer": "orchestrator_reports"
+  },
+  "topic": "docs_health",
+  "viewer": "orchestrator_reports"
+}

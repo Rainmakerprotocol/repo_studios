@@ -174,7 +174,16 @@ def get_keep(script_key: str) -> int:
 
     # Check global default in config
     config = _get_config()
-    default_keep = config.get("default_keep", DEFAULT_FALLBACK_KEEP)
+    default_keep_raw = config.get("default_keep", DEFAULT_FALLBACK_KEEP)
+    if isinstance(default_keep_raw, bool):
+        default_keep = DEFAULT_FALLBACK_KEEP
+    elif isinstance(default_keep_raw, int):
+        default_keep = default_keep_raw
+    else:
+        try:
+            default_keep = int(str(default_keep_raw))
+        except (TypeError, ValueError):
+            default_keep = DEFAULT_FALLBACK_KEEP
 
     logger.debug("Script %s not in config; using default %d", script_key, default_keep)
     return max(1, default_keep)

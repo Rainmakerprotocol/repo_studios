@@ -6,7 +6,7 @@ import sys
 from pathlib import Path
 
 _MODULE_PATH = (
-    Path(__file__).resolve().parents[2] / "command_center" / "scripts" / "producers" / "audit_helper_adoption.py"
+    Path(__file__).resolve().parents[2] / "command_center" / "scripts" / "cc_producers" / "audit_helper_adoption.py"
 )
 
 

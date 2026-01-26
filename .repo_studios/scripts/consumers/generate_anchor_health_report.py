@@ -1,4 +1,4 @@
-"""Anchor Health Report Generator.
+"""HOP-compliant Anchor Health Report Consumer.
 
 Generates a machine + human consumable snapshot of top-level (H1/H2) markdown
 anchor slug duplication using the latest `generate_anchor_inventory.py`
@@ -10,11 +10,17 @@ agents can:
 2. Surface remaining cross-file duplicates, their file membership, and context.
 3. Recommend the next slugs to collapse (largest clusters first) while respecting
      canonical file choices recorded in an optional mapping file.
-4. Emit artifacts for dashboards / summaries: JSON + compact markdown.
+4. Emit artifacts for dashboards / summaries.
 
-Outputs (by default under `.repo_studios/anchor_health/`):
-    - anchor_report_latest.json
-    - anchor_report_latest.md
+HOP Base Package (under `.repo_studios/reports/consumer_reports/anchor_health/<timestamp>/`):
+    - manifest.json (bundle metadata and metrics)
+    - summary.md (human-readable report)
+    - telemetry.json (execution metrics)
+
+Supplementary:
+    - anchor_report.json (legacy full report)
+    - anchor_report.md (legacy markdown)
+    - clusters.tsv (tabular cluster data)
 
 Exit code is 0 even if duplicates exist (pipeline decides policy). Use the JSON
 field `strict_duplicate_count` to gate if desired.
@@ -47,9 +53,11 @@ TOPIC_SLUG = "anchor_health"
 RUN_PREFIX = "anchor_health-"
 DATABASE_PLACEHOLDER_TARGET = "anchor_health_snapshot"
 
-SUMMARY_JSON_NAME = "summary.json"
-SUMMARY_MD_NAME = "SUMMARY.md"
-BUNDLE_SUMMARY_NAME = "bundle_summary.json"
+# HOP base package artifact names
+TELEMETRY_JSON_NAME = "telemetry.json"
+SUMMARY_MD_NAME = "summary.md"
+MANIFEST_JSON_NAME = "manifest.json"
+# Legacy/supplementary artifacts
 LEGACY_JSON_NAME = "anchor_report.json"
 LEGACY_MD_NAME = "anchor_report.md"
 CLUSTERS_TSV_NAME = "clusters.tsv"
@@ -121,16 +129,18 @@ def load_baseline(path: Path) -> dict | None:
     if not path.exists():
         return None
     try:
-        return json.loads(path.read_text(encoding="utf-8"))
+        payload = json.loads(path.read_text(encoding="utf-8"))
     except json.JSONDecodeError:  # pragma: no cover - defensive
         return None
+    return payload if isinstance(payload, dict) else None
 
 
 def _load_json(path: Path) -> dict | None:
     try:
-        return json.loads(path.read_text(encoding="utf-8"))
+        payload = json.loads(path.read_text(encoding="utf-8"))
     except (FileNotFoundError, json.JSONDecodeError):
         return None
+    return payload if isinstance(payload, dict) else None
 
 
 def load_inventory_report(explicit: Path | None = None) -> tuple[dict, Path] | tuple[None, None]:
@@ -347,6 +357,27 @@ def write_artifacts(
     output_dir: Path,
     baseline_path: Path,
 ) -> dict[str, Any]:
+    """Write HOP-compliant artifact bundle.
+
+    Base package (HOP standard):
+        - manifest.json: Bundle metadata, artifact paths, metrics
+        - summary.md: Human-readable anchor health report
+        - telemetry.json: Execution metrics for aggregation
+
+    Supplementary artifacts:
+        - anchor_report.json: Legacy full report (for backward compatibility)
+        - anchor_report.md: Legacy markdown report
+        - clusters.tsv: Tabular cluster data
+
+    Args:
+        report: Full report dict from build_report()
+        ts: Optional timestamp override (defaults to now UTC)
+        output_dir: Parent output directory
+        baseline_path: Path to baseline JSON file
+
+    Returns:
+        Dict with artifact paths and summary data
+    """
     ts = ts or datetime.now(UTC)
     output_dir.mkdir(parents=True, exist_ok=True)
     run_dir = _run_dir(ts, output_dir)
@@ -354,22 +385,25 @@ def write_artifacts(
 
     summary = _build_summary(report)
 
-    summary_path = run_dir / SUMMARY_JSON_NAME
-    summary_path.write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
+    # HOP base package: telemetry.json (was summary.json)
+    telemetry_path = run_dir / TELEMETRY_JSON_NAME
+    telemetry_path.write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
 
+    # HOP base package: summary.md (was SUMMARY.md)
     summary_md_path = run_dir / SUMMARY_MD_NAME
     summary_md_path.write_text(
         _render_summary_markdown(summary, generated_at=ts, bundle_dir=run_dir, baseline_path=baseline_path),
         encoding="utf-8",
     )
 
-    bundle_summary = {
+    # HOP base package: manifest.json (was bundle_summary.json)
+    manifest = {
         "schema_version": 1,
         "generated_at": ts.isoformat(timespec="seconds"),
         "source": report.get("source"),
         "inventory_report": report.get("inventory_report"),
         "artifacts": {
-            "summary_json": str(summary_path.resolve()),
+            "telemetry_json": str(telemetry_path.resolve()),
             "summary_md": str(summary_md_path.resolve()),
             "legacy_report_json": str((run_dir / LEGACY_JSON_NAME).resolve()),
             "legacy_report_md": str((run_dir / LEGACY_MD_NAME).resolve()),
@@ -385,8 +419,8 @@ def write_artifacts(
         "database_placeholder": summary.get("database_placeholder"),
     }
 
-    bundle_summary_path = run_dir / BUNDLE_SUMMARY_NAME
-    bundle_summary_path.write_text(json.dumps(bundle_summary, indent=2) + "\n", encoding="utf-8")
+    manifest_path = run_dir / MANIFEST_JSON_NAME
+    manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
 
     legacy_json_path = run_dir / LEGACY_JSON_NAME
     legacy_json_path.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
@@ -412,9 +446,19 @@ def write_artifacts(
 
     tsv_lines = ["slug\tfile_count\tfiles\tlocations"]
     for cluster in report["clusters"]:
-        files_joined = ",".join(cluster["files"])  # type: ignore[index]
-        locations_joined = ";".join(cluster.get("locations", []))
-        tsv_lines.append(f"{cluster['slug']}\t{cluster['file_count']}\t{files_joined}\t{locations_joined}")
+        files_raw = cluster.get("files")
+        files: list[str] = []
+        if isinstance(files_raw, list):
+            files = [str(item) for item in files_raw]
+        locations_raw = cluster.get("locations")
+        locations: list[str] = []
+        if isinstance(locations_raw, list):
+            locations = [str(item) for item in locations_raw]
+        files_joined = ",".join(files)
+        locations_joined = ";".join(locations)
+        tsv_lines.append(
+            f"{cluster.get('slug','')}\t{int(cluster.get('file_count',0))}\t{files_joined}\t{locations_joined}"
+        )
     (run_dir / CLUSTERS_TSV_NAME).write_text("\n".join(tsv_lines) + "\n", encoding="utf-8")
 
     log_line = f"{ts.isoformat()} duplicates={report['strict_duplicate_count']} baseline={report['baseline_cross_file_duplicates']}"
@@ -424,9 +468,9 @@ def write_artifacts(
     return {
         "bundle_dir": run_dir,
         "summary": summary,
-        "summary_path": summary_path,
-        "summary_markdown_path": summary_md_path,
-        "bundle_summary_path": bundle_summary_path,
+        "telemetry_path": telemetry_path,
+        "summary_path": summary_md_path,
+        "manifest_path": manifest_path,
     }
 
 
@@ -519,9 +563,9 @@ def run(
         "report": report,
         "summary": artifact_info["summary"],
         "bundle_dir": str(artifact_info["bundle_dir"].resolve()),
-        "bundle_summary": str(artifact_info["bundle_summary_path"].resolve()),
+        "manifest_path": str(artifact_info["manifest_path"].resolve()),
+        "telemetry_path": str(artifact_info["telemetry_path"].resolve()),
         "summary_path": str(artifact_info["summary_path"].resolve()),
-        "summary_markdown": str(artifact_info["summary_markdown_path"].resolve()),
         "output_dir": str(target_output.resolve()),
         "source": report.get("source"),
         "pruned": [str(p.resolve()) for p in pruned],

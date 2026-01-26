@@ -1,0 +1,137 @@
+{
+  "artifacts": {
+    "consumer_bundle": ".repo_studios/reports/healthview/consumer_reports/monkey_patch_risk/20260124-1347",
+    "consumer_bundle_summary": ".repo_studios/reports/healthview/consumer_reports/monkey_patch_risk/20260124-1347/bundle_summary.json",
+    "consumer_summary": ".repo_studios/reports/healthview/consumer_reports/monkey_patch_risk/20260124-1347/summary.json",
+    "consumer_summary_md": ".repo_studios/reports/healthview/consumer_reports/monkey_patch_risk/20260124-1347/summary.md",
+    "overview_manifest.json": ".repo_studios/reports/healthview/summarizer_reports/monkey_patch_overview/20260124-1346/manifest.json",
+    "overview_summary.md": ".repo_studios/reports/healthview/summarizer_reports/monkey_patch_overview/20260124-1346/summary.md",
+    "overview_telemetry.json": ".repo_studios/reports/healthview/summarizer_reports/monkey_patch_overview/20260124-1346/telemetry.json",
+    "producer_bundle": ".repo_studios/reports/healthview/producer_reports/monkey_patch_scans/20260124-1346",
+    "producer_manifest.json": ".repo_studios/reports/healthview/producer_reports/monkey_patch_scans/20260124-1346/manifest.json",
+    "producer_matches": null,
+    "producer_report": null,
+    "producer_summary.md": ".repo_studios/reports/healthview/producer_reports/monkey_patch_scans/20260124-1346/summary.md",
+    "producer_telemetry.json": ".repo_studios/reports/healthview/producer_reports/monkey_patch_scans/20260124-1346/telemetry.json",
+    "summarizer_run": ".repo_studios/reports/healthview/summarizer_reports/monkey_patch_overview/20260124-1346",
+    "trend_dir": ".repo_studios/reports/healthview/aggregator_reports/monkey_patch_trends/20260124-1347",
+    "trend_json": ".repo_studios/reports/healthview/aggregator_reports/monkey_patch_trends/20260124-1347/trend.json",
+    "trend_markdown": ".repo_studios/reports/healthview/aggregator_reports/monkey_patch_trends/20260124-1347/trend.md"
+  },
+  "catalog": [
+    {
+      "role": "aggregator",
+      "script_path": ".repo_studios/scripts/aggregators/analyze_monkey_patch_trends.py",
+      "topic": "monkey-patch-oversight"
+    },
+    {
+      "role": "consumer",
+      "script_path": ".repo_studios/scripts/consumers/classify_monkey_patches.py",
+      "topic": "monkey-patch-oversight"
+    },
+    {
+      "role": "orchestrator",
+      "script_path": ".repo_studios/command_center/scripts/orchestrators/run_monkey_patch_oversight.py",
+      "topic": "monkey-patch-oversight"
+    },
+    {
+      "role": "producer",
+      "script_path": ".repo_studios/scripts/producers/scan_monkey_patches.py",
+      "topic": "monkey-patch-oversight"
+    },
+    {
+      "role": "summarizer",
+      "script_path": ".repo_studios/command_center/scripts/summarizers/summarize_monkey_patch_overview.py",
+      "topic": "monkey-patch-oversight"
+    },
+    {
+      "role": "utility",
+      "script_path": ".repo_studios/scripts/utilities/monkey_patch_risk.py",
+      "topic": "monkey-patch-oversight"
+    }
+  ],
+  "generated_at": "2026-01-24T13:47:22.325810+00:00",
+  "inputs": {
+    "duplicate_matrix": null,
+    "producer_strict": false,
+    "producer_with_git": false,
+    "scan_root": ".",
+    "trend_max_runs": 20
+  },
+  "metrics": {
+    "artifact_bytes": 9699,
+    "artifact_files": 3,
+    "runtime_seconds": 1.796661,
+    "step_count": 4,
+    "steps_failed": 0,
+    "steps_skipped": 0,
+    "steps_succeeded": 4
+  },
+  "run_slug": "20260124-1346",
+  "schema_version": 1,
+  "telemetry": {
+    "finished_at": "2026-01-24T13:47:22.325758+00:00",
+    "metrics": {
+      "artifact_bytes": 9699,
+      "artifact_files": 3,
+      "runtime_seconds": 1.796661,
+      "step_count": 4,
+      "steps_failed": 0,
+      "steps_skipped": 0,
+      "steps_succeeded": 4
+    },
+    "run_slug": "20260124-1346",
+    "started_at": "2026-01-24T13:47:20.529097+00:00",
+    "steps": [
+      {
+        "detail": "status=ok, findings=122",
+        "finished_at": "2026-01-24T13:47:22.221339+00:00",
+        "name": "producer",
+        "payload": {
+          "run_id": "20260124-1346",
+          "status": "ok",
+          "total_findings": 122
+        },
+        "started_at": "2026-01-24T13:47:20.529099+00:00",
+        "status": "success"
+      },
+      {
+        "detail": "source=structured",
+        "finished_at": "2026-01-24T13:47:22.248063+00:00",
+        "name": "consumer",
+        "payload": {
+          "bundle_dir": ".repo_studios/reports/healthview/consumer_reports/monkey_patch_risk/20260124-1347",
+          "source": "structured"
+        },
+        "started_at": "2026-01-24T13:47:22.221349+00:00",
+        "status": "success"
+      },
+      {
+        "detail": "mode=consumer",
+        "finished_at": "2026-01-24T13:47:22.300768+00:00",
+        "name": "aggregator",
+        "payload": {
+          "mode": "consumer",
+          "runs": 5
+        },
+        "started_at": "2026-01-24T13:47:22.248073+00:00",
+        "status": "success"
+      },
+      {
+        "detail": "slug=20260124-1346",
+        "finished_at": "2026-01-24T13:47:22.325750+00:00",
+        "name": "summarizer",
+        "payload": {
+          "slug": "20260124-1346"
+        },
+        "started_at": "2026-01-24T13:47:22.300780+00:00",
+        "status": "success"
+      }
+    ],
+    "success": true,
+    "topic": "monkey_patch_oversight",
+    "viewer": "healthview"
+  },
+  "topic": "monkey_patch_oversight",
+  "viewer": "healthview"
+}

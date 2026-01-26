@@ -15,7 +15,7 @@ MODULE_PATH = (
     Path(__file__).resolve().parents[2]
     / "command_center"
     / "scripts"
-    / "producers"
+    / "cc_producers"
     / "generate_commandview_inventory.py"
 )
 MODULE_NAME = "repo_studios_test.generate_commandview_inventory"

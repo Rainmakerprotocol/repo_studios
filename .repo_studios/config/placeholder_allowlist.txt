@@ -2,3 +2,10 @@
 # Review cadence: monthly (next review due 2025-12-23).
 # Entries follow the format <relative/path>:<line> with supporting context logged in the decision log.
 # No active allowlist entries as of 2025-11-23.
+
+# Stage 4.1 hygiene: known template placeholders + intentional annotations.
+.repo_studios/command_center/docs/db_integration_template.md:161
+.repo_studios/command_center/docs/db_integration_template.md:172
+.repo_studios/command_center/docs/db_integration_template.md:175
+.repo_studios/command_center/scripts/libraries/retention_policy.py:244
+.repo_studios/scripts/producers/scan_monkey_patches.py:94

@@ -60,7 +60,7 @@ class ScriptStatus:
 
 def find_markers_in_file(file_path: Path, repo_root: Path) -> list[DBMarker]:
     """Find all DB_INTEGRATION_MARKER occurrences in a file."""
-    markers = []
+    markers: list[DBMarker] = []
     
     try:
         content = file_path.read_text(encoding="utf-8")

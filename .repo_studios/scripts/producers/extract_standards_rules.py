@@ -256,16 +256,20 @@ def _extract_heading_rules(
             "severity": bullets.get("severity"),
             "applies-to": bullets.get("applies-to"),
         }
-        if all(bullet_map.values()):
+        summary_text = bullet_map["summary"]
+        rationale_text = bullet_map["rationale"]
+        severity_text = bullet_map["severity"]
+        applies_raw = bullet_map["applies-to"]
+
+        if summary_text and rationale_text and severity_text and applies_raw:
             rid = _slugify(title)
             if rid in existing_ids:
                 conflicts.add(rid)
             else:
-                severity = _normalize_severity(bullet_map["severity"], rid, invalid_severity)
+                severity = _normalize_severity(severity_text, rid, invalid_severity)
                 if severity is None:
                     i += 1
                     continue
-                applies_raw = bullet_map["applies-to"]
                 applies = _split_multi(applies_raw)
                 if not applies and applies_raw.strip():
                     applies = [applies_raw.strip()]
@@ -274,8 +278,8 @@ def _extract_heading_rules(
                     ParsedRule(
                         id=rid,
                         category_ids=cat_ids or list(categories),
-                        summary=bullet_map["summary"],
-                        rationale=bullet_map["rationale"],
+                        summary=summary_text,
+                        rationale=rationale_text,
                         severity=severity,
                         applies_to=applies,
                         source_file=rel_file,

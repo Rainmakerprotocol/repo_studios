@@ -5,7 +5,7 @@ from __future__ import annotations
 import importlib.util
 from pathlib import Path
 from types import ModuleType
-from typing import Callable, Iterable
+from typing import Callable, Iterable, cast
 
 SummarizerCallable = Callable[[Iterable[str] | None], int]
 
@@ -28,7 +28,7 @@ def load_summarizer(script_path: Path, *, module_name: str) -> SummarizerCallabl
     run_callable = getattr(module, "run", None)
     if not callable(run_callable):
         raise AttributeError(f"Summarizer module at {script_path} does not expose a callable run() helper")
-    return run_callable  # type: ignore[return-value]
+    return cast(SummarizerCallable, run_callable)
 
 
 def run_summarizer(run_callable: SummarizerCallable, argv: Iterable[str] | None = None, *, name: str | None = None) -> None:

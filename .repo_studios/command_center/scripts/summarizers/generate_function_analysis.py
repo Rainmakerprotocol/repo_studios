@@ -12,17 +12,17 @@ import sys
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any, Sequence
 
 try:
-    from libraries import (  # type: ignore  # noqa: E402
+    from libraries import (  # noqa: E402
         ReportArtifact,
         WriteReportArtifactsResult,
         resolve_repo_root,
         slugify_relative,
         write_report_artifacts,
     )
-    from libraries.retention_policy import get_keep  # type: ignore  # noqa: E402
+    from libraries.retention_policy import get_keep  # noqa: E402
 except ModuleNotFoundError:  # pragma: no cover - CLI fallback
     script_dir = Path(__file__).resolve().parent
     scripts_root = script_dir.parent
@@ -30,14 +30,14 @@ except ModuleNotFoundError:  # pragma: no cover - CLI fallback
     for candidate in (repo_studios_root, scripts_root):
         if str(candidate) not in sys.path:
             sys.path.insert(0, str(candidate))
-    from libraries import (  # type: ignore  # noqa: E402
+    from libraries import (  # noqa: E402
         ReportArtifact,
         WriteReportArtifactsResult,
         resolve_repo_root,
         slugify_relative,
         write_report_artifacts,
     )
-    from libraries.retention_policy import get_keep  # type: ignore  # noqa: E402
+    from libraries.retention_policy import get_keep  # noqa: E402
 
 DEFAULT_SCHEMA_VERSION = 1
 ANALYSIS_VERSION = "1.0.0"
@@ -73,7 +73,7 @@ class RunArtifacts:
     index_analysis: Path
 
 
-def parse_args(argv: Iterable[str] | None = None) -> argparse.Namespace:
+def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         prog="generate_function_analysis",
         description=__doc__ or "",
@@ -370,7 +370,7 @@ def write_analysis(
     )
 
 
-def run(argv: Iterable[str] | None = None) -> int:
+def run(argv: Sequence[str] | None = None) -> int:
     args = parse_args(argv)
     options = build_options(args)
     configure_logging(options.log_level)

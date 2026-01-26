@@ -335,7 +335,12 @@ def _write_markdown(path: Path, payload: dict[str, object]) -> None:
     ratio = payload.get("compliance_ratio", 0.0)
     lines.append(f"- Compliance ratio: {ratio:.4f}")
     lines.append("")
-    issue_totals = payload.get("issue_totals", {})
+    issue_totals: dict[str, int] = {}
+    issue_totals_raw = payload.get("issue_totals")
+    if isinstance(issue_totals_raw, dict):
+        for key, value in issue_totals_raw.items():
+            if isinstance(key, str) and isinstance(value, int):
+                issue_totals[key] = value
     if issue_totals:
         lines.append("## Issue Totals")
         lines.append("")
@@ -344,29 +349,48 @@ def _write_markdown(path: Path, payload: dict[str, object]) -> None:
         for issue, count in sorted(issue_totals.items()):
             lines.append(f"| {issue} | {count} |")
         lines.append("")
-    violations = payload.get("violations", [])
+    violations: list[dict[str, object]] = []
+    violations_raw = payload.get("violations")
+    if isinstance(violations_raw, list):
+        for entry in violations_raw:
+            if isinstance(entry, dict):
+                violations.append(entry)
     if violations:
         lines.append("## Violations")
         lines.append("")
         lines.append("| Path | Issues |")
         lines.append("| --- | --- |")
         for entry in violations:
-            joined = ", ".join(entry["issues"])
-            lines.append(f"| `{entry['path']}` | {joined} |")
+            raw_path = entry.get("path")
+            raw_issues = entry.get("issues")
+            issues = [issue for issue in raw_issues if isinstance(issue, str)] if isinstance(raw_issues, list) else []
+            joined = ", ".join(issues)
+            if isinstance(raw_path, str):
+                lines.append(f"| `{raw_path}` | {joined} |")
         lines.append("")
     else:
         lines.append("## Violations")
         lines.append("")
         lines.append("No violations detected.")
         lines.append("")
-    latest_aliases = payload.get("latest_aliases", [])
+    latest_aliases_raw = payload.get("latest_aliases")
+    latest_aliases = [alias for alias in latest_aliases_raw if isinstance(alias, str)] if isinstance(latest_aliases_raw, list) else []
     if latest_aliases:
         lines.append("## Latest Aliases")
         lines.append("")
         for alias in latest_aliases:
             lines.append(f"- `{alias}`")
         lines.append("")
-    suggestions = payload.get("rename_suggestions", [])
+    suggestions: list[dict[str, str]] = []
+    suggestions_raw = payload.get("rename_suggestions")
+    if isinstance(suggestions_raw, list):
+        for entry in suggestions_raw:
+            if not isinstance(entry, dict):
+                continue
+            current = entry.get("current")
+            suggested = entry.get("suggested")
+            if isinstance(current, str) and isinstance(suggested, str):
+                suggestions.append({"current": current, "suggested": suggested})
     if suggestions:
         lines.append("## Rename Suggestions")
         lines.append("")
@@ -424,11 +448,20 @@ def run(argv: Sequence[str] | None = None) -> dict[str, object]:
     _write_json(json_path, summary)
     logging.info("Writing Markdown summary to %s", markdown_path)
     _write_markdown(markdown_path, summary)
-    if args.dry_run_rename and summary.get("rename_suggestions"):
-        for entry in summary["rename_suggestions"]:
-            logging.info("Suggest rename: %s -> %s", entry["current"], entry["suggested"])
-    violations = int(summary.get("violation_count", 0))
-    threshold = summary.get("fail_threshold", 0)
+    if args.dry_run_rename:
+        rename_suggestions = summary.get("rename_suggestions")
+        if isinstance(rename_suggestions, list):
+            for entry in rename_suggestions:
+                if not isinstance(entry, dict):
+                    continue
+                current = entry.get("current")
+                suggested = entry.get("suggested")
+                if isinstance(current, str) and isinstance(suggested, str):
+                    logging.info("Suggest rename: %s -> %s", current, suggested)
+    violations_raw = summary.get("violation_count", 0)
+    violations = violations_raw if isinstance(violations_raw, int) else 0
+    threshold_raw = summary.get("fail_threshold", 0)
+    threshold = threshold_raw if isinstance(threshold_raw, int) else 0
     if violations > threshold:
         logging.error("Violation count %s exceeds threshold %s", violations, threshold)
     else:
@@ -438,8 +471,10 @@ def run(argv: Sequence[str] | None = None) -> dict[str, object]:
 
 def main(argv: Sequence[str] | None = None) -> int:
     summary = run(argv)
-    violations = int(summary.get("violation_count", 0))
-    threshold = int(summary.get("fail_threshold", 0))
+    violations_raw = summary.get("violation_count", 0)
+    violations = violations_raw if isinstance(violations_raw, int) else 0
+    threshold_raw = summary.get("fail_threshold", 0)
+    threshold = threshold_raw if isinstance(threshold_raw, int) else 0
     return 1 if violations > threshold else 0
 
 

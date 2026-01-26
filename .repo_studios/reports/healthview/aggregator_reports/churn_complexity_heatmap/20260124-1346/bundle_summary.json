@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-01-24T13:46:55+00:00",
+  "mode": "consumer",
+  "repo_root": "C:\\Users\\genet\\repo_studios",
+  "window": 500,
+  "git_sha": "eedc95e5f5ee34dcf7afe4a0c4e2b1cadb9a0c35",
+  "inputs": {
+    "metrics_source": null,
+    "test_log_summary": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\consumer_reports\\test_log_health_reports\\20260123-2344\\bundle_summary.json",
+    "logs_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\rawview\\test_execution_runs",
+    "junit": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\rawview\\test_execution_runs\\20260103-1346\\junit_20260103-1346.xml"
+  },
+  "artifacts": {
+    "heatmap_json": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\aggregator_reports\\churn_complexity_heatmap\\20260124-1346\\heatmap.json",
+    "heatmap_md": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\aggregator_reports\\churn_complexity_heatmap\\20260124-1346\\heatmap.md"
+  },
+  "notes": [],
+  "summary_source": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\consumer_reports\\test_log_health_reports\\20260123-2344\\bundle_summary.json"
+}

@@ -79,7 +79,10 @@ DEFAULT_TYPECHECK_OUTPUT_DIR = build_topic_path("producer", "typecheck_report")
 DEFAULT_MYPY_BASELINES_OUTPUT_DIR = Path(".repo_studios/command_center/reports/rawview/mypy_baselines")
 DEFAULT_ORCHESTRATOR_OUTPUT_DIR = build_topic_path("orchestrator", HEALTHVIEW_TOPIC)
 
-DEFAULT_TYPECHECK_TARGETS: tuple[str, ...] = (".repo_studios",)
+DEFAULT_TYPECHECK_TARGETS: tuple[str, ...] = (
+    ".repo_studios/scripts",
+    ".repo_studios/command_center/scripts",
+)
 
 DEPENDENCY_RUN_PREFIX = "dependency_hygiene"
 IMPORT_GRAPH_RUN_PREFIX = "import_graph"

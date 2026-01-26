@@ -1,0 +1,340 @@
+{
+  "schema_version": 1,
+  "viewer": "healthview",
+  "topic": "typecheck_report",
+  "status": "error",
+  "run_timestamp": "20260124-1345",
+  "generated_utc": "2026-01-24T13:45:57.498493+00:00",
+  "repo_root": "C:\\Users\\genet\\repo_studios",
+  "reports_root": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\producer_reports\\typecheck_report",
+  "topic_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\producer_reports\\typecheck_report",
+  "bundle_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\producer_reports\\typecheck_report\\20260124-1345",
+  "invocation": [
+    "C:\\Users\\genet\\repo_studios\\.venv\\Scripts\\python.exe",
+    "-m",
+    "mypy",
+    "--show-error-codes",
+    "--no-color-output",
+    "--hide-error-context",
+    ".repo_studios/scripts",
+    ".repo_studios/command_center/scripts"
+  ],
+  "mypy_version": "mypy 1.11.1 (compiled: no)",
+  "summary": {
+    "error_count": 149,
+    "files_with_issues": 30,
+    "files_checked": 85,
+    "paths_checked": [
+      ".repo_studios/scripts",
+      ".repo_studios/command_center/scripts"
+    ]
+  },
+  "error_samples": [
+    {
+      "path": ".repo_studios\\command_center\\scripts\\libraries\\summarizer_runner.py",
+      "line": 31,
+      "code": "unused-ignore",
+      "message": "Unused \"type: ignore\" comment"
+    },
+    {
+      "path": ".repo_studios\\command_center\\scripts\\libraries\\summarizer_runner.py",
+      "line": 31,
+      "code": "no-any-return",
+      "message": "Returning Any from function declared to return \"Callable[[Iterable[str] | None], int]\""
+    },
+    {
+      "path": ".repo_studios\\command_center\\scripts\\libraries\\guardrails.py",
+      "line": 10,
+      "code": "import-untyped",
+      "message": "Skipping analyzing \"command_center.scripts.utilities\": module is installed, but missing library stubs or py.typed marker"
+    },
+    {
+      "path": ".repo_studios\\command_center\\scripts\\libraries\\guardrails.py",
+      "line": 198,
+      "code": "no-any-return",
+      "message": "Returning Any from function declared to return \"dict[str, object]\""
+    },
+    {
+      "path": ".repo_studios\\command_center\\scripts\\utilities\\reports_naming_audit.py",
+      "line": 344,
+      "code": "attr-defined",
+      "message": "\"object\" has no attribute \"items\""
+    },
+    {
+      "path": ".repo_studios\\command_center\\scripts\\utilities\\reports_naming_audit.py",
+      "line": 353,
+      "code": "attr-defined",
+      "message": "\"object\" has no attribute \"__iter__\"; maybe \"__dir__\" or \"__str__\"? (not iterable)"
+    },
+    {
+      "path": ".repo_studios\\command_center\\scripts\\utilities\\reports_naming_audit.py",
+      "line": 366,
+      "code": "attr-defined",
+      "message": "\"object\" has no attribute \"__iter__\"; maybe \"__dir__\" or \"__str__\"? (not iterable)"
+    },
+    {
+      "path": ".repo_studios\\command_center\\scripts\\utilities\\reports_naming_audit.py",
+      "line": 375,
+      "code": "attr-defined",
+      "message": "\"object\" has no attribute \"__iter__\"; maybe \"__dir__\" or \"__str__\"? (not iterable)"
+    },
+    {
+      "path": ".repo_studios\\command_center\\scripts\\utilities\\reports_naming_audit.py",
+      "line": 428,
+      "code": "attr-defined",
+      "message": "\"object\" has no attribute \"__iter__\"; maybe \"__dir__\" or \"__str__\"? (not iterable)"
+    },
+    {
+      "path": ".repo_studios\\command_center\\scripts\\utilities\\reports_naming_audit.py",
+      "line": 430,
+      "code": "call-overload",
+      "message": "No overload variant of \"int\" matches argument type \"object\""
+    },
+    {
+      "path": ".repo_studios\\command_center\\scripts\\utilities\\reports_naming_audit.py",
+      "line": 441,
+      "code": "call-overload",
+      "message": "No overload variant of \"int\" matches argument type \"object\""
+    },
+    {
+      "path": ".repo_studios\\command_center\\scripts\\utilities\\reports_naming_audit.py",
+      "line": 442,
+      "code": "call-overload",
+      "message": "No overload variant of \"int\" matches argument type \"object\""
+    },
+    {
+      "path": ".repo_studios\\command_center\\scripts\\utilities\\list_db_markers.py",
+      "line": 63,
+      "code": "var-annotated",
+      "message": "Need type annotation for \"markers\" (hint: \"markers: list[<type>] = ...\")"
+    },
+    {
+      "path": ".repo_studios\\command_center\\scripts\\libraries\\retention_policy.py",
+      "line": 180,
+      "code": "no-any-return",
+      "message": "Returning Any from function declared to return \"int\""
+    },
+    {
+      "path": ".repo_studios\\scripts\\utilities\\validate_healthview_agent_workflow_spec.py",
+      "line": 21,
+      "code": "import-untyped",
+      "message": "Library stubs not installed for \"jsonschema\""
+    },
+    {
+      "path": ".repo_studios\\scripts\\utilities\\validate_healthview_agent_workflow_spec.py",
+      "line": 30,
+      "code": "unused-ignore",
+      "message": "Unused \"type: ignore\" comment"
+    },
+    {
+      "path": ".repo_studios\\scripts\\utilities\\fault_run_analysis.py",
+      "line": 136,
+      "code": "no-any-return",
+      "message": "Returning Any from function declared to return \"dict[str, object]\""
+    },
+    {
+      "path": ".repo_studios\\scripts\\utilities\\fault_run_analysis.py",
+      "line": 139,
+      "code": "var-annotated",
+      "message": "Need type annotation for \"manifest\""
+    },
+    {
+      "path": ".repo_studios\\scripts\\utilities\\fault_run_analysis.py",
+      "line": 153,
+      "code": "return-value",
+      "message": "Incompatible return value type (got \"dict[str, dict[Any, Any] | str | None]\", expected \"dict[str, object]\")"
+    },
+    {
+      "path": ".repo_studios\\scripts\\utilities\\fault_run_analysis.py",
+      "line": 205,
+      "code": "no-any-return",
+      "message": "Returning Any from function declared to return \"str\""
+    },
+    {
+      "path": ".repo_studios\\scripts\\utilities\\fault_run_analysis.py",
+      "line": 243,
+      "code": "call-overload",
+      "message": "No overload variant of \"int\" matches argument type \"object\""
+    },
+    {
+      "path": ".repo_studios\\scripts\\utilities\\fault_run_analysis.py",
+      "line": 250,
+      "code": "unused-ignore",
+      "message": "Unused \"type: ignore\" comment"
+    },
+    {
+      "path": ".repo_studios\\scripts\\utilities\\fault_run_analysis.py",
+      "line": 252,
+      "code": "unused-ignore",
+      "message": "Unused \"type: ignore\" comment"
+    },
+    {
+      "path": ".repo_studios\\scripts\\utilities\\fault_run_analysis.py",
+      "line": 252,
+      "code": "call-overload",
+      "message": "No overload variant of \"sorted\" matches argument type \"object\""
+    },
+    {
+      "path": ".repo_studios\\scripts\\utilities\\fault_run_analysis.py",
+      "line": 257,
+      "code": "arg-type",
+      "message": "Argument \"signature_id\" to \"FaultSignature\" has incompatible type \"object\"; expected \"str\""
+    },
+    {
+      "path": ".repo_studios\\scripts\\utilities\\fault_run_analysis.py",
+      "line": 258,
+      "code": "call-overload",
+      "message": "No overload variant of \"int\" matches argument type \"object\""
+    },
+    {
+      "path": ".repo_studios\\scripts\\utilities\\fault_run_analysis.py",
+      "line": 262,
+      "code": "call-overload",
+      "message": "No overload variant of \"int\" matches argument type \"object\""
+    },
+    {
+      "path": ".repo_studios\\scripts\\utilities\\anchor_inventory_loader.py",
+      "line": 39,
+      "code": "no-any-return",
+      "message": "Returning Any from function declared to return \"dict[str, Any] | None\""
+    },
+    {
+      "path": ".repo_studios\\scripts\\producers\\extract_standards_rules.py",
+      "line": 264,
+      "code": "arg-type",
+      "message": "Argument 1 to \"_normalize_severity\" has incompatible type \"str | None\"; expected \"str\""
+    },
+    {
+      "path": ".repo_studios\\scripts\\producers\\extract_standards_rules.py",
+      "line": 269,
+      "code": "arg-type",
+      "message": "Argument 1 to \"_split_multi\" has incompatible type \"str | None\"; expected \"str\""
+    },
+    {
+      "path": ".repo_studios\\scripts\\producers\\extract_standards_rules.py",
+      "line": 270,
+      "code": "union-attr",
+      "message": "Item \"None\" of \"str | None\" has no attribute \"strip\""
+    },
+    {
+      "path": ".repo_studios\\scripts\\producers\\extract_standards_rules.py",
+      "line": 271,
+      "code": "union-attr",
+      "message": "Item \"None\" of \"str | None\" has no attribute \"strip\""
+    },
+    {
+      "path": ".repo_studios\\scripts\\producers\\extract_standards_rules.py",
+      "line": 277,
+      "code": "arg-type",
+      "message": "Argument \"summary\" to \"ParsedRule\" has incompatible type \"str | None\"; expected \"str\""
+    },
+    {
+      "path": ".repo_studios\\scripts\\producers\\extract_standards_rules.py",
+      "line": 278,
+      "code": "arg-type",
+      "message": "Argument \"rationale\" to \"ParsedRule\" has incompatible type \"str | None\"; expected \"str\""
+    },
+    {
+      "path": ".repo_studios\\command_center\\scripts\\libraries\\artifacts.py",
+      "line": 213,
+      "code": "operator",
+      "message": "Unsupported operand types for / (\"Path\" and \"None\")"
+    },
+    {
+      "path": ".repo_studios\\command_center\\scripts\\summarizers\\generate_function_analysis.py",
+      "line": 18,
+      "code": "unused-ignore",
+      "message": "Unused \"type: ignore\" comment"
+    },
+    {
+      "path": ".repo_studios\\command_center\\scripts\\summarizers\\generate_function_analysis.py",
+      "line": 25,
+      "code": "unused-ignore",
+      "message": "Unused \"type: ignore\" comment"
+    },
+    {
+      "path": ".repo_studios\\command_center\\scripts\\summarizers\\generate_function_analysis.py",
+      "line": 33,
+      "code": "unused-ignore",
+      "message": "Unused \"type: ignore\" comment"
+    },
+    {
+      "path": ".repo_studios\\command_center\\scripts\\summarizers\\generate_function_analysis.py",
+      "line": 40,
+      "code": "unused-ignore",
+      "message": "Unused \"type: ignore\" comment"
+    },
+    {
+      "path": ".repo_studios\\command_center\\scripts\\summarizers\\generate_function_analysis.py",
+      "line": 114,
+      "code": "arg-type",
+      "message": "Argument 1 to \"parse_args\" of \"ArgumentParser\" has incompatible type \"Iterable[str] | None\"; expected \"Sequence[str] | None\""
+    },
+    {
+      "path": ".repo_studios\\command_center\\scripts\\orchestrators\\run_monkey_patch_oversight.py",
+      "line": 81,
+      "code": "union-attr",
+      "message": "Item \"None\" of \"ScriptRetention | None\" has no attribute \"keep\""
+    },
+    {
+      "path": ".repo_studios\\command_center\\scripts\\orchestrators\\run_monkey_patch_oversight.py",
+      "line": 86,
+      "code": "union-attr",
+      "message": "Item \"None\" of \"ScriptRetention | None\" has no attribute \"keep\""
+    },
+    {
+      "path": ".repo_studios\\command_center\\scripts\\orchestrators\\run_monkey_patch_oversight.py",
+      "line": 91,
+      "code": "union-attr",
+      "message": "Item \"None\" of \"ScriptRetention | None\" has no attribute \"keep\""
+    },
+    {
+      "path": ".repo_studios\\command_center\\scripts\\orchestrators\\run_monkey_patch_oversight.py",
+      "line": 96,
+      "code": "union-attr",
+      "message": "Item \"None\" of \"ScriptRetention | None\" has no attribute \"keep\""
+    },
+    {
+      "path": ".repo_studios\\command_center\\scripts\\orchestrators\\run_inventory_update.py",
+      "line": 14,
+      "code": "unused-ignore",
+      "message": "Unused \"type: ignore\" comment"
+    },
+    {
+      "path": ".repo_studios\\command_center\\scripts\\orchestrators\\run_inventory_update.py",
+      "line": 20,
+      "code": "unused-ignore",
+      "message": "Unused \"type: ignore\" comment"
+    },
+    {
+      "path": ".repo_studios\\command_center\\scripts\\orchestrators\\run_docs_health_overview.py",
+      "line": 936,
+      "code": "name-defined",
+      "message": "Name \"TopicStepResult\" is not defined"
+    },
+    {
+      "path": ".repo_studios\\command_center\\scripts\\orchestrators\\run_docs_health_overview.py",
+      "line": 996,
+      "code": "name-defined",
+      "message": "Name \"TopicStepResult\" is not defined"
+    },
+    {
+      "path": ".repo_studios\\command_center\\scripts\\orchestrators\\run_docs_health_overview.py",
+      "line": 1044,
+      "code": "union-attr",
+      "message": "Item \"None\" of \"dict[Any, Any] | Any | None\" has no attribute \"get\""
+    },
+    {
+      "path": ".repo_studios\\command_center\\scripts\\orchestrators\\run_docs_health_overview.py",
+      "line": 1045,
+      "code": "union-attr",
+      "message": "Item \"None\" of \"dict[Any, Any] | Any | None\" has no attribute \"get\""
+    }
+  ],
+  "notes": "",
+  "strict": false,
+  "fast_mode": false,
+  "return_code": 1,
+  "log": "status=error\nrun_timestamp=20260124-1345\nerror_count=149\nfiles_with_issues=30\nfiles_checked=85\npaths_checked=2\nmypy_version=mypy 1.11.1 (compiled: no)\n",
+  "raw_output": ".repo_studios\\command_center\\scripts\\libraries\\summarizer_runner.py:31: error: Unused \"type: ignore\" comment  [unused-ignore]\n.repo_studios\\command_center\\scripts\\libraries\\summarizer_runner.py:31: error: Returning Any from function declared to return \"Callable[[Iterable[str] | None], int]\"  [no-any-return]\n.repo_studios\\command_center\\scripts\\libraries\\summarizer_runner.py:31: note: Error code \"no-any-return\" not covered by \"type: ignore\" comment\n.repo_studios\\command_center\\scripts\\libraries\\guardrails.py:10: error: Skipping analyzing \"command_center.scripts.utilities\": module is installed, but missing library stubs or py.typed marker  [import-untyped]\n.repo_studios\\command_center\\scripts\\libraries\\guardrails.py:198: error: Returning Any from function declared to return \"dict[str, object]\"  [no-any-return]\n.repo_studios\\command_center\\scripts\\utilities\\reports_naming_audit.py:344: error: \"object\" has no attribute \"items\"  [attr-defined]\n.repo_studios\\command_center\\scripts\\utilities\\reports_naming_audit.py:353: error: \"object\" has no attribute \"__iter__\"; maybe \"__dir__\" or \"__str__\"? (not iterable)  [attr-defined]\n.repo_studios\\command_center\\scripts\\utilities\\reports_naming_audit.py:366: error: \"object\" has no attribute \"__iter__\"; maybe \"__dir__\" or \"__str__\"? (not iterable)  [attr-defined]\n.repo_studios\\command_center\\scripts\\utilities\\reports_naming_audit.py:375: error: \"object\" has no attribute \"__iter__\"; maybe \"__dir__\" or \"__str__\"? (not iterable)  [attr-defined]\n.repo_studios\\command_center\\scripts\\utilities\\reports_naming_audit.py:428: error: \"object\" has no attribute \"__iter__\"; maybe \"__dir__\" or \"__str__\"? (not iterable)  [attr-defined]\n.repo_studios\\command_center\\scripts\\utilities\\reports_naming_audit.py:430: error: No overload variant of \"int\" matches argument type \"object\"  [call-overload]\n.repo_studios\\command_center\\scripts\\utilities\\reports_naming_audit.py:430: note: Possible overload variants:\n.repo_studios\\command_center\\scripts\\utilities\\reports_naming_audit.py:430: note:     def int(str | Buffer | SupportsInt | SupportsIndex | SupportsTrunc = ..., /) -> int\n.repo_studios\\command_center\\scripts\\utilities\\reports_naming_audit.py:430: note:     def int(str | bytes | bytearray, /, base: SupportsIndex) -> int\n.repo_studios\\command_center\\scripts\\utilities\\reports_naming_audit.py:441: error: No overload variant of \"int\" matches argument type \"object\"  [call-overload]\n.repo_studios\\command_center\\scripts\\utilities\\reports_naming_audit.py:441: note: Possible overload variants:\n.repo_studios\\command_center\\scripts\\utilities\\reports_naming_audit.py:441: note:     def int(str | Buffer | SupportsInt | SupportsIndex | SupportsTrunc = ..., /) -> int\n.repo_studios\\command_center\\scripts\\utilities\\reports_naming_audit.py:441: note:     def int(str | bytes | bytearray, /, base: SupportsIndex) -> int\n.repo_studios\\command_center\\scripts\\utilities\\reports_naming_audit.py:442: error: No overload variant of \"int\" matches argument type \"object\"  [call-overload]\n.repo_studios\\command_center\\scripts\\utilities\\reports_naming_audit.py:442: note: Possible overload variants:\n.repo_studios\\command_center\\scripts\\utilities\\reports_naming_audit.py:442: note:     def int(str | Buffer | SupportsInt | SupportsIndex | SupportsTrunc = ..., /) -> int\n.repo_studios\\command_center\\scripts\\utilities\\reports_naming_audit.py:442: note:     def int(str | bytes | bytearray, /, base: SupportsIndex) -> int\n.repo_studios\\command_center\\scripts\\utilities\\list_db_markers.py:63: error: Need type annotation for \"markers\" (hint: \"markers: list[<type>] = ...\")  [var-annotated]\n.repo_studios\\command_center\\scripts\\libraries\\retention_policy.py:180: error: Returning Any from function declared to return \"int\"  [no-any-return]\n.repo_studios\\scripts\\utilities\\validate_healthview_agent_workflow_spec.py:21: error: Library stubs not installed for \"jsonschema\"  [import-untyped]\n.repo_studios\\scripts\\utilities\\validate_healthview_agent_workflow_spec.py:21: note: Hint: \"python3 -m pip install types-jsonschema\"\n.repo_studios\\scripts\\utilities\\validate_healthview_agent_workflow_spec.py:21: note: (or run \"mypy --install-types\" to install all missing stub packages)\n.repo_studios\\scripts\\utilities\\validate_healthview_agent_workflow_spec.py:30: error: Unused \"type: ignore\" comment  [unused-ignore]\n.repo_studios\\scripts\\utilities\\fault_run_analysis.py:136: error: Returning Any from function declared to return \"dict[str, object]\"  [no-any-return]\n.repo_studios\\scripts\\utilities\\fault_run_analysis.py:139: error: Need type annotation for \"manifest\"  [var-annotated]\n.repo_studios\\scripts\\utilities\\fault_run_analysis.py:153: error: Incompatible return value type (got \"dict[str, dict[Any, Any] | str | None]\", expected \"dict[str, object]\")  [return-value]\n.repo_studios\\scripts\\utilities\\fault_run_analysis.py:153: note: \"Dict\" is invariant -- see https://mypy.readthedocs.io/en/stable/common_issues.html#variance\n.repo_studios\\scripts\\utilities\\fault_run_analysis.py:153: note: Consider using \"Mapping\" instead, which is covariant in the value type\n.repo_studios\\scripts\\utilities\\fault_run_analysis.py:153: note: Perhaps you need a type annotation for \"manifest\"? Suggestion: \"dict[str, object]\"\n.repo_studios\\scripts\\utilities\\fault_run_analysis.py:205: error: Returning Any from function declared to return \"str\"  [no-any-return]\n.repo_studios\\scripts\\utilities\\fault_run_analysis.py:243: error: No overload variant of \"int\" matches argument type \"object\"  [call-overload]\n.repo_studios\\scripts\\utilities\\fault_run_analysis.py:243: note: Possible overload variants:\n.repo_studios\\scripts\\utilities\\fault_run_analysis.py:243: note:     def int(str | Buffer | SupportsInt | SupportsIndex | SupportsTrunc = ..., /) -> int\n.repo_studios\\scripts\\utilities\\fault_run_analysis.py:243: note:     def int(str | bytes | bytearray, /, base: SupportsIndex) -> int\n.repo_studios\\scripts\\utilities\\fault_run_analysis.py:250: error: Unused \"type: ignore\" comment  [unused-ignore]\n.repo_studios\\scripts\\utilities\\fault_run_analysis.py:252: error: Unused \"type: ignore\" comment  [unused-ignore]\n.repo_studios\\scripts\\utilities\\fault_run_analysis.py:252: error: No overload variant of \"sorted\" matches argument type \"object\"  [call-overload]\n.repo_studios\\scripts\\utilities\\fault_run_analysis.py:252: note: Error code \"call-overload\" not covered by \"type: ignore\" comment\n.repo_studios\\scripts\\utilities\\fault_run_analysis.py:252: note: Possible overload variants:\n.repo_studios\\scripts\\utilities\\fault_run_analysis.py:252: note:     def [SupportsRichComparisonT] sorted(Iterable[SupportsRichComparisonT], /, *, key: None = ..., reverse: bool = ...) -> list[SupportsRichComparisonT]\n.repo_studios\\scripts\\utilities\\fault_run_analysis.py:252: note:     def [_T] sorted(Iterable[_T], /, *, key: Callable[[_T], SupportsDunderLT[Any] | SupportsDunderGT[Any]], reverse: bool = ...) -> list[_T]\n.repo_studios\\scripts\\utilities\\fault_run_analysis.py:257: error: Argument \"signature_id\" to \"FaultSignature\" has incompatible type \"object\"; expected \"str\"  [arg-type]\n.repo_studios\\scripts\\utilities\\fault_run_analysis.py:258: error: No overload variant of \"int\" matches argument type \"object\"  [call-overload]\n.repo_studios\\scripts\\utilities\\fault_run_analysis.py:258: note: Possible overload variants:\n.repo_studios\\scripts\\utilities\\fault_run_analysis.py:258: note:     def int(str | Buffer | SupportsInt | SupportsIndex | SupportsTrunc = ..., /) -> int\n.repo_studios\\scripts\\utilities\\fault_run_analysis.py:258: note:     def int(str | bytes | bytearray, /, base: SupportsIndex) -> int\n.repo_studios\\scripts\\utilities\\fault_run_analysis.py:262: error: No overload variant of \"int\" matches argument type \"object\"  [call-overload]\n.repo_studios\\scripts\\utilities\\fault_run_analysis.py:262: note: Possible overload variants:\n.repo_studios\\scripts\\utilities\\fault_run_analysis.py:262: note:     def int(str | Buffer | SupportsInt | SupportsIndex | SupportsTrunc = ..., /) -> int\n.repo_studios\\scripts\\utilities\\fault_run_analysis.py:262: note:     def int(str | bytes | bytearray, /, base: SupportsIndex) -> int\n.repo_studios\\scripts\\utilities\\anchor_inventory_loader.py:39: error: Returning Any from function declared to return \"dict[str, Any] | None\"  [no-any-return]\n.repo_studios\\scripts\\producers\\extract_standards_rules.py:264: error: Argument 1 to \"_normalize_severity\" has incompatible type \"str | None\"; expected \"str\"  [arg-type]\n.repo_studios\\scripts\\producers\\extract_standards_rules.py:269: error: Argument 1 to \"_split_multi\" has incompatible type \"str | None\"; expected \"str\"  [arg-type]\n.repo_studios\\scripts\\producers\\extract_standards_rules.py:270: error: Item \"None\" of \"str | None\" has no attribute \"strip\"  [union-attr]\n.repo_studios\\scripts\\producers\\extract_standards_rules.py:271: error: Item \"None\" of \"str | None\" has no attribute \"strip\"  [union-attr]\n.repo_studios\\scripts\\producers\\extract_standards_rules.py:277: error: Argument \"summary\" to \"ParsedRule\" has incompatible type \"str | None\"; expected \"str\"  [arg-type]\n.repo_studios\\scripts\\producers\\extract_standards_rules.py:278: error: Argument \"rationale\" to \"ParsedRule\" has incompatible type \"str | None\"; expected \"str\"  [arg-type]\n.repo_studios\\command_center\\scripts\\libraries\\artifacts.py:213: error: Unsupported operand types for / (\"Path\" and \"None\")  [operator]\n.repo_studios\\command_center\\scripts\\libraries\\artifacts.py:213: note: Right operand is of type \"str | None\"\n.repo_studios\\command_center\\scripts\\summarizers\\generate_function_analysis.py:18: error: Unused \"type: ignore\" comment  [unused-ignore]\n.repo_studios\\command_center\\scripts\\summarizers\\generate_function_analysis.py:25: error: Unused \"type: ignore\" comment  [unused-ignore]\n.repo_studios\\command_center\\scripts\\summarizers\\generate_function_analysis.py:33: error: Unused \"type: ignore\" comment  [unused-ignore]\n.repo_studios\\command_center\\scripts\\summarizers\\generate_function_analysis.py:40: error: Unused \"type: ignore\" comment  [unused-ignore]\n.repo_studios\\command_center\\scripts\\summarizers\\generate_function_analysis.py:114: error: Argument 1 to \"parse_args\" of \"ArgumentParser\" has incompatible type \"Iterable[str] | None\"; expected \"Sequence[str] | None\"  [arg-type]\n.repo_studios\\command_center\\scripts\\orchestrators\\run_monkey_patch_oversight.py:81: error: Item \"None\" of \"ScriptRetention | None\" has no attribute \"keep\"  [union-attr]\n.repo_studios\\command_center\\scripts\\orchestrators\\run_monkey_patch_oversight.py:86: error: Item \"None\" of \"ScriptRetention | None\" has no attribute \"keep\"  [union-attr]\n.repo_studios\\command_center\\scripts\\orchestrators\\run_monkey_patch_oversight.py:91: error: Item \"None\" of \"ScriptRetention | None\" has no attribute \"keep\"  [union-attr]\n.repo_studios\\command_center\\scripts\\orchestrators\\run_monkey_patch_oversight.py:96: error: Item \"None\" of \"ScriptRetention | None\" has no attribute \"keep\"  [union-attr]\n.repo_studios\\command_center\\scripts\\orchestrators\\run_inventory_update.py:14: error: Unused \"type: ignore\" comment  [unused-ignore]\n.repo_studios\\command_center\\scripts\\orchestrators\\run_inventory_update.py:20: error: Unused \"type: ignore\" comment  [unused-ignore]\n.repo_studios\\command_center\\scripts\\orchestrators\\run_docs_health_overview.py:936: error: Name \"TopicStepResult\" is not defined  [name-defined]\n.repo_studios\\command_center\\scripts\\orchestrators\\run_docs_health_overview.py:996: error: Name \"TopicStepResult\" is not defined  [name-defined]\n.repo_studios\\command_center\\scripts\\orchestrators\\run_docs_health_overview.py:1044: error: Item \"None\" of \"dict[Any, Any] | Any | None\" has no attribute \"get\"  [union-attr]\n.repo_studios\\command_center\\scripts\\orchestrators\\run_docs_health_overview.py:1045: error: Item \"None\" of \"dict[Any, Any] | Any | None\" has no attribute \"get\"  [union-attr]\n.repo_studios\\command_center\\scripts\\orchestrators\\run_docs_health_overview.py:1050: error: Item \"None\" of \"dict[Any, Any] | Any | None\" has no attribute \"get\"  [union-attr]\n.repo_studios\\command_center\\scripts\\orchestrators\\run_docs_health_overview.py:2176: error: Argument \"summary\" to \"_render_docs_health_summary\" has incompatible type \"object\"; expected \"dict[str, Any]\"  [arg-type]\n.repo_studios\\command_center\\scripts\\orchestrators\\run_command_center_pipeline.py:15: error: Unused \"type: ignore\" comment  [unused-ignore]\n.repo_studios\\command_center\\scripts\\orchestrators\\run_command_center_pipeline.py:20: error: Unused \"type: ignore\" comment  [unused-ignore]\n.repo_studios\\command_center\\scripts\\orchestrators\\run_command_center_pipeline.py:65: error: Argument 1 to \"parse_args\" of \"ArgumentParser\" has incompatible type \"Iterable[str] | None\"; expected \"Sequence[str] | None\"  [arg-type]\n.repo_studios\\command_center\\scripts\\orchestrators\\run_command_center_pipeline.py:116: error: Unused \"type: ignore\" comment  [unused-ignore]\n.repo_studios\\command_center\\scripts\\orchestrators\\run_command_center_pipeline.py:116: error: Returning Any from function declared to return \"Callable[[Iterable[str] | None], int]\"  [no-any-return]\n.repo_studios\\command_center\\scripts\\orchestrators\\run_command_center_pipeline.py:116: note: Error code \"no-any-return\" not covered by \"type: ignore\" comment\n.repo_studios\\command_center\\scripts\\orchestrators\\run_automation_dry_run.py:18: error: Unused \"type: ignore\" comment  [unused-ignore]\n.repo_studios\\command_center\\scripts\\orchestrators\\run_automation_dry_run.py:23: error: Unused \"type: ignore\" comment  [unused-ignore]\n.repo_studios\\command_center\\scripts\\orchestrators\\orchestrate_full_diagnostic.py:199: error: Returning Any from function declared to return \"Paths\"  [no-any-return]\n.repo_studios\\command_center\\scripts\\cc_producers\\generate_commandview_inventory.py:155: error: Unused \"type: ignore\" comment  [unused-ignore]\n.repo_studios\\command_center\\scripts\\cc_producers\\generate_commandview_inventory.py:851: error: Argument 1 to \"parse_args\" of \"ArgumentParser\" has incompatible type \"Iterable[str] | None\"; expected \"Sequence[str] | None\"  [arg-type]\n.repo_studios\\command_center\\scripts\\cc_producers\\generate_commandview_inventory.py:1048: error: Incompatible types in assignment (expression has type \"dict[str, str]\", target has type \"int\")  [assignment]\n.repo_studios\\command_center\\scripts\\cc_producers\\generate_commandview_inventory.py:1102: error: \"expr\" has no attribute \"value\"  [attr-defined]\n.repo_studios\\command_center\\scripts\\cc_producers\\generate_commandview_inventory.py:1209: error: Returning Any from function declared to return \"str | None\"  [no-any-return]\n.repo_studios\\command_center\\scripts\\cc_producers\\generate_commandview_inventory.py:1253: error: \"expr\" has no attribute \"value\"  [attr-defined]\n.repo_studios\\command_center\\scripts\\cc_producers\\generate_commandview_inventory.py:1254: error: \"expr\" has no attribute \"value\"  [attr-defined]\n.repo_studios\\command_center\\scripts\\cc_producers\\generate_commandview_inventory.py:1378: error: Argument 1 to \"get_docstring\" has incompatible type \"AST\"; expected \"AsyncFunctionDef | FunctionDef | ClassDef | Module\"  [arg-type]\n.repo_studios\\command_center\\scripts\\cc_producers\\generate_commandview_inventory.py:1390: error: \"AST\" has no attribute \"lineno\"  [attr-defined]\n.repo_studios\\command_center\\scripts\\cc_producers\\generate_commandview_inventory.py:1939: error: Incompatible types in assignment (expression has type \"str | None\", variable has type \"str\")  [assignment]\n.repo_studios\\command_center\\scripts\\cc_producers\\generate_commandview_inventory.py:1948: error: Incompatible types in assignment (expression has type \"str | None\", variable has type \"str\")  [assignment]\n.repo_studios\\command_center\\scripts\\cc_producers\\generate_commandview_inventory.py:1971: error: Incompatible types in assignment (expression has type \"str | None\", variable has type \"str\")  [assignment]\n.repo_studios\\command_center\\scripts\\cc_producers\\generate_commandview_inventory.py:2008: error: Name \"detail\" already defined on line 1941  [no-redef]\n.repo_studios\\command_center\\scripts\\cc_producers\\generate_commandview_inventory.py:2010: error: Unsupported target for indexed assignment (\"dict[str, Any] | None\")  [index]\n.repo_studios\\command_center\\scripts\\cc_producers\\generate_commandview_inventory.py:2012: error: Item \"None\" of \"dict[str, Any] | None\" has no attribute \"setdefault\"  [union-attr]\n.repo_studios\\command_center\\scripts\\cc_producers\\generate_commandview_inventory.py:2014: error: Item \"None\" of \"dict[str, Any] | None\" has no attribute \"setdefault\"  [union-attr]\n.repo_studios\\command_center\\scripts\\cc_producers\\generate_commandview_inventory.py:2180: error: Incompatible types in assignment (expression has type \"set[str]\", variable has type \"list[str]\")  [assignment]\n.repo_studios\\command_center\\scripts\\cc_producers\\generate_commandview_inventory.py:2273: error: Incompatible types in assignment (expression has type \"AST\", variable has type \"stmt\")  [assignment]\n.repo_studios\\command_center\\scripts\\cc_producers\\generate_commandview_inventory.py:2401: error: Need type annotation for \"stats_counter\"  [var-annotated]\n.repo_studios\\command_center\\scripts\\cc_producers\\generate_commandview_inventory.py:2565: error: Incompatible types in assignment (expression has type \"Any | None\", variable has type \"str\")  [assignment]\n.repo_studios\\command_center\\scripts\\cc_producers\\audit_helper_adoption.py:33: error: Unused \"type: ignore\" comment  [unused-ignore]\n.repo_studios\\command_center\\scripts\\cc_producers\\audit_helper_adoption.py:43: error: Unused \"type: ignore\" comment  [unused-ignore]\n.repo_studios\\command_center\\scripts\\cc_producers\\audit_helper_adoption.py:268: error: Unused \"type: ignore\" comment  [unused-ignore]\n.repo_studios\\command_center\\scripts\\cc_producers\\audit_helper_adoption.py:272: error: Unused \"type: ignore\" comment  [unused-ignore]\n.repo_studios\\command_center\\scripts\\cc_producers\\audit_helper_adoption.py:291: error: Value of type \"object\" is not indexable  [index]\n.repo_studios\\command_center\\scripts\\cc_producers\\audit_helper_adoption.py:292: error: Value of type \"object\" is not indexable  [index]\n.repo_studios\\command_center\\scripts\\cc_producers\\audit_helper_adoption.py:297: error: Value of type \"object\" is not indexable  [index]\n.repo_studios\\command_center\\scripts\\cc_producers\\audit_helper_adoption.py:298: error: \"object\" has no attribute \"append\"  [attr-defined]\n.repo_studios\\command_center\\scripts\\cc_producers\\audit_helper_adoption.py:339: error: \"object\" has no attribute \"__iter__\"; maybe \"__dir__\" or \"__str__\"? (not iterable)  [attr-defined]\n.repo_studios\\command_center\\scripts\\cc_producers\\audit_helper_adoption.py:347: error: \"object\" has no attribute \"__iter__\"; maybe \"__dir__\" or \"__str__\"? (not iterable)  [attr-defined]\n.repo_studios\\command_center\\scripts\\cc_producers\\audit_helper_adoption.py:445: error: \"object\" has no attribute \"__iter__\"; maybe \"__dir__\" or \"__str__\"? (not iterable)  [attr-defined]\n.repo_studios\\command_center\\scripts\\aggregators\\scan_duplicates.py:36: error: Unused \"type: ignore\" comment  [unused-ignore]\n.repo_studios\\command_center\\scripts\\aggregators\\scan_duplicates.py:43: error: Unused \"type: ignore\" comment  [unused-ignore]\n.repo_studios\\command_center\\scripts\\aggregators\\scan_duplicates.py:53: error: Unused \"type: ignore\" comment  [unused-ignore]\n.repo_studios\\command_center\\scripts\\aggregators\\scan_duplicates.py:60: error: Unused \"type: ignore\" comment  [unused-ignore]\n.repo_studios\\command_center\\scripts\\aggregators\\scan_duplicates.py:247: error: Argument 1 to \"parse_args\" of \"ArgumentParser\" has incompatible type \"Iterable[str] | None\"; expected \"Sequence[str] | None\"  [arg-type]\n.repo_studios\\command_center\\scripts\\aggregators\\scan_duplicates.py:757: error: Name \"line_count\" already defined on line 741  [no-redef]\n.repo_studios\\command_center\\scripts\\aggregators\\generate_metrics_summary.py:34: error: Unused \"type: ignore\" comment  [unused-ignore]\n.repo_studios\\command_center\\scripts\\aggregators\\generate_metrics_summary.py:47: error: Unused \"type: ignore\" comment  [unused-ignore]\n.repo_studios\\command_center\\scripts\\aggregators\\generate_automation_manifest.py:41: error: Unused \"type: ignore\" comment  [unused-ignore]\n.repo_studios\\command_center\\scripts\\aggregators\\generate_automation_manifest.py:61: error: Unused \"type: ignore\" comment  [unused-ignore]\n.repo_studios\\scripts\\utilities\\dump_faulthandler_snapshot.py:155: error: \"object\" has no attribute \"append\"  [attr-defined]\n.repo_studios\\scripts\\utilities\\dump_faulthandler_snapshot.py:165: error: \"object\" has no attribute \"append\"  [attr-defined]\n.repo_studios\\scripts\\utilities\\dump_faulthandler_snapshot.py:172: error: \"object\" has no attribute \"append\"  [attr-defined]\n.repo_studios\\scripts\\utilities\\dump_faulthandler_snapshot.py:181: error: \"object\" has no attribute \"append\"  [attr-defined]\n.repo_studios\\scripts\\utilities\\dump_faulthandler_snapshot.py:227: error: Argument 2 to \"_write_json\" has incompatible type \"dict[str, Collection[str]]\"; expected \"dict[str, object]\"  [arg-type]\n.repo_studios\\scripts\\utilities\\dump_faulthandler_snapshot.py:227: note: \"Dict\" is invariant -- see https://mypy.readthedocs.io/en/stable/common_issues.html#variance\n.repo_studios\\scripts\\utilities\\dump_faulthandler_snapshot.py:227: note: Consider using \"Mapping\" instead, which is covariant in the value type\n.repo_studios\\scripts\\utilities\\dump_faulthandler_snapshot.py:240: error: Argument 1 to \"join\" of \"str\" has incompatible type \"object\"; expected \"Iterable[str]\"  [arg-type]\n.repo_studios\\scripts\\utilities\\configure_faulthandler_runtime.py:56: error: Unused \"type: ignore\" comment  [unused-ignore]\n.repo_studios\\scripts\\utilities\\configure_faulthandler_runtime.py:169: error: Unused \"type: ignore\" comment  [unused-ignore]\n.repo_studios\\scripts\\utilities\\configure_faulthandler_runtime.py:173: error: Module has no attribute \"flock\"  [attr-defined]\n.repo_studios\\scripts\\utilities\\configure_faulthandler_runtime.py:173: error: Module has no attribute \"LOCK_EX\"  [attr-defined]\n.repo_studios\\scripts\\utilities\\configure_faulthandler_runtime.py:182: error: Module has no attribute \"flock\"  [attr-defined]\n.repo_studios\\scripts\\utilities\\configure_faulthandler_runtime.py:182: error: Module has no attribute \"LOCK_UN\"  [attr-defined]\n.repo_studios\\scripts\\utilities\\configure_faulthandler_runtime.py:224: error: \"object\" has no attribute \"append\"  [attr-defined]\n.repo_studios\\scripts\\utilities\\configure_faulthandler_runtime.py:233: error: \"object\" has no attribute \"append\"  [attr-defined]\n.repo_studios\\scripts\\utilities\\configure_faulthandler_runtime.py:239: error: \"object\" has no attribute \"append\"  [attr-defined]\n.repo_studios\\scripts\\utilities\\configure_faulthandler_runtime.py:248: error: \"object\" has no attribute \"append\"  [attr-defined]\n.repo_studios\\scripts\\utilities\\configure_faulthandler_runtime.py:255: error: \"object\" has no attribute \"append\"  [attr-defined]\n.repo_studios\\scripts\\utilities\\configure_faulthandler_runtime.py:345: error: Value of type \"object\" is not indexable  [index]\n.repo_studios\\scripts\\summarizers\\summarize_health_suite.py:141: error: Argument 1 to \"parse_args\" of \"ArgumentParser\" has incompatible type \"Iterable[str] | None\"; expected \"Sequence[str] | None\"  [arg-type]\n.repo_studios\\scripts\\summarizers\\summarize_health_suite.py:178: error: Returning Any from function declared to return \"Paths\"  [no-any-return]\n.repo_studios\\scripts\\summarizers\\summarize_health_suite.py:275: error: Unused \"type: ignore\" comment  [unused-ignore]\n.repo_studios\\scripts\\summarizers\\summarize_health_suite.py:275: error: Returning Any from function declared to return \"int\"  [no-any-return]\n.repo_studios\\scripts\\summarizers\\summarize_health_suite.py:275: note: Error code \"no-any-return\" not covered by \"type: ignore\" comment\n.repo_studios\\scripts\\summarizers\\summarize_health_suite.py:275: error: No overload variant of \"int\" matches argument type \"object\"  [call-overload]\n.repo_studios\\scripts\\summarizers\\summarize_health_suite.py:275: note: Error code \"call-overload\" not covered by \"type: ignore\" comment\n.repo_studios\\scripts\\summarizers\\summarize_health_suite.py:275: note: Possible overload variants:\n.repo_studios\\scripts\\summarizers\\summarize_health_suite.py:275: note:     def int(str | Buffer | SupportsInt | SupportsIndex | SupportsTrunc = ..., /) -> int\n.repo_studios\\scripts\\summarizers\\summarize_health_suite.py:275: note:     def int(str | bytes | bytearray, /, base: SupportsIndex) -> int\n.repo_studios\\scripts\\producers\\validate_inventory.py:45: error: Unused \"type: ignore\" comment  [unused-ignore]\n.repo_studios\\scripts\\producers\\validate_inventory.py:56: error: Unused \"type: ignore\" comment  [unused-ignore]\n.repo_studios\\scripts\\producers\\validate_inventory.py:57: error: Unused \"type: ignore\" comment  [unused-ignore]\n.repo_studios\\scripts\\producers\\validate_inventory.py:319: error: Argument 2 to \"ensure\" of \"EnumRegistry\" has incompatible type \"list[Any | None]\"; expected \"Iterable[str]\"  [arg-type]\n.repo_studios\\scripts\\producers\\validate_import_boundaries.py:41: error: Unused \"type: ignore\" comment  [unused-ignore]\n.repo_studios\\scripts\\producers\\validate_import_boundaries.py:50: error: Unused \"type: ignore\" comment  [unused-ignore]\n.repo_studios\\scripts\\producers\\validate_import_boundaries.py:51: error: Unused \"type: ignore\" comment  [unused-ignore]\n.repo_studios\\scripts\\producers\\validate_import_boundaries.py:168: error: Returning Any from function declared to return \"Paths\"  [no-any-return]\n.repo_studios\\scripts\\producers\\validate_import_boundaries.py:179: error: Returning Any from function declared to return \"Options\"  [no-any-return]\n.repo_studios\\scripts\\producers\\validate_import_boundaries.py:229: error: Returning Any from function declared to return \"dict[str, Any]\"  [no-any-return]\n.repo_studios\\scripts\\producers\\validate_import_boundaries.py:466: error: Argument 1 to \"_latest_graph_json\" has incompatible type \"Path | None\"; expected \"Path\"  [arg-type]\n.repo_studios\\scripts\\producers\\check_inventory_health.py:29: error: Unused \"type: ignore\" comment  [unused-ignore]\n.repo_studios\\scripts\\producers\\check_inventory_health.py:38: error: Unused \"type: ignore\" comment  [unused-ignore]\n.repo_studios\\scripts\\producers\\check_inventory_health.py:39: error: Unused \"type: ignore\" comment  [unused-ignore]\n.repo_studios\\scripts\\producers\\check_inventory_health.py:43: error: Unused \"type: ignore\" comment  [unused-ignore]\n.repo_studios\\scripts\\producers\\check_inventory_health.py:52: error: Unused \"type: ignore\" comment  [unused-ignore]\n.repo_studios\\scripts\\producers\\check_inventory_health.py:53: error: Unused \"type: ignore\" comment  [unused-ignore]\n.repo_studios\\scripts\\producers\\check_inventory_health.py:161: error: Returning Any from function declared to return \"dict[str, Any]\"  [no-any-return]\n.repo_studios\\scripts\\producers\\check_inventory_health.py:166: error: Returning Any from function declared to return \"dict[str, Any]\"  [no-any-return]\n.repo_studios\\scripts\\producers\\check_inventory_health.py:374: error: Returning Any from function declared to return \"Paths\"  [no-any-return]\n.repo_studios\\scripts\\producers\\check_inventory_health.py:379: error: Returning Any from function declared to return \"Options\"  [no-any-return]\n.repo_studios\\scripts\\consumers\\generate_anchor_health_report.py:124: error: Returning Any from function declared to return \"dict[Any, Any] | None\"  [no-any-return]\n.repo_studios\\scripts\\consumers\\generate_anchor_health_report.py:131: error: Returning Any from function declared to return \"dict[Any, Any] | None\"  [no-any-return]\n.repo_studios\\scripts\\consumers\\generate_anchor_health_report.py:415: error: Unused \"type: ignore\" comment  [unused-ignore]\n.repo_studios\\scripts\\aggregators\\generate_churn_complexity_heatmap.py:371: error: Skipping analyzing \"defusedxml\": module is installed, but missing library stubs or py.typed marker  [import-untyped]\n.repo_studios\\scripts\\aggregators\\generate_churn_complexity_heatmap.py:371: note: See https://mypy.readthedocs.io/en/stable/running_mypy.html#missing-imports\nFound 149 errors in 30 files (checked 85 source files)\n"
+}

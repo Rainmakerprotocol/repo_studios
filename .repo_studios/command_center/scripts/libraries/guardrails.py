@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Iterable, Sequence
 
 import yaml
-from command_center.scripts.utilities import reports_naming_audit
+from utilities import reports_naming_audit
 
 
 class GuardrailConfigError(ValueError):
@@ -174,17 +174,19 @@ def enforce_report_naming(
 
     topic_prefix = f"{viewer}/{topic}"
     violations = []
-    for entry in summary.get("violations", []):
-        if not isinstance(entry, dict):
-            continue
-        raw_path = entry.get("path")
-        if not isinstance(raw_path, str):
-            continue
-        if not raw_path.startswith(topic_prefix):
-            continue
-        issues = entry.get("issues", [])
-        rendered = ", ".join(str(issue) for issue in issues) if isinstance(issues, list) else ""
-        violations.append((raw_path, rendered))
+    violations_raw = summary.get("violations")
+    if isinstance(violations_raw, list):
+        for entry in violations_raw:
+            if not isinstance(entry, dict):
+                continue
+            raw_path = entry.get("path")
+            if not isinstance(raw_path, str):
+                continue
+            if not raw_path.startswith(topic_prefix):
+                continue
+            issues = entry.get("issues", [])
+            rendered = ", ".join(str(issue) for issue in issues) if isinstance(issues, list) else ""
+            violations.append((raw_path, rendered))
 
     if violations:
         details = "\n".join(f"{path}: {detail}" if detail else path for path, detail in violations)

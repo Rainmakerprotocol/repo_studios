@@ -435,6 +435,34 @@ def build_options(args: argparse.Namespace) -> Options:
 
 
 def main(argv: List[str] | None = None) -> int:
+    """CLI entry point for render_inventory_views.
+
+    Args:
+        argv: Command-line arguments. Uses sys.argv[1:] when None.
+
+    Returns:
+        Exit code (0 for success).
+    """
+    result = run(argv)
+    return result.get("exit_code", 0)
+
+
+def run(argv: List[str] | None = None) -> Dict[str, Any]:
+    """Importable entry point returning structured payload.
+
+    Args:
+        argv: Command-line arguments. Uses sys.argv[1:] when None.
+
+    Returns:
+        Payload dict with keys:
+            - status: 'ok' or 'error'
+            - exit_code: 0 for success
+            - run_dir: Path to bundle directory
+            - manifest_path: Path to manifest.json
+            - summary_path: Path to summary.md
+            - telemetry_path: Path to telemetry.json
+            - counts: Entry counts by category
+    """
     parser = _build_parser()
     args = parser.parse_args(argv)
 
@@ -532,7 +560,15 @@ def main(argv: List[str] | None = None) -> int:
         report_payload["counts"]["totals"]["scripts"],
         report_payload["counts"]["totals"]["tests"],
     )
-    return 0
+    return {
+        "status": report_payload.get("status", "ok"),
+        "exit_code": 0,
+        "run_dir": str(run_dir),
+        "manifest_path": str(run_dir / "manifest.json"),
+        "summary_path": str(run_dir / "summary.md"),
+        "telemetry_path": str(run_dir / "telemetry.json"),
+        "counts": report_payload.get("counts", {}),
+    }
 
 
 if __name__ == "__main__":

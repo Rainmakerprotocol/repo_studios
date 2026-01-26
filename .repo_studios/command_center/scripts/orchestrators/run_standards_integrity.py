@@ -60,13 +60,13 @@ VIEWER_SLUG = "healthview"
 SCHEMA_VERSION = 1
 
 GENERATE_SCRIPT = Path(".repo_studios/scripts/producers/generate_standards_index.py")
-GAP_SCRIPT = Path(".repo_studios/command_center/scripts/producers/analyze_standards_index_gaps.py")
+GAP_SCRIPT = Path(".repo_studios/command_center/scripts/cc_producers/analyze_standards_index_gaps.py")
 DIFF_SCRIPT = Path(".repo_studios/scripts/producers/diff_standards_index.py")
 PROMPT_SCRIPT = Path(".repo_studios/scripts/producers/seed_standards_prompts.py")
 SUMMARY_SCRIPT = Path(".repo_studios/scripts/summarizers/summarize_standards.py")
 
 GENERATE_MODULE = "scripts.producers.generate_standards_index"
-GAP_MODULE = "command_center.scripts.producers.analyze_standards_index_gaps"
+GAP_MODULE = "command_center.scripts.cc_producers.analyze_standards_index_gaps"
 DIFF_MODULE = "scripts.producers.diff_standards_index"
 PROMPT_MODULE = "scripts.producers.seed_standards_prompts"
 SUMMARY_MODULE = "scripts.summarizers.summarize_standards"

@@ -73,7 +73,8 @@ def test_structured_artifacts_success(monkeypatch: pytest.MonkeyPatch, tmp_path:
     )
 
     assert exit_code == 0
-    run_dir = output_dir / mod.VIEWER_SLUG / mod.TOPIC / "20240101-0000"
+    # The module calls create_storage with empty viewer_slug/topic, writes directly to output_dir/timestamp
+    run_dir = output_dir / "20240101-0000"
     assert run_dir.is_dir()
 
     telemetry = json.loads((run_dir / "telemetry.json").read_text(encoding="utf-8"))
@@ -126,8 +127,9 @@ def test_no_targets_and_pruning(tmp_path: Path):
     output_dir = repo_root / ".repo_studios" / "reports" / "producer_reports"
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    topic_dir = output_dir / mod.VIEWER_SLUG / mod.TOPIC
-    topic_dir.mkdir(parents=True, exist_ok=True)
+    # create_storage with empty viewer_slug/topic writes to output_dir/timestamp
+    topic_dir = output_dir
+    output_dir.mkdir(parents=True, exist_ok=True)
 
     stale_dirs = [
         topic_dir / "20240101-0000",
@@ -222,7 +224,8 @@ def test_rejects_newline_arguments(tmp_path: Path):
     )
 
     assert exit_code == 0
-    run_dir = output_dir / mod.VIEWER_SLUG / mod.TOPIC / "20240303-0000"
+    # create_storage with empty viewer_slug/topic writes to output_dir/timestamp
+    run_dir = output_dir / "20240303-0000"
     assert run_dir.is_dir()
 
     telemetry = json.loads((run_dir / "telemetry.json").read_text(encoding="utf-8"))

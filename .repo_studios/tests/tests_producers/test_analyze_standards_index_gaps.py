@@ -193,7 +193,7 @@ def test_pruning_keeps_recent_runs(tmp_path):
 
 
 def test_command_center_helpers_cover_basic_paths(monkeypatch, tmp_path):
-    from command_center.scripts.producers import analyze_standards_index_gaps as producer
+    from command_center.scripts.cc_producers import analyze_standards_index_gaps as producer
 
     assert producer._timestamp_slug(datetime(2024, 1, 1, 0, 0)) == "20240101-0000"
 
@@ -221,7 +221,7 @@ def test_command_center_helpers_cover_basic_paths(monkeypatch, tmp_path):
 
 
 def test_command_center_load_index_rejects_missing_file(tmp_path):
-    from command_center.scripts.producers import analyze_standards_index_gaps as producer
+    from command_center.scripts.cc_producers import analyze_standards_index_gaps as producer
 
     missing = tmp_path / "missing.yaml"
     try:
@@ -233,7 +233,7 @@ def test_command_center_load_index_rejects_missing_file(tmp_path):
 
 
 def test_command_center_run_does_not_fall_back_to_legacy_snapshot(tmp_path):
-    from command_center.scripts.producers import analyze_standards_index_gaps as producer
+    from command_center.scripts.cc_producers import analyze_standards_index_gaps as producer
 
     repo_root = tmp_path / "repo"
     repo_root.mkdir()
@@ -272,7 +272,7 @@ def test_command_center_run_does_not_fall_back_to_legacy_snapshot(tmp_path):
 
 
 def test_command_center_detect_git_sha_prefers_env(monkeypatch, tmp_path):
-    from command_center.scripts.producers import analyze_standards_index_gaps as producer
+    from command_center.scripts.cc_producers import analyze_standards_index_gaps as producer
 
     monkeypatch.setenv("GITHUB_SHA", "deadbeef")
     assert producer._detect_git_sha(tmp_path) == "deadbeef"

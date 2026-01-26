@@ -25,11 +25,11 @@ classifiers = [
 ]
 
 dependencies = [
-    "defusedxml>=0.7.1",
-    "PyYAML>=6.0.3",
-    "requests>=2.32.3",
-    "tomli>=2.0.1",
-    "jsonschema>=4.22.0",
+    "defusedxml==0.7.1",
+    "PyYAML==6.0.3",
+    "requests==2.32.3",
+    "tomli==2.0.1",
+    "jsonschema==4.22.0",
 ]
 
 [project.optional-dependencies]

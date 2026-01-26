@@ -19,7 +19,7 @@ import json
 import logging
 import re
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 
 CANONICAL_VIEWER_SLUG = "healthview"
@@ -36,9 +36,13 @@ _BUNDLE_SLUG_RE = re.compile(r"^\d{8}-\d{4}$")
 
 def _load_json(path: Path) -> dict[str, Any] | None:
     try:
-        return json.loads(path.read_text(encoding="utf-8"))
+        payload = json.loads(path.read_text(encoding="utf-8"))
     except (FileNotFoundError, json.JSONDecodeError, OSError):
         return None
+
+    if not isinstance(payload, dict):
+        return None
+    return cast(dict[str, Any], payload)
 
 
 def _select_latest_canonical_bundle(topic_dir: Path) -> Path | None:

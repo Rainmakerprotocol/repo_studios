@@ -103,9 +103,11 @@ def test_anchor_health_uses_inventory_artifacts(tmp_path):
     assert top_cluster["file_count"] == 2
     bundle_dir = Path(result["bundle_dir"])
     assert bundle_dir.exists()
-    assert (bundle_dir / "summary.json").exists()
-    assert (bundle_dir / "SUMMARY.md").exists()
-    assert (bundle_dir / "bundle_summary.json").exists()
+    # HOP base package artifacts
+    assert (bundle_dir / "telemetry.json").exists()
+    assert (bundle_dir / "summary.md").exists()
+    assert (bundle_dir / "manifest.json").exists()
+    # Supplementary artifacts
     assert (bundle_dir / "anchor_report.json").exists()
     assert (bundle_dir / "anchor_report.md").exists()
     assert (bundle_dir / "clusters.tsv").exists()

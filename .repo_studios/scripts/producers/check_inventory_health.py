@@ -21,12 +21,12 @@ import logging
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Dict, NamedTuple
+from typing import Any, Dict, NamedTuple, cast
 
 LIBRARIES_ROOT = Path(__file__).resolve().parents[3] / ".repo_studios" / "command_center" / "scripts"
 
 try:
-    from libraries import (  # type: ignore
+    from libraries import (
         KeepSpec,
         PathSpec,
         OptionsConfig,
@@ -35,12 +35,12 @@ try:
         build_standard_paths,
         prune_run_directories,
     )
-    from libraries.database_integration import create_storage  # type: ignore
-    from libraries.retention_policy import get_keep  # type: ignore
+    from libraries.database_integration import create_storage
+    from libraries.retention_policy import get_keep
 except ModuleNotFoundError:  # pragma: no cover - fallback during standalone execution
     if str(LIBRARIES_ROOT) not in sys.path:
         sys.path.insert(0, str(LIBRARIES_ROOT))
-    from libraries import (  # type: ignore
+    from libraries import (
         KeepSpec,
         PathSpec,
         OptionsConfig,
@@ -49,8 +49,8 @@ except ModuleNotFoundError:  # pragma: no cover - fallback during standalone exe
         build_standard_paths,
         prune_run_directories,
     )
-    from libraries.database_integration import create_storage  # type: ignore
-    from libraries.retention_policy import get_keep  # type: ignore
+    from libraries.database_integration import create_storage
+    from libraries.retention_policy import get_keep
 
 ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_SUMMARY_PATH = Path(".repo_studios/reports/producer_reports/healthview/inventory_overview")
@@ -158,15 +158,16 @@ def load_json(path: Path) -> JsonDict:
             logging.error("failed to parse JSON from %s: %s", telemetry_path, exc)
             return {}
         if isinstance(telemetry, dict) and isinstance(telemetry.get("summary"), dict):
-            return telemetry["summary"]
+            return cast(JsonDict, telemetry["summary"])
         if isinstance(telemetry, dict):
-            return telemetry
+            return cast(JsonDict, telemetry)
         return {}
     try:
-        return json.loads(path.read_text(encoding="utf-8"))
+        payload = json.loads(path.read_text(encoding="utf-8"))
     except json.JSONDecodeError as exc:  # pragma: no cover - guarded by CI inputs
         logging.error("failed to parse JSON from %s: %s", path, exc)
         return {}
+    return payload if isinstance(payload, dict) else {}
 
 
 def compute_deltas(current: JsonDict, baseline: JsonDict) -> JsonDict:
@@ -371,11 +372,11 @@ def configure_logging(level: str) -> None:
 
 
 def build_paths(args: argparse.Namespace) -> Paths:
-    return build_standard_paths(args, PATH_CONFIG, origin=Path(__file__))
+    return cast(Paths, build_standard_paths(args, PATH_CONFIG, origin=Path(__file__)))
 
 
 def build_options(args: argparse.Namespace) -> Options:
-    base_options = build_standard_options(args, OPTIONS_CONFIG)
+    base_options = cast(Options, build_standard_options(args, OPTIONS_CONFIG))
     return base_options._replace(
         timestamp=getattr(args, "timestamp", None),
         log_level=str(getattr(args, "log_level", "INFO")),
@@ -491,6 +492,120 @@ def main(argv: list[str] | None = None) -> int:
     logging.info("inventory health artifacts written to %s", run_dir)
 
     return 1 if status == "failed" else 0
+
+
+def run(argv: list[str] | None = None) -> dict[str, Any]:
+    """Orchestrator-callable entry point returning structured payload.
+
+    Executes inventory health validation and returns a payload dict suitable
+    for orchestrator chaining. Wraps main() logic with payload extraction.
+
+    Args:
+        argv: Command-line arguments (uses sys.argv[1:] if None)
+
+    Returns:
+        Payload dict with keys:
+            - status: "passed" or "failed"
+            - exit_code: 0 (ok), 1 (breach), or 2 (missing input)
+            - run_dir: Path to output bundle directory
+            - output_dir: Parent output directory
+            - run_id: Timestamp slug (YYYYMMDD-HHMM)
+            - manifest: Full manifest dict
+            - telemetry: Full telemetry dict
+            - summary: Summary metrics dict
+    """
+    parser = argparse.ArgumentParser(description="Validate Repo Studios inventory health thresholds.")
+    parser.add_argument("--repo-root", help="Repository root (defaults to project root)")
+    parser.add_argument("--summary", default=str(DEFAULT_SUMMARY_PATH), help="Path to summary JSON")
+    parser.add_argument("--baseline", default=str(DEFAULT_BASELINE_PATH), help="Path to baseline JSON")
+    parser.add_argument("--thresholds", default=str(DEFAULT_THRESHOLDS_PATH), help="Path to thresholds JSON")
+    parser.add_argument("--output-dir", default=str(DEFAULT_OUTPUT_DIR), help="Output directory")
+    parser.add_argument("--artifacts-to-keep", type=int, default=DEFAULT_ARTIFACTS_TO_KEEP, help="Retention")
+    parser.add_argument("--timestamp", help="ISO timestamp for run directory")
+    parser.add_argument("--log-level", default="INFO", help="Logging level")
+    args = parser.parse_args(argv)
+
+    paths = build_paths(args)
+    options = build_options(args)
+    configure_logging(options.log_level)
+
+    if not paths.summary.exists():
+        logging.error("summary source not found: %s", paths.summary)
+        return {
+            "status": "error",
+            "exit_code": 2,
+            "error": f"summary source not found: {paths.summary}",
+            "run_dir": None,
+            "output_dir": str(paths.output_dir),
+            "run_id": None,
+            "manifest": None,
+            "telemetry": None,
+            "summary": None,
+        }
+
+    current = load_json(paths.summary)
+    baseline = load_json(paths.baseline)
+    thresholds = load_json(paths.thresholds)
+
+    status, issues, deltas = evaluate(current, baseline, thresholds)
+    generated_ts = parse_timestamp(options.timestamp)
+    run_slug = _timestamp_slug(generated_ts)
+
+    manifest = build_manifest(
+        status=status,
+        generated_ts=generated_ts,
+        run_slug=run_slug,
+        summary_path=paths.summary,
+        baseline_path=paths.baseline,
+        thresholds_path=paths.thresholds,
+        artifacts_to_keep=options.artifacts_to_keep,
+    )
+    telemetry = build_telemetry(
+        status=status,
+        issues=issues,
+        deltas=deltas,
+        current=current,
+        baseline=baseline,
+        thresholds=thresholds,
+        generated_ts=generated_ts,
+        run_slug=run_slug,
+    )
+
+    storage = create_storage(paths.output_dir, VIEWER_SLUG, TOPIC_SLUG, timestamp=run_slug)
+
+    # DB_INTEGRATION_MARKER: inventory health manifest
+    storage.write_manifest(manifest)
+
+    # DB_INTEGRATION_MARKER: inventory health summary markdown
+    storage.write_summary({"markdown": write_markdown({**telemetry, "inputs": manifest["inputs"]})}, format="md")
+
+    # DB_INTEGRATION_MARKER: inventory health telemetry
+    storage.write_telemetry(telemetry)
+
+    run_dir = storage.file_storage.bundle_dir
+    prune_run_directories(
+        paths.output_dir / VIEWER_SLUG / TOPIC_SLUG,
+        keep=options.artifacts_to_keep,
+        current_run=run_dir,
+        logger=logger,
+    )
+
+    logging.info("inventory health artifacts written to %s", run_dir)
+
+    return {
+        "status": status,
+        "exit_code": 1 if status == "failed" else 0,
+        "run_dir": str(run_dir),
+        "output_dir": str(paths.output_dir),
+        "run_id": run_slug,
+        "manifest": manifest,
+        "telemetry": telemetry,
+        "summary": {
+            "issues_count": len(issues),
+            "total_assets": current.get("total"),
+            "status": status,
+        },
+    }
 
 
 if __name__ == "__main__":  # pragma: no cover

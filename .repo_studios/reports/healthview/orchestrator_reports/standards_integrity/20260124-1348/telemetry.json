@@ -1,0 +1,70 @@
+{
+  "finished_at": "2026-01-24T13:50:11.811858+00:00",
+  "metrics": {
+    "artifact_bytes": 7274,
+    "artifact_files": 3,
+    "runtime_seconds": 0.155285,
+    "step_count": 5,
+    "steps_failed": 0,
+    "steps_skipped": 1,
+    "steps_succeeded": 4
+  },
+  "run_slug": "20260124-1348",
+  "started_at": "2026-01-24T13:50:11.656573+00:00",
+  "steps": [
+    {
+      "detail": "status=ok, rules=11",
+      "finished_at": "2026-01-24T13:50:11.693945+00:00",
+      "name": "index",
+      "payload": {
+        "integrity_hash": "77a0c3584bf8ade2b6996d0c4ef2be774cdc384fad559ad84274d9503f33f503",
+        "rule_count": 11,
+        "status": "ok"
+      },
+      "started_at": "2026-01-24T13:50:11.656576+00:00",
+      "status": "success"
+    },
+    {
+      "detail": "candidates=64",
+      "finished_at": "2026-01-24T13:50:11.764674+00:00",
+      "name": "gap",
+      "payload": {
+        "sources_with_candidates": 6,
+        "total_candidates": 64
+      },
+      "started_at": "2026-01-24T13:50:11.693952+00:00",
+      "status": "success"
+    },
+    {
+      "detail": "diff-old-index not provided",
+      "finished_at": "2026-01-24T13:50:11.764685+00:00",
+      "name": "diff",
+      "started_at": "2026-01-24T13:50:11.764682+00:00",
+      "status": "skipped"
+    },
+    {
+      "detail": "unique=4 assignments=5",
+      "finished_at": "2026-01-24T13:50:11.790698+00:00",
+      "name": "prompts",
+      "payload": {
+        "assignment_count": 5,
+        "category_count": 3,
+        "run_id": "20260124-1350",
+        "total_rules": 4,
+        "unique_rule_count": 4
+      },
+      "started_at": "2026-01-24T13:50:11.764775+00:00",
+      "status": "success"
+    },
+    {
+      "detail": "summarizer completed",
+      "finished_at": "2026-01-24T13:50:11.811848+00:00",
+      "name": "summary",
+      "started_at": "2026-01-24T13:50:11.790707+00:00",
+      "status": "success"
+    }
+  ],
+  "success": true,
+  "topic": "standards-integrity",
+  "viewer": "healthview"
+}

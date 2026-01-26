@@ -44,10 +44,10 @@ related_files:
   Log once evidence (doc-index timestamp + regression suites) is recorded.
 - When hardening, follow the **Pass A / Pass B / Pass C** evidence cycle per stage, as described in
   the how-to guide, and log each doc-index run/regression suite in
-  **Section 16. Update Log & Evidence Tracking**.
+  **Section 17. Update Log & Evidence Tracking**.
 - Before calling any Tier-1 edit complete, refresh the doc-index (via the `doc-index` make target or
   platform-equivalent command), execute the validating regression suites, and only then log the
-  evidence in **Section 16. Update Log & Evidence Tracking**; that section is mandatory and should
+  evidence in **Section 17. Update Log & Evidence Tracking**; that section is mandatory and should
   never be skipped.
 - Editors must follow `.github/instructions/markdown.instructions.md` and `.github/instructions/pipeline_doc_tiers.instructions.md`.
 
@@ -296,9 +296,9 @@ automated alerting.
 - Start with **Sections 1–3** for context and the global map.
 - Read **Stages 1–6** in maturity order to understand each health domain's orchestrators.
 - Use **Stage 7** to understand how the meta-orchestrator chains all domains.
-- Consult the **Snapshot and Stage Matrix (Section 12)** for a quick status overview.
-- Check the **Contradiction Registry (Section 13)** for known inconsistencies.
-- Reference the **Tier-2 Document Index (Section 14)** for implementation details.
+- Consult the **Snapshot and Stage Matrix (Section 13)** for a quick status overview.
+- Check the **Contradiction Registry (Section 14)** for known inconsistencies.
+- Reference the **Tier-2 Document Index (Section 15)** for implementation details.
 - Unchecked Tier-1 gate checkboxes (`[ ]`) are the canonical work queue; follow the linked Tier-2
   records and stop-gates to pick up the next unit of work.
 
@@ -1406,7 +1406,7 @@ confirmed, conditional diff skip logic validated, retention defaults documented
 **Evidence Links:**
 
 - [.repo_studios/scripts/producers/generate_standards_index.py](../../../scripts/producers/generate_standards_index.py)
-- [.repo_studios/command_center/scripts/producers/analyze_standards_index_gaps.py](../../../command_center/scripts/producers/analyze_standards_index_gaps.py)
+- [.repo_studios/command_center/scripts/cc_producers/analyze_standards_index_gaps.py](../../../command_center/scripts/cc_producers/analyze_standards_index_gaps.py)
 - [.repo_studios/scripts/producers/diff_standards_index.py](../../../scripts/producers/diff_standards_index.py)
 - [.repo_studios/scripts/producers/seed_standards_prompts.py](../../../scripts/producers/seed_standards_prompts.py)
 - [.repo_studios/scripts/summarizers/summarize_standards.py](../../../scripts/summarizers/summarize_standards.py)
@@ -1638,9 +1638,59 @@ upgrade paths without over-claiming orchestration coverage until an orchestrator
 
 ---
 
-## 12. Snapshot & Stage Matrix
+## 12. Stage 12 – Script Development Templates (Governance Staging)
 
-### 12.1 Pipeline Snapshot
+> **Purpose:** Temporary staging area for script requirement templates that standardize
+> the design, build, test, and QA process for HealthView scripts. This stage will detach
+> and migrate to the Jarvis governance index when Repo Studios docks.
+
+_Tier-2 references (depth lives here):_
+
+- Stage 12.1 Producer Template: TBD (pending template extraction)
+- Stage 12.2 Consumer Template: TBD (pending template extraction)
+- Stage 12.3 Aggregator Template: TBD (pending template extraction)
+- Stage 12.4 Summarizer Template: TBD (pending template extraction)
+- Stage 12.5 Orchestrator Template: [tier2_available_scripts_orchestrator_roster.md](tier2_roster/tier2_available_scripts_orchestrator_roster.md)
+
+**Implementation Plan:**
+[stage12_template_development_plan.md](implementation_plans/stage12_template_development_plan.md)
+
+**Stage 12 Gate Checklist (Tier-1):**
+
+- [ ] 12.1 Producer template extracted and validated
+- [ ] 12.2 Consumer template extracted and validated
+- [ ] 12.3 Aggregator template extracted and validated
+- [ ] 12.4 Summarizer template extracted and validated
+- [ ] 12.5 Orchestrator template extracted and validated (Stage 11.1 orchestrator built)
+- [ ] All templates linked from this section
+- [ ] Stage 11.1 orchestrator wired to Stage 7 meta-orchestrator
+- [ ] Existing Stage 1.1 scripts refactored to template standards
+
+**Target contract (locked decisions):**
+
+- Templates capture the full lifecycle: design → build → test → tier3.yaml → wiring → QA → docs
+- Working documents live in `/.repo_studios/docs/archives/` with `status: active` during work
+- Completed work transfers to assigned Tier-2 orchestrator roster
+- Archived working documents retain `status: archived` for audit trail
+- Templates evolve through iteration (each script improves the template design)
+
+**Governance destiny:**
+
+- Stage 12 is explicitly temporary; it will detach and migrate to the Jarvis governance index
+  when Repo Studios docks with the parent repository
+- Templates for RawView and CommandView may be added later but are out of scope for initial work
+
+**Current evidence (Stage 12):**
+
+- Implementation plan created: `implementation_plans/stage12_template_development_plan.md`
+- Stage 11.1 orchestrator Tier-2 roster: pending creation (Phase 1.5)
+- Template extraction: pending (Phase 4+)
+
+---
+
+## 13. Snapshot & Stage Matrix
+
+### 13.1 Pipeline Snapshot
 
 **Current State (after partial Phase 2 hardening):**  
 
@@ -1676,7 +1726,7 @@ dedicated test coverage (marked "tests TBD" in matrix).
 
 **Stage-chain contradictions are tracked explicitly.** Structural contract mismatches
 (output roots, retention defaults, timestamp shapes, and stage-specific stop-gates) are tracked in
-**Section 13** and the relevant Tier-2 rosters.
+**Section 14** and the relevant Tier-2 rosters.
 
 All gaps have logical explanations:
 
@@ -1696,7 +1746,7 @@ All gaps have logical explanations:
 - Sequential meta-orchestrator execution causes 20-30 min full-suite runtimes (parallel mode pending)
 - Test coverage incomplete: only 3 of 7 orchestrators have dedicated integration tests
 
-### 12.2 Stage Matrix
+### 13.2 Stage Matrix
 
 | Stage | Name | Orchestrators | Status | Top Gap | Evidence |
 | ----- | ---- | ------------- | ------ | ------- | -------- |
@@ -1710,7 +1760,7 @@ All gaps have logical explanations:
 
 ---
 
-## 13. Contradiction Registry
+## 14. Contradiction Registry
 
 | ID | Description | Sections Affected | Reality Source | Next Step |
 | -- | ----------- | ----------------- | -------------- | --------- |
@@ -1729,7 +1779,7 @@ All gaps have logical explanations:
 
 ---
 
-## 14. Tier-2 Document Index
+## 15. Tier-2 Document Index
 
 **Tier-2 (Roster) Documents (per-orchestrator BEGIN → END):**
 
@@ -1749,6 +1799,16 @@ All gaps have logical explanations:
   – Stage 7 (meta-orchestrator) deep dive
 - [tier2_available_scripts_roster.md](tier2_roster/tier2_available_scripts_roster.md)
   – Stage 11.1 (holding roster) deep dive
+- [tier2_available_scripts_orchestrator_roster.md](tier2_roster/tier2_available_scripts_orchestrator_roster.md)
+  – Stage 11.1 orchestrator deep dive (pending creation)
+
+**Tier-2 (Template) Documents (script development lifecycle):**
+
+- Stage 12.1 Producer Template: TBD
+- Stage 12.2 Consumer Template: TBD
+- Stage 12.3 Aggregator Template: TBD
+- Stage 12.4 Summarizer Template: TBD
+- Stage 12.5 Orchestrator Template: TBD
 
 **Tier-3 (YAML) Documents (per-script agent tools):**
 
@@ -1779,7 +1839,7 @@ All gaps have logical explanations:
 
 ---
 
-## 15. Working / Future Notes
+## 16. Working / Future Notes
 
 **Future enhancements (not yet scheduled):**
 
@@ -1796,10 +1856,11 @@ All gaps have logical explanations:
 
 ---
 
-## 16. Update Log & Evidence Tracking
+## 17. Update Log & Evidence Tracking
 
 | Date | Author / Steward | Change | Doc-index timestamp | Regression suites |
 | --- | --- | --- | --- | --- |
+| 2026-01-25 | GitHub Copilot | Introduced Stage 12 (Script Development Templates) as governance staging; created implementation plan; renumbered downstream sections (Snapshot → 13, Contradictions → 14, Tier-2 Index → 15, Working Notes → 16, Update Log → 17); added Stage 11.1 orchestrator roster placeholder to Tier-2 index. | pending | pending |
 | 2026-01-23 | GitHub Copilot | Stage 6.1 reality sync: corrected orchestrator output root and removed legacy index-pointer language from Tier-1 Stage 6.1 narrative and inputs/outputs. | 20260123-0152 | pytest Stage 6.1 focused suites (11 passed); doc-index |
 | 2026-01-22 | GitHub Copilot | Stage 6.1 follow-up: corrected Stage Matrix script count for Standards Integrity to reflect current 6-script chain; regenerated doc-index artifacts after paired-doc drift cleanup. | 20260122-1218 | doc-index |
 | 2026-01-06 | GitHub Copilot | Stage 3.1 follow-up: corrected Tier-1 Inputs/Outputs for `collect_faulthandler_reports.py` to use HealthView rawview + HOP bundle roots; verified Make target `studio-collect-faulthandler-reports` runs successfully (requires explicit `--repo-root` because `.repo_studios/scripts/.repo_studios/` exists and can confuse repo-root discovery). | 20260106-1502 | make studio-collect-faulthandler-reports; doc-index producer |

@@ -206,14 +206,14 @@ def write_report_artifacts(
 
     normalized = _normalize_timestamp(timestamp)
 
-    use_hierarchical_layout = viewer is not None and topic is not None
-
-    if use_hierarchical_layout:
+    if viewer is not None and topic is not None:
+        use_hierarchical_layout = True
         slug = normalized.strftime("%Y%m%d-%H%M")
         run_dir = output_dir / viewer / topic / slug
         run_dir.mkdir(parents=True, exist_ok=True)
         _prune_topic_runs(run_dir.parent, keep=keep, current_run=run_dir)
     else:
+        use_hierarchical_layout = False
         slug = normalized.strftime("%Y%m%d_%H%M%S")
         output_dir.mkdir(parents=True, exist_ok=True)
         run_dir = output_dir / f"{stem}-{slug}"
@@ -223,8 +223,9 @@ def write_report_artifacts(
     for descriptor in artifacts:
         path = descriptor.materialize(run_dir)
         written[descriptor.filename] = path
-        if descriptor.pointer and not use_hierarchical_layout:
-            copy_latest_artifact(path, output_dir / descriptor.pointer)
+        pointer = descriptor.pointer
+        if pointer is not None and not use_hierarchical_layout:
+            copy_latest_artifact(path, output_dir / pointer)
 
     if not use_hierarchical_layout:
         _prune_old_runs(output_dir, stem=stem, keep=keep, current_run=run_dir)

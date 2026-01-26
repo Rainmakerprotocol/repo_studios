@@ -34,6 +34,7 @@ from libraries import (  # noqa: E402
     ReportArtifact,
     TopicContext,
     TopicStep,
+    TopicStepReport,
     build_pipeline_telemetry,
     build_standard_options,
     build_standard_paths,
@@ -933,7 +934,7 @@ def _status_icon(status: str) -> str:
     return "✅" if status == "success" else "⚠️" if status == "skipped" else "❌"
 
 
-def _section_pipeline_status(result_steps: Sequence[TopicStepResult]) -> list[str]:
+def _section_pipeline_status(result_steps: Sequence[TopicStepReport]) -> list[str]:
     """Render the pipeline status section as Markdown lines.
 
     Args:
@@ -993,7 +994,7 @@ def _render_docs_health_summary(
     *,
     run_slug: str,
     completed_at: datetime,
-    result_steps: Sequence[TopicStepResult],
+    result_steps: Sequence[TopicStepReport],
     artifacts: dict[str, str | None],
     summary: dict[str, Any],
     repo_root: Path,
@@ -1023,10 +1024,18 @@ def _render_docs_health_summary(
     lines.append("")
 
     overall = summary.get("overall_score")
-    category_scores = summary.get("category_scores") if isinstance(summary.get("category_scores"), dict) else {}
-    statuses = summary.get("statuses") if isinstance(summary.get("statuses"), dict) else {}
-    weights = summary.get("weights") if isinstance(summary.get("weights"), dict) else {}
-    status_counts = summary.get("status_counts") if isinstance(summary.get("status_counts"), dict) else {}
+
+    category_scores_raw = summary.get("category_scores")
+    category_scores = cast(dict[str, Any], category_scores_raw) if isinstance(category_scores_raw, dict) else {}
+
+    statuses_raw = summary.get("statuses")
+    statuses = cast(dict[str, Any], statuses_raw) if isinstance(statuses_raw, dict) else {}
+
+    weights_raw = summary.get("weights")
+    weights = cast(dict[str, Any], weights_raw) if isinstance(weights_raw, dict) else {}
+
+    status_counts_raw = summary.get("status_counts")
+    status_counts = cast(dict[str, Any], status_counts_raw) if isinstance(status_counts_raw, dict) else {}
 
     lines.append("## Overall Score")
     lines.append("")
@@ -1047,7 +1056,8 @@ def _render_docs_health_summary(
         lines.append("")
 
     concerns: list[str] = []
-    critical = status_counts.get("critical") if isinstance(status_counts.get("critical"), int) else 0
+    critical_raw = status_counts.get("critical")
+    critical = critical_raw if isinstance(critical_raw, int) else 0
     if critical:
         concerns.append(f"❌ {critical} category(ies) are critical")
     lines.extend(_concerns_line(concerns))
@@ -2173,7 +2183,11 @@ def run(argv: Sequence[str] | None = None) -> int:
         completed_at=completed_at,
         result_steps=result.steps,
         artifacts=artifacts_section,
-        summary=manifest.get("summary") if isinstance(manifest.get("summary"), dict) else {},
+        summary=(
+            cast(dict[str, Any], manifest.get("summary"))
+            if isinstance(manifest.get("summary"), dict)
+            else {}
+        ),
         repo_root=paths.repo_root,
     )
     summary_path = result_artifacts.artifacts["summary.md"]

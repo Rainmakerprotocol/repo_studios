@@ -38,7 +38,7 @@ except ModuleNotFoundError:  # pragma: no cover - CLI fallback for script execut
     SCRIPTS_ROOT = Path(__file__).resolve().parent.parent
     if str(SCRIPTS_ROOT) not in sys.path:
         sys.path.insert(0, str(SCRIPTS_ROOT))
-    from libraries import (  # type: ignore  # noqa: E402
+    from libraries import (  # noqa: E402
         GuardrailState,
         GuardrailViolationError,
         KeepSpec,
@@ -58,7 +58,7 @@ except ModuleNotFoundError:  # pragma: no cover - CLI fallback for script execut
         write_metrics_summary,
         write_report_artifacts,
     )
-    from libraries.retention_policy import get_keep  # type: ignore  # noqa: E402
+    from libraries.retention_policy import get_keep  # noqa: E402
 
 DEFAULT_OUTPUT_DIR = Path(".repo_studios/command_center/reports")
 VIEWER_SLUG = "commandview"

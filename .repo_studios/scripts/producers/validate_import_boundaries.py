@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
-"""Structured import boundary checker with artifacts and pruning."""
+"""HOP-compliant import boundary validation producer.
+
+Emits HealthView bundles to:
+`.repo_studios/reports/producer_reports/healthview/import_boundary/<YYYYMMDD-HHMM>/`
+
+Base package: manifest.json, summary.md, telemetry.json
+Supplementary: violations.json, log.txt
+"""
 
 from __future__ import annotations
 
@@ -12,7 +19,7 @@ import sys
 from collections import Counter
 from dataclasses import dataclass, replace
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 DEFAULT_RELATIVE_GRAPH_DIR = Path(".repo_studios/reports/producer_reports/healthview/import_graph")
 # HOP-compliant output root - set after imports
@@ -38,7 +45,7 @@ try:
 except ModuleNotFoundError:  # pragma: no cover - fallback when running standalone
     if str(LIBRARIES_ROOT) not in sys.path:
         sys.path.insert(0, str(LIBRARIES_ROOT))
-    from libraries import (  # type: ignore
+    from libraries import (
         KeepSpec,
         PathSpec,
         OptionsConfig,
@@ -47,8 +54,8 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when running standalo
         build_standard_paths,
         prune_run_directories,
     )
-    from libraries.report_paths import build_topic_path  # type: ignore
-    from libraries.retention_policy import get_keep  # type: ignore
+    from libraries.report_paths import build_topic_path
+    from libraries.retention_policy import get_keep
 
 # HOP-compliant default output directory (set after imports)
 DEFAULT_OUTPUT_DIR = build_topic_path("producer", TOPIC_SLUG)
@@ -152,7 +159,7 @@ def configure_logging(level: str) -> None:
 
 
 def build_paths(args: argparse.Namespace) -> Paths:
-    paths = build_standard_paths(args, PATH_CONFIG, origin=Path(__file__))
+    paths = cast(Paths, build_standard_paths(args, PATH_CONFIG, origin=Path(__file__)))
     repo_root = paths.repo_root
     graph_dir = (repo_root / DEFAULT_RELATIVE_GRAPH_DIR).resolve()
     if getattr(args, "graph_path", None):
@@ -175,7 +182,7 @@ def build_options(args: argparse.Namespace, paths: Paths) -> Options:
         if not graph_path.is_absolute():
             graph_path = (paths.repo_root / graph_path).resolve()
     strict = bool(args.strict or os.getenv("STRICT") in {"1", "true", "TRUE"})
-    base_options = build_standard_options(args, OPTIONS_CONFIG)
+    base_options = cast(Options, build_standard_options(args, OPTIONS_CONFIG))
     return replace(base_options, graph_path=graph_path, strict=strict)
 
 
@@ -226,9 +233,10 @@ def _load_allowlist(path: Path) -> dict[str, Any]:
     if not path.exists():
         return {"edges": [], "files": []}
     try:
-        return json.loads(path.read_text(encoding="utf-8"))
+        payload = json.loads(path.read_text(encoding="utf-8"))
     except Exception:
         return {"edges": [], "files": []}
+    return payload if isinstance(payload, dict) else {"edges": [], "files": []}
 
 
 def _is_test_file(path: Path) -> bool:
@@ -392,11 +400,53 @@ def write_artifacts(
     payload: dict[str, Any],
     logger: logging.Logger | None,
 ) -> None:
+    """Write HOP-compliant artifact bundle.
+
+    Base package (HOP standard):
+        - manifest.json: Full payload with schema_version, status, violations, summary
+        - summary.md: Human-readable violation report
+        - telemetry.json: Execution metrics for aggregation
+
+    Supplementary artifacts:
+        - violations.json: Violations array only (for downstream consumers)
+        - log.txt: Machine-parseable key=value log
+
+    Args:
+        run_dir: Timestamped run directory (e.g., .../import_boundary/20260125-1200/)
+        output_dir: Parent output directory (unused, kept for interface consistency)
+        payload: Complete payload dict from compose_payload()
+        logger: Optional logger for debug output
+    """
     run_dir.mkdir(parents=True, exist_ok=True)
     if logger:
         logger.debug("Writing import boundary artifacts to %s", run_dir)
-    (run_dir / "report.json").write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-    (run_dir / "report.md").write_text(render_markdown_report(payload), encoding="utf-8")
+
+    # HOP base package
+    (run_dir / "manifest.json").write_text(
+        json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+    (run_dir / "summary.md").write_text(render_markdown_report(payload), encoding="utf-8")
+
+    # Telemetry for aggregation
+    telemetry = {
+        "producer": "validate_import_boundaries",
+        "schema_version": payload.get("schema_version", SCHEMA_VERSION),
+        "timestamp": payload.get("timestamp", ""),
+        "run_id": payload.get("run_id", ""),
+        "metrics": {
+            "status": payload.get("status", ""),
+            "violation_count": payload.get("summary", {}).get("violation_count", 0),
+            "files_scanned": payload.get("summary", {}).get("files_scanned", 0),
+            "cycle_violations": payload.get("summary", {}).get("cycle_violations", 0),
+            "edge_violations": payload.get("summary", {}).get("edge_violations", 0),
+            "static_violations": payload.get("summary", {}).get("static_violations", 0),
+        },
+    }
+    (run_dir / "telemetry.json").write_text(
+        json.dumps(telemetry, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+
+    # Supplementary artifacts
     (run_dir / "log.txt").write_text(render_log(payload), encoding="utf-8")
     (run_dir / "violations.json").write_text(
         json.dumps(payload.get("violations", []), indent=2, sort_keys=True) + "\n",
@@ -463,7 +513,10 @@ def run(argv: list[str] | None = None) -> dict[str, Any]:
     logger.info("Repo root: %s", paths.repo_root)
     logger.info("Output directory: %s", paths.output_dir)
 
-    graph_path = options.graph_path or _latest_graph_json(paths.graph_dir)
+    graph_dir = paths.graph_dir
+    graph_path = options.graph_path
+    if graph_path is None and graph_dir is not None:
+        graph_path = _latest_graph_json(graph_dir)
     if graph_path:
         logger.info("Graph path: %s", graph_path)
     else:

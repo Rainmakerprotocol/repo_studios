@@ -19,7 +19,7 @@ import sys
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Iterable, Mapping
+from typing import Any, Mapping, Sequence, cast
 
 LIBRARIES_ROOT = Path(__file__).resolve().parents[3] / ".repo_studios" / "command_center" / "scripts"
 
@@ -97,7 +97,7 @@ OPTIONS_CONFIG = OptionsConfig(
 )
 
 
-def _parse_args(argv: Iterable[str] | None) -> argparse.Namespace:
+def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__ or "")
     parser.add_argument(
         "--repo-root",
@@ -175,7 +175,7 @@ def configure_logging(level: str) -> None:
 
 
 def build_paths(args: argparse.Namespace) -> Paths:
-    return build_standard_paths(args, PATHS_CONFIG, origin=Path(__file__))
+    return cast(Paths, build_standard_paths(args, PATHS_CONFIG, origin=Path(__file__)))
 
 
 def build_options(args: argparse.Namespace) -> Options:
@@ -271,10 +271,18 @@ def _append_blockquote(lines: list[str], rows: list[str]) -> None:
 
 
 def _to_int(value: object, default: int = 0) -> int:
-    try:
-        return int(value)  # type: ignore[arg-type]
-    except Exception:
-        return default
+    if isinstance(value, bool):
+        return int(value)
+    if isinstance(value, int):
+        return value
+    if isinstance(value, float):
+        return int(value)
+    if isinstance(value, str):
+        try:
+            return int(value.strip())
+        except ValueError:
+            return default
+    return default
 
 
 def _read_json_dict(path: Path) -> dict | None:
@@ -726,7 +734,7 @@ def _compose_churn_section(lines: list[str], table_rows: list[str], cc_dir: Path
         )
 
 
-def run(argv: Iterable[str] | None = None) -> dict[str, Any]:
+def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     args = _parse_args(argv)
     paths = build_paths(args)
     options = build_options(args)
@@ -940,7 +948,7 @@ def run(argv: Iterable[str] | None = None) -> dict[str, Any]:
     return response
 
 
-def main(argv: Iterable[str] | None = None) -> None:
+def main(argv: Sequence[str] | None = None) -> None:
     result = run(argv)
     raise SystemExit(0 if result.get("status") == "ok" else 1)
 

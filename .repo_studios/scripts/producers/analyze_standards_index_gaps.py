@@ -12,7 +12,7 @@ from types import ModuleType
 def _load_command_center_module() -> ModuleType:
     try:
         return __import__(
-            "command_center.scripts.producers.analyze_standards_index_gaps",
+            "command_center.scripts.cc_producers.analyze_standards_index_gaps",
             fromlist=["*"],
         )
     except ModuleNotFoundError:
@@ -23,7 +23,7 @@ def _load_command_center_module() -> ModuleType:
         Path(__file__).resolve().parents[2]
         / "command_center"
         / "scripts"
-        / "producers"
+        / "cc_producers"
         / "analyze_standards_index_gaps.py"
     )
     if module_name in sys.modules:
@@ -68,7 +68,7 @@ COMMAND_CENTER_SCRIPT_PATH = (
     Path(__file__).resolve().parents[2]
     / "command_center"
     / "scripts"
-    / "producers"
+    / "cc_producers"
     / "analyze_standards_index_gaps.py"
 )
 

@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "viewer": "healthview",
+  "topic": "code_placeholders",
+  "status": "ok",
+  "timestamp": "2026-01-24T13:45:58.042373+00:00",
+  "generated_utc": "2026-01-24T13:45:58.042373+00:00",
+  "run_timestamp": "20260124-1345",
+  "run_id": "20260124-1345",
+  "repo_root": "C:\\Users\\genet\\repo_studios",
+  "bundle_dir": ".repo_studios/reports/healthview/producer_reports/code_placeholders/20260124-1345",
+  "scan_root": ".",
+  "include_extensions": [
+    ".js",
+    ".json",
+    ".md",
+    ".py",
+    ".ts",
+    ".txt",
+    ".yaml",
+    ".yml"
+  ],
+  "patterns": [
+    "FIXME",
+    "NOTE",
+    "OPTIMIZE",
+    "REVIEW",
+    "TODO",
+    "XXX"
+  ],
+  "allowlist_size": 5,
+  "exclude_prefixes": [
+    ".venv/",
+    "node_modules/"
+  ],
+  "exclude_segments": [
+    "site-packages"
+  ],
+  "default_exclusions_applied": true,
+  "total_matches": 0,
+  "summary": {
+    "by_pattern": {},
+    "by_extension": {}
+  },
+  "log": "status=ok\nrun_timestamp=20260124-1345\nscan_root=.\ntotal_matches=0\npatterns=FIXME,NOTE,OPTIMIZE,REVIEW,TODO,XXX\nextensions=.js,.json,.md,.py,.ts,.txt,.yaml,.yml\nallowlist_size=5\n",
+  "matches_total": 0,
+  "matches_sample_limit": 200,
+  "matches_sample_truncated": false,
+  "matches_sample": []
+}

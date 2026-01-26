@@ -19,7 +19,7 @@ import argparse
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Callable, Dict, Mapping, MutableMapping, Optional
+from typing import Callable, Dict, Mapping, MutableMapping, Optional, Protocol, cast
 
 root = Path(__file__).resolve().parents[3]  # repository root
 root_str = str(root)
@@ -52,10 +52,21 @@ warnings.filterwarnings(
 )
 
 _LOCK = threading.Lock()
+
+
+class _FcntlLike(Protocol):
+    LOCK_EX: int
+    LOCK_UN: int
+
+    def flock(self, fd: int, op: int) -> None: ...
+
+
 try:  # POSIX-only; ignored elsewhere.
-    import fcntl as _FCNTL  # type: ignore
+    import fcntl as _raw_fcntl
 except Exception:  # pragma: no cover - Windows and other platforms
-    _FCNTL = None  # type: ignore
+    _FCNTL: _FcntlLike | None = None
+else:
+    _FCNTL = cast(_FcntlLike, _raw_fcntl)
 
 
 def _default_base_dir(allow_legacy: bool) -> Path:
@@ -166,7 +177,7 @@ class _LockedFile:
         self._tee = tee_stderr
         self._fh = open(path, "a", buffering=1, encoding="utf-8", errors="replace")
 
-    def write(self, data: str) -> int:  # type: ignore[override]
+    def write(self, data: str) -> int:
         with _LOCK:
             if _FCNTL is not None:
                 try:
@@ -217,11 +228,13 @@ def _activate_faulthandler(writer: Optional[_LockedFile], tee_label: str, dump_l
         "dump_later": False,
         "errors": [],
     }
+    errors: list[str] = []
+    info["errors"] = errors
 
     try:
         fh = importlib.import_module("faulthandler")
     except Exception as exc:  # pragma: no cover - happens when module absent
-        info["errors"].append(f"import_failed:{exc}")
+        errors.append(f"import_failed:{exc}")
         return info
 
     target = writer or sys.stderr
@@ -230,13 +243,13 @@ def _activate_faulthandler(writer: Optional[_LockedFile], tee_label: str, dump_l
         fh.enable(file=target, all_threads=True)
         info["activated"] = True
     except Exception as exc:
-        info["errors"].append(f"enable_failed:{exc}")
+        errors.append(f"enable_failed:{exc}")
         try:
             fh.enable()
             info["activated"] = True
             info["writer"] = "stderr"
         except Exception as inner:
-            info["errors"].append(f"fallback_failed:{inner}")
+            errors.append(f"fallback_failed:{inner}")
 
     try:
         import signal
@@ -245,14 +258,14 @@ def _activate_faulthandler(writer: Optional[_LockedFile], tee_label: str, dump_l
             fh.register(signal.SIGUSR1, file=target, all_threads=True)
             info["registered_sigusr1"] = True
     except Exception as exc:
-        info["errors"].append(f"sigusr1_failed:{exc}")
+        errors.append(f"sigusr1_failed:{exc}")
 
     if dump_later:
         try:
             fh.dump_traceback_later(dump_timeout, repeat=True, file=target)
             info["dump_later"] = True
         except Exception as exc:
-            info["errors"].append(f"dump_later_failed:{exc}")
+            errors.append(f"dump_later_failed:{exc}")
 
     return info
 
@@ -342,7 +355,7 @@ def bootstrap(
 
     bundle_summary = {
         "status": result["status"],
-        "outdir": manifest["resolved"]["outdir"],
+        "outdir": str(settings.outdir),
         "writer": activation["writer"],
         "retention": manifest["retention"],
         "flags": settings.env_snapshot,

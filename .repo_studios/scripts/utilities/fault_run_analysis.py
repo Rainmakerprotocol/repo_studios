@@ -8,11 +8,12 @@ in one place helps the refactor loop avoid divergent heuristics.
 from __future__ import annotations
 
 import json
+import hashlib
 import re
 from dataclasses import asdict, dataclass
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Iterable, Sequence
+from typing import Iterable, Sequence, TypedDict
 
 __all__ = [
     "FaultSignature",
@@ -53,6 +54,18 @@ class FaultAnalysisResult:
     report: dict[str, object]
     signatures: list[FaultSignature]
     combined_text: str
+
+
+class _SignatureRow(TypedDict):
+    signature_id: str
+    count: int
+    top_module: str
+    top_func: str
+    top_file: str
+    top_line: int
+    threads: set[str]
+    first_seen_ts: str
+    last_seen_ts: str
 
 
 def _iter_thread_blocks(lines: Iterable[str]) -> Iterable[list[str]]:
@@ -133,10 +146,12 @@ def ensure_manifest(outdir: Path) -> dict[str, object]:
     manifest_path = outdir / "MANIFEST.json"
     if manifest_path.exists():
         try:
-            return json.loads(manifest_path.read_text(encoding="utf-8"))
+            payload = json.loads(manifest_path.read_text(encoding="utf-8"))
+            if isinstance(payload, dict):
+                return {str(key): value for key, value in payload.items()}
         except Exception:
             pass
-    manifest = {
+    manifest: dict[str, object] = {
         "ts": datetime.now(UTC).isoformat(timespec="seconds"),
         "pid": None,
         "python": None,
@@ -202,7 +217,7 @@ def _signature_id(frames: Sequence[_TopFrame], salt: str) -> str:
             )
         )
     raw = f"{salt}|N={len(frames)}|" + "|".join(parts)
-    return __import__("hashlib").sha256(raw.encode("utf-8")).hexdigest()[:16]
+    return hashlib.sha256(raw.encode("utf-8")).hexdigest()[:16]
 
 
 def collect_signatures(
@@ -215,7 +230,7 @@ def collect_signatures(
     """Aggregate per-signature metrics from raw stack text."""
 
     lines = stacks_text.splitlines()
-    rows_map: dict[str, dict[str, object]] = {}
+    rows_map: dict[str, _SignatureRow] = {}
     thread_block_count = 0
     for block in _iter_thread_blocks(lines):
         thread_block_count += 1
@@ -240,29 +255,23 @@ def collect_signatures(
                 "last_seen_ts": now_iso,
             }
         row = rows_map[sig]
-        row["count"] = int(row["count"]) + 1
+        row["count"] = row["count"] + 1
         row["last_seen_ts"] = now_iso
-        threads = row["threads"]
-        assert isinstance(threads, set)
-        threads.add(thread_id)
+        row["threads"].add(thread_id)
     signatures: list[FaultSignature] = []
     for data in rows_map.values():
-        threads = data.pop("threads")  # type: ignore[assignment]
-        try:
-            thread_list = sorted(threads)  # type: ignore[arg-type]
-        except Exception:
-            thread_list = []
+        thread_list = sorted(data["threads"])
         signatures.append(
             FaultSignature(
                 signature_id=data["signature_id"],
-                count=int(data["count"]),
-                top_module=str(data["top_module"]),
-                top_func=str(data["top_func"]),
-                top_file=str(data["top_file"]),
-                top_line=int(data["top_line"]),
+                count=data["count"],
+                top_module=data["top_module"],
+                top_func=data["top_func"],
+                top_file=data["top_file"],
+                top_line=data["top_line"],
                 threads=thread_list,
-                first_seen_ts=str(data["first_seen_ts"]),
-                last_seen_ts=str(data["last_seen_ts"]),
+                first_seen_ts=data["first_seen_ts"],
+                last_seen_ts=data["last_seen_ts"],
             )
         )
     signatures.sort(key=lambda s: (-s.count, s.signature_id))

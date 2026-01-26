@@ -11,14 +11,14 @@ from pathlib import Path
 from typing import Sequence
 
 try:
-    from libraries import PathSpec, PathsConfig, build_standard_paths  # type: ignore
-    from producers import generate_commandview_inventory  # type: ignore
+    from libraries import PathSpec, PathsConfig, build_standard_paths
+    from cc_producers import generate_commandview_inventory
 except ModuleNotFoundError:  # pragma: no cover - CLI fallback for script execution
     SCRIPTS_ROOT = Path(__file__).resolve().parent.parent
     if str(SCRIPTS_ROOT) not in sys.path:
         sys.path.insert(0, str(SCRIPTS_ROOT))
-    from libraries import PathSpec, PathsConfig, build_standard_paths  # type: ignore  # noqa: E402
-    from producers import generate_commandview_inventory  # type: ignore  # noqa: E402
+    from libraries import PathSpec, PathsConfig, build_standard_paths  # noqa: E402
+    from cc_producers import generate_commandview_inventory  # noqa: E402
 
 ALLOWED_ROOT = Path(".repo_studios")
 

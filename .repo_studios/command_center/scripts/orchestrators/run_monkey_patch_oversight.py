@@ -78,23 +78,31 @@ DEFAULT_HEALTHVIEW_ROOT = build_topic_path("orchestrator", "monkey_patch_oversig
 _RETENTION_CONFIG = get_orchestrator_config("run_monkey_patch_oversight")
 DEFAULT_ORCHESTRATOR_KEEP = (_RETENTION_CONFIG.artifacts_to_keep if _RETENTION_CONFIG else 3)
 DEFAULT_PRODUCER_KEEP = (
-    _RETENTION_CONFIG.scripts.get("scan_monkey_patches").keep
-    if _RETENTION_CONFIG and "scan_monkey_patches" in _RETENTION_CONFIG.scripts
+    _RETENTION_CONFIG.scripts["scan_monkey_patches"].keep
+    if _RETENTION_CONFIG
+    and "scan_monkey_patches" in _RETENTION_CONFIG.scripts
+    and _RETENTION_CONFIG.scripts["scan_monkey_patches"] is not None
     else get_keep("scan_monkey_patches")
 )
 DEFAULT_CONSUMER_KEEP = (
-    _RETENTION_CONFIG.scripts.get("classify_monkey_patches").keep
-    if _RETENTION_CONFIG and "classify_monkey_patches" in _RETENTION_CONFIG.scripts
+    _RETENTION_CONFIG.scripts["classify_monkey_patches"].keep
+    if _RETENTION_CONFIG
+    and "classify_monkey_patches" in _RETENTION_CONFIG.scripts
+    and _RETENTION_CONFIG.scripts["classify_monkey_patches"] is not None
     else get_keep("classify_monkey_patches")
 )
 DEFAULT_AGGREGATOR_KEEP = (
-    _RETENTION_CONFIG.scripts.get("analyze_monkey_patch_trends").keep
-    if _RETENTION_CONFIG and "analyze_monkey_patch_trends" in _RETENTION_CONFIG.scripts
+    _RETENTION_CONFIG.scripts["analyze_monkey_patch_trends"].keep
+    if _RETENTION_CONFIG
+    and "analyze_monkey_patch_trends" in _RETENTION_CONFIG.scripts
+    and _RETENTION_CONFIG.scripts["analyze_monkey_patch_trends"] is not None
     else get_keep("analyze_monkey_patch_trends")
 )
 DEFAULT_SUMMARIZER_KEEP = (
-    _RETENTION_CONFIG.scripts.get("summarize_monkey_patch_overview").keep
-    if _RETENTION_CONFIG and "summarize_monkey_patch_overview" in _RETENTION_CONFIG.scripts
+    _RETENTION_CONFIG.scripts["summarize_monkey_patch_overview"].keep
+    if _RETENTION_CONFIG
+    and "summarize_monkey_patch_overview" in _RETENTION_CONFIG.scripts
+    and _RETENTION_CONFIG.scripts["summarize_monkey_patch_overview"] is not None
     else get_keep("summarize_monkey_patch_overview")
 )
 

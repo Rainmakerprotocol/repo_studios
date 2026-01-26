@@ -33,14 +33,14 @@ from pathlib import Path
 from typing import Any, Iterable, Iterator, Sequence
 
 try:
-    from libraries import (  # type: ignore  # noqa: E402
+    from libraries import (  # noqa: E402
         ReportArtifact,
         WriteReportArtifactsResult,
         resolve_repo_root,
         slugify_relative,
         write_report_artifacts,
     )
-    from libraries.retention_policy import get_keep  # type: ignore  # noqa: E402
+    from libraries.retention_policy import get_keep  # noqa: E402
 except ModuleNotFoundError:  # pragma: no cover - CLI fallback
     SCRIPT_DIR = Path(__file__).resolve().parent
     SCRIPTS_ROOT = SCRIPT_DIR.parent
@@ -50,24 +50,24 @@ except ModuleNotFoundError:  # pragma: no cover - CLI fallback
         sys.path.insert(0, str(SCRIPTS_ROOT))
     if str(REPO_STUDIOS_ROOT) not in sys.path:
         sys.path.insert(0, str(REPO_STUDIOS_ROOT))
-    from libraries import (  # type: ignore  # noqa: E402
+    from libraries import (  # noqa: E402
         ReportArtifact,
         WriteReportArtifactsResult,
         resolve_repo_root,
         slugify_relative,
         write_report_artifacts,
     )
-    from libraries.retention_policy import get_keep  # type: ignore  # noqa: E402
+    from libraries.retention_policy import get_keep  # noqa: E402
 
 DEFAULT_SIMILARITY_THRESHOLD = 0.85
 DEFAULT_MIN_LINES = 3
 DEFAULT_KEEP_RUNS = get_keep("scan_duplicates")
 MAX_KEEP_RUNS = 5
-DEFAULT_TARGET_RELATIVE = Path(".repo_studios/command_center/scripts/producers")
+DEFAULT_TARGET_RELATIVE = Path(".repo_studios/command_center/scripts/cc_producers")
 DEFAULT_OUTPUT_DIR = Path(".repo_studios/command_center/reports")
 
 INVENTORY_SCRIPT_RELATIVE = Path(
-    ".repo_studios/command_center/scripts/producers/generate_commandview_inventory.py"
+    ".repo_studios/command_center/scripts/cc_producers/generate_commandview_inventory.py"
 )
 ANALYSIS_SCRIPT_RELATIVE = Path(
     ".repo_studios/command_center/scripts/summarizers/generate_function_analysis.py"
@@ -181,7 +181,7 @@ class RunArtifacts:
     index_summary: Path
 
 
-def parse_args(argv: Iterable[str] | None = None) -> argparse.Namespace:
+def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         prog="scan_duplicates",
         description="Scan a directory for duplicate Python functions and merge results with producers analysis.",
@@ -738,12 +738,12 @@ def _extract_top_offenders(
             line_start_raw = inst.get("line")
             line_start = int(line_start_raw) if isinstance(line_start_raw, int) and line_start_raw > 0 else None
             line_count_raw = inst.get("line_count")
-            line_count = int(line_count_raw) if isinstance(line_count_raw, int) and line_count_raw > 0 else None
+            inst_line_count = int(line_count_raw) if isinstance(line_count_raw, int) and line_count_raw > 0 else None
             line_end = None
-            if line_start is not None and line_count is not None:
-                line_end = line_start + line_count - 1
+            if line_start is not None and inst_line_count is not None:
+                line_end = line_start + inst_line_count - 1
             sample_line = _load_source_line(repo_root, path, line_start)
-            record_occurrence(path, line_start, line_end, line_count, sample_line)
+            record_occurrence(path, line_start, line_end, inst_line_count, sample_line)
 
         for group in scanner_groups:
             for occ in group.get("occurrences", []) or []:
@@ -986,7 +986,7 @@ def write_outputs(
         index_summary=index_summary,
     )
 
-def run(argv: Iterable[str] | None = None) -> int:
+def run(argv: Sequence[str] | None = None) -> int:
     args = parse_args(argv)
     options = build_options(args)
     configure_logging(options.log_level)
