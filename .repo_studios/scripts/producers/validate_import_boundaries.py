@@ -344,13 +344,29 @@ def _summarize(violations: list[Violation]) -> dict[str, Any]:
 def render_markdown_report(payload: dict[str, Any]) -> str:
     summary = payload.get("summary", {})
     violations = payload.get("violations", [])
+    
+    # Use relative paths in summary.md for portability
+    repo_root = payload.get("repo_root", "")
+    allowlist_path = payload.get("allowlist_path", "")
+    graph_path = payload.get("graph_path")
+    
+    # Convert absolute paths to relative (from repo root)
+    if repo_root and allowlist_path and allowlist_path.startswith(repo_root):
+        allowlist_display = allowlist_path[len(repo_root):].lstrip("/\\")
+    else:
+        allowlist_display = allowlist_path or "(none)"
+    
+    if graph_path and repo_root and graph_path.startswith(repo_root):
+        graph_display = graph_path[len(repo_root):].lstrip("/\\")
+    else:
+        graph_display = graph_path or "auto-detected"
+    
     lines = [
         "# Import Boundary Report\n\n",
         f"- Status: `{payload.get('status', 'unknown')}`\n",
         f"- Timestamp: `{payload.get('timestamp', '')}`\n",
-        f"- Repo Root: `{payload.get('repo_root', '')}`\n",
-        f"- Graph Path: `{payload.get('graph_path') or 'auto-detected'}`\n",
-        f"- Allowlist: `{payload.get('allowlist_path', '')}`\n",
+        f"- Graph Path: `{graph_display}`\n",
+        f"- Allowlist: `{allowlist_display}`\n",
         f"- Violations: {summary.get('violation_count', 0)}\n",
     ]
 
@@ -422,9 +438,11 @@ def write_artifacts(
         logger.debug("Writing import boundary artifacts to %s", run_dir)
 
     # HOP base package
+    # DB_INTEGRATION_MARKER: import boundary manifest write
     (run_dir / "manifest.json").write_text(
         json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )
+    # DB_INTEGRATION_MARKER: import boundary summary markdown write
     (run_dir / "summary.md").write_text(render_markdown_report(payload), encoding="utf-8")
 
     # Telemetry for aggregation
@@ -442,6 +460,7 @@ def write_artifacts(
             "static_violations": payload.get("summary", {}).get("static_violations", 0),
         },
     }
+    # DB_INTEGRATION_MARKER: import boundary telemetry write
     (run_dir / "telemetry.json").write_text(
         json.dumps(telemetry, indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )

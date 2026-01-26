@@ -134,7 +134,9 @@ Authoritative entry points for Tier-1 routing and agent discovery are:
 - No pointer files like `latest_*`.
 - Pruning mechanisms and targets are explicit, stable, and evidence-backed.
 - DB integration is gated behind `REPO_STUDIOS_DB_ENABLED` and is best-effort (warn-only failures).
-  Every DB callsite includes `DB_INTEGRATION_MARKER:`.
+  Every artifact write site **MUST** have a `DB_INTEGRATION_MARKER:` comment.
+  The `markers_present` field in records must enumerate each marker with line number.
+- QA verification (mypy --strict, pytest) must be captured with timestamp.
 
 **Current evidence (repo-observed):**
 
@@ -226,6 +228,9 @@ fields:
     gated_by: "REPO_STUDIOS_DB_ENABLED"
     marker_required: true
     marker_string: "DB_INTEGRATION_MARKER:"
+    markers_present:
+      - "<Lxxx — artifact write description>"
+      - "<Lyyy — artifact write description>"
   evidence:
     code_refs:
       - "<path>#Lx-Ly"
@@ -233,6 +238,10 @@ fields:
       - "<pytest path>"
     fixtures:
       - "<fixture path>"
+    qa:
+      mypy: "<mypy --strict result>"
+      pytest: "<pytest result summary>"
+      last_verified: "<YYYY-MM-DD>"
   notes:
     - "<short note>"
 ```

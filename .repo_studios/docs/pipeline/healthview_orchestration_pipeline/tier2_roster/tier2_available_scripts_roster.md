@@ -116,7 +116,6 @@ related_files:
 - Producer: `.repo_studios/scripts/producers/extract_standards_rules.py` (planned Stage 6.2)
 - Producer: `.repo_studios/scripts/producers/check_inventory_health.py` (questionable)
 - Producer: `.repo_studios/scripts/producers/validate_inventory.py` (questionable)
-- Summarizer: `.repo_studios/scripts/summarizers/summarize_health_suite.py` (legacy/deprecation candidate)
 - Producer: `.repo_studios/scripts/producers/render_inventory_views.py`
   (out-of-scope for HealthView today)
 - Producer: `.repo_studios/scripts/producers/generate_lizard_report.py`
@@ -179,7 +178,6 @@ A short index that links to each per-script record block in this document.
 - ASR-006 — `extract_standards_rules.py` — producer — [ASR-006](#asr-006-extract_standards_rulespy)
 - ASR-007 — `check_inventory_health.py` — producer — [ASR-007](#asr-007-check_inventory_healthpy)
 - ASR-008 — `validate_inventory.py` — producer — [ASR-008](#asr-008-validate_inventorypy)
-- ASR-009 — `summarize_health_suite.py` — summarizer — [ASR-009](#asr-009-summarize_health_suitepy)
 - ASR-010 — `render_inventory_views.py` — producer — [ASR-010](#asr-010-render_inventory_viewspy)
 - ASR-011 — `generate_lizard_report.py` — producer — [ASR-011](#asr-011-generate_lizard_reportpy)
 - ASR-013 — `test_log_analysis.py` — utility (library) — [ASR-013](#asr-013-test_log_analysispy)
@@ -603,11 +601,11 @@ script:
   category: "producer"
 tier3:
   metadata_block_version: "v1"
-  allowed: false
-  exists: false
+  allowed: true
+  exists: true
   name: "tier3_validate_import_boundaries.yaml"
-  meets_template: "NA"
-  last_updated: null
+  meets_template: "yes"
+  last_updated: "2026-01-26"
 cli_surfaces:
   run_entrypoint: "main(argv) -> run(argv)" 
   key_flags:
@@ -638,7 +636,7 @@ io_contract:
         - "manifest.json"
         - "summary.md"
         - "telemetry.json"
-    status: "✅ ALIGNED (2026-01-25)"
+    status: "✅ ALIGNED (2026-01-26)"
 retention:
   surfaces:
     - "--artifacts-to-keep (default from get_keep('validate_import_boundaries'))"
@@ -655,21 +653,31 @@ db_integration:
   gated_by: "REPO_STUDIOS_DB_ENABLED"
   marker_required: true
   marker_string: "DB_INTEGRATION_MARKER:"
+  markers_present:
+    - "L425 — manifest.json write"
+    - "L429 — summary.md write"  
+    - "L447 — telemetry.json write"
 evidence:
   code_refs:
-    - ".repo_studios/scripts/producers/validate_import_boundaries.py#L1-L9 (HOP docstring)"
-    - ".repo_studios/scripts/producers/validate_import_boundaries.py#L396-L448 (write_artifacts with base package)"
+    - ".repo_studios/scripts/producers/validate_import_boundaries.py#L61 (build_topic_path HOP path)"
+    - ".repo_studios/scripts/producers/validate_import_boundaries.py#L425-L447 (DB_INTEGRATION_MARKER writes)"
+    - ".repo_studios/scripts/producers/validate_import_boundaries.py#L468 (prune_run_directories)"
   tests:
     - ".repo_studios/tests/tests_producers/test_validate_import_boundaries.py::test_emits_structured_artifacts_without_violations (PASSED)"
     - ".repo_studios/tests/tests_producers/test_validate_import_boundaries.py::test_detects_violations_and_honors_allowlist (PASSED)"
   fixtures: []
-  phase4_build_doc: ".repo_studios/docs/archives/temp_validate_import_boundaries_build.md"
+  tier3_yaml: ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier3_scripts/dependency_import_hygiene/tier3_validate_import_boundaries.yaml"
+  qa:
+    mypy: "Success: no issues found in 1 source file"
+    pytest: "2 passed in 0.19s"
+    last_verified: "2026-01-26"
 notes:
   - "Classification: HOP-compliant producer, ready for Stage 4.2 promotion."
   - "Contract status: ✅ aligned with HOP base package (manifest.json, summary.md, telemetry.json)"
   - "Entry surface: CLI (exits non-zero when violations exist); also importable (run(argv))."
   - "Primary purpose: reads a module-level import graph (when available) + performs a repo walk to detect forbidden static import patterns; applies a JSON allowlist to filter accepted exceptions; emits structured reports."
-  - "Phase 4 processing: Completed 2026-01-25 — docstring updated, artifacts renamed, telemetry.json added, tests passing."
+  - "Phase 4 processing: Completed 2026-01-26 — DB_INTEGRATION_MARKERs added, Tier-3 YAML created, mypy/pytest verified."
+  - "Output quality: summary.md uses relative paths (not absolute), passes markdownlint, JSON artifacts validated."
 ```
 
 ##### Promotion Mapping — validate_import_boundaries.py
@@ -689,13 +697,11 @@ notes:
 - [x] B. Gap analysis — identify delta between current and target contract
 - [x] C. Modification — apply HOP alignment (docstring, artifact naming, telemetry.json)
 - [x] D. Evidence — capture tests and representative payload examples
-- [ ] E. Promote — wrap in Stage 4.2 orchestrator (pending Stage 4.2 implementation)
-- [x] DONE — record outcome in Tier-2 roster, Phase 4 working doc archived
-- [ ] B. Plan — define wrapper + mapping into base package; enumerate stop-gates
-- [ ] C. Implement — execute approved plan (if adopted)
-- [ ] D. Evidence — capture tests and representative bundle artifacts (or mark N/A)
-- [ ] E. Promote — move reference out of Stage 11.1 in Tier-1 (when approved)
-- [ ] DONE — record outcome, close stop-gates, and update Tier-1 Available Scripts section
+- [x] E. DB markers — added DB_INTEGRATION_MARKER comments to artifact writes (L425, L429, L447)
+- [x] F. Tier-3 YAML — created tier3_validate_import_boundaries.yaml with ScriptInspectionRecordV1 schema
+- [x] G. QA verification — mypy --strict PASSED, pytest 2/2 PASSED, CLI execution verified
+- [ ] H. Promote — wrap in Stage 4.2 orchestrator (pending Stage 4.2 implementation)
+- [x] DONE — record outcome in Tier-2 roster, Tier-3 YAML created, Phase 4 complete (2026-01-26)
 
 ##### ASR-006: extract_standards_rules.py
 
@@ -948,87 +954,6 @@ notes:
 - [x] D. Evidence — tests passing (2/2)
 - [ ] E. Promote — move to Stage when orchestrator is implemented
 - [x] DONE — record updated, Phase 4 processing complete (2026-01-25)
-
-##### ASR-009: summarize_health_suite.py
-
-```yaml
-record_id: "ASR-009"
-script:
-  path: ".repo_studios/scripts/summarizers/summarize_health_suite.py"
-  name: "summarize_health_suite.py"
-  category: "summarizer"
-tier3:
-  metadata_block_version: "v1"
-  allowed: false
-  exists: false
-  name: "tier3_summarize_health_suite.yaml"
-  meets_template: "NA"
-  last_updated: null
-cli_surfaces:
-  run_entrypoint: "run(argv)"
-  key_flags:
-    - "--repo-root"
-    - "--output-dir"
-    - "--legacy-dir"
-    - "--timestamp"
-    - "--artifacts-to-keep"
-    - "--log-level"
-    - "--skip-legacy-mirror"
-io_contract:
-  inputs:
-    - "Reads multiple upstream Health Suite artifacts from fixed locations under .repo_studios/ (selected by preferred timestamp dir or latest dir)."
-    - "Uses anchor health latest dataset: .repo_studios/anchor_health/anchor_report_latest.json (if present)."
-  outputs:
-    current:
-      root: ".repo_studios/command_center/reports/healthview/health_suite_overview/<YYYYMMDD-HHMM>/"
-      artifacts:
-        - "health_suite_summary.json"
-        - "health_suite_summary.md"
-        - "(optional) .repo_studios/health_suite/health_suite_summary_<YYYY-MM-DD_HHMM>.md (legacy mirror)"
-        - "(optional) .repo_studios/health_suite/MOVED.txt (legacy marker)"
-    target:
-      root: ".repo_studios/reports/healthview/<class>/<topic>/<timestamp>/"
-      artifacts:
-        - "manifest.json"
-        - "summary.md"
-        - "telemetry.json"
-retention:
-  surfaces:
-    - "--artifacts-to-keep (default present; value not captured here)"
-    - "--skip-legacy-mirror (disables legacy markdown copy)"
-  mechanism: "write_report_artifacts(..., keep=N, viewer=healthview, topic=health_suite_overview)"
-  targets:
-    - ".repo_studios/command_center/reports/healthview/health_suite_overview/<YYYYMMDD-HHMM>/"
-  guardrails:
-    - "None observed (missing upstream datasets become '(missing)' sections and add notes)"
-  evidence:
-    - "Docstring describes intended summary composition; implementation reads multiple report roots and composes a markdown plus JSON payload"
-    - "Uses write_report_artifacts to emit run-scoped artifacts under output_dir/viewer/topic"
-db_integration:
-  gated_by: "REPO_STUDIOS_DB_ENABLED"
-  marker_required: true
-  marker_string: "DB_INTEGRATION_MARKER:"
-evidence:
-  code_refs:
-    - ".repo_studios/scripts/summarizers/summarize_health_suite.py"
-  tests:
-    - ".repo_studios/tests/tests_summarizers/test_summarize_health_suite.py"
-  fixtures: []
-notes:
-  - "Classification: legacy/deprecate."
-  - "Contract gaps: does not emit the base package (manifest.json/summary.md/telemetry.json); emits health_suite_summary.* and optional legacy mirror artifacts."
-  - "Entry surfaces: import-safe helper run(argv) plus CLI main(argv) that exits non-zero only when run() does not return status='ok'."
-  - "Timestamp selection prefers a same-run timestamped directory when present, else falls back to the latest directory for each upstream dataset." 
-```
-
-#### Implementation Workstreams (checkbox-driven) — summarize_health_suite.py
-
-- [x] A. Discovery — confirmed legacy/deprecate classification, has run(argv), uses write_report_artifacts (2026-01-25)
-- [x] B. Plan — no HOP migration needed, script marked for deprecation (2026-01-25)
-- [x] C. Implement — N/A, deprecated summarizer retains current contract (2026-01-25)
-- [x] D. Evidence — N/A, no changes made (2026-01-25)
-- [x] E. Promote — N/A, awaiting deprecation decision (2026-01-25)
-- [x] DONE — classified as deprecated, no HOP changes required (2026-01-25)
 
 ##### ASR-010: render_inventory_views.py
 

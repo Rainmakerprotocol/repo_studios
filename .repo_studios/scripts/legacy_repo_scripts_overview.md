@@ -96,9 +96,7 @@ flowchart LR
   subgraph Summarizers["Summarizers"]
     direction TB
     summarizersHub["Narrative outputs"]:::category
-    s1["summarize_health_suite.py"]:::script
     s2["summarize_standards.py"]:::script
-    summarizersHub --> s1
     summarizersHub --> s2
   end
 

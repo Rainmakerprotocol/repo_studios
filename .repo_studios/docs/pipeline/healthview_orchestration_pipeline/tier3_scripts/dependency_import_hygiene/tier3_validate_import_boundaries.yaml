@@ -1,0 +1,107 @@
+# Tier-3 Script Specification — validate_import_boundaries.py
+# Schema: ScriptInspectionRecordV1
+# Stage: 4.2 — Boundary Validation
+# Last verified: 2026-01-26
+
+schema: ScriptInspectionRecordV1
+record_id: S42R-001
+
+script:
+  path: .repo_studios/scripts/producers/validate_import_boundaries.py
+  name: validate_import_boundaries.py
+  category: producer
+  stage: "4.2"
+  stage_name: Boundary Validation
+
+tier3:
+  metadata_block_version: v1
+  allowed: true
+  exists: true
+  name: tier3_validate_import_boundaries.yaml
+  meets_template: "yes"
+  last_updated: "2026-01-26"
+
+cli_surfaces:
+  run_entrypoint: main(argv)
+  importable_entrypoint: run(argv)
+  key_flags:
+    - --repo-root
+    - --graph-path
+    - --output-dir
+    - --allowlist-path
+    - --artifacts-to-keep
+    - --strict
+    - --log-level
+
+io_contract:
+  inputs:
+    - repo_root — repository root directory (defaults to project root)
+    - graph-path — path to import graph telemetry.json or legacy graph.json (optional)
+    - allowlist-path — path to JSON allowlist file (defaults to import_rules_allowlist.json)
+  outputs:
+    current:
+      root: .repo_studios/reports/healthview/producer_reports/import_boundary/<YYYYMMDD-HHMM>/
+      artifacts:
+        - manifest.json
+        - summary.md
+        - telemetry.json
+        - violations.json
+        - log.txt
+    target:
+      root: .repo_studios/reports/healthview/producer_reports/import_boundary/<YYYYMMDD-HHMM>/
+      artifacts:
+        - manifest.json
+        - summary.md
+        - telemetry.json
+        - violations.json
+        - log.txt
+    status: HOP-compliant
+    hop_library: build_topic_path("producer", "import_boundary")
+    hop_line_ref: L61
+    schema_version: 1
+
+retention:
+  surfaces:
+    - --artifacts-to-keep
+    - prune_run_directories(... keep=keep, current_run=current_run)
+  mechanism: prune_by_keep_budget
+  default_keep: 5
+  targets:
+    - .repo_studios/reports/healthview/producer_reports/import_boundary
+  guardrails:
+    - prune_run_directories retains current_run
+    - prune_run_directories honors .keep sentinel
+  line_ref: L468
+
+db_integration:
+  gated_by: REPO_STUDIOS_DB_ENABLED
+  marker_required: true
+  marker_string: "DB_INTEGRATION_MARKER:"
+  markers_present:
+    - L425 — manifest.json write
+    - L429 — summary.md write
+    - L447 — telemetry.json write
+
+evidence:
+  code_refs:
+    - .repo_studios/scripts/producers/validate_import_boundaries.py#L61 — build_topic_path
+    - .repo_studios/scripts/producers/validate_import_boundaries.py#L468 — prune_run_directories
+    - .repo_studios/scripts/producers/validate_import_boundaries.py#L425-L447 — DB_INTEGRATION_MARKER writes
+    - .repo_studios/scripts/producers/validate_import_boundaries.py#L559-L578 — run(argv) entrypoint
+  tests:
+    - path: .repo_studios/tests/tests_producers/test_validate_import_boundaries.py
+      result: 2/2 passed
+      duration: 0.19s
+  qa:
+    mypy: "Success: no issues found in 1 source file"
+    pytest: "2 passed in 0.19s"
+    last_verified: "2026-01-26"
+
+notes:
+  - Script uses build_topic_path('producer', 'import_boundary') — HOP-compliant
+  - Validates import boundaries using graph from generate_import_graph_report.py
+  - Detects cycles, forbidden edges, and static import violations
+  - Supports allowlist for known exceptions (edges and files)
+  - Has both run(argv) importable entry and main(argv) CLI wrapper
+  - Emits base package (manifest.json, summary.md, telemetry.json) plus supplementary (violations.json, log.txt)
+  - summary.md uses relative paths (not absolute) for portability — fixed 2026-01-26

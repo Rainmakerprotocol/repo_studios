@@ -1555,30 +1555,43 @@ _Tier-2 references (depth lives here):_
 
 **Stage 11.1 Script Gate Summary (Tier-1):**
 
-- [ ] `generate_anchor_health_report.py` — available; unassigned.
-  See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-001-generate_anchor_health_reportpy)
-- [ ] `configure_faulthandler_runtime.py` — available; unassigned (utility).
-  See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-002-configure_faulthandler_runtimepy)
-- [ ] `dump_faulthandler_snapshot.py` — available; unassigned (utility).
-  See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-003-dump_faulthandler_snapshotpy)
-- [ ] `fault_run_analysis.py` — available; unassigned (utility).
-  See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-004-fault_run_analysispy)
-- [ ] `validate_import_boundaries.py` — available; unassigned.
+_Producers (HOP-compliant output path):_
+
+- [ ] `validate_import_boundaries.py` — ✅ CLI works; ✅ HOP output path.
   See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-005-validate_import_boundariespy)
-- [ ] `extract_standards_rules.py` — available; unassigned.
-  See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-006-extract_standards_rulespy)
-- [ ] `check_inventory_health.py` — available; unassigned.
-  See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-007-check_inventory_healthpy)
-- [ ] `validate_inventory.py` — available; unassigned.
+- [ ] `validate_inventory.py` — ✅ CLI works; ✅ HOP output path.
   See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-008-validate_inventorypy)
-- [ ] `summarize_health_suite.py` — available; unassigned (legacy candidate).
-  See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-009-summarize_health_suitepy)
-- [ ] `render_inventory_views.py` — available; unassigned (out-of-scope for HealthView today).
-  See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-010-render_inventory_viewspy)
-- [ ] `generate_lizard_report.py` — available; unassigned (out-of-scope for HealthView today).
+- [ ] `generate_lizard_report.py` — ✅ CLI works; ✅ HOP output path.
   See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-011-generate_lizard_reportpy)
-- [ ] `test_log_analysis.py` — available by design (library).
+
+_Producers (non-standard output path — needs alignment):_
+
+- [ ] `render_inventory_views.py` — ✅ CLI works; ⚠️ writes to `.repo_studios/reports/producer_reports/healthview/` (alternate tree).
+  See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-010-render_inventory_viewspy)
+- [ ] `check_inventory_health.py` — ✅ CLI works; ⚠️ writes to `.repo_studios/command_center/reports/healthview/` (alternate tree); requires `render_inventory_views` output.
+  See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-007-check_inventory_healthpy)
+
+_Consumers (needs fix):_
+
+- [ ] `generate_anchor_health_report.py` — ❌ import error (`LIBRARIES_ROOT` path bug).
+  See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-001-generate_anchor_health_reportpy)
+
+_Utilities (not directly orchestrated):_
+
+- [ ] `configure_faulthandler_runtime.py` — utility; invoked by other scripts.
+  See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-002-configure_faulthandler_runtimepy)
+- [ ] `dump_faulthandler_snapshot.py` — utility; invoked by other scripts.
+  See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-003-dump_faulthandler_snapshotpy)
+- [ ] `fault_run_analysis.py` — utility; invoked by other scripts.
+  See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-004-fault_run_analysispy)
+
+_Libraries (import-only; no CLI):_
+
+- [ ] `extract_standards_rules.py` — library module; no CLI entry point.
+  See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-006-extract_standards_rulespy)
+- [ ] `test_log_analysis.py` — library module; no CLI entry point.
   See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-013-test_log_analysispy)
+- [ ] `anchor_inventory_loader.py` — library module; loads anchor inventory bundles (no CLI).
 
 **Stage 11.1 Gate Checklist (Tier-1):**
 
@@ -1603,7 +1616,34 @@ These are Stage 11.1 promotion gates when a script is picked up by an orchestrat
 
 **Current evidence (Stage 11.1):**
 
-Meaning of “available scripts” (Tier-1 contract):
+_Tested 2026-01-26 — script-by-script CLI and output path validation:_
+
+HOP-compliant producers (3):
+
+- `validate_import_boundaries.py` → `.repo_studios/reports/healthview/producer_reports/import_boundary/<ts>/`
+- `validate_inventory.py` → `.repo_studios/reports/healthview/producer_reports/validate_inventory/<ts>/`
+- `generate_lizard_report.py` → `.repo_studios/reports/healthview/producer_reports/lizard_complexity/<ts>/`
+
+Non-standard output paths (2):
+
+- `render_inventory_views.py` → `.repo_studios/reports/producer_reports/healthview/inventory_overview/<ts>/` (alternate tree)
+- `check_inventory_health.py` → `.repo_studios/command_center/reports/healthview/inventory_health/<ts>/` (alternate tree)
+
+Broken (1):
+
+- `generate_anchor_health_report.py` — import error: `LIBRARIES_ROOT` missing `.repo_studios` segment
+
+Libraries (3):
+
+- `extract_standards_rules.py` — no CLI entry point (library module)
+- `test_log_analysis.py` — no CLI entry point (library module)
+- `anchor_inventory_loader.py` — no CLI entry point (loads anchor inventory bundles)
+
+Utilities (3):
+
+- `configure_faulthandler_runtime.py`, `dump_faulthandler_snapshot.py`, `fault_run_analysis.py` — not tested (invoked by other scripts)
+
+Meaning of "available scripts" (Tier-1 contract):
 
 - The script exists, is discoverable in the repo, and can be invoked directly (CLI) or consumed as
   a library/utility.
@@ -1615,22 +1655,18 @@ Meaning of “available scripts” (Tier-1 contract):
 
 Planned orchestrator integrations (compiled need; wrapper pending):
 
-- Stage 2.2: `generate_anchor_health_report.py`
+- Stage 2.2: `generate_anchor_health_report.py` (blocked: import error fix needed)
 - Stage 3.2: `configure_faulthandler_runtime.py`, `dump_faulthandler_snapshot.py`, `fault_run_analysis.py`
-- Stage 4.2: `validate_import_boundaries.py`
-- Stage 6.2: `extract_standards_rules.py`
+- Stage 4.2: `validate_import_boundaries.py` (ready)
+- Stage 6.2: `extract_standards_rules.py` (library-only; requires CLI wrapper to integrate)
 
 Current inventory candidates without a compiled need (subject to reclassification):
 
-- Questionable: `check_inventory_health.py`, `validate_inventory.py`
-- Legacy / deprecation candidate: `summarize_health_suite.py`
+- `check_inventory_health.py` — works but needs output path alignment
+- `validate_inventory.py` — ready (HOP-compliant)
 - Out-of-scope for HealthView today:
-  - `render_inventory_views.py` (CommandView-specific)
-  - `generate_lizard_report.py` (candidate for a future “Engineering Complexity Watch” stage)
-
-Available by design (import-only helpers; not expected to have orchestrator wrappers):
-
-- `test_log_analysis.py` (library)
+  - `render_inventory_views.py` (CommandView-specific; non-standard output path)
+  - `generate_lizard_report.py` (HOP-compliant; candidate for future "Engineering Complexity Watch" stage)
 
 **Overview:**  
 Stage 11.1 is intentionally a Tier-1 holding area: it exists to preserve discoverability and
@@ -1646,23 +1682,24 @@ upgrade paths without over-claiming orchestration coverage until an orchestrator
 
 _Tier-2 references (depth lives here):_
 
-- Stage 12.1 Producer Template: TBD (pending template extraction)
-- Stage 12.2 Consumer Template: TBD (pending template extraction)
-- Stage 12.3 Aggregator Template: TBD (pending template extraction)
-- Stage 12.4 Summarizer Template: TBD (pending template extraction)
-- Stage 12.5 Orchestrator Template: [tier2_available_scripts_orchestrator_roster.md](tier2_roster/tier2_available_scripts_orchestrator_roster.md)
+- Stage 12.1 Producer Template: [tier2_producer_template.md](tier2_roster/templates/tier2_producer_template.md)
+- Stage 12.2 Consumer Template: [tier2_consumer_template.md](tier2_roster/templates/tier2_consumer_template.md)
+- Stage 12.3 Aggregator Template: [tier2_aggregator_template.md](tier2_roster/templates/tier2_aggregator_template.md)
+- Stage 12.4 Summarizer Template: [tier2_summarizer_template.md](tier2_roster/templates/tier2_summarizer_template.md)
+- Stage 12.5 Orchestrator Template: [tier2_orchestrator_template.md](tier2_roster/templates/tier2_orchestrator_template.md)
+- Stage 11.1 Available Scripts Roster: [tier2_available_scripts_roster.md](tier2_roster/tier2_available_scripts_roster.md)
 
 **Implementation Plan:**
 [stage12_template_development_plan.md](implementation_plans/stage12_template_development_plan.md)
 
 **Stage 12 Gate Checklist (Tier-1):**
 
-- [ ] 12.1 Producer template extracted and validated
-- [ ] 12.2 Consumer template extracted and validated
-- [ ] 12.3 Aggregator template extracted and validated
-- [ ] 12.4 Summarizer template extracted and validated
-- [ ] 12.5 Orchestrator template extracted and validated (Stage 11.1 orchestrator built)
-- [ ] All templates linked from this section
+- [x] 12.1 Producer template extracted and validated
+- [x] 12.2 Consumer template extracted and validated
+- [x] 12.3 Aggregator template extracted and validated
+- [x] 12.4 Summarizer template extracted and validated
+- [x] 12.5 Orchestrator template extracted and validated
+- [x] All templates linked from this section
 - [ ] Stage 11.1 orchestrator wired to Stage 7 meta-orchestrator
 - [ ] Existing Stage 1.1 scripts refactored to template standards
 
@@ -1682,9 +1719,10 @@ _Tier-2 references (depth lives here):_
 
 **Current evidence (Stage 12):**
 
-- Implementation plan created: `implementation_plans/stage12_template_development_plan.md`
-- Stage 11.1 orchestrator Tier-2 roster: pending creation (Phase 1.5)
-- Template extraction: pending (Phase 4+)
+- Implementation plan: `implementation_plans/stage12_template_development_plan.md` — Phases 1-5 complete
+- Stage 11.1 Available Scripts roster: `tier2_roster/tier2_available_scripts_roster.md` — 12 scripts processed
+- Templates created (2026-01-26): `tier2_roster/templates/tier2_*_template.md` (5 tier-class templates)
+- Phase 4 results: 7 HOP-aligned scripts, 4 libraries classified, 1 deferred; 18/18 tests passing
 
 ---
 
@@ -1732,7 +1770,6 @@ All gaps have logical explanations:
 
 - 5 scripts (easy integrations): related to existing orchestrators but not yet wired
 - 2 scripts (questionable): purpose unclear, may be CommandView-specific
-- 1 script (legacy): `summarize_health_suite.py` replaced by per-topic summarizers
 - 4 scripts (out of scope): `render_inventory_views.py` (CommandView),
   `generate_lizard_report.py` (potential Stage 8)
 

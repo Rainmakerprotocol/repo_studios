@@ -156,8 +156,8 @@ roadmap.
 - Topic coverage snapshot using the 2025-11-29 inventory:
   - **Test Execution Telemetry** – `run_pytest_log_capture.py`, `collect_test_log_reports.py`,
     `generate_test_log_health_report.py`, `generate_churn_complexity_heatmap.py`,
-    `generate_test_coverage_inventory.py`, `analyze_test_hardening.py`,
-    `summarize_health_suite.py`; helper dependency now resides under
+    `generate_test_coverage_inventory.py`, `analyze_test_hardening.py`;
+    helper dependency now resides under
     `command_center/scripts/libraries/test_log_analysis.py` with a legacy shim for
     `scripts/utilities/test_log_analysis.py` imports.
   - **Fault Diagnostics** – `run_fault_pipeline.py`, `collect_faulthandler_reports.py`,
@@ -555,10 +555,9 @@ roadmap.
 - [x] Phase 4 – Summaries and Healthview Artifacts — Completed 2025-12-07 after validating topic summarizer suites and publishing the Healthview manifest guidance.
   - 2025-12-03: Updated the health suite and standards summarizers to consume the shared command
     center helper stack, emit Healthview-aligned JSON/Markdown bundles, and prune legacy mirrors;
-    refreshed `.repo_studios/scripts/summarizers/summarize_health_suite.py` and
-    `.repo_studios/scripts/summarizers/summarize_standards.py`, added the legacy `summarize()` shim
+    refreshed `.repo_studios/scripts/summarizers/summarize_standards.py`, added the legacy `summarize()` shim
     for orchestrator compatibility, and validated via
-    `.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_summarizers/test_summarize_health_suite.py .repo_studios/tests/tests_summarizers/test_summarize_standards.py`.
+    `.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_summarizers/test_summarize_standards.py`.
   - 2025-12-04: Authored the Test Execution Telemetry summarizer
     (`.repo_studios/command_center/scripts/summarizers/summarize_test_execution_telemetry.py`),
     wiring the orchestrator manifest to consume it, capturing JSON/Markdown Healthview bundles, and
@@ -775,7 +774,7 @@ Example manifest path: `.../healthview/test_execution_telemetry/20251129-2102/ma
 - [x] 2025-12-08: Reviewed Phase 6 documentation deliverables (`docs/automation/orchestrator_implementation.md`, `docs/automation/healthview_onboarding.md`, `docs/automation/orchestrator_migration_announcement.md`, `docs/automation/orchestrator_legacy_cleanup_checklist.md`) and updated the plan to record completion; documentation-only verification, no tests required.
 - [x] 2025-12-08: Retired legacy orchestrator shims and tests (`.repo_studios/scripts/orchestrators/*.py`, `tests/tests_orchestrators/test_run_*.py`) while introducing the internal batch-cleanup plan hook inside `command_center/scripts/orchestrators/run_dependency_import_hygiene.py`; validated via `.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_command_center/dependency_import_hygiene -q`.
 - [x] 2025-12-08: Closed Phase 5 after rerunning `.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py -q` to validate the meta orchestrator tooling stack and updating `docs/automation/orchestrator_implementation.md` with the completion narrative.
-- [x] 2025-12-07: `./.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_summarizers/test_summarize_health_suite.py .repo_studios/tests/tests_summarizers/test_summarize_standards.py .repo_studios/tests/tests_command_center/test_execution_telemetry/test_summarize_test_execution_telemetry.py -q` — summarizer suites remain ≥80% coverage, confirming Phase 4 artifacts stay healthy.
+- [x] 2025-12-07: `./.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_summarizers/test_summarize_standards.py .repo_studios/tests/tests_command_center/test_execution_telemetry/test_summarize_test_execution_telemetry.py -q` — summarizer suites remain ≥80% coverage, confirming Phase 4 artifacts stay healthy.
 - [x] 2025-12-07: Updated `docs/automation/orchestrator_implementation.md` to mark Phase 4 complete and preserve Healthview manifest guidance for topic summaries.
 - Completed Phase 2 helper scaffolding (`build_topic_pipeline`, `summarizer_runner`,
   `telemetry_emitters`, `catalog_registry`) with coverage backed by
@@ -865,7 +864,7 @@ Example manifest path: `.../healthview/test_execution_telemetry/20251129-2102/ma
   bundles via `write_report_artifacts`, retained orchestrator compatibility with a legacy shim in
   `.repo_studios/scripts/summarizers/summarize_standards.py`, tightened prompt retention defaults in
   `command_center/scripts/orchestrators/run_standards_integrity.py`, and revalidated coverage with
-  `.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_summarizers/test_summarize_health_suite.py .repo_studios/tests/tests_summarizers/test_summarize_standards.py`.
+  `.venv/Scripts/python.exe -m pytest .repo_studios/tests/tests_summarizers/test_summarize_standards.py`.
 - 2025-12-04: Landed the Test Execution Telemetry summarizer at
   `.repo_studios/command_center/scripts/summarizers/summarize_test_execution_telemetry.py`, updated
   `run_test_execution_telemetry.py` to register the Healthview summary artifacts, and validated the
