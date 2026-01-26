@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "status": "error",
+  "timestamp": "20260126-2219",
+  "generated_utc": "2026-01-26T22:19:49.340700+00:00",
+  "repo_root": "C:\\Users\\genet\\repo_studios",
+  "output_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\producer_reports\\20260126-2219",
+  "inputs": {
+    "schema_root": "C:\\Users\\genet\\repo_studios\\.repo_studios\\inventory_schema",
+    "config_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\inventory_schema\\validator_config.yaml",
+    "enums_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\inventory_schema\\enums.yaml"
+  },
+  "summary": {
+    "files_checked": 7,
+    "records_checked": 70,
+    "issue_counts": {
+      "total": 8,
+      "errors": 8,
+      "warnings": 0
+    }
+  }
+}

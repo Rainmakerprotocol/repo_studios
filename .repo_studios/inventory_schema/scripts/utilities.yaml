@@ -94,35 +94,6 @@
     decisions:
       - "Integrate with new dependency governance controls."
     blockers: []
-- id: scripts.utilities.batch_clean
-  name: "Batch Clean"
-  path: .repo_studios/scripts/orchestrators/run_batch_cleanup.py
-  asset_kind: script
-  roles:
-    - orchestrator
-  maturity: legacy
-  description: "Applies clean-up transformations across multiple files."
-  dependencies:
-    internal_paths: []
-    external_tools: []
-    inputs: []
-  consumers:
-    - coding_agent
-  status: needs_review
-  governance_flags:
-    - pending_migration
-  artifact_type: py
-  related_assets: []
-  tags:
-    - maintenance
-    - automation
-  phase_origin: legacy
-  source_repo: repo_studios_legacy
-  notes:
-    context: "General purpose helper; define guardrails before re-enabling."
-    decisions:
-      - "Document supported transformations within standards inventory."
-    blockers: []
 - id: scripts.utilities.find_placeholders
   name: "Find Placeholders"
   path: .repo_studios/scripts/producers/scan_code_placeholders.py

@@ -30,6 +30,7 @@ def test_default_paths_point_to_repo_root():
         == expected_root
         / ".repo_studios"
         / "reports"
+        / "healthview"
         / "producer_reports"
         / "healthview"
         / "inventory_overview"

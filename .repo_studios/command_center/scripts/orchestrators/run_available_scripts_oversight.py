@@ -65,6 +65,7 @@ from libraries import (
     build_pipeline_telemetry,
     build_standard_options,
     build_standard_paths,
+    build_topic_path,
     build_topic_pipeline,
     measure_artifact_directory,
     step_failed,
@@ -107,19 +108,23 @@ PRODUCER_CONFIGS = [
     ScriptConfig(
         name="validate_import_boundaries",
         path=".repo_studios/scripts/producers/validate_import_boundaries.py",
+        supports_output_dir=False,  # Uses topic-aware default: build_topic_path("producer", "import_boundary")
     ),
     ScriptConfig(
         name="check_inventory_health",
         path=".repo_studios/scripts/producers/check_inventory_health.py",
+        supports_output_dir=False,  # Uses topic-aware default with VIEWER_SLUG/TOPIC_SLUG
     ),
     ScriptConfig(
         name="validate_inventory",
         path=".repo_studios/scripts/producers/validate_inventory.py",
+        supports_output_dir=False,  # Uses topic-aware default: build_topic_path("producer", "validate_inventory")
     ),
     ScriptConfig(
         name="render_inventory_views",
         path=".repo_studios/scripts/producers/render_inventory_views.py",
         supports_artifacts_to_keep=False,  # Uses --timestamp only
+        supports_output_dir=False,  # Uses topic-aware default with VIEWER_SLUG/TOPIC_SLUG
     ),
 ]
 
@@ -128,6 +133,7 @@ CONSUMER_CONFIGS = [
         name="generate_anchor_health_report",
         path=".repo_studios/scripts/consumers/generate_anchor_health_report.py",
         uses_argv_kwarg=True,  # run(*, ..., argv=...) signature
+        supports_output_dir=False,  # Uses topic-aware default: build_topic_path("consumer", "anchor_health")
     ),
 ]
 
@@ -136,7 +142,7 @@ ORCHESTRATOR_SCRIPT = ".repo_studios/command_center/scripts/orchestrators/run_av
 # --- Default paths -------------------------------------------------------------
 DEFAULT_PRODUCER_OUTPUT = Path(".repo_studios/reports/healthview/producer_reports")
 DEFAULT_CONSUMER_OUTPUT = Path(".repo_studios/reports/healthview/consumer_reports")
-DEFAULT_ORCHESTRATOR_OUTPUT = Path(".repo_studios/reports/healthview/orchestrator_reports")
+DEFAULT_ORCHESTRATOR_OUTPUT = build_topic_path("orchestrator", "available_scripts_oversight")
 
 
 # --- Dataclasses ---------------------------------------------------------------

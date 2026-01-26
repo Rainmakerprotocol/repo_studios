@@ -67,40 +67,6 @@
     decisions:
       - "Keep heuristics but modernize configuration handling."
     blockers: []
-- id: scripts.standards.index_cli
-  name: "Standards Index CLI"
-  path: .repo_studios/scripts/orchestrators/run_standards_index_cli.py
-  asset_kind: script
-  roles:
-    - cli
-    - orchestrator
-  maturity: legacy
-  description: "CLI wrapper to query or summarize the standards index."
-  dependencies:
-    internal_paths:
-      - .repo_studios_legacy/repo_files/copilot_standards_index.yaml
-    external_tools: []
-    inputs: []
-  consumers:
-    - coding_agent
-    - human_developer
-  status: needs_review
-  governance_flags:
-    - pending_migration
-  artifact_type: py
-  related_assets:
-    - docs.standards_index_schema
-    - scripts.standards.build_index
-  tags:
-    - standards
-    - cli
-  phase_origin: legacy
-  source_repo: repo_studios_legacy
-  notes:
-    context: "Currently imports modules via legacy path assumptions."
-    decisions:
-      - "Update to read from relocated inventory files post-migration."
-    blockers: []
 - id: scripts.standards.index_diff
   name: "Standards Index Diff"
   path: .repo_studios/scripts/producers/diff_standards_index.py

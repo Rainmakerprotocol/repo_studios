@@ -209,6 +209,13 @@ studio-orchestrate-dependency-import-hygiene:
 		".repo_studios/command_center/scripts/orchestrators/run_dependency_import_hygiene.py" \
 		--repo-root "$(REPO_ROOT)" --log-level "$(LOG_LEVEL)"
 
+.PHONY: studio-orchestrate-available-scripts
+studio-orchestrate-available-scripts:
+	@echo Running available scripts oversight orchestrator (Stage 11.1) with log level $(LOG_LEVEL). Override via LOG_LEVEL=DEBUG for verbose output.
+	cd "$(REPO_ROOT)" && $(PYTHONPATH_EXPORT) $(PYTHON) \
+		".repo_studios/command_center/scripts/orchestrators/run_available_scripts_oversight.py" \
+		--repo-root "$(REPO_ROOT)" --log-level "$(LOG_LEVEL)"
+
 .PHONY: studio-orchestrate-monkey-patch-oversight
 studio-orchestrate-monkey-patch-oversight:
 	@echo Running monkey patch oversight orchestrator with log level $(LOG_LEVEL). Override via LOG_LEVEL=DEBUG for verbose output.

@@ -65,42 +65,6 @@
     decisions:
       - "Exercises both producer and fallback pathways."
     blockers: []
-- id: tests.health_suite.run_fault_pipeline
-  name: "Run Fault Pipeline Orchestrator Tests"
-  path: .repo_studios/tests/tests_orchestrators/test_run_fault_pipeline.py
-  asset_kind: test
-  roles:
-    - test_case
-    - validator
-  maturity: incubating
-  description: "Validates orchestration between faulthandler producer and consumer, including reuse and pruning semantics."
-  dependencies:
-    internal_paths:
-      - .repo_studios/scripts/orchestrators/run_fault_pipeline.py
-      - .repo_studios/scripts/producers/collect_faulthandler_reports.py
-      - .repo_studios/scripts/consumers/generate_fault_artifacts.py
-    external_tools: []
-    inputs: []
-  consumers:
-    - coding_agent
-    - ci_pipeline
-  status: active
-  governance_flags: []
-  artifact_type: py
-  related_assets:
-    - scripts.health.fault_pipeline_orchestrator
-    - scripts.health.collect_faulthandler_reports
-    - scripts.health.generate_fault_artifacts
-  tags:
-    - health_suite
-    - orchestration
-  phase_origin: phase2
-  source_repo: repo_studios
-  notes:
-    context: "Covers orchestration logging, reuse of prior producer reports, and report mirroring into the command center."
-    decisions:
-      - "Maintains parity with health suite workflows."
-    blockers: []
 - id: tests.health_suite.generate_lizard_report
   name: "Generate Lizard Report Tests"
   path: .repo_studios/tests/tests_producers/test_generate_lizard_report.py

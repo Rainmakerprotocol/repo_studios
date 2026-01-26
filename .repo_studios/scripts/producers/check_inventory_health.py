@@ -53,7 +53,7 @@ except ModuleNotFoundError:  # pragma: no cover - fallback during standalone exe
     from libraries.retention_policy import get_keep
 
 ROOT = Path(__file__).resolve().parents[2]
-DEFAULT_SUMMARY_PATH = Path(".repo_studios/reports/producer_reports/healthview/inventory_overview")
+DEFAULT_SUMMARY_PATH = Path(".repo_studios/reports/healthview/producer_reports/healthview/inventory_overview")
 DEFAULT_BASELINE_PATH = Path(".repo_studios/config/inventory/inventory_summary_baseline.json")
 DEFAULT_THRESHOLDS_PATH = Path("config/ci_inventory_thresholds.json")
 DEFAULT_OUTPUT_PATH = Path(".repo_studios/command_center/reports")
