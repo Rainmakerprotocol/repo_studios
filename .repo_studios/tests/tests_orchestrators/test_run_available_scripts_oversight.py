@@ -95,6 +95,27 @@ class TestScriptConfig:
             assert config.name
             assert config.path
 
+    def test_generate_lizard_report_config(self) -> None:
+        """Verify generate_lizard_report ScriptConfig is properly registered."""
+        lizard_config = next(
+            (c for c in PRODUCER_CONFIGS if c.name == "generate_lizard_report"),
+            None,
+        )
+        assert lizard_config is not None, "generate_lizard_report not in PRODUCER_CONFIGS"
+        assert lizard_config.path == ".repo_studios/scripts/producers/generate_lizard_report.py"
+        assert lizard_config.supports_output_dir is True
+        assert lizard_config.supports_artifacts_to_keep is True
+        assert lizard_config.uses_argv_kwarg is False
+
+    def test_generate_lizard_report_importable(self) -> None:
+        """Verify generate_lizard_report run() can be imported."""
+        script_path = REPO_ROOT / ".repo_studios" / "scripts" / "producers"
+        if str(script_path) not in sys.path:
+            sys.path.insert(0, str(script_path))
+        from generate_lizard_report import run as lizard_run
+
+        assert callable(lizard_run)
+
 
 class TestRun:
     """Test the main run function."""

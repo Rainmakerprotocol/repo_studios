@@ -320,4 +320,5 @@ Standardize existing Tier-2 documentation using finalized templates.
 | 2026-01-26 | GitHub Copilot | Phase 4 complete | All 12 ASR scripts processed: 7 HOP-aligned (run(argv) + base package), 4 libraries classified, 1 deferred; 18/18 tests passing; Tier-2 roster workstreams updated |
 | 2026-01-26 | GitHub Copilot | Phase 5 complete | 5 tier-class templates created in `tier2_roster/templates/`; Tier-1 Stage 12 links and checkboxes updated |
 | 2026-01-27 | GitHub Copilot | Phase 5 extended | 7 templates total: updated all build templates to v2.0.0 (Universal Law, Tier-3 YAML, DB Integration); added `tier2_utility_template.md` for Tier B; added `tier2_promotion_template.md` for Phase 4B orchestrator integration; created `README.md` with 5W1H instructions |
+| 2026-01-28 | GitHub Copilot | First promotion complete | ASR-011 (`generate_lizard_report.py`) promoted to `run_available_scripts_oversight.py`; Tier-2 roster updated; ScriptConfig added; orchestrator Tier-3 YAML created; 12/12 tests passing |
 | | | | |

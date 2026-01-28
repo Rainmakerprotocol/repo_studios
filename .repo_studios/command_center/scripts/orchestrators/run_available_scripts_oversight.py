@@ -12,6 +12,7 @@ Execution flow:
    - check_inventory_health.py (ASR-007)
    - validate_inventory.py (ASR-008)
    - render_inventory_views.py (ASR-010)
+   - generate_lizard_report.py (ASR-011)
 
 2. Phase 2 — Consumers (depends on producers):
    - generate_anchor_health_report.py (ASR-001)
@@ -21,7 +22,6 @@ Excluded scripts:
 - ASR-002, ASR-003, ASR-004: Utilities (invoked by other scripts)
 - ASR-006: Library module (no CLI)
 - ASR-009: Deprecated summarizer
-- ASR-011: Missing run(argv) entry point
 - ASR-013: Library module (no CLI)
 
 Output bundle is written to::
@@ -125,6 +125,12 @@ PRODUCER_CONFIGS = [
         path=".repo_studios/scripts/producers/render_inventory_views.py",
         supports_artifacts_to_keep=False,  # Uses --timestamp only
         supports_output_dir=False,  # Uses topic-aware default with VIEWER_SLUG/TOPIC_SLUG
+    ),
+    ScriptConfig(
+        name="generate_lizard_report",
+        path=".repo_studios/scripts/producers/generate_lizard_report.py",
+        supports_output_dir=True,  # Uses --output-dir flag
+        supports_artifacts_to_keep=True,  # Uses --artifacts-to-keep flag
     ),
 ]
 

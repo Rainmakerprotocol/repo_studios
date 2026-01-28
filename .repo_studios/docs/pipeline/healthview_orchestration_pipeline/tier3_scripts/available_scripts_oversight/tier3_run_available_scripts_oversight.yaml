@@ -1,0 +1,150 @@
+# Tier-3: run_available_scripts_oversight.py
+# Record: Stage 11.1 Orchestrator
+# Orchestrator for Available Scripts holding area (Stage 11.1)
+
+tool:
+  id: run_available_scripts_oversight
+  name: Run Available Scripts Oversight Orchestrator
+  description: |
+    Stage 11.1 orchestrator for Available Scripts holding area. Coordinates execution
+    of producer and consumer scripts in the Stage 11.1 holding area.
+
+    The orchestrator coordinates:
+      Phase 1 — Producers (parallel-capable):
+        1. validate_import_boundaries.py (ASR-005)
+        2. check_inventory_health.py (ASR-007)
+        3. validate_inventory.py (ASR-008)
+        4. render_inventory_views.py (ASR-010)
+        5. generate_lizard_report.py (ASR-011)
+
+      Phase 2 — Consumers:
+        6. generate_anchor_health_report.py (ASR-001)
+
+    Each step is executed via dynamic import with exit code propagation.
+    Output bundle written to:
+      .repo_studios/reports/healthview/orchestrator_reports/available_scripts_oversight/<YYYYMMDD-HHMM>/
+
+  keywords:
+    - healthview
+    - orchestrator
+    - stage-11.1
+    - available-scripts
+    - holding-area
+    - import-boundaries
+    - inventory-health
+    - lizard-complexity
+  use_when:
+    - Need a full Stage 11.1 Available Scripts diagnostic run
+    - Refreshing holding area script health metrics
+    - Running all available scripts producers in coordinated sequence
+    - Generating orchestrator manifests with cross-references
+  dont_use_when:
+    - Need only a single script's output (call the script directly)
+    - Testing a specific producer in isolation
+
+invocation:
+  command_template: |
+    python {script_path} \
+      --repo-root {repo_root} \
+      --log-level {log_level} \
+      --artifacts-to-keep {artifacts_to_keep}
+  cli_args:
+    - name: --repo-root
+      type: path
+      required: false
+      description: "Repository root directory (auto-detected if omitted)"
+    - name: --log-level
+      type: choice
+      choices: [DEBUG, INFO, WARNING, ERROR]
+      default: INFO
+      description: "Logging verbosity"
+    - name: --artifacts-to-keep
+      type: integer
+      default: 3
+      description: "Number of orchestrator bundles to retain"
+    - name: --skip-producers
+      type: flag
+      description: "Skip all producer script execution"
+    - name: --skip-consumers
+      type: flag
+      description: "Skip all consumer script execution"
+
+script:
+  path: .repo_studios/command_center/scripts/orchestrators/run_available_scripts_oversight.py
+  category: orchestrator
+  compliance_tier: A
+  entry_point: run
+  supports_output_dir: true
+  supports_artifacts_to_keep: true
+
+outputs:
+  bundle_dir: ".repo_studios/reports/healthview/orchestrator_reports/available_scripts_oversight/<YYYYMMDD-HHMM>/"
+  artifacts:
+    - manifest.json
+    - summary.md
+    - telemetry.json
+  return_payload:
+    status: "ok | error"
+    exit_code: "0 = success, 1 = partial failure, 2 = error"
+    run_dir: "Path to bundle directory"
+    manifest_path: "Path to manifest.json"
+    summary_path: "Path to summary.md"
+    telemetry_path: "Path to telemetry.json"
+    producer_count: "Number of producers executed"
+    consumer_count: "Number of consumers executed"
+
+child_scripts:
+  producers:
+    - name: validate_import_boundaries
+      path: .repo_studios/scripts/producers/validate_import_boundaries.py
+      record_id: ASR-005
+      description: "Validates Python import boundaries across codebase"
+      depends_on: []
+
+    - name: check_inventory_health
+      path: .repo_studios/scripts/producers/check_inventory_health.py
+      record_id: ASR-007
+      description: "Checks health of inventory YAML files"
+      depends_on: []
+
+    - name: validate_inventory
+      path: .repo_studios/scripts/producers/validate_inventory.py
+      record_id: ASR-008
+      description: "Validates inventory against schema"
+      depends_on: []
+
+    - name: render_inventory_views
+      path: .repo_studios/scripts/producers/render_inventory_views.py
+      record_id: ASR-010
+      description: "Renders inventory as various view formats"
+      depends_on: []
+
+    - name: generate_lizard_report
+      path: .repo_studios/scripts/producers/generate_lizard_report.py
+      record_id: ASR-011
+      description: "Lizard complexity analysis for Python files"
+      depends_on: []
+
+  consumers:
+    - name: generate_anchor_health_report
+      path: .repo_studios/scripts/consumers/generate_anchor_health_report.py
+      record_id: ASR-001
+      description: "Generates anchor health report from producer outputs"
+      depends_on:
+        - validate_import_boundaries
+        - check_inventory_health
+        - validate_inventory
+
+orchestrator_ready: true
+db_integration_ready: true
+
+tags:
+  - stage-11.1
+  - healthview
+  - orchestrator
+  - available-scripts
+  - producer
+  - consumer
+
+version: "1.0.0"
+updated_at: "2026-01-28"

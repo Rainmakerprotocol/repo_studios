@@ -1067,13 +1067,13 @@ script:
   category: "producer"
 tier3:
   metadata_block_version: "v1"
-  allowed: false
-  exists: false
+  allowed: true
+  exists: true
   name: "tier3_generate_lizard_report.yaml"
-  meets_template: "NA"
-  last_updated: null
+  meets_template: "full"
+  last_updated: "2026-01-27"
 cli_surfaces:
-  run_entrypoint: "main(argv)"
+  run_entrypoint: "run(argv) -> dict"
   key_flags:
     - "--repo-root"
     - "--output-dir"
@@ -1126,21 +1126,30 @@ evidence:
     - ".repo_studios/tests/tests_producers/test_generate_lizard_report.py"
   fixtures: []
 notes:
-  - "Classification: HOP-compliant producer (experimental/hold for scope)."
+  - "Classification: HOP-compliant producer — promoted to orchestrator (2026-01-28)."
   - "Contract status: ✅ emits base package (manifest.json/summary.md/telemetry.json)"
-  - "Entry surface: CLI-only (main(argv)); uses create_storage with empty viewer/topic."
+  - "Entry surface: run(argv) -> dict; returns Tier A payload with 8 keys."
   - "Output topic slug: lizard_complexity; run timestamps use minute granularity (YYYYMMDD-HHMM)."
   - "Tests: 3/3 passing (test_structured_artifacts_success, test_no_targets_and_pruning, test_rejects_newline_arguments)"
+  - "Build doc: tier2_roster/working_docs/ASR-011_generate_lizard_report_build.md"
+  - "Tier-3 YAML: .repo_studios/scripts/producers/tier3_generate_lizard_report.yaml"
+orchestrator_integration:
+  orchestrator_ready: true
+  db_integration_ready: true
+  phase_4_status: complete
+  promoted_to_orchestrator: true
+  promotion_date: "2026-01-28"
+  target_orchestrator: "run_available_scripts_oversight.py"
 ```
 
 #### Implementation Workstreams (checkbox-driven) — generate_lizard_report.py
 
 - [x] A. Discovery — confirmed HOP-compliant base package, experimental/hold classification
 - [x] B. Plan — hold classification retained; script already emits correct artifacts
-- [x] C. Implement — test path expectations fixed (2026-01-26)
-- [x] D. Evidence — tests passing 3/3
-- [ ] E. Promote — awaiting scope decision (experimental/hold)
-- [x] DONE — classified as HOP-compliant, tests verified (2026-01-26)
+- [x] C. Implement — run(argv) entry point added; Tier-3 YAML created (2026-01-27)
+- [x] D. Evidence — tests passing 3/3; mypy 0 errors
+- [x] E. Promote — wired to run_available_scripts_oversight.py (2026-01-28)
+- [x] DONE — Phase 4 build + promotion complete (2026-01-28)
 
 ##### ASR-013: test_log_analysis.py
 
