@@ -9,9 +9,9 @@ owners:
 role:
   - roster
   - stage-vertical
-status: draft
-version: 0.1.0
-updated_at: 2025-12-21
+status: active
+version: 1.0.0
+updated_at: 2026-01-28
 tags:
   - pipeline
   - healthview
@@ -42,9 +42,9 @@ related_files:
 > **Tier-1 source:** Stage 11.1 in
 > `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md`.
 > **Locked decisions source:** Tier-1 spine + `REPORT_NAMING_STANDARDS.md`.
-> **Last synced with Tier-1:** 2025-12-20.
+> **Last synced with Tier-1:** 2026-01-28.
 >
-> Standards: `.github/instructions/markdown.instructions.md` (reviewed 2025-12-20).
+> Standards: `.github/instructions/markdown.instructions.md` (reviewed 2026-01-28).
 
 ---
 
@@ -1350,3 +1350,5 @@ checks:
 | 2025-12-21 | Stage 11.1 Discovery Pass B — Classification: labeled each ASR record as candidate/utility/commandview-only/legacy/experimental based on current repo evidence; no Tier-1 edits. | repo_studios_ai | Not run (doc-only) | None |
 | 2025-12-21 | Stage 11.1 Discovery Pass C — Promotion Mapping (hypothetical): proposed candidate stage mappings + minimal wrapper needs + known contract deltas for ASR-001/003/005; no Tier-1 edits; no Tier-3 YAMLs. | repo_studios_ai | Not run (doc-only) | None |
 | 2025-12-21 | Stage 11.1 Contract Gap Notes: documented base-contract contradictions/gaps (canonical root + base package + pointer-ban applicability) across ASR records to support later checkbox-driven remediation. | repo_studios_ai | Not run (doc-only) | None |
+| 2026-01-26 | Phase 4 HOP alignment: 7 scripts aligned with run(argv) entry points and base package; 4 libraries classified; workstream checkboxes updated. | GitHub Copilot | N/A | 18/18 passing |
+| 2026-01-28 | **Stage 11.1 finalized:** All 6 orchestrated scripts have Phase 4 compliance (Tier-3 YAML + build doc + roster update + db_integration verified). Status promoted to `active` v1.0.0. | GitHub Copilot | N/A | 570/580 suite |

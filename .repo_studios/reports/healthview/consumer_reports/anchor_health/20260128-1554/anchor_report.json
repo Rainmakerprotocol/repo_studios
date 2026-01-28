@@ -1,0 +1,2416 @@
+{
+  "baseline_cross_file_duplicates": null,
+  "clusters": [
+    {
+      "file_count": 28,
+      "files": [
+        ".repo_studios/docs/automation\\analyze_test_hardening.md",
+        ".repo_studios/docs/automation\\classify_monkey_patches.md",
+        ".repo_studios/docs/automation\\collect_test_log_reports.md",
+        ".repo_studios/docs/automation\\configure_faulthandler_runtime.md",
+        ".repo_studios/docs/automation\\diff_standards_index.md",
+        ".repo_studios/docs/automation\\dump_faulthandler_snapshot.md",
+        ".repo_studios/docs/automation\\extract_standards_rules.md",
+        ".repo_studios/docs/automation\\generate_anchor_health_report.md",
+        ".repo_studios/docs/automation\\generate_code_doc_churn_report.md",
+        ".repo_studios/docs/automation\\generate_dependency_hygiene_report.md",
+        ".repo_studios/docs/automation\\generate_import_graph_report.md",
+        ".repo_studios/docs/automation\\generate_standards_index.md",
+        ".repo_studios/docs/automation\\generate_test_coverage_inventory.md",
+        ".repo_studios/docs/automation\\generate_test_log_health_report.md",
+        ".repo_studios/docs/automation\\generate_typecheck_report.md",
+        ".repo_studios/docs/automation\\render_inventory_views.md",
+        ".repo_studios/docs/automation\\run_fault_pipeline.md",
+        ".repo_studios/docs/automation\\run_pytest_log_capture.md",
+        ".repo_studios/docs/automation\\run_standards_index_cli.md",
+        ".repo_studios/docs/automation\\scan_code_placeholders.md",
+        ".repo_studios/docs/automation\\scan_monkey_patches.md",
+        ".repo_studios/docs/automation\\seed_standards_prompts.md",
+        ".repo_studios/docs/automation\\summarize_standards.md",
+        ".repo_studios/docs/automation\\validate_import_boundaries.md",
+        ".repo_studios/docs/automation\\validate_inventory.md",
+        ".repo_studios/docs/automation\\validate_markdown_anchors.md",
+        ".repo_studios/docs/automation\\validate_metrics_anchor_stubs.md",
+        ".repo_studios/docs/pipeline\\tier3_index\\IMPLEMENTATION_SUMMARY.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/automation\\analyze_test_hardening.md:47",
+        ".repo_studios/docs/automation\\classify_monkey_patches.md:73",
+        ".repo_studios/docs/automation\\collect_test_log_reports.md:79",
+        ".repo_studios/docs/automation\\configure_faulthandler_runtime.md:46",
+        ".repo_studios/docs/automation\\diff_standards_index.md:98",
+        ".repo_studios/docs/automation\\dump_faulthandler_snapshot.md:44",
+        ".repo_studios/docs/automation\\extract_standards_rules.md:86",
+        ".repo_studios/docs/automation\\generate_anchor_health_report.md:40",
+        ".repo_studios/docs/automation\\generate_code_doc_churn_report.md:81",
+        ".repo_studios/docs/automation\\generate_dependency_hygiene_report.md:81",
+        ".repo_studios/docs/automation\\generate_import_graph_report.md:82",
+        ".repo_studios/docs/automation\\generate_standards_index.md:68",
+        ".repo_studios/docs/automation\\generate_test_coverage_inventory.md:112",
+        ".repo_studios/docs/automation\\generate_test_log_health_report.md:94",
+        ".repo_studios/docs/automation\\generate_typecheck_report.md:84",
+        ".repo_studios/docs/automation\\render_inventory_views.md:58",
+        ".repo_studios/docs/automation\\run_fault_pipeline.md:70",
+        ".repo_studios/docs/automation\\run_pytest_log_capture.md:84",
+        ".repo_studios/docs/automation\\run_standards_index_cli.md:29",
+        ".repo_studios/docs/automation\\scan_code_placeholders.md:92",
+        ".repo_studios/docs/automation\\scan_monkey_patches.md:90",
+        ".repo_studios/docs/automation\\seed_standards_prompts.md:55",
+        ".repo_studios/docs/automation\\summarize_standards.md:49",
+        ".repo_studios/docs/automation\\validate_import_boundaries.md:55",
+        ".repo_studios/docs/automation\\validate_inventory.md:46",
+        ".repo_studios/docs/automation\\validate_markdown_anchors.md:70",
+        ".repo_studios/docs/automation\\validate_metrics_anchor_stubs.md:78",
+        ".repo_studios/docs/pipeline\\tier3_index\\IMPLEMENTATION_SUMMARY.md:215"
+      ],
+      "slug": "testing"
+    },
+    {
+      "file_count": 27,
+      "files": [
+        ".repo_studios/docs/automation\\aggregate_docs_health_signals.md",
+        ".repo_studios/docs/automation\\analyze_test_hardening.md",
+        ".repo_studios/docs/automation\\classify_monkey_patches.md",
+        ".repo_studios/docs/automation\\collect_test_log_reports.md",
+        ".repo_studios/docs/automation\\extract_standards_rules.md",
+        ".repo_studios/docs/automation\\generate_anchor_health_report.md",
+        ".repo_studios/docs/automation\\generate_anchor_inventory.md",
+        ".repo_studios/docs/automation\\generate_code_doc_churn_report.md",
+        ".repo_studios/docs/automation\\generate_dependency_hygiene_report.md",
+        ".repo_studios/docs/automation\\generate_import_graph_report.md",
+        ".repo_studios/docs/automation\\generate_standards_index.md",
+        ".repo_studios/docs/automation\\generate_test_coverage_inventory.md",
+        ".repo_studios/docs/automation\\generate_test_log_health_report.md",
+        ".repo_studios/docs/automation\\healthview_onboarding.md",
+        ".repo_studios/docs/automation\\refresh_mypy_baselines.md",
+        ".repo_studios/docs/automation\\scan_code_placeholders.md",
+        ".repo_studios/docs/automation\\scan_monkey_patches.md",
+        ".repo_studios/docs/automation\\seed_standards_prompts.md",
+        ".repo_studios/docs/automation\\summarize_standards.md",
+        ".repo_studios/docs/automation\\traceability\\aggregator_dependency_audit.md",
+        ".repo_studios/docs/automation\\traceability\\fault_pipeline_aggregator_plan.md",
+        ".repo_studios/docs/automation\\validate_import_boundaries.md",
+        ".repo_studios/docs/automation\\validate_markdown_anchors.md",
+        ".repo_studios/docs/automation\\validate_metrics_anchor_stubs.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_11_1_implementation_plan.md",
+        ".repo_studios/docs/standards\\global\\std-global-prompt-engineering.md",
+        "docs/automation\\orchestrator_legacy_cleanup_checklist.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/automation\\aggregate_docs_health_signals.md:3",
+        ".repo_studios/docs/automation\\analyze_test_hardening.md:5",
+        ".repo_studios/docs/automation\\classify_monkey_patches.md:5",
+        ".repo_studios/docs/automation\\collect_test_log_reports.md:24",
+        ".repo_studios/docs/automation\\extract_standards_rules.md:5",
+        ".repo_studios/docs/automation\\generate_anchor_health_report.md:3",
+        ".repo_studios/docs/automation\\generate_anchor_inventory.md:5",
+        ".repo_studios/docs/automation\\generate_code_doc_churn_report.md:23",
+        ".repo_studios/docs/automation\\generate_dependency_hygiene_report.md:23",
+        ".repo_studios/docs/automation\\generate_import_graph_report.md:24",
+        ".repo_studios/docs/automation\\generate_standards_index.md:5",
+        ".repo_studios/docs/automation\\generate_test_coverage_inventory.md:20",
+        ".repo_studios/docs/automation\\generate_test_log_health_report.md:24",
+        ".repo_studios/docs/automation\\healthview_onboarding.md:5",
+        ".repo_studios/docs/automation\\refresh_mypy_baselines.md:3",
+        ".repo_studios/docs/automation\\scan_code_placeholders.md:25",
+        ".repo_studios/docs/automation\\scan_monkey_patches.md:26",
+        ".repo_studios/docs/automation\\seed_standards_prompts.md:5",
+        ".repo_studios/docs/automation\\summarize_standards.md:5",
+        ".repo_studios/docs/automation\\traceability\\aggregator_dependency_audit.md:3",
+        ".repo_studios/docs/automation\\traceability\\fault_pipeline_aggregator_plan.md:9",
+        ".repo_studios/docs/automation\\validate_import_boundaries.md:5",
+        ".repo_studios/docs/automation\\validate_markdown_anchors.md:19",
+        ".repo_studios/docs/automation\\validate_metrics_anchor_stubs.md:19",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_11_1_implementation_plan.md:10",
+        ".repo_studios/docs/standards\\global\\std-global-prompt-engineering.md:29",
+        "docs/automation\\orchestrator_legacy_cleanup_checklist.md:5"
+      ],
+      "slug": "purpose"
+    },
+    {
+      "file_count": 26,
+      "files": [
+        ".repo_studios/docs/automation\\check_inventory_health.md",
+        ".repo_studios/docs/automation\\collect_faulthandler_reports.md",
+        ".repo_studios/docs/automation\\diff_standards_index.md",
+        ".repo_studios/docs/automation\\generate_doc_index.md",
+        ".repo_studios/docs/automation\\generate_import_graph_report.md",
+        ".repo_studios/docs/automation\\generate_lizard_report.md",
+        ".repo_studios/docs/automation\\generate_typecheck_report.md",
+        ".repo_studios/docs/automation\\generate_undocumented_logic_report.md",
+        ".repo_studios/docs/automation\\scan_monkey_patches.md",
+        ".repo_studios/docs/automation\\validate_markdown_anchors.md",
+        ".repo_studios/docs/pipeline\\README.md",
+        ".repo_studios/docs/pipeline\\checkbox_report\\outputs\\checkbox_report.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\docstring_compliance_plan.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_11_1_implementation_plan.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_3_1_implementation_plan.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\README.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_onboarding_tools_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-001_generate_anchor_health_report_build.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-008_validate_inventory_build.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-010_render_inventory_views_build.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\workflows\\healthview_agent_loop_implementation_plan.md",
+        ".repo_studios/docs/pipeline\\pipeline_doc_map.md",
+        "docs/automation\\reviews\\standards_integrity_output_review-2026-01-21.md",
+        "docs/db_integrations\\README.md",
+        "docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_2_1_docs_health_expectations_temp.md",
+        "docs/templates\\meta_prompt_markdown_lint_hygiene.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/automation\\check_inventory_health.md:101",
+        ".repo_studios/docs/automation\\collect_faulthandler_reports.md:115",
+        ".repo_studios/docs/automation\\diff_standards_index.md:102",
+        ".repo_studios/docs/automation\\generate_doc_index.md:86",
+        ".repo_studios/docs/automation\\generate_import_graph_report.md:87",
+        ".repo_studios/docs/automation\\generate_lizard_report.md:81",
+        ".repo_studios/docs/automation\\generate_typecheck_report.md:90",
+        ".repo_studios/docs/automation\\generate_undocumented_logic_report.md:88",
+        ".repo_studios/docs/automation\\scan_monkey_patches.md:104",
+        ".repo_studios/docs/automation\\validate_markdown_anchors.md:87",
+        ".repo_studios/docs/pipeline\\README.md:142",
+        ".repo_studios/docs/pipeline\\checkbox_report\\outputs\\checkbox_report.md:133",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\docstring_compliance_plan.md:392",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_11_1_implementation_plan.md:173",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_3_1_implementation_plan.md:418",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\README.md:46",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_onboarding_tools_roster.md:220",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-001_generate_anchor_health_report_build.md:104",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-008_validate_inventory_build.md:121",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-010_render_inventory_views_build.md:119",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\workflows\\healthview_agent_loop_implementation_plan.md:492",
+        ".repo_studios/docs/pipeline\\pipeline_doc_map.md:158",
+        "docs/automation\\reviews\\standards_integrity_output_review-2026-01-21.md:534",
+        "docs/db_integrations\\README.md:44",
+        "docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_2_1_docs_health_expectations_temp.md:361",
+        "docs/templates\\meta_prompt_markdown_lint_hygiene.md:174"
+      ],
+      "slug": "update-log"
+    },
+    {
+      "file_count": 23,
+      "files": [
+        ".repo_studios/docs/automation\\analyze_test_hardening.md",
+        ".repo_studios/docs/automation\\classify_monkey_patches.md",
+        ".repo_studios/docs/automation\\collect_test_log_reports.md",
+        ".repo_studios/docs/automation\\extract_standards_rules.md",
+        ".repo_studios/docs/automation\\generate_dependency_hygiene_report.md",
+        ".repo_studios/docs/automation\\generate_import_graph_report.md",
+        ".repo_studios/docs/automation\\generate_lizard_report.md",
+        ".repo_studios/docs/automation\\generate_standards_index.md",
+        ".repo_studios/docs/automation\\generate_test_coverage_inventory.md",
+        ".repo_studios/docs/automation\\generate_typecheck_report.md",
+        ".repo_studios/docs/automation\\refresh_mypy_baselines.md",
+        ".repo_studios/docs/automation\\render_inventory_views.md",
+        ".repo_studios/docs/automation\\run_fault_pipeline.md",
+        ".repo_studios/docs/automation\\run_pytest_log_capture.md",
+        ".repo_studios/docs/automation\\scan_code_placeholders.md",
+        ".repo_studios/docs/automation\\scan_monkey_patches.md",
+        ".repo_studios/docs/automation\\seed_standards_prompts.md",
+        ".repo_studios/docs/automation\\summarize_standards.md",
+        ".repo_studios/docs/automation\\validate_import_boundaries.md",
+        ".repo_studios/docs/automation\\validate_inventory.md",
+        ".repo_studios/docs/automation\\validate_markdown_anchors.md",
+        ".repo_studios/docs/automation\\validate_metrics_anchor_stubs.md",
+        ".repo_studios/docs/automation\\verify_docs_integrity.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/automation\\analyze_test_hardening.md:9",
+        ".repo_studios/docs/automation\\classify_monkey_patches.md:28",
+        ".repo_studios/docs/automation\\collect_test_log_reports.md:28",
+        ".repo_studios/docs/automation\\extract_standards_rules.md:50",
+        ".repo_studios/docs/automation\\generate_dependency_hygiene_report.md:30",
+        ".repo_studios/docs/automation\\generate_import_graph_report.md:37",
+        ".repo_studios/docs/automation\\generate_lizard_report.md:46",
+        ".repo_studios/docs/automation\\generate_standards_index.md:9",
+        ".repo_studios/docs/automation\\generate_test_coverage_inventory.md:30",
+        ".repo_studios/docs/automation\\generate_typecheck_report.md:35",
+        ".repo_studios/docs/automation\\refresh_mypy_baselines.md:9",
+        ".repo_studios/docs/automation\\render_inventory_views.md:22",
+        ".repo_studios/docs/automation\\run_fault_pipeline.md:15",
+        ".repo_studios/docs/automation\\run_pytest_log_capture.md:23",
+        ".repo_studios/docs/automation\\scan_code_placeholders.md:29",
+        ".repo_studios/docs/automation\\scan_monkey_patches.md:32",
+        ".repo_studios/docs/automation\\seed_standards_prompts.md:9",
+        ".repo_studios/docs/automation\\summarize_standards.md:14",
+        ".repo_studios/docs/automation\\validate_import_boundaries.md:9",
+        ".repo_studios/docs/automation\\validate_inventory.md:5",
+        ".repo_studios/docs/automation\\validate_markdown_anchors.md:26",
+        ".repo_studios/docs/automation\\validate_metrics_anchor_stubs.md:28",
+        ".repo_studios/docs/automation\\verify_docs_integrity.md:21"
+      ],
+      "slug": "invocation"
+    },
+    {
+      "file_count": 23,
+      "files": [
+        ".repo_studios/docs/automation\\analyze_test_hardening.md",
+        ".repo_studios/docs/automation\\classify_monkey_patches.md",
+        ".repo_studios/docs/automation\\collect_test_log_reports.md",
+        ".repo_studios/docs/automation\\diff_standards_index.md",
+        ".repo_studios/docs/automation\\generate_code_doc_churn_report.md",
+        ".repo_studios/docs/automation\\generate_dependency_hygiene_report.md",
+        ".repo_studios/docs/automation\\generate_import_graph_report.md",
+        ".repo_studios/docs/automation\\generate_standards_index.md",
+        ".repo_studios/docs/automation\\generate_test_coverage_inventory.md",
+        ".repo_studios/docs/automation\\generate_test_log_health_report.md",
+        ".repo_studios/docs/automation\\refresh_mypy_baselines.md",
+        ".repo_studios/docs/automation\\render_inventory_views.md",
+        ".repo_studios/docs/automation\\run_fault_pipeline.md",
+        ".repo_studios/docs/automation\\run_pytest_log_capture.md",
+        ".repo_studios/docs/automation\\scan_code_placeholders.md",
+        ".repo_studios/docs/automation\\scan_monkey_patches.md",
+        ".repo_studios/docs/automation\\seed_standards_prompts.md",
+        ".repo_studios/docs/automation\\summarize_standards.md",
+        ".repo_studios/docs/automation\\validate_import_boundaries.md",
+        ".repo_studios/docs/automation\\validate_inventory.md",
+        ".repo_studios/docs/automation\\validate_markdown_anchors.md",
+        ".repo_studios/docs/automation\\validate_metrics_anchor_stubs.md",
+        ".repo_studios/docs/playbooks\\playbook-memory-refresh.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/automation\\analyze_test_hardening.md:30",
+        ".repo_studios/docs/automation\\classify_monkey_patches.md:55",
+        ".repo_studios/docs/automation\\collect_test_log_reports.md:53",
+        ".repo_studios/docs/automation\\diff_standards_index.md:83",
+        ".repo_studios/docs/automation\\generate_code_doc_churn_report.md:46",
+        ".repo_studios/docs/automation\\generate_dependency_hygiene_report.md:53",
+        ".repo_studios/docs/automation\\generate_import_graph_report.md:60",
+        ".repo_studios/docs/automation\\generate_standards_index.md:41",
+        ".repo_studios/docs/automation\\generate_test_coverage_inventory.md:88",
+        ".repo_studios/docs/automation\\generate_test_log_health_report.md:52",
+        ".repo_studios/docs/automation\\refresh_mypy_baselines.md:27",
+        ".repo_studios/docs/automation\\render_inventory_views.md:38",
+        ".repo_studios/docs/automation\\run_fault_pipeline.md:56",
+        ".repo_studios/docs/automation\\run_pytest_log_capture.md:55",
+        ".repo_studios/docs/automation\\scan_code_placeholders.md:58",
+        ".repo_studios/docs/automation\\scan_monkey_patches.md:63",
+        ".repo_studios/docs/automation\\seed_standards_prompts.md:32",
+        ".repo_studios/docs/automation\\summarize_standards.md:28",
+        ".repo_studios/docs/automation\\validate_import_boundaries.md:30",
+        ".repo_studios/docs/automation\\validate_inventory.md:22",
+        ".repo_studios/docs/automation\\validate_markdown_anchors.md:46",
+        ".repo_studios/docs/automation\\validate_metrics_anchor_stubs.md:53",
+        ".repo_studios/docs/playbooks\\playbook-memory-refresh.md:64"
+      ],
+      "slug": "outputs"
+    },
+    {
+      "file_count": 17,
+      "files": [
+        ".repo_studios/docs/automation\\check_inventory_health.md",
+        ".repo_studios/docs/automation\\ci_metrics_checks.md",
+        ".repo_studios/docs/automation\\collect_faulthandler_reports.md",
+        ".repo_studios/docs/automation\\diff_standards_index.md",
+        ".repo_studios/docs/automation\\generate_doc_index.md",
+        ".repo_studios/docs/automation\\generate_lizard_report.md",
+        ".repo_studios/docs/automation\\generate_typecheck_report.md",
+        ".repo_studios/docs/automation\\generate_undocumented_logic_report.md",
+        ".repo_studios/docs/automation\\standards-extraction-spec.md",
+        ".repo_studios/docs/pipeline\\README.md",
+        ".repo_studios/docs/pipeline\\checkbox_report\\outputs\\checkbox_report.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\README.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\workflows\\healthview_agent_loop_implementation_plan.md",
+        ".repo_studios/docs/pipeline\\pipeline_doc_map.md",
+        "docs/automation\\reviews\\standards_integrity_output_review-2026-01-21.md",
+        "docs/db_integrations\\README.md",
+        "docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_2_1_docs_health_expectations_temp.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/automation\\check_inventory_health.md:21",
+        ".repo_studios/docs/automation\\ci_metrics_checks.md:7",
+        ".repo_studios/docs/automation\\collect_faulthandler_reports.md:23",
+        ".repo_studios/docs/automation\\diff_standards_index.md:29",
+        ".repo_studios/docs/automation\\generate_doc_index.md:20",
+        ".repo_studios/docs/automation\\generate_lizard_report.md:23",
+        ".repo_studios/docs/automation\\generate_typecheck_report.md:20",
+        ".repo_studios/docs/automation\\generate_undocumented_logic_report.md:24",
+        ".repo_studios/docs/automation\\standards-extraction-spec.md:27",
+        ".repo_studios/docs/pipeline\\README.md:33",
+        ".repo_studios/docs/pipeline\\checkbox_report\\outputs\\checkbox_report.md:23",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\README.md:31",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\workflows\\healthview_agent_loop_implementation_plan.md:43",
+        ".repo_studios/docs/pipeline\\pipeline_doc_map.md:31",
+        "docs/automation\\reviews\\standards_integrity_output_review-2026-01-21.md:23",
+        "docs/db_integrations\\README.md:16",
+        "docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_2_1_docs_health_expectations_temp.md:36"
+      ],
+      "slug": "goals"
+    },
+    {
+      "file_count": 16,
+      "files": [
+        ".repo_studios/docs/automation\\analyze_test_hardening.md",
+        ".repo_studios/docs/automation\\classify_monkey_patches.md",
+        ".repo_studios/docs/automation\\collect_test_log_reports.md",
+        ".repo_studios/docs/automation\\generate_dependency_hygiene_report.md",
+        ".repo_studios/docs/automation\\generate_standards_index.md",
+        ".repo_studios/docs/automation\\generate_test_coverage_inventory.md",
+        ".repo_studios/docs/automation\\healthview_onboarding.md",
+        ".repo_studios/docs/automation\\run_pytest_log_capture.md",
+        ".repo_studios/docs/automation\\run_standards_index_cli.md",
+        ".repo_studios/docs/automation\\scan_code_placeholders.md",
+        ".repo_studios/docs/automation\\scan_monkey_patches.md",
+        ".repo_studios/docs/automation\\seed_standards_prompts.md",
+        ".repo_studios/docs/automation\\validate_import_boundaries.md",
+        ".repo_studios/docs/automation\\validate_markdown_anchors.md",
+        ".repo_studios/docs/automation\\validate_metrics_anchor_stubs.md",
+        ".repo_studios/docs/directory_layout.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/automation\\analyze_test_hardening.md:53",
+        ".repo_studios/docs/automation\\classify_monkey_patches.md:77",
+        ".repo_studios/docs/automation\\collect_test_log_reports.md:85",
+        ".repo_studios/docs/automation\\generate_dependency_hygiene_report.md:86",
+        ".repo_studios/docs/automation\\generate_standards_index.md:73",
+        ".repo_studios/docs/automation\\generate_test_coverage_inventory.md:118",
+        ".repo_studios/docs/automation\\healthview_onboarding.md:105",
+        ".repo_studios/docs/automation\\run_pytest_log_capture.md:94",
+        ".repo_studios/docs/automation\\run_standards_index_cli.md:40",
+        ".repo_studios/docs/automation\\scan_code_placeholders.md:98",
+        ".repo_studios/docs/automation\\scan_monkey_patches.md:96",
+        ".repo_studios/docs/automation\\seed_standards_prompts.md:61",
+        ".repo_studios/docs/automation\\validate_import_boundaries.md:61",
+        ".repo_studios/docs/automation\\validate_markdown_anchors.md:78",
+        ".repo_studios/docs/automation\\validate_metrics_anchor_stubs.md:85",
+        ".repo_studios/docs/directory_layout.md:25"
+      ],
+      "slug": "operational-notes"
+    },
+    {
+      "file_count": 15,
+      "files": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier1_healthview_orchestration_pipeline.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_available_scripts_orchestrator_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_available_scripts_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_dependency_import_hygiene_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_docs_health_overview_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_fault_diagnostics_overview_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_full_suite_overview_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_healthview_roster_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_monkey_patch_oversight_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_onboarding_tools_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_standards_integrity_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_test_execution_telemetry_roster.md",
+        ".repo_studios/docs/pipeline\\pipeline_templates\\tier1_pipeline_template.md",
+        ".repo_studios/docs/pipeline\\pipeline_templates\\tier2_pipeline_template.md",
+        ".repo_studios/docs/pipeline\\pipeline_templates\\tier3_pipeline_template.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier1_healthview_orchestration_pipeline.md:35",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_available_scripts_orchestrator_roster.md:55",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_available_scripts_roster.md:51",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_dependency_import_hygiene_roster.md:48",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_docs_health_overview_roster.md:48",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_fault_diagnostics_overview_roster.md:49",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_full_suite_overview_roster.md:49",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_healthview_roster_template.md:45",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_monkey_patch_oversight_roster.md:46",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_onboarding_tools_roster.md:51",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_standards_integrity_roster.md:46",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_test_execution_telemetry_roster.md:51",
+        ".repo_studios/docs/pipeline\\pipeline_templates\\tier1_pipeline_template.md:9",
+        ".repo_studios/docs/pipeline\\pipeline_templates\\tier2_pipeline_template.md:32",
+        ".repo_studios/docs/pipeline\\pipeline_templates\\tier3_pipeline_template.md:36"
+      ],
+      "slug": "0-instruction-block-for-editors-ai-assistants"
+    },
+    {
+      "file_count": 15,
+      "files": [
+        ".repo_studios/docs/automation\\check_inventory_health.md",
+        ".repo_studios/docs/automation\\collect_faulthandler_reports.md",
+        ".repo_studios/docs/automation\\diff_standards_index.md",
+        ".repo_studios/docs/automation\\generate_doc_index.md",
+        ".repo_studios/docs/automation\\generate_lizard_report.md",
+        ".repo_studios/docs/automation\\generate_typecheck_report.md",
+        ".repo_studios/docs/automation\\generate_undocumented_logic_report.md",
+        ".repo_studios/docs/pipeline\\README.md",
+        ".repo_studios/docs/pipeline\\checkbox_report\\outputs\\checkbox_report.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\README.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\workflows\\healthview_agent_loop_implementation_plan.md",
+        ".repo_studios/docs/pipeline\\pipeline_doc_map.md",
+        "docs/automation\\reviews\\standards_integrity_output_review-2026-01-21.md",
+        "docs/db_integrations\\README.md",
+        "docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_2_1_docs_health_expectations_temp.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/automation\\check_inventory_health.md:27",
+        ".repo_studios/docs/automation\\collect_faulthandler_reports.md:29",
+        ".repo_studios/docs/automation\\diff_standards_index.md:34",
+        ".repo_studios/docs/automation\\generate_doc_index.md:25",
+        ".repo_studios/docs/automation\\generate_lizard_report.md:29",
+        ".repo_studios/docs/automation\\generate_typecheck_report.md:26",
+        ".repo_studios/docs/automation\\generate_undocumented_logic_report.md:30",
+        ".repo_studios/docs/pipeline\\README.md:42",
+        ".repo_studios/docs/pipeline\\checkbox_report\\outputs\\checkbox_report.md:29",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\README.md:36",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\workflows\\healthview_agent_loop_implementation_plan.md:51",
+        ".repo_studios/docs/pipeline\\pipeline_doc_map.md:37",
+        "docs/automation\\reviews\\standards_integrity_output_review-2026-01-21.md:29",
+        "docs/db_integrations\\README.md:21",
+        "docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_2_1_docs_health_expectations_temp.md:76"
+      ],
+      "slug": "system-context"
+    },
+    {
+      "file_count": 13,
+      "files": [
+        ".repo_studios/docs/automation\\check_inventory_health.md",
+        ".repo_studios/docs/automation\\collect_faulthandler_reports.md",
+        ".repo_studios/docs/automation\\diff_standards_index.md",
+        ".repo_studios/docs/automation\\generate_doc_index.md",
+        ".repo_studios/docs/automation\\generate_lizard_report.md",
+        ".repo_studios/docs/automation\\generate_typecheck_report.md",
+        ".repo_studios/docs/automation\\generate_undocumented_logic_report.md",
+        ".repo_studios/docs/pipeline\\README.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\workflows\\healthview_agent_loop_implementation_plan.md",
+        ".repo_studios/docs/pipeline\\pipeline_doc_map.md",
+        "docs/automation\\reviews\\standards_integrity_output_review-2026-01-21.md",
+        "docs/db_integrations\\README.md",
+        "docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_2_1_docs_health_expectations_temp.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/automation\\check_inventory_health.md:55",
+        ".repo_studios/docs/automation\\collect_faulthandler_reports.md:48",
+        ".repo_studios/docs/automation\\diff_standards_index.md:44",
+        ".repo_studios/docs/automation\\generate_doc_index.md:31",
+        ".repo_studios/docs/automation\\generate_lizard_report.md:40",
+        ".repo_studios/docs/automation\\generate_typecheck_report.md:78",
+        ".repo_studios/docs/automation\\generate_undocumented_logic_report.md:35",
+        ".repo_studios/docs/pipeline\\README.md:88",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\workflows\\healthview_agent_loop_implementation_plan.md:83",
+        ".repo_studios/docs/pipeline\\pipeline_doc_map.md:115",
+        "docs/automation\\reviews\\standards_integrity_output_review-2026-01-21.md:47",
+        "docs/db_integrations\\README.md:38",
+        "docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_2_1_docs_health_expectations_temp.md:327"
+      ],
+      "slug": "agent-instructions"
+    },
+    {
+      "file_count": 12,
+      "files": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_available_scripts_orchestrator_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_available_scripts_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_dependency_import_hygiene_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_docs_health_overview_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_fault_diagnostics_overview_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_full_suite_overview_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_healthview_roster_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_monkey_patch_oversight_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_onboarding_tools_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_standards_integrity_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_test_execution_telemetry_roster.md",
+        ".repo_studios/docs/pipeline\\pipeline_templates\\tier2_pipeline_template.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_available_scripts_orchestrator_roster.md:74",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_available_scripts_roster.md:76",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_dependency_import_hygiene_roster.md:72",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_docs_health_overview_roster.md:72",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_fault_diagnostics_overview_roster.md:73",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_full_suite_overview_roster.md:73",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_healthview_roster_template.md:69",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_monkey_patch_oversight_roster.md:70",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_onboarding_tools_roster.md:68",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_standards_integrity_roster.md:70",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_test_execution_telemetry_roster.md:78",
+        ".repo_studios/docs/pipeline\\pipeline_templates\\tier2_pipeline_template.md:52"
+      ],
+      "slug": "1-goals-success-criteria"
+    },
+    {
+      "file_count": 12,
+      "files": [
+        ".repo_studios/docs/archives\\temp_check_inventory_health_build.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_available_scripts_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_dependency_import_hygiene_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_docs_health_overview_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_fault_diagnostics_overview_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_full_suite_overview_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_healthview_roster_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_monkey_patch_oversight_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_standards_integrity_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-007_check_inventory_health_build.md",
+        ".repo_studios/docs/pipeline\\pipeline_templates\\tier2_pipeline_template.md",
+        ".repo_studios/docs/pipeline\\pipeline_templates\\tier_doc_system_instructions.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/archives\\temp_check_inventory_health_build.md:211",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_available_scripts_roster.md:1345",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_dependency_import_hygiene_roster.md:1141",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_docs_health_overview_roster.md:1787",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_fault_diagnostics_overview_roster.md:925",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_full_suite_overview_roster.md:1081",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_healthview_roster_template.md:448",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_monkey_patch_oversight_roster.md:983",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_standards_integrity_roster.md:1108",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-007_check_inventory_health_build.md:240",
+        ".repo_studios/docs/pipeline\\pipeline_templates\\tier2_pipeline_template.md:197",
+        ".repo_studios/docs/pipeline\\pipeline_templates\\tier_doc_system_instructions.md:166"
+      ],
+      "slug": "8-update-log"
+    },
+    {
+      "file_count": 11,
+      "files": [
+        ".repo_studios/docs/archives\\temp_check_inventory_health_build.md",
+        ".repo_studios/docs/archives\\temp_validate_import_boundaries_build.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_aggregator_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_consumer_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_orchestrator_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_producer_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_summarizer_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_utility_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-005_validate_import_boundaries_build.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-007_check_inventory_health_build.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-011_generate_lizard_report_build.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/archives\\temp_check_inventory_health_build.md:38",
+        ".repo_studios/docs/archives\\temp_validate_import_boundaries_build.md:40",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_aggregator_template.md:45",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_consumer_template.md:45",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_orchestrator_template.md:49",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_producer_template.md:45",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_summarizer_template.md:45",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_utility_template.md:49",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-005_validate_import_boundaries_build.md:40",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-007_check_inventory_health_build.md:40",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-011_generate_lizard_report_build.md:46"
+      ],
+      "slug": "1-script-identity"
+    },
+    {
+      "file_count": 11,
+      "files": [
+        ".repo_studios/docs/archives\\temp_check_inventory_health_build.md",
+        ".repo_studios/docs/archives\\temp_validate_import_boundaries_build.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_aggregator_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_consumer_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_orchestrator_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_producer_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_summarizer_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_utility_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-005_validate_import_boundaries_build.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-007_check_inventory_health_build.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-011_generate_lizard_report_build.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/archives\\temp_check_inventory_health_build.md:64",
+        ".repo_studios/docs/archives\\temp_validate_import_boundaries_build.md:68",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_aggregator_template.md:69",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_consumer_template.md:69",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_orchestrator_template.md:74",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_producer_template.md:76",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_summarizer_template.md:69",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_utility_template.md:91",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-005_validate_import_boundaries_build.md:69",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-007_check_inventory_health_build.md:67",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-011_generate_lizard_report_build.md:84"
+      ],
+      "slug": "2-current-state-analysis"
+    },
+    {
+      "file_count": 11,
+      "files": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_available_scripts_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_dependency_import_hygiene_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_docs_health_overview_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_fault_diagnostics_overview_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_full_suite_overview_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_healthview_roster_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_monkey_patch_oversight_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_onboarding_tools_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_standards_integrity_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_test_execution_telemetry_roster.md",
+        ".repo_studios/docs/pipeline\\pipeline_templates\\tier2_pipeline_template.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_available_scripts_roster.md:95",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_dependency_import_hygiene_roster.md:92",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_docs_health_overview_roster.md:92",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_fault_diagnostics_overview_roster.md:94",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_full_suite_overview_roster.md:93",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_healthview_roster_template.md:89",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_monkey_patch_oversight_roster.md:90",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_onboarding_tools_roster.md:85",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_standards_integrity_roster.md:90",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_test_execution_telemetry_roster.md:96",
+        ".repo_studios/docs/pipeline\\pipeline_templates\\tier2_pipeline_template.md:63"
+      ],
+      "slug": "2-system-context"
+    },
+    {
+      "file_count": 11,
+      "files": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_available_scripts_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_dependency_import_hygiene_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_docs_health_overview_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_fault_diagnostics_overview_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_full_suite_overview_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_healthview_roster_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_monkey_patch_oversight_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_standards_integrity_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_test_execution_telemetry_roster.md",
+        ".repo_studios/docs/pipeline\\pipeline_templates\\tier2_pipeline_template.md",
+        ".repo_studios/docs/pipeline\\pipeline_templates\\tier_doc_system_instructions.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_available_scripts_roster.md:1316",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_dependency_import_hygiene_roster.md:1112",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_docs_health_overview_roster.md:1756",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_fault_diagnostics_overview_roster.md:896",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_full_suite_overview_roster.md:1052",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_healthview_roster_template.md:419",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_monkey_patch_oversight_roster.md:954",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_standards_integrity_roster.md:1079",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_test_execution_telemetry_roster.md:1209",
+        ".repo_studios/docs/pipeline\\pipeline_templates\\tier2_pipeline_template.md:174",
+        ".repo_studios/docs/pipeline\\pipeline_templates\\tier_doc_system_instructions.md:145"
+      ],
+      "slug": "7-agent-automation-block"
+    },
+    {
+      "file_count": 10,
+      "files": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_available_scripts_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_dependency_import_hygiene_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_docs_health_overview_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_fault_diagnostics_overview_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_full_suite_overview_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_healthview_roster_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_monkey_patch_oversight_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_standards_integrity_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_test_execution_telemetry_roster.md",
+        ".repo_studios/docs/pipeline\\pipeline_templates\\tier2_pipeline_template.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_available_scripts_roster.md:1282",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_dependency_import_hygiene_roster.md:1061",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_docs_health_overview_roster.md:1705",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_fault_diagnostics_overview_roster.md:845",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_full_suite_overview_roster.md:994",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_healthview_roster_template.md:368",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_monkey_patch_oversight_roster.md:903",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_standards_integrity_roster.md:1026",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_test_execution_telemetry_roster.md:1166",
+        ".repo_studios/docs/pipeline\\pipeline_templates\\tier2_pipeline_template.md:127"
+      ],
+      "slug": "4-signals-telemetry"
+    },
+    {
+      "file_count": 10,
+      "files": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_available_scripts_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_dependency_import_hygiene_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_docs_health_overview_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_fault_diagnostics_overview_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_full_suite_overview_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_healthview_roster_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_monkey_patch_oversight_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_standards_integrity_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_test_execution_telemetry_roster.md",
+        ".repo_studios/docs/pipeline\\pipeline_templates\\tier2_pipeline_template.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_available_scripts_roster.md:1296",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_dependency_import_hygiene_roster.md:1079",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_docs_health_overview_roster.md:1723",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_fault_diagnostics_overview_roster.md:863",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_full_suite_overview_roster.md:1020",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_healthview_roster_template.md:386",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_monkey_patch_oversight_roster.md:921",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_standards_integrity_roster.md:1046",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_test_execution_telemetry_roster.md:1184",
+        ".repo_studios/docs/pipeline\\pipeline_templates\\tier2_pipeline_template.md:141"
+      ],
+      "slug": "5-dependencies-stop-gates"
+    },
+    {
+      "file_count": 10,
+      "files": [
+        ".repo_studios/docs/playbooks\\playbook-agent-operations.md",
+        ".repo_studios/docs/playbooks\\playbook-memory-refresh.md",
+        ".repo_studios/docs/playbooks\\playbook-migration.md",
+        ".repo_studios/docs/playbooks\\playbook-prompt-library.md",
+        ".repo_studios/docs/standards\\global\\std-global-html-coding.md",
+        ".repo_studios/docs/standards\\global\\std-global-markdown-authoring.md",
+        ".repo_studios/docs/standards\\global\\std-global-monkey-patching.md",
+        ".repo_studios/docs/standards\\global\\std-global-prompt-engineering.md",
+        ".repo_studios/docs/standards\\global\\std-global-python-engineering.md",
+        ".repo_studios/docs/standards\\project\\std-project-operating-standard.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/playbooks\\playbook-agent-operations.md:96",
+        ".repo_studios/docs/playbooks\\playbook-memory-refresh.md:113",
+        ".repo_studios/docs/playbooks\\playbook-migration.md:76",
+        ".repo_studios/docs/playbooks\\playbook-prompt-library.md:74",
+        ".repo_studios/docs/standards\\global\\std-global-html-coding.md:126",
+        ".repo_studios/docs/standards\\global\\std-global-markdown-authoring.md:152",
+        ".repo_studios/docs/standards\\global\\std-global-monkey-patching.md:178",
+        ".repo_studios/docs/standards\\global\\std-global-prompt-engineering.md:143",
+        ".repo_studios/docs/standards\\global\\std-global-python-engineering.md:280",
+        ".repo_studios/docs/standards\\project\\std-project-operating-standard.md:132"
+      ],
+      "slug": "agent-block-machine-readable"
+    },
+    {
+      "file_count": 10,
+      "files": [
+        ".repo_studios/docs/automation\\check_inventory_health.md",
+        ".repo_studios/docs/automation\\collect_faulthandler_reports.md",
+        ".repo_studios/docs/automation\\diff_standards_index.md",
+        ".repo_studios/docs/automation\\generate_lizard_report.md",
+        ".repo_studios/docs/automation\\generate_undocumented_logic_report.md",
+        ".repo_studios/docs/pipeline\\README.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\workflows\\healthview_agent_loop_implementation_plan.md",
+        ".repo_studios/docs/pipeline\\pipeline_doc_map.md",
+        "docs/automation\\reviews\\standards_integrity_output_review-2026-01-21.md",
+        "docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_2_1_docs_health_expectations_temp.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/automation\\check_inventory_health.md:78",
+        ".repo_studios/docs/automation\\collect_faulthandler_reports.md:72",
+        ".repo_studios/docs/automation\\diff_standards_index.md:50",
+        ".repo_studios/docs/automation\\generate_lizard_report.md:75",
+        ".repo_studios/docs/automation\\generate_undocumented_logic_report.md:42",
+        ".repo_studios/docs/pipeline\\README.md:126",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\workflows\\healthview_agent_loop_implementation_plan.md:344",
+        ".repo_studios/docs/pipeline\\pipeline_doc_map.md:144",
+        "docs/automation\\reviews\\standards_integrity_output_review-2026-01-21.md:79",
+        "docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_2_1_docs_health_expectations_temp.md:350"
+      ],
+      "slug": "human-notes"
+    },
+    {
+      "file_count": 9,
+      "files": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_dependency_import_hygiene_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_docs_health_overview_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_fault_diagnostics_overview_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_full_suite_overview_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_healthview_roster_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_monkey_patch_oversight_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_standards_integrity_roster.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_test_execution_telemetry_roster.md",
+        ".repo_studios/docs/pipeline\\pipeline_templates\\tier2_pipeline_template.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_dependency_import_hygiene_roster.md:1100",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_docs_health_overview_roster.md:1744",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_fault_diagnostics_overview_roster.md:884",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_full_suite_overview_roster.md:1040",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_healthview_roster_template.md:407",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_monkey_patch_oversight_roster.md:942",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_standards_integrity_roster.md:1067",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_test_execution_telemetry_roster.md:1201",
+        ".repo_studios/docs/pipeline\\pipeline_templates\\tier2_pipeline_template.md:157"
+      ],
+      "slug": "6-instruction-block-required-by-tier-rules"
+    },
+    {
+      "file_count": 9,
+      "files": [
+        ".repo_studios/docs/automation\\check_inventory_health.md",
+        ".repo_studios/docs/automation\\collect_faulthandler_reports.md",
+        ".repo_studios/docs/automation\\diff_standards_index.md",
+        ".repo_studios/docs/automation\\generate_undocumented_logic_report.md",
+        ".repo_studios/docs/pipeline\\README.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\workflows\\healthview_agent_loop_implementation_plan.md",
+        ".repo_studios/docs/pipeline\\pipeline_doc_map.md",
+        "docs/automation\\reviews\\standards_integrity_output_review-2026-01-21.md",
+        "docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_2_1_docs_health_expectations_temp.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/automation\\check_inventory_health.md:96",
+        ".repo_studios/docs/automation\\collect_faulthandler_reports.md:110",
+        ".repo_studios/docs/automation\\diff_standards_index.md:93",
+        ".repo_studios/docs/automation\\generate_undocumented_logic_report.md:67",
+        ".repo_studios/docs/pipeline\\README.md:133",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\workflows\\healthview_agent_loop_implementation_plan.md:193",
+        ".repo_studios/docs/pipeline\\pipeline_doc_map.md:150",
+        "docs/automation\\reviews\\standards_integrity_output_review-2026-01-21.md:382",
+        "docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_2_1_docs_health_expectations_temp.md:355"
+      ],
+      "slug": "reference-prompts"
+    },
+    {
+      "file_count": 7,
+      "files": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_aggregator_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_consumer_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_orchestrator_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_producer_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_summarizer_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_utility_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-011_generate_lizard_report_build.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_aggregator_template.md:395",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_consumer_template.md:382",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_orchestrator_template.md:467",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_producer_template.md:397",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_summarizer_template.md:382",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_utility_template.md:468",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-011_generate_lizard_report_build.md:410"
+      ],
+      "slug": "3-gap-analysis"
+    },
+    {
+      "file_count": 7,
+      "files": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_aggregator_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_consumer_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_orchestrator_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_producer_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_summarizer_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_utility_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-011_generate_lizard_report_build.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_aggregator_template.md:440",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_consumer_template.md:427",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_orchestrator_template.md:514",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_producer_template.md:441",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_summarizer_template.md:427",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_utility_template.md:513",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-011_generate_lizard_report_build.md:447"
+      ],
+      "slug": "4-changes-made"
+    },
+    {
+      "file_count": 7,
+      "files": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_aggregator_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_consumer_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_orchestrator_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_producer_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_summarizer_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_utility_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-011_generate_lizard_report_build.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_aggregator_template.md:447",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_consumer_template.md:434",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_orchestrator_template.md:525",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_producer_template.md:452",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_summarizer_template.md:434",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_utility_template.md:524",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-011_generate_lizard_report_build.md:476"
+      ],
+      "slug": "5-evidence"
+    },
+    {
+      "file_count": 7,
+      "files": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_aggregator_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_consumer_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_orchestrator_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_producer_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_summarizer_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_utility_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-011_generate_lizard_report_build.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_aggregator_template.md:508",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_consumer_template.md:495",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_orchestrator_template.md:563",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_producer_template.md:531",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_summarizer_template.md:495",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_utility_template.md:599",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-011_generate_lizard_report_build.md:576"
+      ],
+      "slug": "7-completion"
+    },
+    {
+      "file_count": 7,
+      "files": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_aggregator_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_consumer_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_orchestrator_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_producer_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_summarizer_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_utility_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-011_generate_lizard_report_build.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_aggregator_template.md:524",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_consumer_template.md:511",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_orchestrator_template.md:580",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_producer_template.md:547",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_summarizer_template.md:511",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_utility_template.md:615",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-011_generate_lizard_report_build.md:592"
+      ],
+      "slug": "8-template-variables"
+    },
+    {
+      "file_count": 7,
+      "files": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_aggregator_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_consumer_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_orchestrator_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_producer_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_summarizer_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_utility_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-011_generate_lizard_report_build.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_aggregator_template.md:541",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_consumer_template.md:528",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_orchestrator_template.md:597",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_producer_template.md:564",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_summarizer_template.md:528",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_utility_template.md:631",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-011_generate_lizard_report_build.md:607"
+      ],
+      "slug": "9-version-history"
+    },
+    {
+      "file_count": 7,
+      "files": [
+        ".repo_studios/docs/automation\\collect_test_log_reports.md",
+        ".repo_studios/docs/automation\\run_pytest_log_capture.md",
+        ".repo_studios/docs/automation\\scan_code_placeholders.md",
+        ".repo_studios/docs/automation\\scan_monkey_patches.md",
+        ".repo_studios/docs/automation\\seed_standards_prompts.md",
+        ".repo_studios/docs/automation\\validate_import_boundaries.md",
+        ".repo_studios/docs/automation\\validate_metrics_anchor_stubs.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/automation\\collect_test_log_reports.md:67",
+        ".repo_studios/docs/automation\\run_pytest_log_capture.md:70",
+        ".repo_studios/docs/automation\\scan_code_placeholders.md:72",
+        ".repo_studios/docs/automation\\scan_monkey_patches.md:82",
+        ".repo_studios/docs/automation\\seed_standards_prompts.md:48",
+        ".repo_studios/docs/automation\\validate_import_boundaries.md:48",
+        ".repo_studios/docs/automation\\validate_metrics_anchor_stubs.md:70"
+      ],
+      "slug": "diagnostics"
+    },
+    {
+      "file_count": 7,
+      "files": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\README.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_aggregator_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_consumer_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_orchestrator_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_producer_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_summarizer_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_utility_template.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\README.md:428",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_aggregator_template.md:291",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_consumer_template.md:287",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_orchestrator_template.md:357",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_producer_template.md:305",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_summarizer_template.md:287",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_utility_template.md:353"
+      ],
+      "slug": "tier-3-metadata-for-scriptname"
+    },
+    {
+      "file_count": 6,
+      "files": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_aggregator_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_consumer_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_producer_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_summarizer_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_utility_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-011_generate_lizard_report_build.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_aggregator_template.md:256",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_consumer_template.md:252",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_producer_template.md:270",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_summarizer_template.md:252",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_utility_template.md:315",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-011_generate_lizard_report_build.md:262"
+      ],
+      "slug": "26-agent-discoverability-tier-3-yaml"
+    },
+    {
+      "file_count": 6,
+      "files": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_aggregator_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_consumer_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_producer_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_summarizer_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_utility_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-011_generate_lizard_report_build.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_aggregator_template.md:347",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_consumer_template.md:338",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_producer_template.md:347",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_summarizer_template.md:338",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_utility_template.md:418",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-011_generate_lizard_report_build.md:368"
+      ],
+      "slug": "27-database-integration-preparation"
+    },
+    {
+      "file_count": 6,
+      "files": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_aggregator_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_consumer_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_producer_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_summarizer_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_utility_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-011_generate_lizard_report_build.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_aggregator_template.md:461",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_consumer_template.md:448",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_producer_template.md:466",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_summarizer_template.md:448",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_utility_template.md:538",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-011_generate_lizard_report_build.md:523"
+      ],
+      "slug": "6-orchestrator-integration"
+    },
+    {
+      "file_count": 6,
+      "files": [
+        ".repo_studios/docs/automation\\generate_test_coverage_inventory.md",
+        ".repo_studios/docs/automation\\healthview_onboarding.md",
+        ".repo_studios/docs/automation\\refactor_library_integration_notes.md",
+        ".repo_studios/docs/standards\\global\\std-global-html-coding.md",
+        ".repo_studios/docs/standards\\global\\std-global-monkey-patching.md",
+        ".repo_studios/docs/standards\\global\\std-global-prompt-engineering.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/automation\\generate_test_coverage_inventory.md:131",
+        ".repo_studios/docs/automation\\healthview_onboarding.md:115",
+        ".repo_studios/docs/automation\\refactor_library_integration_notes.md:92",
+        ".repo_studios/docs/standards\\global\\std-global-html-coding.md:120",
+        ".repo_studios/docs/standards\\global\\std-global-monkey-patching.md:164",
+        ".repo_studios/docs/standards\\global\\std-global-prompt-engineering.md:129"
+      ],
+      "slug": "references"
+    },
+    {
+      "file_count": 6,
+      "files": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_aggregator_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_consumer_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_orchestrator_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_producer_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_summarizer_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_utility_template.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_aggregator_template.md:28",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_consumer_template.md:28",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_orchestrator_template.md:28",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_producer_template.md:28",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_summarizer_template.md:28",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_utility_template.md:28"
+      ],
+      "slug": "script-build-template-scriptname"
+    },
+    {
+      "file_count": 6,
+      "files": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_11_1_implementation_plan.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_3_1_implementation_plan.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_4_1_implementation_plan.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_5_1_implementation_plan.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_6_1_implementation_plan.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_7_1_implementation_plan.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_11_1_implementation_plan.md:160",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_3_1_implementation_plan.md:406",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_4_1_implementation_plan.md:131",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_5_1_implementation_plan.md:138",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_6_1_implementation_plan.md:128",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_7_1_implementation_plan.md:115"
+      ],
+      "slug": "verification-checklist"
+    },
+    {
+      "file_count": 5,
+      "files": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_aggregator_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_consumer_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_producer_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_summarizer_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-011_generate_lizard_report_build.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_aggregator_template.md:292",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_consumer_template.md:288",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_producer_template.md:306",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_summarizer_template.md:288",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-011_generate_lizard_report_build.md:295"
+      ],
+      "slug": "agent-discoverable-script-definition"
+    },
+    {
+      "file_count": 5,
+      "files": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_aggregator_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_consumer_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_orchestrator_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_producer_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_summarizer_template.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_aggregator_template.md:380",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_consumer_template.md:370",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_orchestrator_template.md:452",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_producer_template.md:385",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_summarizer_template.md:370"
+      ],
+      "slug": "dbintegrationmarker-tablenamecolumnname-description"
+    },
+    {
+      "file_count": 5,
+      "files": [
+        ".repo_studios/docs/automation\\traceability\\analyze_monkey_patch_trends_modernization_plan.md",
+        ".repo_studios/docs/automation\\traceability\\generate_churn_complexity_heatmap_modernization_plan.md",
+        ".repo_studios/docs/automation\\traceability\\generate_code_doc_churn_report_plan.md",
+        ".repo_studios/docs/automation\\traceability\\run_batch_cleanup_modernization_plan.md",
+        ".repo_studios/docs/automation\\traceability\\run_standards_index_cli_modernization_plan.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/automation\\traceability\\analyze_monkey_patch_trends_modernization_plan.md:5",
+        ".repo_studios/docs/automation\\traceability\\generate_churn_complexity_heatmap_modernization_plan.md:3",
+        ".repo_studios/docs/automation\\traceability\\generate_code_doc_churn_report_plan.md:22",
+        ".repo_studios/docs/automation\\traceability\\run_batch_cleanup_modernization_plan.md:10",
+        ".repo_studios/docs/automation\\traceability\\run_standards_index_cli_modernization_plan.md:9"
+      ],
+      "slug": "objective"
+    },
+    {
+      "file_count": 5,
+      "files": [
+        ".repo_studios/docs/automation\\traceability\\analyze_monkey_patch_trends_modernization_plan.md",
+        ".repo_studios/docs/automation\\traceability\\fault_pipeline_aggregator_plan.md",
+        ".repo_studios/docs/automation\\traceability\\generate_churn_complexity_heatmap_modernization_plan.md",
+        ".repo_studios/docs/automation\\traceability\\run_batch_cleanup_modernization_plan.md",
+        ".repo_studios/docs/automation\\traceability\\run_standards_index_cli_modernization_plan.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/automation\\traceability\\analyze_monkey_patch_trends_modernization_plan.md:76",
+        ".repo_studios/docs/automation\\traceability\\fault_pipeline_aggregator_plan.md:23",
+        ".repo_studios/docs/automation\\traceability\\generate_churn_complexity_heatmap_modernization_plan.md:74",
+        ".repo_studios/docs/automation\\traceability\\run_batch_cleanup_modernization_plan.md:76",
+        ".repo_studios/docs/automation\\traceability\\run_standards_index_cli_modernization_plan.md:73"
+      ],
+      "slug": "open-questions"
+    },
+    {
+      "file_count": 5,
+      "files": [
+        ".repo_studios/docs/automation\\report_paths_migration_pattern.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_4_1_implementation_plan.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_5_1_implementation_plan.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_6_1_implementation_plan.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_7_1_implementation_plan.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/automation\\report_paths_migration_pattern.md:47",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_4_1_implementation_plan.md:20",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_5_1_implementation_plan.md:20",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_6_1_implementation_plan.md:28",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_7_1_implementation_plan.md:28"
+      ],
+      "slug": "script-inventory"
+    },
+    {
+      "file_count": 4,
+      "files": [
+        ".repo_studios/docs/archives\\temp_check_inventory_health_build.md",
+        ".repo_studios/docs/archives\\temp_validate_import_boundaries_build.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-005_validate_import_boundaries_build.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-007_check_inventory_health_build.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/archives\\temp_check_inventory_health_build.md:118",
+        ".repo_studios/docs/archives\\temp_validate_import_boundaries_build.md:142",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-005_validate_import_boundaries_build.md:143",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-007_check_inventory_health_build.md:121"
+      ],
+      "slug": "3-build-plan"
+    },
+    {
+      "file_count": 4,
+      "files": [
+        ".repo_studios/docs/archives\\temp_check_inventory_health_build.md",
+        ".repo_studios/docs/archives\\temp_validate_import_boundaries_build.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-005_validate_import_boundaries_build.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-007_check_inventory_health_build.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/archives\\temp_check_inventory_health_build.md:140",
+        ".repo_studios/docs/archives\\temp_validate_import_boundaries_build.md:176",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-005_validate_import_boundaries_build.md:177",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-007_check_inventory_health_build.md:143"
+      ],
+      "slug": "4-alteration-locations"
+    },
+    {
+      "file_count": 4,
+      "files": [
+        ".repo_studios/docs/archives\\temp_check_inventory_health_build.md",
+        ".repo_studios/docs/archives\\temp_validate_import_boundaries_build.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-005_validate_import_boundaries_build.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-007_check_inventory_health_build.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/archives\\temp_check_inventory_health_build.md:163",
+        ".repo_studios/docs/archives\\temp_validate_import_boundaries_build.md:223",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-005_validate_import_boundaries_build.md:224",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-007_check_inventory_health_build.md:166"
+      ],
+      "slug": "5-modifications-log"
+    },
+    {
+      "file_count": 4,
+      "files": [
+        ".repo_studios/docs/standards\\global\\std-global-monkey-patching.md",
+        ".repo_studios/docs/standards\\global\\std-global-prompt-engineering.md",
+        ".repo_studios/docs/standards\\global\\std-global-python-engineering.md",
+        ".repo_studios/docs/standards\\project\\std-project-operating-standard.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/standards\\global\\std-global-monkey-patching.md:172",
+        ".repo_studios/docs/standards\\global\\std-global-prompt-engineering.md:137",
+        ".repo_studios/docs/standards\\global\\std-global-python-engineering.md:274",
+        ".repo_studios/docs/standards\\project\\std-project-operating-standard.md:126"
+      ],
+      "slug": "anchor-health-reminder"
+    },
+    {
+      "file_count": 4,
+      "files": [
+        ".repo_studios/docs/automation\\traceability\\analyze_monkey_patch_trends_modernization_plan.md",
+        ".repo_studios/docs/automation\\traceability\\generate_churn_complexity_heatmap_modernization_plan.md",
+        ".repo_studios/docs/automation\\traceability\\run_batch_cleanup_modernization_plan.md",
+        ".repo_studios/docs/automation\\traceability\\run_standards_index_cli_modernization_plan.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/automation\\traceability\\analyze_monkey_patch_trends_modernization_plan.md:9",
+        ".repo_studios/docs/automation\\traceability\\generate_churn_complexity_heatmap_modernization_plan.md:7",
+        ".repo_studios/docs/automation\\traceability\\run_batch_cleanup_modernization_plan.md:14",
+        ".repo_studios/docs/automation\\traceability\\run_standards_index_cli_modernization_plan.md:16"
+      ],
+      "slug": "current-state"
+    },
+    {
+      "file_count": 4,
+      "files": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_aggregator_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_consumer_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_producer_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_summarizer_template.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_aggregator_template.md:386",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_consumer_template.md:376",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_producer_template.md:391",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_summarizer_template.md:376"
+      ],
+      "slug": "dbintegrationmarker-hoptelemetrymetricsjson-execution-metrics"
+    },
+    {
+      "file_count": 4,
+      "files": [
+        ".repo_studios/docs/archives\\temp_validate_inventory_build.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-001_generate_anchor_health_report_build.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-008_validate_inventory_build.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-010_render_inventory_views_build.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/archives\\temp_validate_inventory_build.md:39",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-001_generate_anchor_health_report_build.md:46",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-008_validate_inventory_build.md:66",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-010_render_inventory_views_build.md:46"
+      ],
+      "slug": "evidence"
+    },
+    {
+      "file_count": 4,
+      "files": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_4_1_implementation_plan.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_5_1_implementation_plan.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_6_1_implementation_plan.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_7_1_implementation_plan.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_4_1_implementation_plan.md:142",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_5_1_implementation_plan.md:149",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_6_1_implementation_plan.md:139",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_7_1_implementation_plan.md:126"
+      ],
+      "slug": "evidence-links"
+    },
+    {
+      "file_count": 4,
+      "files": [
+        ".repo_studios/docs/Repo_Studios_MOU_Strategic_Architecture.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_3_1_implementation_plan.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_5_hop_refactor_plan.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_6_1_hop_refactor_plan.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/Repo_Studios_MOU_Strategic_Architecture.md:13",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_3_1_implementation_plan.md:27",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_5_hop_refactor_plan.md:34",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_6_1_hop_refactor_plan.md:31"
+      ],
+      "slug": "executive-summary"
+    },
+    {
+      "file_count": 4,
+      "files": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_4_1_implementation_plan.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_5_1_implementation_plan.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_6_1_implementation_plan.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_7_1_implementation_plan.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_4_1_implementation_plan.md:35",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_5_1_implementation_plan.md:35",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_6_1_implementation_plan.md:43",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_7_1_implementation_plan.md:82"
+      ],
+      "slug": "implementation-phases"
+    },
+    {
+      "file_count": 4,
+      "files": [
+        ".repo_studios/docs/automation\\traceability\\analyze_monkey_patch_trends_modernization_plan.md",
+        ".repo_studios/docs/automation\\traceability\\generate_churn_complexity_heatmap_modernization_plan.md",
+        ".repo_studios/docs/automation\\traceability\\run_batch_cleanup_modernization_plan.md",
+        ".repo_studios/docs/automation\\traceability\\run_standards_index_cli_modernization_plan.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/automation\\traceability\\analyze_monkey_patch_trends_modernization_plan.md:27",
+        ".repo_studios/docs/automation\\traceability\\generate_churn_complexity_heatmap_modernization_plan.md:26",
+        ".repo_studios/docs/automation\\traceability\\run_batch_cleanup_modernization_plan.md:40",
+        ".repo_studios/docs/automation\\traceability\\run_standards_index_cli_modernization_plan.md:42"
+      ],
+      "slug": "implementation-steps"
+    },
+    {
+      "file_count": 4,
+      "files": [
+        ".repo_studios/docs/automation\\run_standards_index_cli.md",
+        ".repo_studios/docs/automation\\traceability\\fault_pipeline_aggregator_plan.md",
+        ".repo_studios/docs/automation\\traceability\\run_batch_cleanup_modernization_plan.md",
+        ".repo_studios/docs/automation\\traceability\\run_standards_index_cli_modernization_plan.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/automation\\run_standards_index_cli.md:5",
+        ".repo_studios/docs/automation\\traceability\\fault_pipeline_aggregator_plan.md:3",
+        ".repo_studios/docs/automation\\traceability\\run_batch_cleanup_modernization_plan.md:3",
+        ".repo_studios/docs/automation\\traceability\\run_standards_index_cli_modernization_plan.md:3"
+      ],
+      "slug": "status"
+    },
+    {
+      "file_count": 4,
+      "files": [
+        ".repo_studios/docs/automation\\generate_dependency_hygiene_report.md",
+        ".repo_studios/docs/automation\\generate_standards_index.md",
+        ".repo_studios/docs/automation\\generate_test_coverage_inventory.md",
+        ".repo_studios/docs/automation\\validate_markdown_anchors.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/automation\\generate_dependency_hygiene_report.md:68",
+        ".repo_studios/docs/automation\\generate_standards_index.md:62",
+        ".repo_studios/docs/automation\\generate_test_coverage_inventory.md:101",
+        ".repo_studios/docs/automation\\validate_markdown_anchors.md:60"
+      ],
+      "slug": "status-semantics"
+    },
+    {
+      "file_count": 4,
+      "files": [
+        ".repo_studios/docs/automation\\traceability\\analyze_monkey_patch_trends_modernization_plan.md",
+        ".repo_studios/docs/automation\\traceability\\generate_churn_complexity_heatmap_modernization_plan.md",
+        ".repo_studios/docs/automation\\traceability\\run_batch_cleanup_modernization_plan.md",
+        ".repo_studios/docs/automation\\traceability\\run_standards_index_cli_modernization_plan.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/automation\\traceability\\analyze_monkey_patch_trends_modernization_plan.md:16",
+        ".repo_studios/docs/automation\\traceability\\generate_churn_complexity_heatmap_modernization_plan.md:15",
+        ".repo_studios/docs/automation\\traceability\\run_batch_cleanup_modernization_plan.md:27",
+        ".repo_studios/docs/automation\\traceability\\run_standards_index_cli_modernization_plan.md:29"
+      ],
+      "slug": "target-architecture"
+    },
+    {
+      "file_count": 4,
+      "files": [
+        ".repo_studios/docs/automation\\dump_faulthandler_snapshot.md",
+        ".repo_studios/docs/automation\\generate_code_doc_churn_report.md",
+        ".repo_studios/docs/pipeline\\tier3_index\\IMPLEMENTATION_SUMMARY.md",
+        ".repo_studios/docs/pipeline\\tier3_index\\README (1).md"
+      ],
+      "locations": [
+        ".repo_studios/docs/automation\\dump_faulthandler_snapshot.md:34",
+        ".repo_studios/docs/automation\\generate_code_doc_churn_report.md:60",
+        ".repo_studios/docs/pipeline\\tier3_index\\IMPLEMENTATION_SUMMARY.md:114",
+        ".repo_studios/docs/pipeline\\tier3_index\\README (1).md:16"
+      ],
+      "slug": "usage"
+    },
+    {
+      "file_count": 3,
+      "files": [
+        ".repo_studios/docs/automation\\traceability\\analyze_monkey_patch_trends_modernization_plan.md",
+        ".repo_studios/docs/automation\\traceability\\run_batch_cleanup_modernization_plan.md",
+        ".repo_studios/docs/automation\\traceability\\run_standards_index_cli_modernization_plan.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/automation\\traceability\\analyze_monkey_patch_trends_modernization_plan.md:68",
+        ".repo_studios/docs/automation\\traceability\\run_batch_cleanup_modernization_plan.md:68",
+        ".repo_studios/docs/automation\\traceability\\run_standards_index_cli_modernization_plan.md:64"
+      ],
+      "slug": "acceptance-criteria"
+    },
+    {
+      "file_count": 3,
+      "files": [
+        ".repo_studios/docs/standards\\global\\std-global-chainlit-ui.md",
+        ".repo_studios/docs/standards\\global\\std-global-code-cleanup.md",
+        ".repo_studios/docs/standards\\global\\std-global-html-coding.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/standards\\global\\std-global-chainlit-ui.md:197",
+        ".repo_studios/docs/standards\\global\\std-global-code-cleanup.md:133",
+        ".repo_studios/docs/standards\\global\\std-global-html-coding.md:156"
+      ],
+      "slug": "anchor-health-cross-link"
+    },
+    {
+      "file_count": 3,
+      "files": [
+        ".repo_studios/docs/standards\\global\\std-global-html-coding.md",
+        ".repo_studios/docs/standards\\global\\std-global-markdown-authoring.md",
+        ".repo_studios/docs/standards\\global\\std-global-python-engineering.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/standards\\global\\std-global-html-coding.md:88",
+        ".repo_studios/docs/standards\\global\\std-global-markdown-authoring.md:89",
+        ".repo_studios/docs/standards\\global\\std-global-python-engineering.md:256"
+      ],
+      "slug": "anti-patterns-to-avoid"
+    },
+    {
+      "file_count": 3,
+      "files": [
+        ".repo_studios/docs/automation\\traceability\\fault_pipeline_aggregator_plan.md",
+        ".repo_studios/docs/templates\\agent_note_template.md",
+        "docs/automation\\orchestrator_implementation.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/automation\\traceability\\fault_pipeline_aggregator_plan.md:14",
+        ".repo_studios/docs/templates\\agent_note_template.md:14",
+        "docs/automation\\orchestrator_implementation.md:19"
+      ],
+      "slug": "context"
+    },
+    {
+      "file_count": 3,
+      "files": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-001_generate_anchor_health_report_build.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-008_validate_inventory_build.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-010_render_inventory_views_build.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-001_generate_anchor_health_report_build.md:92",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-008_validate_inventory_build.md:109",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-010_render_inventory_views_build.md:99"
+      ],
+      "slug": "db-integration-status"
+    },
+    {
+      "file_count": 3,
+      "files": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_aggregator_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_consumer_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_producer_template.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_aggregator_template.md:383",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_consumer_template.md:373",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_producer_template.md:388"
+      ],
+      "slug": "dbintegrationmarker-hopsummariescontentmd-human-readable-summary"
+    },
+    {
+      "file_count": 3,
+      "files": [
+        ".repo_studios/docs/automation\\traceability\\analyze_monkey_patch_trends_modernization_plan.md",
+        ".repo_studios/docs/automation\\traceability\\run_batch_cleanup_modernization_plan.md",
+        ".repo_studios/docs/automation\\traceability\\run_standards_index_cli_modernization_plan.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/automation\\traceability\\analyze_monkey_patch_trends_modernization_plan.md:62",
+        ".repo_studios/docs/automation\\traceability\\run_batch_cleanup_modernization_plan.md:62",
+        ".repo_studios/docs/automation\\traceability\\run_standards_index_cli_modernization_plan.md:57"
+      ],
+      "slug": "dependencies-coordination"
+    },
+    {
+      "file_count": 3,
+      "files": [
+        ".repo_studios/docs/automation\\generate_anchor_health_report.md",
+        ".repo_studios/docs/automation\\generate_code_doc_churn_report.md",
+        ".repo_studios/docs/automation\\generate_test_log_health_report.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/automation\\generate_anchor_health_report.md:9",
+        ".repo_studios/docs/automation\\generate_code_doc_churn_report.md:31",
+        ".repo_studios/docs/automation\\generate_test_log_health_report.md:35"
+      ],
+      "slug": "inputs"
+    },
+    {
+      "file_count": 3,
+      "files": [
+        ".repo_studios/docs/automation\\traceability\\generate_code_doc_churn_report_plan.md",
+        ".repo_studios/docs/inventory\\inventory-notes.md",
+        ".repo_studios/docs/pipeline\\tier3_index\\IMPLEMENTATION_SUMMARY.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/automation\\traceability\\generate_code_doc_churn_report_plan.md:119",
+        ".repo_studios/docs/inventory\\inventory-notes.md:120",
+        ".repo_studios/docs/pipeline\\tier3_index\\IMPLEMENTATION_SUMMARY.md:228"
+      ],
+      "slug": "next-steps"
+    },
+    {
+      "file_count": 3,
+      "files": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-001_generate_anchor_health_report_build.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-008_validate_inventory_build.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-010_render_inventory_views_build.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-001_generate_anchor_health_report_build.md:66",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-008_validate_inventory_build.md:84",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-010_render_inventory_views_build.md:73"
+      ],
+      "slug": "orchestrator-integration"
+    },
+    {
+      "file_count": 3,
+      "files": [
+        ".repo_studios/docs/standards\\global\\std-global-html-coding.md",
+        ".repo_studios/docs/standards\\global\\std-global-monkey-patching.md",
+        ".repo_studios/docs/standards\\global\\std-global-prompt-engineering.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/standards\\global\\std-global-html-coding.md:104",
+        ".repo_studios/docs/standards\\global\\std-global-monkey-patching.md:146",
+        ".repo_studios/docs/standards\\global\\std-global-prompt-engineering.md:101"
+      ],
+      "slug": "quick-checklists"
+    },
+    {
+      "file_count": 3,
+      "files": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-001_generate_anchor_health_report_build.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-008_validate_inventory_build.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-010_render_inventory_views_build.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-001_generate_anchor_health_report_build.md:18",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-008_validate_inventory_build.md:18",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-010_render_inventory_views_build.md:18"
+      ],
+      "slug": "script-identity"
+    },
+    {
+      "file_count": 3,
+      "files": [
+        ".repo_studios/docs/automation\\standards-index-schema.md",
+        ".repo_studios/docs/pipeline\\tier3_index\\IMPLEMENTATION_SUMMARY.md",
+        ".repo_studios/docs/pipeline\\tier3_index\\README (1).md"
+      ],
+      "locations": [
+        ".repo_studios/docs/automation\\standards-index-schema.md:133",
+        ".repo_studios/docs/pipeline\\tier3_index\\IMPLEMENTATION_SUMMARY.md:103",
+        ".repo_studios/docs/pipeline\\tier3_index\\README (1).md:69"
+      ],
+      "slug": "validation-rules"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier1_healthview_orchestration_pipeline.md",
+        ".repo_studios/docs/pipeline\\pipeline_templates\\tier1_pipeline_template.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier1_healthview_orchestration_pipeline.md:113",
+        ".repo_studios/docs/pipeline\\pipeline_templates\\tier1_pipeline_template.md:33"
+      ],
+      "slug": "1-5w1h-purpose-context"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_5_hop_refactor_plan.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_6_1_hop_refactor_plan.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_5_hop_refactor_plan.md:80",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_6_1_hop_refactor_plan.md:67"
+      ],
+      "slug": "1-gap-analysis"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\README.md",
+        "docs/automation\\orchestrator_topic_refactor_rfc.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\README.md:45",
+        "docs/automation\\orchestrator_topic_refactor_rfc.md:3"
+      ],
+      "slug": "1-overview"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_promotion_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-011_generate_lizard_report_promote.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_promotion_template.md:50",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-011_generate_lizard_report_promote.md:50"
+      ],
+      "slug": "1-promotion-checklist-overview"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/archives\\temp_validate_import_boundaries_build.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-005_validate_import_boundaries_build.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/archives\\temp_validate_import_boundaries_build.md:434",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-005_validate_import_boundaries_build.md:435"
+      ],
+      "slug": "10-future-considerations"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_promotion_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-011_generate_lizard_report_promote.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_promotion_template.md:434",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-011_generate_lizard_report_promote.md:415"
+      ],
+      "slug": "10-step-8-update-stage-12-tracking"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_promotion_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-011_generate_lizard_report_promote.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_promotion_template.md:465",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-011_generate_lizard_report_promote.md:438"
+      ],
+      "slug": "11-completion"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/archives\\temp_validate_import_boundaries_build.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-005_validate_import_boundaries_build.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/archives\\temp_validate_import_boundaries_build.md:442",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-005_validate_import_boundaries_build.md:443"
+      ],
+      "slug": "11-update-log"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_promotion_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-011_generate_lizard_report_promote.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_promotion_template.md:497",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-011_generate_lizard_report_promote.md:483"
+      ],
+      "slug": "13-version-history"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier1_healthview_orchestration_pipeline.md",
+        ".repo_studios/docs/pipeline\\pipeline_templates\\tier1_pipeline_template.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier1_healthview_orchestration_pipeline.md:231",
+        ".repo_studios/docs/pipeline\\pipeline_templates\\tier1_pipeline_template.md:67"
+      ],
+      "slug": "2-document-metadata"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_promotion_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-011_generate_lizard_report_promote.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_promotion_template.md:65",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-011_generate_lizard_report_promote.md:65"
+      ],
+      "slug": "2-script-identity-from-build-doc"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier1_healthview_orchestration_pipeline.md",
+        ".repo_studios/docs/pipeline\\pipeline_templates\\tier1_pipeline_template.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier1_healthview_orchestration_pipeline.md:255",
+        ".repo_studios/docs/pipeline\\pipeline_templates\\tier1_pipeline_template.md:78"
+      ],
+      "slug": "3-global-pipeline-overview"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_promotion_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-011_generate_lizard_report_promote.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_promotion_template.md:92",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-011_generate_lizard_report_promote.md:96"
+      ],
+      "slug": "3-step-1-update-tier-2-roster-record"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_promotion_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-011_generate_lizard_report_promote.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_promotion_template.md:137",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-011_generate_lizard_report_promote.md:141"
+      ],
+      "slug": "4-step-2-add-scriptconfig-to-orchestrator"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_promotion_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-011_generate_lizard_report_promote.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_promotion_template.md:196",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-011_generate_lizard_report_promote.md:181"
+      ],
+      "slug": "5-step-3-register-in-orchestrator-script-registry"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/archives\\temp_validate_import_boundaries_build.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-005_validate_import_boundaries_build.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/archives\\temp_validate_import_boundaries_build.md:244",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-005_validate_import_boundaries_build.md:245"
+      ],
+      "slug": "6-documentation-section"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_promotion_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-011_generate_lizard_report_promote.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_promotion_template.md:243",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-011_generate_lizard_report_promote.md:238"
+      ],
+      "slug": "6-step-4-update-orchestrator-tier-3-yaml"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_5_hop_refactor_plan.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_6_1_hop_refactor_plan.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_5_hop_refactor_plan.md:552",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_6_1_hop_refactor_plan.md:558"
+      ],
+      "slug": "6-stop-gates"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/archives\\temp_check_inventory_health_build.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-007_check_inventory_health_build.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/archives\\temp_check_inventory_health_build.md:180",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-007_check_inventory_health_build.md:183"
+      ],
+      "slug": "6-test-section"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_promotion_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-011_generate_lizard_report_promote.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_promotion_template.md:288",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-011_generate_lizard_report_promote.md:272"
+      ],
+      "slug": "7-step-5-addupdate-orchestrator-tests"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/archives\\temp_validate_import_boundaries_build.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-005_validate_import_boundaries_build.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/archives\\temp_validate_import_boundaries_build.md:342",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-005_validate_import_boundaries_build.md:343"
+      ],
+      "slug": "7-test-section"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/archives\\temp_check_inventory_health_build.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-007_check_inventory_health_build.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/archives\\temp_check_inventory_health_build.md:202",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-007_check_inventory_health_build.md:231"
+      ],
+      "slug": "7-transfer-checklist"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_6_1_hop_refactor_plan.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_available_scripts_orchestrator_roster.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_6_1_hop_refactor_plan.md:588",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\tier2_available_scripts_orchestrator_roster.md:584"
+      ],
+      "slug": "7-update-log"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_promotion_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-011_generate_lizard_report_promote.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_promotion_template.md:346",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-011_generate_lizard_report_promote.md:323"
+      ],
+      "slug": "8-step-6-update-makefile-targets"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/archives\\temp_validate_import_boundaries_build.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-005_validate_import_boundaries_build.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/archives\\temp_validate_import_boundaries_build.md:380",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-005_validate_import_boundaries_build.md:381"
+      ],
+      "slug": "8-transfer-checklist"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/archives\\temp_validate_import_boundaries_build.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-005_validate_import_boundaries_build.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/archives\\temp_validate_import_boundaries_build.md:394",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-005_validate_import_boundaries_build.md:395"
+      ],
+      "slug": "9-qa-section-prove-it"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_promotion_template.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-011_generate_lizard_report_promote.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\templates\\tier2_promotion_template.md:394",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-011_generate_lizard_report_promote.md:362"
+      ],
+      "slug": "9-step-7-verify-end-to-end-execution"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/standards\\global\\std-global-monkey-patching.md",
+        ".repo_studios/docs/standards\\global\\std-global-prompt-engineering.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/standards\\global\\std-global-monkey-patching.md:137",
+        ".repo_studios/docs/standards\\global\\std-global-prompt-engineering.md:119"
+      ],
+      "slug": "anti-patterns"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/archives\\temp_validate_inventory_build.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-008_validate_inventory_build.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/archives\\temp_validate_inventory_build.md:5",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-008_validate_inventory_build.md:32"
+      ],
+      "slug": "assessment-2026-01-25"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/standards\\global\\README.md",
+        ".repo_studios/docs/standards\\project\\README.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/standards\\global\\README.md:22",
+        ".repo_studios/docs/standards\\project\\README.md:25"
+      ],
+      "slug": "authoring-guidelines"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/standards\\global\\std-global-html-coding.md",
+        ".repo_studios/docs/standards\\global\\std-global-prompt-engineering.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/standards\\global\\std-global-html-coding.md:151",
+        ".repo_studios/docs/standards\\global\\std-global-prompt-engineering.md:185"
+      ],
+      "slug": "change-history"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/automation\\generate_anchor_inventory.md",
+        ".repo_studios/docs/automation\\generate_doc_index.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/automation\\generate_anchor_inventory.md:59",
+        ".repo_studios/docs/automation\\generate_doc_index.md:66"
+      ],
+      "slug": "cli-reference"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/archives\\temp_validate_inventory_build.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-008_validate_inventory_build.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/archives\\temp_validate_inventory_build.md:50",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-008_validate_inventory_build.md:77"
+      ],
+      "slug": "completion"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-001_generate_anchor_health_report_build.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-010_render_inventory_views_build.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-001_generate_anchor_health_report_build.md:34",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-010_render_inventory_views_build.md:34"
+      ],
+      "slug": "current-state-2026-01-28"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/automation\\generate_anchor_inventory.md",
+        ".repo_studios/docs/automation\\generate_doc_index.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/automation\\generate_anchor_inventory.md:27",
+        ".repo_studios/docs/automation\\generate_doc_index.md:50"
+      ],
+      "slug": "data-shape"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/automation\\function_inventory_integration_plan.md",
+        ".repo_studios/docs/templates\\integration_alignment_template.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/automation\\function_inventory_integration_plan.md:128",
+        ".repo_studios/docs/templates\\integration_alignment_template.md:97"
+      ],
+      "slug": "decisions-captured"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/automation\\configure_faulthandler_runtime.md",
+        ".repo_studios/docs/automation\\dump_faulthandler_snapshot.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/automation\\configure_faulthandler_runtime.md:29",
+        ".repo_studios/docs/automation\\dump_faulthandler_snapshot.md:21"
+      ],
+      "slug": "environment-flags"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        "docs/standards\\global\\std-global-chainlit-ui.md",
+        "docs/standards\\global\\std-global-python-engineering.md"
+      ],
+      "locations": [
+        "docs/standards\\global\\std-global-chainlit-ui.md:42",
+        "docs/standards\\global\\std-global-python-engineering.md:20"
+      ],
+      "slug": "error-handling"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/pipeline\\tier3_index\\IMPLEMENTATION_SUMMARY.md",
+        ".repo_studios/docs/pipeline\\tier3_index\\README (1).md"
+      ],
+      "locations": [
+        ".repo_studios/docs/pipeline\\tier3_index\\IMPLEMENTATION_SUMMARY.md:145",
+        ".repo_studios/docs/pipeline\\tier3_index\\README (1).md:106"
+      ],
+      "slug": "fast-keyword-search"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/automation\\function_analysis_guide.md",
+        ".repo_studios/docs/automation\\standards-extraction-spec.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/automation\\function_analysis_guide.md:91",
+        ".repo_studios/docs/automation\\standards-extraction-spec.md:167"
+      ],
+      "slug": "future-enhancements"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/automation\\generate_anchor_inventory.md",
+        ".repo_studios/docs/automation\\generate_doc_index.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/automation\\generate_anchor_inventory.md:73",
+        ".repo_studios/docs/automation\\generate_doc_index.md:75"
+      ],
+      "slug": "implementation-summary"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/automation\\extract_standards_rules.md",
+        ".repo_studios/docs/automation\\verify_docs_integrity.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/automation\\extract_standards_rules.md:92",
+        ".repo_studios/docs/automation\\verify_docs_integrity.md:72"
+      ],
+      "slug": "integration-notes"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/automation\\configure_faulthandler_runtime.md",
+        ".repo_studios/docs/automation\\dump_faulthandler_snapshot.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/automation\\configure_faulthandler_runtime.md:60",
+        ".repo_studios/docs/automation\\dump_faulthandler_snapshot.md:65"
+      ],
+      "slug": "legacy-compatibility"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/pipeline\\tier3_index\\IMPLEMENTATION_SUMMARY.md",
+        ".repo_studios/docs/pipeline\\tier3_index\\README (1).md"
+      ],
+      "locations": [
+        ".repo_studios/docs/pipeline\\tier3_index\\IMPLEMENTATION_SUMMARY.md:141",
+        ".repo_studios/docs/pipeline\\tier3_index\\README (1).md:102"
+      ],
+      "slug": "load-index"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/standards\\global\\README.md",
+        ".repo_studios/docs/standards\\project\\README.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/standards\\global\\README.md:28",
+        ".repo_studios/docs/standards\\project\\README.md:31"
+      ],
+      "slug": "migration-notes"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/automation\\ci_metrics_checks.md",
+        ".repo_studios/docs/automation\\traceability\\aggregator_dependency_audit.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/automation\\ci_metrics_checks.md:43",
+        ".repo_studios/docs/automation\\traceability\\aggregator_dependency_audit.md:28"
+      ],
+      "slug": "next-actions"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/automation\\generate_anchor_inventory.md",
+        ".repo_studios/docs/automation\\generate_doc_index.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/automation\\generate_anchor_inventory.md:89",
+        ".repo_studios/docs/automation\\generate_doc_index.md:81"
+      ],
+      "slug": "notes-for-ai-consumers"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/automation\\generate_anchor_inventory.md",
+        ".repo_studios/docs/automation\\generate_doc_index.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/automation\\generate_anchor_inventory.md:12",
+        ".repo_studios/docs/automation\\generate_doc_index.md:37"
+      ],
+      "slug": "output-contract"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/automation\\function_inventory_integration_plan.md",
+        ".repo_studios/docs/templates\\integration_alignment_template.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/automation\\function_inventory_integration_plan.md:141",
+        ".repo_studios/docs/templates\\integration_alignment_template.md:106"
+      ],
+      "slug": "outstanding-considerations"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/standards\\global\\std-global-python-engineering.md",
+        "docs/standards\\global\\std-global-python-engineering.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/standards\\global\\std-global-python-engineering.md:170",
+        "docs/standards\\global\\std-global-python-engineering.md:40"
+      ],
+      "slug": "packaging-dependencies"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/archives\\temp_validate_import_boundaries_build.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-005_validate_import_boundaries_build.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/archives\\temp_validate_import_boundaries_build.md:317",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-005_validate_import_boundaries_build.md:318"
+      ],
+      "slug": "payloadstatus-ok-or-violations"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/repo_studios_build_plan.md",
+        ".repo_studios/docs/templates\\structural_checklist_template.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/repo_studios_build_plan.md:19",
+        ".repo_studios/docs/templates\\structural_checklist_template.md:10"
+      ],
+      "slug": "phase-1-foundation-inventory"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/repo_studios_build_plan.md",
+        ".repo_studios/docs/templates\\structural_checklist_template.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/repo_studios_build_plan.md:35",
+        ".repo_studios/docs/templates\\structural_checklist_template.md:16"
+      ],
+      "slug": "phase-2-migration-normalization"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/repo_studios_build_plan.md",
+        ".repo_studios/docs/templates\\structural_checklist_template.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/repo_studios_build_plan.md:49",
+        ".repo_studios/docs/templates\\structural_checklist_template.md:21"
+      ],
+      "slug": "phase-3-automation-quality-gates"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\docstring_compliance_plan.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_4_1_implementation_plan.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\docstring_compliance_plan.md:378",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\implementation_plans\\stage_4_1_implementation_plan.md:164"
+      ],
+      "slug": "progress-log"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/automation\\configure_faulthandler_runtime.md",
+        ".repo_studios/docs/automation\\dump_faulthandler_snapshot.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/automation\\configure_faulthandler_runtime.md:13",
+        ".repo_studios/docs/automation\\dump_faulthandler_snapshot.md:11"
+      ],
+      "slug": "responsibilities"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/archives\\temp_check_inventory_health_build.md",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-007_check_inventory_health_build.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/archives\\temp_check_inventory_health_build.md:27",
+        ".repo_studios/docs/pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\ASR-007_check_inventory_health_build.md:28"
+      ],
+      "slug": "script-build-template-checkinventoryhealthpy"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/templates\\script_inventory.md",
+        ".repo_studios/docs/templates\\script_inventory_template.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/templates\\script_inventory.md:1",
+        ".repo_studios/docs/templates\\script_inventory_template.md:1"
+      ],
+      "slug": "script-inventory-template"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/standards\\global\\std-global-code-cleanup.md",
+        ".repo_studios/docs/standards\\global\\std-global-html-coding.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/standards\\global\\std-global-code-cleanup.md:72",
+        ".repo_studios/docs/standards\\global\\std-global-html-coding.md:97"
+      ],
+      "slug": "self-improvement-protocol"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/pipeline\\README.md",
+        ".repo_studios/docs/pipeline\\pipeline_doc_map.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/pipeline\\README.md:65",
+        ".repo_studios/docs/pipeline\\pipeline_doc_map.md:64"
+      ],
+      "slug": "status-board"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/playbooks\\playbook-memory-refresh.md",
+        ".repo_studios/docs/standards\\global\\std-global-mission-parameters.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/playbooks\\playbook-memory-refresh.md:72",
+        ".repo_studios/docs/standards\\global\\std-global-mission-parameters.md:103"
+      ],
+      "slug": "success-criteria"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        "docs/standards\\global\\std-global-python-engineering.md",
+        "docs/standards\\project\\std-project-python-instructions.md"
+      ],
+      "locations": [
+        "docs/standards\\global\\std-global-python-engineering.md:32",
+        "docs/standards\\project\\std-project-python-instructions.md:32"
+      ],
+      "slug": "testing-discipline"
+    },
+    {
+      "file_count": 2,
+      "files": [
+        ".repo_studios/docs/automation\\healthview_onboarding.md",
+        ".repo_studios/docs/automation\\report_paths_migration_pattern.md"
+      ],
+      "locations": [
+        ".repo_studios/docs/automation\\healthview_onboarding.md:97",
+        ".repo_studios/docs/automation\\report_paths_migration_pattern.md:329"
+      ],
+      "slug": "validation-checklist"
+    }
+  ],
+  "delta_vs_baseline": null,
+  "inventory_cross_file_duplicates": null,
+  "inventory_report": null,
+  "outputs": {
+    "database": {
+      "note": "Database sink placeholder; no data persisted during this run.",
+      "status": "not_implemented",
+      "target": "anchor_health_snapshot"
+    }
+  },
+  "schema_version": 2,
+  "source": "scan",
+  "strict_duplicate_count": 132
+}

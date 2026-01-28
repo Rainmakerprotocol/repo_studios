@@ -1,0 +1,65 @@
+{
+  "viewer": "orchestrator_reports",
+  "topic": "test-execution-telemetry",
+  "run_slug": "20260128-1806",
+  "success": true,
+  "started_at": "2026-01-28T18:06:42.273733+00:00",
+  "finished_at": "2026-01-28T18:08:11.691919+00:00",
+  "steps": [
+    {
+      "name": "collect",
+      "status": "success",
+      "started_at": "2026-01-28T18:06:42.273740+00:00",
+      "finished_at": "2026-01-28T18:08:01.494971+00:00",
+      "detail": "log report captured",
+      "payload": {
+        "coverage": {
+          "status": "ok",
+          "total_files": 84,
+          "total_functions": 1580,
+          "covered_functions": 1547,
+          "overall_coverage_pct": 97.91,
+          "files_below_threshold": [],
+          "threshold": null,
+          "include_empty": false
+        },
+        "log_report": {
+          "warnings_total": 0,
+          "slow_tests": 0
+        }
+      }
+    },
+    {
+      "name": "analyse",
+      "status": "success",
+      "started_at": "2026-01-28T18:08:01.494985+00:00",
+      "finished_at": "2026-01-28T18:08:11.677713+00:00",
+      "detail": "analysis completed",
+      "payload": {
+        "hardening_status": "issues-found",
+        "heatmap_mode": "consumer"
+      }
+    },
+    {
+      "name": "summarize",
+      "status": "success",
+      "started_at": "2026-01-28T18:08:11.677726+00:00",
+      "finished_at": "2026-01-28T18:08:11.691907+00:00",
+      "detail": "health summary generated",
+      "payload": {
+        "source": "producer"
+      }
+    }
+  ],
+  "metrics": {
+    "runtime_seconds": 89.418186,
+    "step_count": 3,
+    "steps_succeeded": 3,
+    "steps_failed": 0,
+    "steps_skipped": 0,
+    "artifact_files": 3,
+    "artifact_bytes": 7983
+  },
+  "status": "ok",
+  "exit_code": 0
+}

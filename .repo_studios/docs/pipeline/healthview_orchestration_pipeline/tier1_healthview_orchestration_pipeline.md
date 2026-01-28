@@ -1555,55 +1555,53 @@ _Tier-2 references (depth lives here):_
 
 **Stage 11.1 Script Gate Summary (Tier-1):**
 
-_Producers (HOP-compliant output path):_
+_Producers — Orchestrator-Promoted (6 scripts in `run_available_scripts_oversight.py`):_
 
-- [ ] `validate_import_boundaries.py` — ✅ CLI works; ✅ HOP output path.
+- [x] `validate_import_boundaries.py` — ✅ HOP-compliant; ✅ promoted to orchestrator (Phase 1).
   See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-005-validate_import_boundariespy)
-- [ ] `validate_inventory.py` — ✅ CLI works; ✅ HOP output path.
+- [x] `validate_inventory.py` — ✅ HOP-compliant; ✅ promoted to orchestrator (Phase 1).
   See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-008-validate_inventorypy)
-- [ ] `generate_lizard_report.py` — ✅ CLI works; ✅ HOP output path.
+- [x] `generate_lizard_report.py` — ✅ HOP-compliant; ✅ promoted to orchestrator (Phase 1).
   See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-011-generate_lizard_reportpy)
-
-_Producers (non-standard output path — needs alignment):_
-
-- [ ] `render_inventory_views.py` — ✅ CLI works; ⚠️ writes to `.repo_studios/reports/producer_reports/healthview/` (alternate tree).
+- [x] `render_inventory_views.py` — ✅ HOP-compliant; ✅ promoted to orchestrator (Phase 1).
   See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-010-render_inventory_viewspy)
-- [ ] `check_inventory_health.py` — ✅ CLI works; ⚠️ writes to `.repo_studios/command_center/reports/healthview/` (alternate tree); requires `render_inventory_views` output.
+- [x] `check_inventory_health.py` — ✅ HOP-compliant; ✅ promoted to orchestrator (Phase 1).
   See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-007-check_inventory_healthpy)
 
-_Consumers (needs fix):_
+_Consumers — Orchestrator-Promoted:_
 
-- [ ] `generate_anchor_health_report.py` — ❌ import error (`LIBRARIES_ROOT` path bug).
+- [x] `generate_anchor_health_report.py` — ✅ HOP-compliant; ✅ promoted to orchestrator (Phase 2).
   See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-001-generate_anchor_health_reportpy)
 
-_Utilities (not directly orchestrated):_
+_Utilities (not directly orchestrated — Tier B):_
 
-- [ ] `configure_faulthandler_runtime.py` — utility; invoked by other scripts.
+- [x] `configure_faulthandler_runtime.py` — utility; invoked by other scripts (classified, no changes needed).
   See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-002-configure_faulthandler_runtimepy)
-- [ ] `dump_faulthandler_snapshot.py` — utility; invoked by other scripts.
+- [x] `dump_faulthandler_snapshot.py` — utility; invoked by other scripts (classified, no changes needed).
   See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-003-dump_faulthandler_snapshotpy)
-- [ ] `fault_run_analysis.py` — utility; invoked by other scripts.
+- [x] `fault_run_analysis.py` — utility; invoked by other scripts (classified, no changes needed).
   See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-004-fault_run_analysispy)
 
-_Libraries (import-only; no CLI):_
+_Libraries (import-only; no CLI — Tier B):_
 
-- [ ] `extract_standards_rules.py` — library module; no CLI entry point.
+- [x] `extract_standards_rules.py` — library module; no CLI entry point (classified).
   See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-006-extract_standards_rulespy)
-- [ ] `test_log_analysis.py` — library module; no CLI entry point.
+- [x] `test_log_analysis.py` — library module; no CLI entry point (classified).
   See: [Tier-2 record](tier2_roster/tier2_available_scripts_roster.md#asr-013-test_log_analysispy)
-- [ ] `anchor_inventory_loader.py` — library module; loads anchor inventory bundles (no CLI).
 
 **Stage 11.1 Gate Checklist (Tier-1):**
 
 These are Stage 11.1 promotion gates when a script is picked up by an orchestrator.
 
-- [ ] Base package complete (`manifest.json`, `summary.md`, `telemetry.json`) when the script is a
+- [x] Base package complete (`manifest.json`, `summary.md`, `telemetry.json`) when the script is a
   bundle-emitting stage participant.
-- [ ] No pointer artifacts (`latest_*` / `current_*`) in the promoted bundle surface.
-- [ ] Output root aligned to HOP contract
+- [x] No pointer artifacts (`latest_*` / `current_*`) in the promoted bundle surface.
+- [x] Output root aligned to HOP contract
   (`.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`)
   when the script emits HealthView bundles.
-- [ ] Tier-3 eligible once Tier-2 depth exists (a Tier-2 roster is created for the new vertical).
+- [x] Tier-3 eligible once Tier-2 depth exists (a Tier-2 roster is created for the new vertical).
+- [x] Orchestrator implemented (`run_available_scripts_oversight.py`) with 6-script pipeline.
+- [x] Phase 4 compliance: Tier-3 YAML + build doc for all 6 orchestrated scripts.
 
 **Target contract (locked decisions):**
 
@@ -1616,61 +1614,49 @@ These are Stage 11.1 promotion gates when a script is picked up by an orchestrat
 
 **Current evidence (Stage 11.1):**
 
-_Tested 2026-01-26 — script-by-script CLI and output path validation:_
+_Validated 2026-01-28 — orchestrator operational with full test suite:_
 
-HOP-compliant producers (3):
+**Orchestrator:** `run_available_scripts_oversight.py` (12/12 tests passing)
 
-- `validate_import_boundaries.py` → `.repo_studios/reports/healthview/producer_reports/import_boundary/<ts>/`
-- `validate_inventory.py` → `.repo_studios/reports/healthview/producer_reports/validate_inventory/<ts>/`
-- `generate_lizard_report.py` → `.repo_studios/reports/healthview/producer_reports/lizard_complexity/<ts>/`
+**Orchestrated scripts (6):**
 
-Non-standard output paths (2):
+| Phase | Script | Output Path | Status |
+|-------|--------|-------------|--------|
+| 1 | `validate_import_boundaries.py` | `.repo_studios/reports/healthview/producer_reports/import_boundary/<ts>/` | ✅ |
+| 1 | `check_inventory_health.py` | `.repo_studios/reports/healthview/producer_reports/inventory_health/<ts>/` | ✅ |
+| 1 | `validate_inventory.py` | `.repo_studios/reports/healthview/producer_reports/validate_inventory/<ts>/` | ✅ |
+| 1 | `render_inventory_views.py` | `.repo_studios/reports/healthview/producer_reports/inventory_overview/<ts>/` | ✅ |
+| 1 | `generate_lizard_report.py` | `.repo_studios/reports/healthview/producer_reports/lizard_complexity/<ts>/` | ✅ |
+| 2 | `generate_anchor_health_report.py` | `.repo_studios/reports/healthview/consumer_reports/anchor_health/<ts>/` | ✅ |
 
-- `render_inventory_views.py` → `.repo_studios/reports/producer_reports/healthview/inventory_overview/<ts>/` (alternate tree)
-- `check_inventory_health.py` → `.repo_studios/command_center/reports/healthview/inventory_health/<ts>/` (alternate tree)
+**Phase 4 documentation compliance (all 6 scripts):**
 
-Broken (1):
+- Tier-3 YAML created at `tier3_scripts/available_scripts_oversight/`
+- Build doc created at `tier2_roster/working_docs/`
+- Tier-2 roster records updated with orchestrator_integration block
+- DB integration docs verified/fixed
 
-- `generate_anchor_health_report.py` — import error: `LIBRARIES_ROOT` missing `.repo_studios` segment
+**Classified but not orchestrated (Tier B — libraries/utilities):**
 
-Libraries (3):
+- `extract_standards_rules.py` — library module (no CLI)
+- `test_log_analysis.py` — library module (no CLI)
+- `configure_faulthandler_runtime.py` — utility (invoked by other scripts)
+- `dump_faulthandler_snapshot.py` — utility (invoked by other scripts)
+- `fault_run_analysis.py` — utility (invoked by other scripts)
 
-- `extract_standards_rules.py` — no CLI entry point (library module)
-- `test_log_analysis.py` — no CLI entry point (library module)
-- `anchor_inventory_loader.py` — no CLI entry point (loads anchor inventory bundles)
+**Meaning of "available scripts" (Tier-1 contract):**
 
-Utilities (3):
-
-- `configure_faulthandler_runtime.py`, `dump_faulthandler_snapshot.py`, `fault_run_analysis.py` — not tested (invoked by other scripts)
-
-Meaning of "available scripts" (Tier-1 contract):
-
-- The script exists, is discoverable in the repo, and can be invoked directly (CLI) or consumed as
-  a library/utility.
-- The script is **not** part of the current HealthView orchestrator blast-radius chain (Stages
-  1.1–7) and therefore does not contribute to coverage certainty today.
-- When a compiled need emerges, the script should be promoted by **copy/paste wiring** into an
-  appropriate orchestrator, followed by a Tier-1 doc update moving the reference out of
-  this holding area.
-
-Planned orchestrator integrations (compiled need; wrapper pending):
-
-- Stage 2.2: `generate_anchor_health_report.py` (blocked: import error fix needed)
-- Stage 3.2: `configure_faulthandler_runtime.py`, `dump_faulthandler_snapshot.py`, `fault_run_analysis.py`
-- Stage 4.2: `validate_import_boundaries.py` (ready)
-- Stage 6.2: `extract_standards_rules.py` (library-only; requires CLI wrapper to integrate)
-
-Current inventory candidates without a compiled need (subject to reclassification):
-
-- `check_inventory_health.py` — works but needs output path alignment
-- `validate_inventory.py` — ready (HOP-compliant)
-- Out-of-scope for HealthView today:
-  - `render_inventory_views.py` (CommandView-specific; non-standard output path)
-  - `generate_lizard_report.py` (HOP-compliant; candidate for future "Engineering Complexity Watch" stage)
+- Stage 11.1 scripts are now orchestrated via `run_available_scripts_oversight.py`.
+- The orchestrator runs as part of the HealthView diagnostic chain.
+- Tier B items (libraries/utilities) remain classified but not directly invoked by the orchestrator.
 
 **Overview:**  
-Stage 11.1 is intentionally a Tier-1 holding area: it exists to preserve discoverability and
-upgrade paths without over-claiming orchestration coverage until an orchestrator vertical is built.
+Stage 11.1 is now **operational**: the `run_available_scripts_oversight.py` orchestrator manages
+6 HOP-compliant scripts (5 producers + 1 consumer) with full Phase 4 documentation compliance.
+Tier B items (libraries/utilities) are classified but not directly orchestrated.
+
+**Orchestrator location:** `.repo_studios/command_center/scripts/orchestrators/run_available_scripts_oversight.py`  
+**Tier-2 orchestrator roster:** [tier2_available_scripts_orchestrator_roster.md](tier2_roster/tier2_available_scripts_orchestrator_roster.md)
 
 ---
 
@@ -1687,7 +1673,11 @@ _Tier-2 references (depth lives here):_
 - Stage 12.3 Aggregator Template: [tier2_aggregator_template.md](tier2_roster/templates/tier2_aggregator_template.md)
 - Stage 12.4 Summarizer Template: [tier2_summarizer_template.md](tier2_roster/templates/tier2_summarizer_template.md)
 - Stage 12.5 Orchestrator Template: [tier2_orchestrator_template.md](tier2_roster/templates/tier2_orchestrator_template.md)
+- Stage 12.6 Utility Template: [tier2_utility_template.md](tier2_roster/templates/tier2_utility_template.md)
+- Stage 12.7 Promotion Template: [tier2_promotion_template.md](tier2_roster/templates/tier2_promotion_template.md)
+- Templates README: [README.md](tier2_roster/templates/README.md)
 - Stage 11.1 Available Scripts Roster: [tier2_available_scripts_roster.md](tier2_roster/tier2_available_scripts_roster.md)
+- Stage 11.1 Orchestrator Roster: [tier2_available_scripts_orchestrator_roster.md](tier2_roster/tier2_available_scripts_orchestrator_roster.md)
 
 **Implementation Plan:**
 [stage12_template_development_plan.md](implementation_plans/stage12_template_development_plan.md)
@@ -1700,7 +1690,10 @@ _Tier-2 references (depth lives here):_
 - [x] 12.4 Summarizer template extracted and validated
 - [x] 12.5 Orchestrator template extracted and validated
 - [x] All templates linked from this section
-- [ ] Stage 11.1 orchestrator wired to Stage 7 meta-orchestrator
+- [x] 12.6 Utility template extracted and validated (`tier2_utility_template.md`)
+- [x] 12.7 Promotion template extracted and validated (`tier2_promotion_template.md`)
+- [x] Stage 11.1 orchestrator implemented and operational (2026-01-28)
+- [ ] Stage 11.1 orchestrator wired to Stage 7 meta-orchestrator (pending)
 - [ ] Existing Stage 1.1 scripts refactored to template standards
 
 **Target contract (locked decisions):**
@@ -1720,9 +1713,11 @@ _Tier-2 references (depth lives here):_
 **Current evidence (Stage 12):**
 
 - Implementation plan: `implementation_plans/stage12_template_development_plan.md` — Phases 1-5 complete
-- Stage 11.1 Available Scripts roster: `tier2_roster/tier2_available_scripts_roster.md` — 12 scripts processed
-- Templates created (2026-01-26): `tier2_roster/templates/tier2_*_template.md` (5 tier-class templates)
-- Phase 4 results: 7 HOP-aligned scripts, 4 libraries classified, 1 deferred; 18/18 tests passing
+- Stage 11.1 Available Scripts roster: `tier2_roster/tier2_available_scripts_roster.md` — 11 scripts processed
+- Stage 11.1 Orchestrator roster: `tier2_roster/tier2_available_scripts_orchestrator_roster.md` — operational
+- Templates created: `tier2_roster/templates/` (7 templates: 5 tier-class + utility + promotion)
+- Phase 4 results (2026-01-28): 6 orchestrated scripts with full documentation compliance
+- Orchestrator: `run_available_scripts_oversight.py` — 12/12 tests passing
 
 ---
 
@@ -1730,11 +1725,17 @@ _Tier-2 references (depth lives here):_
 
 ### 13.1 Pipeline Snapshot
 
-**Current State (after partial Phase 2 hardening):**  
+**Current State (2026-01-28):**  
 
-All six maturity domain orchestrators (Stages 1–6) are **operational** and produce
-timestamped HealthView bundles. Coverage analysis shows 28/36 scripts (77.8%) orchestrated;
-12 gaps identified and documented as "Planned Expansions" within appropriate stage classes.
+All eight maturity domain orchestrators (Stages 1–7 + Stage 11) are **operational** and produce
+timestamped HealthView bundles. Stage 12 (Script Development Templates) is complete with 7 templates.
+
+**Orchestrator coverage:**
+
+- **Stages 1–6:** 6 maturity domain orchestrators operational (partial hardening complete)
+- **Stage 7:** Meta-orchestrator chains Stages 1–6 sequentially
+- **Stage 11:** Available Scripts orchestrator operational (6 scripts, 12/12 tests)
+- **Stage 12:** 7 templates complete (5 tier-class + utility + promotion)
 
 **Hardening status:**
 
@@ -1755,33 +1756,31 @@ timestamped HealthView bundles. Coverage analysis shows 28/36 scripts (77.8%) or
   prompt format configurability
 - **Stage 7 (Meta-Orchestrator):** Pass B complete – code-verified sequential execution,
   fail-fast strategy, composite manifest generation
-- **All stages:** Phase 2 Pass B hardening 100% complete – code validation done, awaiting Pass C
-  polish (wording, transitions, cross-references)
+- **Stage 11 (Available Scripts):** **Complete** – 6-script pipeline (5 producers + 1 consumer),
+  Phase 4 documentation compliance, 12/12 tests passing
+- **Stage 12 (Templates):** **Complete** – 7 templates in `tier2_roster/templates/`
+- **All core stages (1–7):** Phase 2 Pass B hardening 100% complete – code validation done,
+  awaiting Pass C polish (wording, transitions, cross-references)
 
-**Meta-orchestrator (Stage 7)** chains all six Stage NN.1 orchestrators sequentially via
-dynamic imports. Tests exist for Stage 1, Stage 5, and Stage 7; other orchestrators lack
-dedicated test coverage (marked "tests TBD" in matrix).
+**Meta-orchestrator (Stage 7)** chains all six Stage NN.1 orchestrators (1–6) sequentially via
+dynamic imports. Stage 11.1 orchestrator is operational but not yet wired to Stage 7.
 
 **Stage-chain contradictions are tracked explicitly.** Structural contract mismatches
 (output roots, retention defaults, timestamp shapes, and stage-specific stop-gates) are tracked in
 **Section 14** and the relevant Tier-2 rosters.
 
-All gaps have logical explanations:
+**Remaining gaps:**
 
-- 5 scripts (easy integrations): related to existing orchestrators but not yet wired
-- 2 scripts (questionable): purpose unclear, may be CommandView-specific
-- 4 scripts (out of scope): `render_inventory_views.py` (CommandView),
-  `generate_lizard_report.py` (potential Stage 8)
+- Stage 11.1 orchestrator not yet wired to Stage 7 meta-orchestrator
+- Stage 1.1 scripts not yet refactored to Stage 12 template standards
+- 5 Tier B items (libraries/utilities) classified but not directly orchestrated
 
 **High-Level Risks:**
 
 - Orchestrators lack CI/CD integration; currently manual-only execution (invoke via CLI or make target)
 - No automated alerting when health metrics degrade below thresholds (metrics collected but not monitored)
-- Tier-2 rosters are in progress; Stage 1.1 roster exists (other stage rosters pending)
-- Tier-3 YAML docs not yet created (blocking AI agent tool integration)
-- Gap scripts not yet integrated (5 easy integrations identified, awaiting code updates)
 - Sequential meta-orchestrator execution causes 20-30 min full-suite runtimes (parallel mode pending)
-- Test coverage incomplete: only 3 of 7 orchestrators have dedicated integration tests
+- Test coverage incomplete: only 4 of 8 orchestrators have dedicated integration tests
 
 ### 13.2 Stage Matrix
 
@@ -1794,6 +1793,8 @@ All gaps have logical explanations:
 | 5 | Technical Debt Oversight | 5.1 Monkey Patch Oversight (5 scripts) | Operational (partial hardening) | Risk scoring incomplete | [orchestrator](../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py), [tests](../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py) |
 | 6 | Process Governance | 6.1 Standards Integrity (6 scripts) | Operational (partial hardening) | Standards rules extraction not integrated | [orchestrator](../../../command_center/scripts/orchestrators/run_standards_integrity.py), [tests](../../../tests/tests_command_center/standards_integrity/test_run_standards_integrity.py) |
 | 7 | Running Complete Suite | Meta-Orchestrator (chains 6 topics) | Operational (partial hardening) | Sequential execution only (no parallel mode) | [orchestrator](../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py), [tests](../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py) |
+| 11 | Available Scripts Oversight | 11.1 Available Scripts (6 scripts) | **Operational** | Wire to Stage 7 meta-orchestrator | [orchestrator](../../../command_center/scripts/orchestrators/run_available_scripts_oversight.py), [tests](../../../tests/tests_command_center/orchestrators/test_run_available_scripts_oversight.py) |
+| 12 | Script Development Templates | 12.1–12.7 Templates (7 templates) | **Complete** | Apply to Stage 1.1 scripts | [templates](tier2_roster/templates/), [plan](implementation_plans/stage12_template_development_plan.md) |
 
 ---
 
@@ -1897,6 +1898,7 @@ All gaps have logical explanations:
 
 | Date | Author / Steward | Change | Doc-index timestamp | Regression suites |
 | --- | --- | --- | --- | --- |
+| 2026-01-28 | GitHub Copilot | **Stage 11 & 12 finalized:** Stage 11.1 orchestrator operational (6 scripts, 12/12 tests); Phase 4 documentation complete for all scripts (Tier-3 YAML + build docs); Stage 12 templates complete (7 templates); Tier-2 rosters promoted to `active` v1.0.0; Stage Matrix updated with Stages 11 & 12. | N/A | 570/580 suite; 12/12 orchestrator |
 | 2026-01-25 | GitHub Copilot | Introduced Stage 12 (Script Development Templates) as governance staging; created implementation plan; renumbered downstream sections (Snapshot → 13, Contradictions → 14, Tier-2 Index → 15, Working Notes → 16, Update Log → 17); added Stage 11.1 orchestrator roster placeholder to Tier-2 index. | pending | pending |
 | 2026-01-23 | GitHub Copilot | Stage 6.1 reality sync: corrected orchestrator output root and removed legacy index-pointer language from Tier-1 Stage 6.1 narrative and inputs/outputs. | 20260123-0152 | pytest Stage 6.1 focused suites (11 passed); doc-index |
 | 2026-01-22 | GitHub Copilot | Stage 6.1 follow-up: corrected Stage Matrix script count for Standards Integrity to reflect current 6-script chain; regenerated doc-index artifacts after paired-doc drift cleanup. | 20260122-1218 | doc-index |

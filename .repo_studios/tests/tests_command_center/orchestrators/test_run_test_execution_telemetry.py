@@ -470,8 +470,8 @@ def test_run_generates_healthview_bundle(tmp_path: Path, monkeypatch: pytest.Mon
         encoding="utf-8",
     )
 
-    exit_code = telemetry_module.run(args)
-    assert exit_code == 0
+    payload = telemetry_module.run(args)
+    assert payload["exit_code"] == 0
 
     topic_dir = healthview_root / "orchestrator_reports" / "test_execution_telemetry"
     runs = sorted(child for child in topic_dir.iterdir() if child.is_dir())
@@ -649,8 +649,8 @@ def test_run_handles_missing_logs(tmp_path: Path, monkeypatch: pytest.MonkeyPatc
         encoding="utf-8",
     )
 
-    exit_code = telemetry_module.run(args)
-    assert exit_code == 1
+    payload = telemetry_module.run(args)
+    assert payload["exit_code"] == 1
 
     topic_dir = healthview_root / "orchestrator_reports" / "test_execution_telemetry"
     runs = sorted(child for child in topic_dir.iterdir() if child.is_dir())

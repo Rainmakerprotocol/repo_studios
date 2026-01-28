@@ -18,6 +18,7 @@ import json
 import logging
 import os
 import sys
+import time
 from dataclasses import dataclass, replace
 from datetime import datetime, timezone
 from pathlib import Path
@@ -46,6 +47,7 @@ from libraries import (
     step_success,
     write_report_artifacts,
 )
+from libraries.database_integration import create_storage
 from libraries.report_paths import build_topic_path
 from libraries.retention_policy import get_keep, get_orchestrator_config
 
@@ -316,6 +318,58 @@ class HealthReportOutcome:
     run_dir: Path | None
     bundle_summary: Path | None
     payload: dict[str, Any]
+
+
+@dataclass(frozen=True)
+class ChildOutcome:
+    """Capture the outcome of a child script invocation.
+
+    Attributes:
+        name: Script filename for the child invocation.
+        path: Repo-relative script path.
+        status: Outcome status (ok, warn, no_data, error).
+        exit_code: Exit code derived from the child outcome.
+        run_dir: Output directory produced by the child script, if any.
+        duration_seconds: Elapsed runtime in seconds.
+        error: Error message when the child invocation fails.
+    """
+
+    name: str
+    path: str
+    status: str
+    exit_code: int
+    run_dir: str | None
+    duration_seconds: float
+    error: str | None
+
+    def as_dict(self) -> dict[str, Any]:
+        """Return a JSON-serializable representation of the outcome."""
+        return {
+            "name": self.name,
+            "path": self.path,
+            "status": self.status,
+            "exit_code": self.exit_code,
+            "run_dir": self.run_dir,
+            "duration_seconds": self.duration_seconds,
+            "error": self.error,
+        }
+
+
+def _exit_code_from_status(status: str) -> int:
+    """Return an exit code for a child outcome status.
+
+    Args:
+        status: Child script status string.
+
+    Returns:
+        Integer exit code compatible with orchestrator summary semantics.
+    """
+    normalized = status.lower()
+    if normalized in {"ok", "success"}:
+        return 0
+    if normalized in {"warn", "partial", "no_data", "skipped"}:
+        return 1
+    return 2
 
 
 def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
@@ -851,13 +905,14 @@ def _section_pipeline_status(result_steps: Sequence[Any]) -> list[str]:
     lines = [
         "## Pipeline Status",
         "",
-        "| Step | Status | Detail |",
-        "| --- | --- | --- |",
+        "| Step | Status | Detail | Duration (s) |",
+        "| --- | --- | --- | ---: |",
     ]
     for step in result_steps:
         icon = _status_icon(step.status)
         detail = step.detail or ""
-        lines.append(f"| {step.name} | {icon} {step.status} | {detail} |")
+        duration_seconds = (step.finished_at - step.started_at).total_seconds()
+        lines.append(f"| {step.name} | {icon} {step.status} | {detail} | {duration_seconds:.2f} |")
     lines.append("")
     return lines
 
@@ -1363,7 +1418,7 @@ def _build_enhanced_summary(ctx: EnhancedSummaryContext) -> str:
     return "\n".join(lines)
 
 
-def run(argv: Sequence[str] | None = None) -> int:
+def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     """Execute the test execution telemetry orchestrator.
 
     Parse arguments, run the three-phase pipeline (collect, analyse,
@@ -1373,7 +1428,7 @@ def run(argv: Sequence[str] | None = None) -> int:
         argv: Command-line arguments, or None to use sys.argv.
 
     Returns:
-        Exit code (0 for success, non-zero for failure).
+        Payload dictionary with orchestrator status, artifacts, and child outcomes.
     """
     args = parse_args(argv)
     paths = build_paths(args)
@@ -1385,6 +1440,30 @@ def run(argv: Sequence[str] | None = None) -> int:
 
     context = TopicContext(paths=paths, options=options, metadata={})
 
+    child_outcomes: list[ChildOutcome] = []
+
+    def _record_child_outcome(
+        *,
+        name: str,
+        path: Path,
+        status: str,
+        exit_code: int,
+        run_dir: Path | None,
+        duration_seconds: float,
+        error: str | None,
+    ) -> None:
+        child_outcomes.append(
+            ChildOutcome(
+                name=name,
+                path=path.as_posix(),
+                status=status,
+                exit_code=exit_code,
+                run_dir=run_dir.as_posix() if run_dir is not None else None,
+                duration_seconds=duration_seconds,
+                error=error,
+            )
+        )
+
     collect_outcome_holder: dict[str, CollectOutcome] = {}
     coverage_outcome_holder: dict[str, CoverageOutcome] = {}
     heatmap_outcome_holder: dict[str, HeatmapOutcome] = {}
@@ -1393,8 +1472,60 @@ def run(argv: Sequence[str] | None = None) -> int:
 
     def collect_step(ctx: TopicContext):
         LOGGER.info("Collecting pytest telemetry artifacts")
-        coverage = _execute_coverage(paths, options)
-        collect = _execute_collect(paths, options)
+        coverage_start = time.perf_counter()
+        try:
+            coverage = _execute_coverage(paths, options)
+        except Exception as exc:
+            duration = time.perf_counter() - coverage_start
+            _record_child_outcome(
+                name=COVERAGE_SCRIPT.name,
+                path=COVERAGE_SCRIPT,
+                status="error",
+                exit_code=2,
+                run_dir=None,
+                duration_seconds=duration,
+                error=str(exc),
+            )
+            raise
+        else:
+            duration = time.perf_counter() - coverage_start
+            _record_child_outcome(
+                name=COVERAGE_SCRIPT.name,
+                path=COVERAGE_SCRIPT,
+                status="ok",
+                exit_code=0,
+                run_dir=coverage.report_dir,
+                duration_seconds=duration,
+                error=None,
+            )
+
+        collect_start = time.perf_counter()
+        try:
+            collect = _execute_collect(paths, options)
+        except Exception as exc:
+            duration = time.perf_counter() - collect_start
+            _record_child_outcome(
+                name=COLLECT_SCRIPT.name,
+                path=COLLECT_SCRIPT,
+                status="error",
+                exit_code=2,
+                run_dir=None,
+                duration_seconds=duration,
+                error=str(exc),
+            )
+            raise
+        else:
+            duration = time.perf_counter() - collect_start
+            status = str(collect.payload.get("status", "ok"))
+            _record_child_outcome(
+                name=COLLECT_SCRIPT.name,
+                path=COLLECT_SCRIPT,
+                status=status,
+                exit_code=_exit_code_from_status(status),
+                run_dir=collect.report_dir,
+                duration_seconds=duration,
+                error=None,
+            )
         ctx.add_metadata("coverage", coverage)
         ctx.add_metadata("collect", collect)
         coverage_outcome_holder["value"] = coverage
@@ -1413,8 +1544,62 @@ def run(argv: Sequence[str] | None = None) -> int:
 
     def analyse_step(ctx: TopicContext):
         LOGGER.info("Running telemetry analysis scripts")
-        hardening = _execute_hardening(paths, options)
-        heatmap = _execute_heatmap(paths, options)
+        hardening_start = time.perf_counter()
+        try:
+            hardening = _execute_hardening(paths, options)
+        except Exception as exc:
+            duration = time.perf_counter() - hardening_start
+            _record_child_outcome(
+                name=HARDENING_SCRIPT.name,
+                path=HARDENING_SCRIPT,
+                status="error",
+                exit_code=2,
+                run_dir=None,
+                duration_seconds=duration,
+                error=str(exc),
+            )
+            raise
+        else:
+            duration = time.perf_counter() - hardening_start
+            status = str(hardening.payload.get("status", "ok"))
+            exit_code = int(hardening.payload.get("exit_code", _exit_code_from_status(status)))
+            _record_child_outcome(
+                name=HARDENING_SCRIPT.name,
+                path=HARDENING_SCRIPT,
+                status=status,
+                exit_code=exit_code,
+                run_dir=hardening.run_dir,
+                duration_seconds=duration,
+                error=None,
+            )
+
+        heatmap_start = time.perf_counter()
+        try:
+            heatmap = _execute_heatmap(paths, options)
+        except Exception as exc:
+            duration = time.perf_counter() - heatmap_start
+            _record_child_outcome(
+                name=HEATMAP_SCRIPT.name,
+                path=HEATMAP_SCRIPT,
+                status="error",
+                exit_code=2,
+                run_dir=None,
+                duration_seconds=duration,
+                error=str(exc),
+            )
+            raise
+        else:
+            duration = time.perf_counter() - heatmap_start
+            status = str(heatmap.payload.get("status", "ok"))
+            _record_child_outcome(
+                name=HEATMAP_SCRIPT.name,
+                path=HEATMAP_SCRIPT,
+                status=status,
+                exit_code=_exit_code_from_status(status),
+                run_dir=heatmap.run_dir,
+                duration_seconds=duration,
+                error=None,
+            )
         ctx.add_metadata("hardening", hardening)
         ctx.add_metadata("heatmap", heatmap)
         hardening_outcome_holder["value"] = hardening
@@ -1432,7 +1617,33 @@ def run(argv: Sequence[str] | None = None) -> int:
         if collect_outcome is None or collect_outcome.producer_bundle_dir is None:
             return step_skipped(detail="no structured log report found")
         LOGGER.info("Generating test log health summary")
-        health = _execute_health_report(paths, options, producer_bundle_dir=collect_outcome.producer_bundle_dir)
+        health_start = time.perf_counter()
+        try:
+            health = _execute_health_report(paths, options, producer_bundle_dir=collect_outcome.producer_bundle_dir)
+        except Exception as exc:
+            duration = time.perf_counter() - health_start
+            _record_child_outcome(
+                name=HEALTH_REPORT_SCRIPT.name,
+                path=HEALTH_REPORT_SCRIPT,
+                status="error",
+                exit_code=2,
+                run_dir=None,
+                duration_seconds=duration,
+                error=str(exc),
+            )
+            raise
+        else:
+            duration = time.perf_counter() - health_start
+            status = str(health.payload.get("status", "ok"))
+            _record_child_outcome(
+                name=HEALTH_REPORT_SCRIPT.name,
+                path=HEALTH_REPORT_SCRIPT,
+                status=status,
+                exit_code=_exit_code_from_status(status),
+                run_dir=health.run_dir,
+                duration_seconds=duration,
+                error=None,
+            )
         ctx.add_metadata("health", health)
         health_outcome_holder["value"] = health
         return step_success(
@@ -1452,11 +1663,17 @@ def run(argv: Sequence[str] | None = None) -> int:
 
     result = pipeline.run(context)
     exit_code = 0
+    status = "ok"
     try:
         result.raise_for_failure()
     except RuntimeError as exc:
         LOGGER.error("Pipeline failed: %s", exc)
         exit_code = 1
+        status = "error"
+    else:
+        if any(step.status == "skipped" for step in result.steps):
+            exit_code = 1
+            status = "partial"
 
     collect_outcome = collect_outcome_holder.get("value")
     if collect_outcome is None:
@@ -1494,6 +1711,8 @@ def run(argv: Sequence[str] | None = None) -> int:
     }
 
     telemetry_payload = telemetry.as_dict()
+    telemetry_payload["status"] = status
+    telemetry_payload["exit_code"] = exit_code
 
     manifest = {
         "schema_version": SCHEMA_VERSION,
@@ -1501,6 +1720,8 @@ def run(argv: Sequence[str] | None = None) -> int:
         "topic": HEALTHVIEW_TOPIC,
         "run_slug": run_slug,
         "generated_at": completed_at.isoformat(),
+        "status": status,
+        "exit_code": exit_code,
         "telemetry": telemetry_payload,
         "artifacts": artifacts_section,
         "inputs": {
@@ -1540,6 +1761,7 @@ def run(argv: Sequence[str] | None = None) -> int:
         topic="",
     )
 
+    summarizer_start = time.perf_counter()
     summarizer_run = _load_run_callable(paths.repo_root / SUMMARIZER_SCRIPT, SUMMARIZER_MODULE)
     summary_args = [
         "--repo-root",
@@ -1556,8 +1778,19 @@ def run(argv: Sequence[str] | None = None) -> int:
         options.log_level,
     ]
     summary_payload = summarizer_run(summary_args)
+    summarizer_duration = time.perf_counter() - summarizer_start
     if not isinstance(summary_payload, dict) or summary_payload.get("status") != "ok":
         raise RuntimeError("summarize_test_execution_telemetry returned unexpected payload")
+
+    _record_child_outcome(
+        name=SUMMARIZER_SCRIPT.name,
+        path=SUMMARIZER_SCRIPT,
+        status=str(summary_payload.get("status", "ok")),
+        exit_code=_exit_code_from_status(str(summary_payload.get("status", "ok"))),
+        run_dir=Path(str(summary_payload.get("run_dir"))) if summary_payload.get("run_dir") else None,
+        duration_seconds=summarizer_duration,
+        error=None,
+    )
 
     summary_artifacts_raw = summary_payload.get("artifacts")
     summary_artifacts: dict[str, str] = {}
@@ -1580,20 +1813,52 @@ def run(argv: Sequence[str] | None = None) -> int:
     if summary_json_path:
         artifacts_section["summary_json"] = _relativize(summary_json_path, paths.repo_root)
 
+    child_outcomes_payload = [outcome.as_dict() for outcome in child_outcomes]
+    scripts_run = len(child_outcomes_payload)
+    scripts_failed = sum(1 for outcome in child_outcomes_payload if outcome["exit_code"] != 0)
+    scripts_passed = scripts_run - scripts_failed
+
+    manifest["child_outcomes"] = child_outcomes_payload
+    manifest["scripts_run"] = scripts_run
+    manifest["scripts_passed"] = scripts_passed
+    manifest["scripts_failed"] = scripts_failed
+
     artifact_metrics = measure_artifact_directory(result_artifacts.run_dir)
     metrics_section = telemetry_payload.setdefault("metrics", {})
     metrics_section.update(artifact_metrics.as_dict())
     manifest["telemetry"] = telemetry_payload
     manifest["metrics"] = dict(metrics_section)
 
-    manifest_path = result_artifacts.artifacts["manifest.json"]
-    manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    storage = create_storage(paths.healthview_root, "", "", timestamp=run_slug)
+    # DB_INTEGRATION_MARKER: hop_manifests.run_slug — Orchestrator manifest payload
+    storage.write_manifest(manifest)
+    # DB_INTEGRATION_MARKER: hop_summaries.content_md — Orchestrator summary markdown
+    storage.write_summary({"markdown": summary_markdown}, format="md")
+    # DB_INTEGRATION_MARKER: hop_telemetry.metrics_json — Orchestrator telemetry payload
+    storage.write_telemetry(telemetry_payload)
 
-    telemetry_path = result_artifacts.artifacts["telemetry.json"]
-    telemetry_path.write_text(json.dumps(telemetry_payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    child_outcomes_path = result_artifacts.run_dir / "child_outcomes.json"
+    # DB_INTEGRATION_MARKER: orchestrator_runs.child_outcomes — Child script outcomes
+    child_outcomes_path.write_text(
+        json.dumps(child_outcomes_payload, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
 
     LOGGER.info("Test Execution Telemetry orchestrator complete (slug=%s)", run_slug)
-    return exit_code
+    return {
+        "status": status,
+        "exit_code": exit_code,
+        "run_dir": str(result_artifacts.run_dir),
+        "output_dir": str(paths.healthview_root),
+        "run_id": run_slug,
+        "manifest": manifest,
+        "telemetry": telemetry_payload,
+        "summary": summary_markdown,
+        "child_outcomes": child_outcomes_payload,
+        "scripts_run": scripts_run,
+        "scripts_passed": scripts_passed,
+        "scripts_failed": scripts_failed,
+    }
 
 
 def main(argv: Sequence[str] | None = None) -> None:
@@ -1605,7 +1870,9 @@ def main(argv: Sequence[str] | None = None) -> None:
     Raises:
         SystemExit: With run() return code.
     """
-    raise SystemExit(run(argv))
+    payload = run(argv)
+    exit_code = int(payload.get("exit_code", 1)) if isinstance(payload, dict) else 1
+    raise SystemExit(exit_code)
 
 
 __all__ = ["run", "main", "parse_args", "build_paths", "build_options"]
