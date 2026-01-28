@@ -1,0 +1,10 @@
+{
+  "status": "ok",
+  "timestamp": "20260126-2333",
+  "metrics": {
+    "files_checked": 7,
+    "records_checked": 62,
+    "errors": 0,
+    "warnings": 0
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "viewer_slug": "healthview",
+  "topic": "inventory_health",
+  "run_timestamp": "20260126-2333",
+  "generated_at": "2026-01-26T23:33:58.635889+00:00",
+  "status": "passed",
+  "catalog": [
+    "scripts.inventory.check_inventory_health"
+  ],
+  "inputs": {
+    "summary_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\producer_reports\\inventory_overview",
+    "baseline_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\config\\inventory\\inventory_summary_baseline.json",
+    "thresholds_path": "C:\\Users\\genet\\repo_studios\\config\\ci_inventory_thresholds.json",
+    "artifacts_to_keep": 5
+  }
+}

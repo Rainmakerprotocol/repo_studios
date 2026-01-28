@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "viewer_slug": "healthview",
+  "topic": "lizard_complexity",
+  "run_timestamp": "20260128-0149",
+  "git_sha": null,
+  "status": "ok",
+  "catalog": [
+    {
+      "artifact": "manifest.json",
+      "kind": "json"
+    },
+    {
+      "artifact": "summary.md",
+      "kind": "markdown"
+    },
+    {
+      "artifact": "telemetry.json",
+      "kind": "json"
+    }
+  ],
+  "inputs": {
+    "repo_root": "C:\\Users\\genet\\repo_studios",
+    "run_timestamp": "20260128-0149",
+    "max_ccn": 15,
+    "max_length": 80,
+    "targets_requested": [
+      ".repo_studios/scripts/producers"
+    ],
+    "targets_resolved": [
+      "C:\\Users\\genet\\repo_studios\\.repo_studios\\scripts\\producers"
+    ],
+    "extra_args": [],
+    "artifacts_to_keep": 5
+  },
+  "provenance": {
+    "trigger_type": "manual"
+  },
+  "summary": {
+    "status": "issues",
+    "issue_count": 46,
+    "files_scanned": 26
+  }
+}

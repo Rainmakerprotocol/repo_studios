@@ -49,8 +49,6 @@ BASELINE_PATH = Path("tests/docs/anchor_slug_baseline.json")
 # HOP-compliant output root for anchor health artifacts
 TOPIC_SLUG = "anchor_health"
 
-# Subfolder naming pattern: anchor_health-YYYY-MM-DD_hhmm
-RUN_PREFIX = "anchor_health-"
 DATABASE_PLACEHOLDER_TARGET = "anchor_health_snapshot"
 
 # HOP base package artifact names
@@ -296,8 +294,9 @@ DEFAULT_ARTIFACTS_TO_KEEP = get_keep("generate_anchor_health_report")
 
 
 def _run_dir(ts: datetime, base: Path = OUTPUT_DIR) -> Path:
-    stamp = ts.strftime("%Y-%m-%d_%H%M")
-    return base / f"{RUN_PREFIX}{stamp}"
+    """Build HOP-compliant run directory path with YYYYMMDD-HHMM format."""
+    stamp = ts.strftime("%Y%m%d-%H%M")
+    return base / stamp
 
 
 def _prune_old_runs(output_dir: Path, *, keep: int, current_run: Path, logger: logging.Logger | None) -> list[Path]:
@@ -311,7 +310,6 @@ def _prune_old_runs(output_dir: Path, *, keep: int, current_run: Path, logger: l
     result = prune_run_directories(
         output_dir,
         keep=keep_count,
-        stem_prefix=RUN_PREFIX,
         current_run=current_run,
         logger=logger,
     )

@@ -53,10 +53,10 @@ except ModuleNotFoundError:  # pragma: no cover - fallback during standalone exe
     from libraries.retention_policy import get_keep
 
 ROOT = Path(__file__).resolve().parents[2]
-DEFAULT_SUMMARY_PATH = Path(".repo_studios/reports/healthview/producer_reports/healthview/inventory_overview")
+DEFAULT_SUMMARY_PATH = Path(".repo_studios/reports/healthview/producer_reports/inventory_overview")
 DEFAULT_BASELINE_PATH = Path(".repo_studios/config/inventory/inventory_summary_baseline.json")
 DEFAULT_THRESHOLDS_PATH = Path("config/ci_inventory_thresholds.json")
-DEFAULT_OUTPUT_PATH = Path(".repo_studios/command_center/reports")
+DEFAULT_OUTPUT_PATH = Path(".repo_studios/reports/healthview/producer_reports")
 
 SUMMARY_LATEST = ROOT / DEFAULT_SUMMARY_PATH
 BASELINE_PATH = ROOT / DEFAULT_BASELINE_PATH
@@ -470,7 +470,7 @@ def main(argv: list[str] | None = None) -> int:
         run_slug=run_slug,
     )
 
-    storage = create_storage(output_dir, VIEWER_SLUG, TOPIC_SLUG, timestamp=run_slug)
+    storage = create_storage(output_dir, "", TOPIC_SLUG, timestamp=run_slug)
 
     # DB_INTEGRATION_MARKER: inventory health manifest
     storage.write_manifest(manifest)
@@ -483,7 +483,7 @@ def main(argv: list[str] | None = None) -> int:
 
     run_dir = storage.file_storage.bundle_dir
     prune_run_directories(
-        output_dir / VIEWER_SLUG / TOPIC_SLUG,
+        output_dir / TOPIC_SLUG,
         keep=options.artifacts_to_keep,
         current_run=run_dir,
         logger=logger,
@@ -571,7 +571,7 @@ def run(argv: list[str] | None = None) -> dict[str, Any]:
         run_slug=run_slug,
     )
 
-    storage = create_storage(paths.output_dir, VIEWER_SLUG, TOPIC_SLUG, timestamp=run_slug)
+    storage = create_storage(paths.output_dir, "", TOPIC_SLUG, timestamp=run_slug)
 
     # DB_INTEGRATION_MARKER: inventory health manifest
     storage.write_manifest(manifest)
@@ -584,7 +584,7 @@ def run(argv: list[str] | None = None) -> dict[str, Any]:
 
     run_dir = storage.file_storage.bundle_dir
     prune_run_directories(
-        paths.output_dir / VIEWER_SLUG / TOPIC_SLUG,
+        paths.output_dir / TOPIC_SLUG,
         keep=options.artifacts_to_keep,
         current_run=run_dir,
         logger=logger,

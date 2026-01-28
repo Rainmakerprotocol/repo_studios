@@ -1,0 +1,121 @@
+# Tier-3 Metadata for generate_lizard_report.py
+# Agent-discoverable script definition
+# Created: 2026-01-27
+# Record: ASR-011
+
+name: generate_lizard_report.py
+path: .repo_studios/scripts/producers/generate_lizard_report.py
+category: producer
+compliance_tier: A
+entry_point: run
+description: "Generates code complexity analysis reports using Lizard static analyzer, identifying functions that exceed cyclomatic complexity and length thresholds"
+version: "1.0.0"
+
+inputs:
+  - name: repo_root
+    type: path
+    required: false
+    description: "Repository root override (auto-discovered via .repo_studios marker when omitted)"
+  - name: output_dir
+    type: path
+    required: false
+    description: "Output directory for HOP bundle artifacts"
+  - name: timestamp
+    type: string
+    required: false
+    description: "ISO timestamp override for run identification"
+  - name: max_ccn
+    type: int
+    required: false
+    default: 15
+    description: "Maximum cyclomatic complexity threshold (env: LIZARD_MAX_CCN)"
+  - name: max_length
+    type: int
+    required: false
+    default: 80
+    description: "Maximum function length threshold (env: LIZARD_MAX_LENGTH)"
+  - name: targets
+    type: list[str]
+    required: false
+    default: [".repo_studios"]
+    description: "Target directories for analysis (env: LIZARD_TARGETS)"
+  - name: extra_args
+    type: list[str]
+    required: false
+    default: []
+    description: "Additional arguments passed verbatim to lizard"
+  - name: artifacts_to_keep
+    type: int
+    required: false
+    default: 5
+    description: "Number of historical run bundles to retain"
+  - name: log_level
+    type: choice
+    choices: [DEBUG, INFO, WARNING, ERROR]
+    default: INFO
+    description: "Logging verbosity"
+
+outputs:
+  status: "ok|issues|error|no_targets — Analysis result status"
+  exit_code: "0 (always) — Script is tolerant, encodes failures in payload"
+  run_dir: "Path to timestamped output bundle directory"
+  output_dir: "Parent output directory (topic root)"
+  run_id: "Timestamp slug (YYYYMMDD-HHMM)"
+  manifest: "Full manifest.json content as dict"
+  telemetry: "Full telemetry.json content as dict"
+  summary: "Dict with 'markdown' key containing summary.md content"
+
+# HOP Bundle artifacts produced
+artifacts:
+  - name: manifest.json
+    kind: json
+    description: "Schema version, status, inputs, catalog"
+  - name: summary.md
+    kind: markdown
+    description: "Human-readable top offenders table with recommendations"
+  - name: telemetry.json
+    kind: json
+    description: "Execution metrics, full offender list, raw lizard output"
+
+orchestrator_ready: true
+db_integration_ready: true
+
+# ScriptConfig for orchestrator integration
+script_config:
+  supports_output_dir: true
+  supports_artifacts_to_keep: true
+  uses_argv_kwarg: false
+  custom_args: null
+
+tags:
+  - complexity
+  - static-analysis
+  - lizard
+  - producer
+  - healthview
+  - code-quality
+  - maintainability
+
+consumers:
+  - coding_agent
+  - human_developer
+  - ci_pipeline
+  - healthview_orchestrator
+
+# When should agents invoke this script?
+triggers:
+  - "User asks about code complexity or cyclomatic complexity"
+  - "User wants to identify functions that are too complex"
+  - "User wants maintainability analysis"
+  - "CI pipeline needs complexity gate check"
+  - "HealthView orchestrator runs full pipeline"
+
+dependencies:
+  external:
+    - lizard  # pip install lizard
+  internal:
+    - libraries.database_integration
+    - libraries.prune_logs
+    - libraries.report_paths
+    - libraries.retention_policy
+    - libraries.cli

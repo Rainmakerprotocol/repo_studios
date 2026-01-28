@@ -245,8 +245,24 @@ After all scripts complete, extract formal templates.
   - [x] `tier2_aggregator_template.md`
   - [x] `tier2_summarizer_template.md`
   - [x] `tier2_orchestrator_template.md`
+  - [x] `tier2_utility_template.md` (Tier B Action Utilities)
+  - [x] `tier2_promotion_template.md` (Phase 4B orchestrator integration)
 - [x] 5.5 Place templates in `tier2_roster/templates/`
 - [x] 5.6 Link templates from Stage 12 sections in Tier-1
+- [x] 5.7 Create `README.md` instructions document with 5W1H coverage
+- [x] 5.8 Document Phase 4A/4B workflow split
+
+**Template Summary (v2.0.0):**
+
+| Template | Purpose | Phase |
+|----------|---------|-------|
+| tier2_producer_template.md | Build: Tier A producer compliance | 4A |
+| tier2_consumer_template.md | Build: Tier A consumer compliance | 4A |
+| tier2_aggregator_template.md | Build: Tier A aggregator compliance | 4A |
+| tier2_summarizer_template.md | Build: Tier A summarizer compliance | 4A |
+| tier2_orchestrator_template.md | Build: Tier A orchestrator compliance | 4A |
+| tier2_utility_template.md | Build: Tier B utility compliance | 4A |
+| tier2_promotion_template.md | Promote: Wire to orchestrator | 4B |
 
 ---
 
@@ -271,9 +287,13 @@ Standardize existing Tier-2 documentation using finalized templates.
 - [ ] C.2 Stage 11.1 orchestrator is operational and wired to Stage 7
 - [x] C.3 All Stage 11.1 scripts processed through Phase 4
 - [x] C.4 All five tier-class templates exist and are usable
-- [ ] C.5 Existing Stage 1.1 Tier-2 docs standardized
-- [x] C.6 Archived temp templates preserved with `status: archived`
-- [ ] C.7 Lessons learned documented for future refinement
+- [x] C.5 Tier B utility template created (`tier2_utility_template.md`)
+- [x] C.6 Promotion template created (`tier2_promotion_template.md`) for Phase 4B
+- [x] C.7 README.md instructions with 5W1H coverage
+- [ ] C.8 Existing Stage 1.1 Tier-2 docs standardized
+- [x] C.9 Archived temp templates preserved with `status: archived`
+- [ ] C.10 Lessons learned documented for future refinement
+- [x] C.11 Phase 4A/4B workflow documented (Build → Promote)
 
 ---
 
@@ -299,4 +319,5 @@ Standardize existing Tier-2 documentation using finalized templates.
 | 2026-01-25 | GitHub Copilot | Phase 3 complete | Listed 12 scripts from Stage 11.1; classified by tier (5 producers, 1 consumer, 1 summarizer, 4 utilities); mapped dependencies; proposed 3-phase execution order; selected ASR-005 (`validate_import_boundaries.py`) as first Phase 4 candidate |
 | 2026-01-26 | GitHub Copilot | Phase 4 complete | All 12 ASR scripts processed: 7 HOP-aligned (run(argv) + base package), 4 libraries classified, 1 deferred; 18/18 tests passing; Tier-2 roster workstreams updated |
 | 2026-01-26 | GitHub Copilot | Phase 5 complete | 5 tier-class templates created in `tier2_roster/templates/`; Tier-1 Stage 12 links and checkboxes updated |
+| 2026-01-27 | GitHub Copilot | Phase 5 extended | 7 templates total: updated all build templates to v2.0.0 (Universal Law, Tier-3 YAML, DB Integration); added `tier2_utility_template.md` for Tier B; added `tier2_promotion_template.md` for Phase 4B orchestrator integration; created `README.md` with 5W1H instructions |
 | | | | |

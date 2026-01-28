@@ -614,11 +614,35 @@ def _build_parser() -> argparse.ArgumentParser:
 
 
 def configure_logging(level: str) -> None:
+    """Configure logging with the specified level.
+
+    Args:
+        level: Logging level name (DEBUG, INFO, WARNING, ERROR).
+    """
     numeric_level = getattr(logging, level.upper(), logging.INFO)
     logging.basicConfig(level=numeric_level, format="%(levelname)s: %(message)s")
 
 
-def main(argv: Sequence[str] | None = None) -> int:
+def run(argv: list[str] | None = None) -> dict[str, Any]:
+    """Run the Lizard complexity analysis and produce HOP bundle artifacts.
+
+    This is the orchestration-ready entry point. It parses arguments, executes
+    the Lizard analysis, writes artifacts, and returns a structured payload.
+
+    Args:
+        argv: Command-line arguments. If None, uses sys.argv[1:].
+
+    Returns:
+        Dictionary containing:
+            - status: "ok", "issues", "error", or "no_targets"
+            - exit_code: Always 0 (script is tolerant)
+            - run_dir: Path to output bundle directory
+            - output_dir: Parent output directory
+            - run_id: Timestamp slug (YYYYMMDD-HHMM)
+            - manifest: Full manifest content
+            - telemetry: Full telemetry content
+            - summary: Summary dict with markdown key
+    """
     args = _build_parser().parse_args(argv)
 
     configure_logging(args.log_level)
@@ -836,7 +860,31 @@ def main(argv: Sequence[str] | None = None) -> int:
     )
     logging.info("Lizard report written to %s", bundle_dir)
 
-    return 0
+    # DB_INTEGRATION_MARKER: orchestrator_payload — Return payload for orchestrator integration
+    return {
+        "status": payload.get("status", "ok"),
+        "exit_code": 0,  # Script is tolerant — always succeeds
+        "run_dir": str(bundle_dir),
+        "output_dir": str(output_dir),
+        "run_id": run_timestamp,
+        "manifest": manifest,
+        "telemetry": telemetry,
+        "summary": {"markdown": markdown},
+    }
+
+
+def main(argv: Sequence[str] | None = None) -> int:
+    """CLI entry point for Lizard complexity report generation.
+
+    Args:
+        argv: Command-line arguments. If None, uses sys.argv[1:].
+
+    Returns:
+        Exit code (always 0 — script is tolerant).
+    """
+    result = run(list(argv) if argv is not None else None)
+    exit_code: int = result["exit_code"]
+    return exit_code
 
 
 if __name__ == "__main__":  # pragma: no cover

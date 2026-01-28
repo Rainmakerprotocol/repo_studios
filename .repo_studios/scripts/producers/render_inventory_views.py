@@ -28,7 +28,7 @@ DEFAULT_REPO_ROOT = Path(__file__).resolve().parents[3]
 DEFAULT_SCHEMA_ROOT = Path(".repo_studios/inventory_schema")
 DEFAULT_VIEWS_DIR = Path(".repo_studios/inventory_schema/views")
 DEFAULT_REPORTS_ROOT = Path(".repo_studios/reports")
-DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/producer_reports")
+DEFAULT_OUTPUT_DIR = Path(".repo_studios/reports/healthview/producer_reports")
 VIEWER_SLUG = "healthview"
 TOPIC_SLUG = "inventory_overview"
 CATALOG_ID = "scripts.inventory.render_inventory_views"
@@ -484,7 +484,7 @@ def run(argv: List[str] | None = None) -> Dict[str, Any]:
 
     generated_at = _parse_timestamp(options.timestamp)
     slug = _format_slug(generated_at)
-    run_dir = output_dir / VIEWER_SLUG / TOPIC_SLUG / slug
+    run_dir = output_dir / TOPIC_SLUG / slug
 
     entries = load_inventory(schema_root, views_dir)
     bundle = build_views(entries, generated_at=generated_at)
@@ -535,7 +535,7 @@ def run(argv: List[str] | None = None) -> Dict[str, Any]:
     }
     summary_md = render_markdown(report_payload)
 
-    storage = create_storage(output_dir, VIEWER_SLUG, TOPIC_SLUG, timestamp=slug)
+    storage = create_storage(output_dir, "", TOPIC_SLUG, timestamp=slug)
     # DB_INTEGRATION_MARKER: write manifest
     storage.write_manifest(manifest)
     # DB_INTEGRATION_MARKER: write summary
@@ -543,7 +543,7 @@ def run(argv: List[str] | None = None) -> Dict[str, Any]:
     # DB_INTEGRATION_MARKER: write telemetry
     storage.write_telemetry(telemetry)
 
-    topic_dir = output_dir / VIEWER_SLUG / TOPIC_SLUG
+    topic_dir = output_dir / TOPIC_SLUG
     prune_run_directories(topic_dir, keep=1, logger=logging.getLogger(__name__))
 
     write_stub(views_dir / "docs_overview.yaml", topic_dir, generated_at=generated_at, repo_root=repo_root)
