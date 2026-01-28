@@ -1,0 +1,168 @@
+{
+  "artifacts": {
+    "consumer_generate_anchor_health_report": ".repo_studios/reports/healthview/consumer_reports/anchor_health",
+    "producer_check_inventory_health": ".repo_studios/reports/healthview/producer_reports/inventory_health/20260128-1221",
+    "producer_generate_lizard_report": ".repo_studios/reports/healthview/producer_reports/lizard_complexity/20260128-1221",
+    "producer_render_inventory_views": ".repo_studios/reports/healthview/producer_reports/inventory_overview/20260128-1221",
+    "producer_validate_import_boundaries": ".repo_studios/reports/healthview/producer_reports/import_boundary",
+    "producer_validate_inventory": ".repo_studios/reports/healthview/producer_reports/validate_inventory/20260128-1221"
+  },
+  "catalog": [
+    {
+      "role": "consumer",
+      "script_path": ".repo_studios/scripts/consumers/generate_anchor_health_report.py",
+      "topic": "available-scripts-oversight"
+    },
+    {
+      "role": "orchestrator",
+      "script_path": ".repo_studios/command_center/scripts/orchestrators/run_available_scripts_oversight.py",
+      "topic": "available-scripts-oversight"
+    },
+    {
+      "role": "producer",
+      "script_path": ".repo_studios/scripts/producers/check_inventory_health.py",
+      "topic": "available-scripts-oversight"
+    },
+    {
+      "role": "producer",
+      "script_path": ".repo_studios/scripts/producers/generate_lizard_report.py",
+      "topic": "available-scripts-oversight"
+    },
+    {
+      "role": "producer",
+      "script_path": ".repo_studios/scripts/producers/render_inventory_views.py",
+      "topic": "available-scripts-oversight"
+    },
+    {
+      "role": "producer",
+      "script_path": ".repo_studios/scripts/producers/validate_import_boundaries.py",
+      "topic": "available-scripts-oversight"
+    },
+    {
+      "role": "producer",
+      "script_path": ".repo_studios/scripts/producers/validate_inventory.py",
+      "topic": "available-scripts-oversight"
+    }
+  ],
+  "generated_at": "2026-01-28T12:21:59.568010+00:00",
+  "inputs": {
+    "skip_consumers": false,
+    "skip_producers": false
+  },
+  "metrics": {
+    "artifact_bytes": 8935,
+    "artifact_files": 3,
+    "runtime_seconds": 4.4e-05,
+    "step_count": 6,
+    "steps_failed": 0,
+    "steps_skipped": 0,
+    "steps_succeeded": 6
+  },
+  "run_slug": "20260128-1221",
+  "schema_version": 1,
+  "step_outcomes": {
+    "consumers": [
+      {
+        "detail": "exit_code=None",
+        "exit_code": null,
+        "run_dir": ".repo_studios/reports/healthview/consumer_reports/anchor_health",
+        "script": "generate_anchor_health_report",
+        "status": "ok"
+      }
+    ],
+    "producers": [
+      {
+        "detail": "exit_code=0",
+        "exit_code": 0,
+        "run_dir": ".repo_studios/reports/healthview/producer_reports/import_boundary",
+        "script": "validate_import_boundaries",
+        "status": "ok"
+      },
+      {
+        "detail": "exit_code=0",
+        "exit_code": 0,
+        "run_dir": ".repo_studios/reports/healthview/producer_reports/inventory_health/20260128-1221",
+        "script": "check_inventory_health",
+        "status": "ok"
+      },
+      {
+        "detail": "exit_code=0",
+        "exit_code": 0,
+        "run_dir": ".repo_studios/reports/healthview/producer_reports/validate_inventory/20260128-1221",
+        "script": "validate_inventory",
+        "status": "ok"
+      },
+      {
+        "detail": "exit_code=0",
+        "exit_code": 0,
+        "run_dir": ".repo_studios/reports/healthview/producer_reports/inventory_overview/20260128-1221",
+        "script": "render_inventory_views",
+        "status": "ok"
+      },
+      {
+        "detail": "exit_code=0",
+        "exit_code": 0,
+        "run_dir": ".repo_studios/reports/healthview/producer_reports/lizard_complexity/20260128-1221",
+        "script": "generate_lizard_report",
+        "status": "ok"
+      }
+    ]
+  },
+  "telemetry": {
+    "finished_at": "2026-01-28T12:21:59.567952+00:00",
+    "metrics": {
+      "artifact_bytes": 8935,
+      "artifact_files": 3,
+      "runtime_seconds": 4.4e-05,
+      "step_count": 6,
+      "steps_failed": 0,
+      "steps_skipped": 0,
+      "steps_succeeded": 6
+    },
+    "run_slug": "20260128-1221",
+    "started_at": "2026-01-28T12:21:59.567908+00:00",
+    "steps": [
+      {
+        "finished_at": "2026-01-28T12:21:59.567925+00:00",
+        "name": "validate_import_boundaries",
+        "started_at": "2026-01-28T12:21:59.567919+00:00",
+        "status": "success"
+      },
+      {
+        "finished_at": "2026-01-28T12:21:59.567934+00:00",
+        "name": "check_inventory_health",
+        "started_at": "2026-01-28T12:21:59.567931+00:00",
+        "status": "success"
+      },
+      {
+        "finished_at": "2026-01-28T12:21:59.567939+00:00",
+        "name": "validate_inventory",
+        "started_at": "2026-01-28T12:21:59.567938+00:00",
+        "status": "success"
+      },
+      {
+        "finished_at": "2026-01-28T12:21:59.567943+00:00",
+        "name": "render_inventory_views",
+        "started_at": "2026-01-28T12:21:59.567942+00:00",
+        "status": "success"
+      },
+      {
+        "finished_at": "2026-01-28T12:21:59.567946+00:00",
+        "name": "generate_lizard_report",
+        "started_at": "2026-01-28T12:21:59.567945+00:00",
+        "status": "success"
+      },
+      {
+        "finished_at": "2026-01-28T12:21:59.567950+00:00",
+        "name": "generate_anchor_health_report",
+        "started_at": "2026-01-28T12:21:59.567948+00:00",
+        "status": "success"
+      }
+    ],
+    "success": true,
+    "topic": "available-scripts-oversight",
+    "viewer": "healthview"
+  },
+  "topic": "available_scripts_oversight",
+  "viewer": "healthview"
+}

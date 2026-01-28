@@ -74,10 +74,14 @@ class TestScriptConfig:
     """Test ScriptConfig dataclass."""
 
     def test_default_values(self) -> None:
-        """Verify default ScriptConfig values."""
+        """Verify default ScriptConfig values.
+
+        Note: supports_output_dir defaults to False (safe default) to prevent
+        cross-topic pruning when orchestrator passes generic parent directory.
+        """
         config = ScriptConfig(name="test", path="test.py")
         assert config.supports_artifacts_to_keep is True
-        assert config.supports_output_dir is True
+        assert config.supports_output_dir is False  # Safe default
         assert config.uses_argv_kwarg is False
         assert config.custom_args is None
 
@@ -96,14 +100,19 @@ class TestScriptConfig:
             assert config.path
 
     def test_generate_lizard_report_config(self) -> None:
-        """Verify generate_lizard_report ScriptConfig is properly registered."""
+        """Verify generate_lizard_report ScriptConfig is properly registered.
+
+        Note: supports_output_dir=False ensures the script uses its internal
+        topic-aware default path (producer_reports/lizard_complexity/) rather
+        than accepting the orchestrator's generic parent directory.
+        """
         lizard_config = next(
             (c for c in PRODUCER_CONFIGS if c.name == "generate_lizard_report"),
             None,
         )
         assert lizard_config is not None, "generate_lizard_report not in PRODUCER_CONFIGS"
         assert lizard_config.path == ".repo_studios/scripts/producers/generate_lizard_report.py"
-        assert lizard_config.supports_output_dir is True
+        assert lizard_config.supports_output_dir is False  # Uses topic-aware default
         assert lizard_config.supports_artifacts_to_keep is True
         assert lizard_config.uses_argv_kwarg is False
 

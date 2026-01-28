@@ -80,11 +80,16 @@ related_files:
 ScriptConfig(
     name="generate_lizard_report",
     path=".repo_studios/scripts/producers/generate_lizard_report.py",
-    supports_output_dir=True,  # Has --output-dir flag
+    supports_output_dir=False,  # ⚠️ SAFE: Uses topic-aware build_topic_path() default
     supports_artifacts_to_keep=True,  # Has --artifacts-to-keep flag
     uses_argv_kwarg=False,  # Standard positional argv: run(argv)
 )
 ```
+
+> **⚠️ Safety Note:** `supports_output_dir=False` is **required** for this script.
+> When `True`, the orchestrator passes a generic parent directory, causing
+> cross-topic pruning. The script's internal `build_topic_path()` default
+> ensures output goes to `producer_reports/lizard_complexity/` with topic-scoped pruning.
 
 ---
 
@@ -147,10 +152,15 @@ Find `PRODUCER_CONFIGS` list (approximately line 108).
     ScriptConfig(
         name="generate_lizard_report",
         path=".repo_studios/scripts/producers/generate_lizard_report.py",
-        supports_output_dir=True,  # Uses --output-dir flag
+        supports_output_dir=False,  # ⚠️ SAFE: Uses topic-aware build_topic_path() default
         supports_artifacts_to_keep=True,  # Uses --artifacts-to-keep flag
     ),
 ```
+
+> **⚠️ Safety Note:** Although the script HAS an `--output-dir` flag, setting
+> `supports_output_dir=True` causes the orchestrator to override the script's
+> topic-aware default path, resulting in cross-topic pruning disasters.
+> Always use `False` unless the script is specifically designed for orchestrator path overrides.
 
 ### 4.3 Placement Guidelines
 

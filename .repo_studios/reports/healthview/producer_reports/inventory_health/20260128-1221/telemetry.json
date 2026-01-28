@@ -1,0 +1,283 @@
+{
+  "schema_version": 1,
+  "viewer_slug": "healthview",
+  "topic": "inventory_health",
+  "run_timestamp": "20260128-1221",
+  "generated_utc": "2026-01-28T12:21:57.167917+00:00",
+  "status": "passed",
+  "summary": {
+    "issues": 0,
+    "total_assets": 62
+  },
+  "deltas": {
+    "total": 0
+  },
+  "issues": [],
+  "snapshots": {
+    "current": {
+      "generated_at": "2026-01-28T11:29:26.318497+00:00",
+      "total": 62,
+      "by_asset_kind": {
+        "document": 20,
+        "script": 36,
+        "test": 6
+      },
+      "by_maturity": {
+        "incubating": 36,
+        "legacy": 26
+      },
+      "by_status": {
+        "needs_review": 43,
+        "active": 19
+      },
+      "status_by_asset_kind": {
+        "document": {
+          "needs_review": 17,
+          "active": 3
+        },
+        "script": {
+          "needs_review": 26,
+          "active": 10
+        },
+        "test": {
+          "active": 6
+        }
+      },
+      "maturity_by_asset_kind": {
+        "document": {
+          "incubating": 20
+        },
+        "script": {
+          "legacy": 26,
+          "incubating": 10
+        },
+        "test": {
+          "incubating": 6
+        }
+      },
+      "consumers": {
+        "coding_agent": 61,
+        "human_developer": 30,
+        "ci_pipeline": 26,
+        "docs_generator": 3
+      },
+      "top_tags": [
+        {
+          "tag": "health",
+          "count": 23
+        },
+        {
+          "tag": "standards",
+          "count": 15
+        },
+        {
+          "tag": "docs",
+          "count": 8
+        },
+        {
+          "tag": "faults",
+          "count": 7
+        },
+        {
+          "tag": "inventory",
+          "count": 6
+        },
+        {
+          "tag": "validation",
+          "count": 5
+        },
+        {
+          "tag": "health_suite",
+          "count": 5
+        },
+        {
+          "tag": "repo_studios",
+          "count": 4
+        },
+        {
+          "tag": "prompts",
+          "count": 4
+        },
+        {
+          "tag": "monkey_patch",
+          "count": 4
+        },
+        {
+          "tag": "typing",
+          "count": 4
+        },
+        {
+          "tag": "testing",
+          "count": 3
+        },
+        {
+          "tag": "alignment",
+          "count": 2
+        },
+        {
+          "tag": "python",
+          "count": 2
+        },
+        {
+          "tag": "extraction",
+          "count": 2
+        },
+        {
+          "tag": "schema",
+          "count": 2
+        },
+        {
+          "tag": "anchors",
+          "count": 2
+        },
+        {
+          "tag": "complexity",
+          "count": 2
+        },
+        {
+          "tag": "reporting",
+          "count": 2
+        },
+        {
+          "tag": "instructions",
+          "count": 1
+        },
+        {
+          "tag": "memory",
+          "count": 1
+        },
+        {
+          "tag": "migration",
+          "count": 1
+        },
+        {
+          "tag": "governance",
+          "count": 1
+        },
+        {
+          "tag": "samples",
+          "count": 1
+        },
+        {
+          "tag": "chainlit",
+          "count": 1
+        },
+        {
+          "tag": "html",
+          "count": 1
+        },
+        {
+          "tag": "markdown",
+          "count": 1
+        },
+        {
+          "tag": "project",
+          "count": 1
+        },
+        {
+          "tag": "remediation",
+          "count": 1
+        },
+        {
+          "tag": "history",
+          "count": 1
+        },
+        {
+          "tag": "collaboration",
+          "count": 1
+        },
+        {
+          "tag": "roadmap",
+          "count": 1
+        },
+        {
+          "tag": "planning",
+          "count": 1
+        },
+        {
+          "tag": "analytics",
+          "count": 1
+        },
+        {
+          "tag": "dependencies",
+          "count": 1
+        },
+        {
+          "tag": "imports",
+          "count": 1
+        },
+        {
+          "tag": "diff",
+          "count": 1
+        },
+        {
+          "tag": "gap_analysis",
+          "count": 1
+        },
+        {
+          "tag": "architecture",
+          "count": 1
+        },
+        {
+          "tag": "hygiene",
+          "count": 1
+        },
+        {
+          "tag": "diagnostics",
+          "count": 1
+        }
+      ]
+    },
+    "baseline": {
+      "generated_at": "2025-10-18T00:49:43.978169+00:00",
+      "total": 62,
+      "by_asset_kind": {
+        "document": 21,
+        "script": 31,
+        "test": 10
+      },
+      "by_maturity": {
+        "legacy": 59,
+        "incubating": 3
+      },
+      "by_status": {
+        "needs_review": 58,
+        "archived": 1,
+        "active": 3
+      },
+      "status_by_asset_kind": {
+        "document": {
+          "needs_review": 17,
+          "archived": 1,
+          "active": 3
+        },
+        "script": {
+          "needs_review": 31
+        },
+        "test": {
+          "needs_review": 10
+        }
+      },
+      "maturity_by_asset_kind": {
+        "document": {
+          "legacy": 18,
+          "incubating": 3
+        },
+        "script": {
+          "legacy": 31
+        },
+        "test": {
+          "legacy": 10
+        }
+      },
+      "consumers": {
+        "coding_agent": 61,
+        "human_developer": 18,
+        "ci_pipeline": 29,
+        "docs_generator": 3
+      },
+      "top_tags": []
+    },
+    "thresholds": {}
+  }
+}

@@ -1,0 +1,116 @@
+# Tier-3 Script Specification — render_inventory_views.py
+# Schema: ScriptInspectionRecordV1
+# Stage: 11.1 — Available Scripts Oversight
+# Last verified: 2026-01-28
+
+schema: ScriptInspectionRecordV1
+record_id: ASR-010
+
+script:
+  path: .repo_studios/scripts/producers/render_inventory_views.py
+  name: render_inventory_views.py
+  category: producer
+  stage: "11.1"
+  stage_name: Available Scripts Oversight
+
+tier3:
+  metadata_block_version: v1
+  allowed: true
+  exists: true
+  name: tier3_render_inventory_views.yaml
+  meets_template: "yes"
+  last_updated: "2026-01-28"
+
+cli_surfaces:
+  run_entrypoint: run(argv)
+  importable_entrypoint: run(argv)
+  key_flags:
+    - --repo-root
+    - --schema-root
+    - --views-dir
+    - --reports-root
+    - --output-dir
+    - --timestamp
+    - --log-level
+
+io_contract:
+  inputs:
+    - "Inventory schema YAML files under schema_root"
+    - "Excludes: enums.yaml, inventory_entry_template.yaml, and anything under views_dir"
+    - "Legacy views directory for redirect stub writes"
+  outputs:
+    root: .repo_studios/reports/healthview/producer_reports/inventory_overview/<YYYYMMDD-HHMM>/
+    artifacts:
+      - manifest.json (base package via create_storage)
+      - summary.md (base package via create_storage)
+      - telemetry.json (base package via create_storage)
+      - "(legacy stubs) docs_overview.yaml, scripts_overview.yaml, tests_overview.yaml, summary.json"
+    status: HOP-compliant
+    hop_library: create_storage(output_dir, "", TOPIC_SLUG, timestamp=slug)
+    hop_line_ref: L538
+
+retention:
+  surfaces:
+    - "Hard-coded keep=1 in prune_run_directories() call (L545)"
+    - "No --artifacts-to-keep flag (supports_artifacts_to_keep=False)"
+  mechanism: prune_run_directories(topic_dir, keep=1)
+  targets:
+    - .repo_studios/reports/healthview/producer_reports/inventory_overview/
+  guardrails:
+    - Warns and normalizes legacy --output-dir when it ends with 'render_inventory_views'
+    - No latest_* pointers (HOP-compliant)
+  evidence:
+    - Uses create_storage() for artifact writing (L538-L544)
+    - Uses prune_run_directories(keep=1) for retention (L545)
+
+db_integration:
+  gated_by: REPO_STUDIOS_DB_ENABLED
+  marker_required: true
+  marker_string: "DB_INTEGRATION_MARKER:"
+  markers:
+    - "DB_INTEGRATION_MARKER: write manifest (L539)"
+    - "DB_INTEGRATION_MARKER: write summary (L541)"
+    - "DB_INTEGRATION_MARKER: write telemetry (L543)"
+
+evidence:
+  code_refs:
+    - .repo_studios/scripts/producers/render_inventory_views.py#L1-L10 (module docstring)
+    - .repo_studios/scripts/producers/render_inventory_views.py#L30-L33 (VIEWER_SLUG, TOPIC_SLUG, DEFAULT_OUTPUT_DIR)
+    - .repo_studios/scripts/producers/render_inventory_views.py#L42-L47 (create_storage import)
+    - .repo_studios/scripts/producers/render_inventory_views.py#L538-L544 (storage writes with DB markers)
+    - .repo_studios/scripts/producers/render_inventory_views.py#L450-L571 (run(argv) entry)
+  tests:
+    - .repo_studios/tests/tests_producers/test_render_inventory_views.py::test_render_inventory_views_structured_output
+    - .repo_studios/tests/tests_producers/test_render_inventory_views.py::test_run_returns_payload_dict
+  fixtures: []
+
+orchestrator_integration:
+  target_orchestrator: run_available_scripts_oversight.py
+  script_config:
+    name: render_inventory_views
+    path: .repo_studios/scripts/producers/render_inventory_views.py
+    supports_output_dir: false  # Uses topic-aware default with VIEWER_SLUG/TOPIC_SLUG
+    supports_artifacts_to_keep: false  # Uses --timestamp only, hard-coded keep=1
+    uses_argv_kwarg: false
+
+notes:
+  - "Classification: HOP-compliant producer for inventory overview rendering"
+  - "Contract status: ✅ emits base package via create_storage() (manifest.json/summary.md/telemetry.json)"
+  - "Entry surface: run(argv) returns payload dict with 7 keys"
+  - "DB integration: Has DB_INTEGRATION_MARKER tags at L539, L541, L543"
+  - "Special: Uses create_storage() — unlike most other Stage 11.1 scripts"
+  - "Special: Hard-coded keep=1 retention (no --artifacts-to-keep flag)"
+  - "Legacy: Writes redirect stubs under views_dir for backward compatibility"
+  - "Docstring path is stale: says 'reports/producer_reports/healthview' but actual is 'reports/healthview/producer_reports'"
+  - "Phase 4 processing: Code compliance 2026-01-26; Doc compliance 2026-01-28"
+
+tags:
+  - stage-11.1
+  - healthview
+  - producer
+  - inventory-overview
+  - ASR-010
+  - phase-4-complete
+
+version: "1.0.0"
+updated_at: "2026-01-28"

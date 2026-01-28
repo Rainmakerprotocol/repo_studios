@@ -1,0 +1,55 @@
+{
+  "finished_at": "2026-01-28T11:29:29.856273+00:00",
+  "metrics": {
+    "artifact_bytes": 8881,
+    "artifact_files": 3,
+    "runtime_seconds": 5.5e-05,
+    "step_count": 6,
+    "steps_failed": 0,
+    "steps_skipped": 0,
+    "steps_succeeded": 6
+  },
+  "run_slug": "20260128-1129",
+  "started_at": "2026-01-28T11:29:29.856218+00:00",
+  "steps": [
+    {
+      "finished_at": "2026-01-28T11:29:29.856234+00:00",
+      "name": "validate_import_boundaries",
+      "started_at": "2026-01-28T11:29:29.856229+00:00",
+      "status": "success"
+    },
+    {
+      "finished_at": "2026-01-28T11:29:29.856246+00:00",
+      "name": "check_inventory_health",
+      "started_at": "2026-01-28T11:29:29.856242+00:00",
+      "status": "success"
+    },
+    {
+      "finished_at": "2026-01-28T11:29:29.856253+00:00",
+      "name": "validate_inventory",
+      "started_at": "2026-01-28T11:29:29.856251+00:00",
+      "status": "success"
+    },
+    {
+      "finished_at": "2026-01-28T11:29:29.856258+00:00",
+      "name": "render_inventory_views",
+      "started_at": "2026-01-28T11:29:29.856256+00:00",
+      "status": "success"
+    },
+    {
+      "finished_at": "2026-01-28T11:29:29.856263+00:00",
+      "name": "generate_lizard_report",
+      "started_at": "2026-01-28T11:29:29.856261+00:00",
+      "status": "success"
+    },
+    {
+      "finished_at": "2026-01-28T11:29:29.856270+00:00",
+      "name": "generate_anchor_health_report",
+      "started_at": "2026-01-28T11:29:29.856267+00:00",
+      "status": "success"
+    }
+  ],
+  "success": true,
+  "topic": "available-scripts-oversight",
+  "viewer": "healthview"
+}

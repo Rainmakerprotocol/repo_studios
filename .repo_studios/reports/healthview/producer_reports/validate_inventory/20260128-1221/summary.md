@@ -1,0 +1,18 @@
+# Inventory Validation Report
+
+- generated_utc: 2026-01-28T12:21:57.181901+00:00
+- status: ok
+- output_dir: C:\Users\genet\repo_studios\.repo_studios\reports\healthview\producer_reports\validate_inventory\20260128-1221
+
+## Summary
+
+| Metric | Value |
+|---|---:|
+| files_checked | 7 |
+| records_checked | 62 |
+| errors | 0 |
+| warnings | 0 |
+
+## Notes
+
+(none)

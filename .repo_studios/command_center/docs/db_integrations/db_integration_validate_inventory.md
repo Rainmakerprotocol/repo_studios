@@ -7,7 +7,7 @@
 - **Category**: Producer
 - **Topic Slug**: `validate_inventory`
 - **Schema Version**: 1
-- **Status**: Questionable (may be deprecated)
+- **Status**: Active (Stage 11.1 orchestrator integration complete)
 
 ## I/O Contract
 
@@ -52,9 +52,14 @@
 
 ## Storage Integration
 
-- Uses standard PathsConfig and OptionsConfig
-- Uses `prune_run_directories` for retention
-- Uses `copy_latest_artifact` for convenience pointers
+- Uses `build_topic_path("producer", TOPIC_SLUG)` for default output path
+- Uses `prune_history()` for retention (not `prune_run_directories`)
+- **Does NOT use `create_storage()`** — uses direct file writes via `write_run_artifacts()`
+- **No `latest_*` pointers** — HOP-compliant
+
+> **DB Integration Status:** This script does NOT currently have `DB_INTEGRATION_MARKER`
+> tags. To enable dual-write support, markers would need to be added at the artifact
+> write locations in `write_run_artifacts()` (lines 515-549).
 
 ## ValidationIssue Dataclass
 
@@ -75,5 +80,12 @@ class ValidationIssue:
 ## Notes
 
 - Validates Repo Studios inventory entries against schema
-- Emits structured validation artifacts
-- Status: Questionable — may overlap with other validation scripts
+- Emits structured validation artifacts (HOP base package + raw.json)
+- Orchestrator integration: Stage 11.1 `run_available_scripts_oversight.py`
+- Phase 4 compliance: Complete (2026-01-28)
+
+## Update Log
+
+| Date | Author | Changes |
+|------|--------|---------|
+| 2026-01-28 | Agent | Fixed status (was "Questionable"), corrected storage integration section, noted missing DB markers |

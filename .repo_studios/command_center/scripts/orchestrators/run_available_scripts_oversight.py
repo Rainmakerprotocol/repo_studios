@@ -91,7 +91,11 @@ class ScriptConfig:
         name: Script identifier.
         path: Relative path from repo root.
         supports_artifacts_to_keep: Whether script accepts --artifacts-to-keep.
-        supports_output_dir: Whether script accepts --output-dir.
+        supports_output_dir: Whether script accepts --output-dir override from
+            orchestrator. Default is False to preserve script's topic-aware
+            default path built with build_topic_path(). Set to True ONLY if
+            you understand that the orchestrator will pass a generic parent
+            directory which may cause cross-topic pruning collisions.
         uses_argv_kwarg: Whether run() expects argv as keyword argument.
         custom_args: Additional custom arguments for this script.
     """
@@ -99,7 +103,7 @@ class ScriptConfig:
     name: str
     path: str
     supports_artifacts_to_keep: bool = True
-    supports_output_dir: bool = True
+    supports_output_dir: bool = False  # Safe default: let scripts use topic-aware paths
     uses_argv_kwarg: bool = False
     custom_args: list[str] | None = None
 
@@ -129,7 +133,7 @@ PRODUCER_CONFIGS = [
     ScriptConfig(
         name="generate_lizard_report",
         path=".repo_studios/scripts/producers/generate_lizard_report.py",
-        supports_output_dir=True,  # Uses --output-dir flag
+        supports_output_dir=False,  # Uses topic-aware default: build_topic_path("producer", "lizard_complexity")
         supports_artifacts_to_keep=True,  # Uses --artifacts-to-keep flag
     ),
 ]

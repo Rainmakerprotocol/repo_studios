@@ -1,0 +1,116 @@
+# Tier-3 Script Specification — generate_anchor_health_report.py
+# Schema: ScriptInspectionRecordV1
+# Stage: 11.1 — Available Scripts Oversight
+# Last verified: 2026-01-28
+
+schema: ScriptInspectionRecordV1
+record_id: ASR-001
+
+script:
+  path: .repo_studios/scripts/consumers/generate_anchor_health_report.py
+  name: generate_anchor_health_report.py
+  category: consumer
+  stage: "11.1"
+  stage_name: Available Scripts Oversight
+
+tier3:
+  metadata_block_version: v1
+  allowed: true
+  exists: true
+  name: tier3_generate_anchor_health_report.yaml
+  meets_template: "yes"
+  last_updated: "2026-01-28"
+
+cli_surfaces:
+  run_entrypoint: run(*, argv=...)
+  importable_entrypoint: run(*, repo_root=..., inventory_report=..., output_dir=..., artifacts_to_keep=..., argv=...)
+  key_flags:
+    - --inventory-report
+    - --output-dir
+    - --artifacts-to-keep
+    - --log-level
+
+io_contract:
+  inputs:
+    - "Optional anchor inventory report path (--inventory-report)"
+    - "Falls back to latest via utilities.anchor_inventory_loader if absent"
+    - "Docs tree scan: docs/ and .repo_studios/docs/ when no inventory available"
+    - "Baseline JSON: tests/docs/anchor_slug_baseline.json (read if present)"
+  outputs:
+    root: .repo_studios/reports/consumer_reports/anchor_health/<timestamp>/
+    artifacts:
+      - manifest.json (base package)
+      - summary.md (base package)
+      - telemetry.json (base package)
+      - anchor_report.json (supplementary/legacy)
+      - anchor_report.md (supplementary/legacy)
+      - clusters.tsv (supplementary)
+    status: HOP-compliant
+    hop_library: build_topic_path("consumer", "anchor_health") + direct file writes
+    hop_line_ref: L292
+
+retention:
+  surfaces:
+    - --artifacts-to-keep (default from get_keep("generate_anchor_health_report"))
+  mechanism: _prune_old_runs(output_dir, keep=N, current_run=bundle_dir)
+  targets:
+    - .repo_studios/reports/consumer_reports/anchor_health/
+  guardrails:
+    - Exit code 0 always (pipeline decides policy)
+    - Use strict_duplicate_count JSON field to gate if desired
+    - No latest_* pointers (HOP-compliant)
+  evidence:
+    - Uses direct file writes for artifact emission (L437-L513)
+    - Uses _prune_old_runs() for retention (L617-L619)
+
+db_integration:
+  gated_by: REPO_STUDIOS_DB_ENABLED
+  marker_required: false
+  marker_string: null
+  markers: []
+  notes:
+    - "Script uses direct file writes (not create_storage())"
+    - "DB_INTEGRATION_MARKER tags not present — would need retrofit for dual-write"
+    - "db_integration doc says 'Planned Stage: 2.2' — needs update"
+
+evidence:
+  code_refs:
+    - .repo_studios/scripts/consumers/generate_anchor_health_report.py#L1-L27 (module docstring)
+    - .repo_studios/scripts/consumers/generate_anchor_health_report.py#L51 (TOPIC_SLUG)
+    - .repo_studios/scripts/consumers/generate_anchor_health_report.py#L292 (OUTPUT_DIR via build_topic_path)
+    - .repo_studios/scripts/consumers/generate_anchor_health_report.py#L405-L513 (write_artifacts)
+    - .repo_studios/scripts/consumers/generate_anchor_health_report.py#L558-L625 (run() entry)
+  tests:
+    - .repo_studios/tests/tests_consumers/test_generate_anchor_health_report.py::test_anchor_health_uses_inventory_artifacts
+    - .repo_studios/tests/tests_consumers/test_generate_anchor_health_report.py::test_anchor_health_falls_back_to_docs_scan
+    - .repo_studios/tests/tests_consumers/test_generate_anchor_health_report.py::test_anchor_health_prunes_history
+  fixtures: []
+
+orchestrator_integration:
+  target_orchestrator: run_available_scripts_oversight.py
+  script_config:
+    name: generate_anchor_health_report
+    path: .repo_studios/scripts/consumers/generate_anchor_health_report.py
+    supports_output_dir: false  # Uses topic-aware default via build_topic_path()
+    supports_artifacts_to_keep: true
+    uses_argv_kwarg: true  # run(*, argv=...) signature
+
+notes:
+  - "Classification: HOP-compliant consumer for anchor health analysis"
+  - "Contract status: ✅ emits base package (manifest.json/summary.md/telemetry.json) + supplementary"
+  - "Entry surface: run(*, argv=...) returns payload dict with report, paths, pruned list"
+  - "Upstream dependency: generate_anchor_inventory.py (optional — falls back to docs scan)"
+  - "DB integration: NOT using create_storage(), no DB_INTEGRATION_MARKER tags"
+  - "Multi-root scanning: scans both docs/ and .repo_studios/docs/ (2026-01-26)"
+  - "Phase 4 processing: Code compliance 2026-01-25; Doc compliance 2026-01-28"
+
+tags:
+  - stage-11.1
+  - healthview
+  - consumer
+  - anchor-health
+  - ASR-001
+  - phase-4-complete
+
+version: "1.0.0"
+updated_at: "2026-01-28"

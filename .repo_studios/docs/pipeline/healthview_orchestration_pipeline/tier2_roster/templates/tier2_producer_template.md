@@ -469,11 +469,25 @@ storage.write_telemetry(telemetry)
 
 ### 6.1 ScriptConfig Attributes
 
+> **⚠️ CRITICAL: `supports_output_dir` Safety Warning**
+>
+> **Default to `False` unless you have a specific reason to override.**
+>
+> | Setting | Orchestrator Behavior | Pruning Scope | Safety |
+> |---------|----------------------|---------------|--------|
+> | `False` | Script uses internal `build_topic_path()` default | Topic-scoped ✅ | **SAFE** |
+> | `True` | Orchestrator passes generic parent dir | Cross-topic ❌ | **DANGEROUS** |
+>
+> When `True`, the orchestrator passes `--output-dir producer_reports/` (no topic slug),
+> causing the script to create output at the wrong level and prune ALL topics' directories.
+>
+> **Rule:** If script uses `build_topic_path()` for its default, set `supports_output_dir=False`.
+
 | Attribute | Value | Rationale |
 |-----------|-------|-----------|
 | `name` | `"<script_name>"` | Basename without `.py` |
 | `path` | `"<relative_path>"` | From repo root |
-| `supports_output_dir` | `True/False` | Does script accept `--output-dir`? |
+| `supports_output_dir` | `False` (default) | **⚠️ See warning above** — only set `True` if script needs orchestrator path override |
 | `supports_artifacts_to_keep` | `True/False` | Does script accept `--artifacts-to-keep`? |
 | `uses_argv_kwarg` | `True/False` | Is signature `run(*, argv=...)` or `run(argv)`? |
 | `custom_args` | `None` or `[...]` | Any non-standard args needed |
@@ -484,11 +498,15 @@ storage.write_telemetry(telemetry)
 ScriptConfig(
     name="<script_name>",
     path="<relative_path>",
-    supports_output_dir=<True/False>,  # <rationale>
-    supports_artifacts_to_keep=<True/False>,  # <rationale>
-    uses_argv_kwarg=<True/False>,  # <rationale>
+    supports_output_dir=False,  # ⚠️ Safe default — preserves topic-aware build_topic_path()
+    supports_artifacts_to_keep=<True/False>,  # Script accepts --artifacts-to-keep flag
+    uses_argv_kwarg=<True/False>,  # True if run(*, argv=...), False if run(argv)
 )
 ```
+
+> **Note:** Only set `supports_output_dir=True` if the script is specifically designed to
+> accept an orchestrator-provided output path AND its pruning logic is safe for cross-topic
+> directories. This is rare — most scripts should use `False`.
 
 ### 6.3 Orchestration Readiness Checklist
 

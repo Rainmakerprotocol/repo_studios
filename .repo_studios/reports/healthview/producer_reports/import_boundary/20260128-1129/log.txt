@@ -1,0 +1,5 @@
+status=ok
+timestamp=2026-01-28T11:29:26.137757+00:00
+violations=0
+graph_path=C:\Users\genet\repo_studios\.repo_studios\reports\healthview\producer_reports\import_graph\20260124-1348\telemetry.json
+allowlist_path=C:\Users\genet\repo_studios\.repo_studios\scripts\producers\import_rules_allowlist.json

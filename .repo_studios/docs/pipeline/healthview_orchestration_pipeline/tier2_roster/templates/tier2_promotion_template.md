@@ -144,12 +144,32 @@ Find the section where `ScriptConfig` instances are defined (typically near the 
 
 ### 4.2 Add New Config
 
+> **⚠️ CRITICAL: `supports_output_dir` Safety Warning**
+>
+> **Default to `False` unless you have a specific reason to override.**
+>
+> When `supports_output_dir=True`, the orchestrator passes a **generic parent directory**
+> (e.g., `producer_reports/`) to the script via `--output-dir`. This causes:
+>
+> 1. Script creates output at wrong level: `producer_reports/20260128-1129/` (no topic slug)
+> 2. Script's `prune_run_directories()` operates on the parent directory
+> 3. **ALL topics' historical runs get pruned** — catastrophic cross-topic data loss
+>
+> When `supports_output_dir=False` (safe default):
+>
+> 1. Script uses its internal `build_topic_path()` default with topic slug
+> 2. Output goes to correct location: `producer_reports/<topic_slug>/20260128-1129/`
+> 3. Pruning is scoped to the script's own topic directory only ✅
+>
+> **Rule:** If the script uses `build_topic_path()` for its default output directory,
+> set `supports_output_dir=False` to preserve that topic-aware behavior.
+
 ```python
 # <SCRIPT_NAME> — <brief description>
 <CONFIG_VAR_NAME> = ScriptConfig(
     name="<script_name_without_py>",
     path="<relative_path_from_repo_root>",
-    supports_output_dir=<True/False>,
+    supports_output_dir=False,  # ⚠️ Safe default — preserves topic-aware path
     supports_artifacts_to_keep=<True/False>,
     uses_argv_kwarg=<True/False>,
     custom_args=<None or list>,

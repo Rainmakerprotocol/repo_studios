@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "viewer_slug": "healthview",
+  "topic": "inventory_overview",
+  "run_timestamp": "20260128-1221",
+  "generated_at": "2026-01-28T12:21:57.306461+00:00",
+  "status": "ok",
+  "catalog": [
+    "scripts.inventory.render_inventory_views"
+  ],
+  "inputs": {
+    "repo_root": "C:\\Users\\genet\\repo_studios",
+    "schema_root": "C:\\Users\\genet\\repo_studios\\.repo_studios\\inventory_schema",
+    "views_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\inventory_schema\\views",
+    "reports_root": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports",
+    "output_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\producer_reports"
+  }
+}

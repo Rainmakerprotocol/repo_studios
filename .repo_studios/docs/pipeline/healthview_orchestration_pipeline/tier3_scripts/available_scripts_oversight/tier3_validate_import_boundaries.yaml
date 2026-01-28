@@ -1,0 +1,119 @@
+# Tier-3 Script Specification — validate_import_boundaries.py
+# Schema: ScriptInspectionRecordV1
+# Stage: 11.1 — Available Scripts Oversight
+# Last verified: 2026-01-28
+
+schema: ScriptInspectionRecordV1
+record_id: ASR-005
+
+script:
+  path: .repo_studios/scripts/producers/validate_import_boundaries.py
+  name: validate_import_boundaries.py
+  category: producer
+  stage: "11.1"
+  stage_name: Available Scripts Oversight
+
+tier3:
+  metadata_block_version: v1
+  allowed: true
+  exists: true
+  name: tier3_validate_import_boundaries.yaml
+  meets_template: "yes"
+  last_updated: "2026-01-28"
+
+cli_surfaces:
+  run_entrypoint: run(argv)
+  importable_entrypoint: run(argv)
+  key_flags:
+    - --repo-root
+    - --graph-path
+    - --output-dir
+    - --allowlist-path
+    - --artifacts-to-keep
+    - --strict
+    - --log-level
+
+io_contract:
+  inputs:
+    - "repo_root — repository root directory (defaults to project root)"
+    - "graph-path — path to import graph telemetry.json or legacy graph.json (optional)"
+    - "allowlist-path — path to JSON allowlist file (defaults to import_rules_allowlist.json)"
+  outputs:
+    root: .repo_studios/reports/healthview/producer_reports/import_boundary/<YYYYMMDD-HHMM>/
+    artifacts:
+      - manifest.json (base package)
+      - summary.md (base package)
+      - telemetry.json (base package)
+      - violations.json (supplementary)
+      - log.txt (supplementary)
+    status: HOP-compliant
+    hop_library: build_topic_path("producer", "import_boundary") + direct file writes
+    hop_line_ref: L62
+
+retention:
+  surfaces:
+    - --artifacts-to-keep (default from get_keep("validate_import_boundaries"))
+  mechanism: prune_history(output_dir, keep=N, current_run=run_dir)
+  targets:
+    - .repo_studios/reports/healthview/producer_reports/import_boundary/
+  guardrails:
+    - Exit code 1 when violations detected (after allowlist filtering)
+    - No latest_* pointers (HOP-compliant)
+  evidence:
+    - Uses direct file writes for artifact emission (L442-L475)
+    - Uses prune_history() for retention (L575-L581)
+
+db_integration:
+  gated_by: REPO_STUDIOS_DB_ENABLED
+  marker_required: true
+  marker_string: "DB_INTEGRATION_MARKER:"
+  markers:
+    - "DB_INTEGRATION_MARKER: import boundary manifest write (L442)"
+    - "DB_INTEGRATION_MARKER: import boundary summary markdown write (L446)"
+    - "DB_INTEGRATION_MARKER: import boundary telemetry write (L464)"
+
+evidence:
+  code_refs:
+    - .repo_studios/scripts/producers/validate_import_boundaries.py#L1-L18 (module docstring)
+    - .repo_studios/scripts/producers/validate_import_boundaries.py#L27 (TOPIC_SLUG)
+    - .repo_studios/scripts/producers/validate_import_boundaries.py#L62 (DEFAULT_OUTPUT_DIR via build_topic_path)
+    - .repo_studios/scripts/producers/validate_import_boundaries.py#L442-L475 (artifact writes with DB markers)
+    - .repo_studios/scripts/producers/validate_import_boundaries.py#L525-L592 (run(argv) entry)
+  tests:
+    - .repo_studios/tests/tests_producers/test_validate_import_boundaries.py::test_emits_structured_artifacts_without_violations
+    - .repo_studios/tests/tests_producers/test_validate_import_boundaries.py::test_detects_violations_and_honors_allowlist
+  fixtures: []
+  qa:
+    mypy: "Success: no issues found in 1 source file"
+    pytest: "2 passed in 0.19s"
+    last_verified: "2026-01-26"
+
+orchestrator_integration:
+  target_orchestrator: run_available_scripts_oversight.py
+  script_config:
+    name: validate_import_boundaries
+    path: .repo_studios/scripts/producers/validate_import_boundaries.py
+    supports_output_dir: false  # Uses topic-aware default via build_topic_path()
+    supports_artifacts_to_keep: true
+    uses_argv_kwarg: false
+
+notes:
+  - "Classification: HOP-compliant producer for import boundary validation"
+  - "Contract status: ✅ emits base package (manifest.json/summary.md/telemetry.json) + supplementary"
+  - "Entry surface: run(argv) returns full payload dict; main(argv) returns exit code"
+  - "DB integration: Has DB_INTEGRATION_MARKER tags at L442, L446, L464"
+  - "Upstream dependency: generate_import_graph_report.py (graph input optional)"
+  - "Bug fix (2026-01-26): Corrected DEFAULT_RELATIVE_GRAPH_DIR path order"
+  - "Phase 4 processing: Code compliance 2026-01-26; Doc compliance 2026-01-28"
+  - "Note: Also has Tier-3 at tier3_scripts/dependency_import_hygiene/ (legacy S42R-001 record_id)"
+
+tags:
+  - stage-11.1
+  - healthview
+  - producer
+  - import-boundary
+  - ASR-005
+  - phase-4-complete
+
+version: "1.0.0"
+updated_at: "2026-01-28"

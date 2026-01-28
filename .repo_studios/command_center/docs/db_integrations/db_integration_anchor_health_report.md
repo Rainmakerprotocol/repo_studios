@@ -6,7 +6,7 @@
 - **Path**: `.repo_studios/scripts/consumers/generate_anchor_health_report.py`
 - **Category**: Consumer
 - **Topic Slug**: `anchor_health`
-- **Planned Stage**: 2.2
+- **Status**: Active (Stage 11.1 orchestrator integration complete)
 
 ## I/O Contract
 
@@ -52,4 +52,23 @@ Generates machine and human consumable snapshot of top-level (H1/H2) markdown an
 
 - Consumer that analyzes anchor inventory for duplications
 - Falls back to in-process docs scan when no inventory exists
-- Planned for Stage 2.2 (not yet integrated into orchestrator)
+- Multi-root scanning: scans both `docs/` and `.repo_studios/docs/`
+- Orchestrator integration: Stage 11.1 `run_available_scripts_oversight.py`
+- Phase 4 compliance: Complete (2026-01-28)
+
+## Storage Integration
+
+- Uses `build_topic_path("consumer", TOPIC_SLUG)` for default output path
+- Uses `_prune_old_runs()` for retention
+- **Does NOT use `create_storage()`** — uses direct file writes
+- **No `latest_*` pointers** — HOP-compliant
+
+> **DB Integration Status:** This script does NOT currently have `DB_INTEGRATION_MARKER`
+> tags. To enable dual-write support, markers would need to be added at the artifact
+> write locations in `write_artifacts()` (lines 405-513).
+
+## Update Log
+
+| Date | Author | Changes |
+|------|--------|---------|
+| 2026-01-28 | Agent | Updated status to Active, noted missing DB markers, corrected storage integration |

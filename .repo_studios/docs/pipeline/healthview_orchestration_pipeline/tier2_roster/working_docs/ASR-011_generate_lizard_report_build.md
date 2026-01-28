@@ -530,7 +530,7 @@ python -c "import yaml; yaml.safe_load(open('.repo_studios/scripts/producers/tie
 |-----------|-------|-----------|
 | `name` | `"generate_lizard_report"` | Basename without `.py` |
 | `path` | `".repo_studios/scripts/producers/generate_lizard_report.py"` | From repo root |
-| `supports_output_dir` | `True` | Has `--output-dir` flag (L569-573) |
+| `supports_output_dir` | `False` | **⚠️ SAFE**: Script uses `build_topic_path()` default; `True` causes cross-topic pruning |
 | `supports_artifacts_to_keep` | `True` | Has `--artifacts-to-keep` flag (L603-607) |
 | `uses_argv_kwarg` | `False` | Signature is `run(argv)` not `run(*, argv=...)` |
 | `custom_args` | `None` | Standard flags sufficient |
@@ -541,11 +541,17 @@ python -c "import yaml; yaml.safe_load(open('.repo_studios/scripts/producers/tie
 ScriptConfig(
     name="generate_lizard_report",
     path=".repo_studios/scripts/producers/generate_lizard_report.py",
-    supports_output_dir=True,  # Has --output-dir flag
+    supports_output_dir=False,  # ⚠️ SAFE: Uses topic-aware build_topic_path() default
     supports_artifacts_to_keep=True,  # Has --artifacts-to-keep flag
     uses_argv_kwarg=False,  # Standard positional argv
 )
 ```
+
+> **⚠️ Safety Note:** Although the script HAS an `--output-dir` flag, setting
+> `supports_output_dir=True` in the orchestrator causes it to override the script's
+> topic-aware default path (`producer_reports/lizard_complexity/`), resulting in
+> output landing at `producer_reports/<timestamp>/` and cross-topic pruning.
+> Always use `False` for scripts that use `build_topic_path()` internally.
 
 ### 6.3 Orchestration Readiness Checklist
 

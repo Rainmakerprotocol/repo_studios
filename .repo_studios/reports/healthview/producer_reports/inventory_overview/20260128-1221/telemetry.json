@@ -1,0 +1,1393 @@
+{
+  "schema_version": 1,
+  "viewer_slug": "healthview",
+  "topic": "inventory_overview",
+  "run_timestamp": "20260128-1221",
+  "generated_at": "2026-01-28T12:21:57.306461+00:00",
+  "status": "ok",
+  "counts": {
+    "totals": {
+      "total": 62,
+      "docs": 20,
+      "scripts": 36,
+      "tests": 6
+    },
+    "by_asset_kind": {
+      "document": 20,
+      "script": 36,
+      "test": 6
+    },
+    "by_maturity": {
+      "incubating": 36,
+      "legacy": 26
+    },
+    "by_status": {
+      "needs_review": 43,
+      "active": 19
+    }
+  },
+  "summary": {
+    "generated_at": "2026-01-28T12:21:57.306461+00:00",
+    "total": 62,
+    "by_asset_kind": {
+      "document": 20,
+      "script": 36,
+      "test": 6
+    },
+    "by_maturity": {
+      "incubating": 36,
+      "legacy": 26
+    },
+    "by_status": {
+      "needs_review": 43,
+      "active": 19
+    },
+    "status_by_asset_kind": {
+      "document": {
+        "needs_review": 17,
+        "active": 3
+      },
+      "script": {
+        "needs_review": 26,
+        "active": 10
+      },
+      "test": {
+        "active": 6
+      }
+    },
+    "maturity_by_asset_kind": {
+      "document": {
+        "incubating": 20
+      },
+      "script": {
+        "legacy": 26,
+        "incubating": 10
+      },
+      "test": {
+        "incubating": 6
+      }
+    },
+    "consumers": {
+      "coding_agent": 61,
+      "human_developer": 30,
+      "ci_pipeline": 26,
+      "docs_generator": 3
+    },
+    "top_tags": [
+      {
+        "tag": "health",
+        "count": 23
+      },
+      {
+        "tag": "standards",
+        "count": 15
+      },
+      {
+        "tag": "docs",
+        "count": 8
+      },
+      {
+        "tag": "faults",
+        "count": 7
+      },
+      {
+        "tag": "inventory",
+        "count": 6
+      },
+      {
+        "tag": "validation",
+        "count": 5
+      },
+      {
+        "tag": "health_suite",
+        "count": 5
+      },
+      {
+        "tag": "repo_studios",
+        "count": 4
+      },
+      {
+        "tag": "prompts",
+        "count": 4
+      },
+      {
+        "tag": "monkey_patch",
+        "count": 4
+      },
+      {
+        "tag": "typing",
+        "count": 4
+      },
+      {
+        "tag": "testing",
+        "count": 3
+      },
+      {
+        "tag": "alignment",
+        "count": 2
+      },
+      {
+        "tag": "python",
+        "count": 2
+      },
+      {
+        "tag": "extraction",
+        "count": 2
+      },
+      {
+        "tag": "schema",
+        "count": 2
+      },
+      {
+        "tag": "anchors",
+        "count": 2
+      },
+      {
+        "tag": "complexity",
+        "count": 2
+      },
+      {
+        "tag": "reporting",
+        "count": 2
+      },
+      {
+        "tag": "instructions",
+        "count": 1
+      },
+      {
+        "tag": "memory",
+        "count": 1
+      },
+      {
+        "tag": "migration",
+        "count": 1
+      },
+      {
+        "tag": "governance",
+        "count": 1
+      },
+      {
+        "tag": "samples",
+        "count": 1
+      },
+      {
+        "tag": "chainlit",
+        "count": 1
+      },
+      {
+        "tag": "html",
+        "count": 1
+      },
+      {
+        "tag": "markdown",
+        "count": 1
+      },
+      {
+        "tag": "project",
+        "count": 1
+      },
+      {
+        "tag": "remediation",
+        "count": 1
+      },
+      {
+        "tag": "history",
+        "count": 1
+      },
+      {
+        "tag": "collaboration",
+        "count": 1
+      },
+      {
+        "tag": "roadmap",
+        "count": 1
+      },
+      {
+        "tag": "planning",
+        "count": 1
+      },
+      {
+        "tag": "analytics",
+        "count": 1
+      },
+      {
+        "tag": "dependencies",
+        "count": 1
+      },
+      {
+        "tag": "imports",
+        "count": 1
+      },
+      {
+        "tag": "diff",
+        "count": 1
+      },
+      {
+        "tag": "gap_analysis",
+        "count": 1
+      },
+      {
+        "tag": "architecture",
+        "count": 1
+      },
+      {
+        "tag": "hygiene",
+        "count": 1
+      },
+      {
+        "tag": "diagnostics",
+        "count": 1
+      }
+    ]
+  },
+  "dashboard": {
+    "maturity_totals_by_asset_kind": {
+      "document": {
+        "incubating": 20
+      },
+      "script": {
+        "legacy": 26,
+        "incubating": 10
+      },
+      "test": {
+        "incubating": 6
+      }
+    },
+    "roles": {
+      "playbook": 8,
+      "governance": 1,
+      "standards": 20,
+      "artifact_sample": 2,
+      "report_generator": 20,
+      "validator": 31,
+      "orchestrator": 4,
+      "summarizer": 3,
+      "test_case": 6
+    },
+    "artifact_types": {
+      "md": 20,
+      "py": 42
+    }
+  },
+  "views": {
+    "docs": [
+      {
+        "id": "docs.agents_guide",
+        "name": "Agent Operations Playbook",
+        "path": ".repo_studios/docs/playbooks/playbook-agent-operations.md",
+        "maturity": "incubating",
+        "status": "needs_review",
+        "consumers": [
+          "coding_agent",
+          "human_developer"
+        ],
+        "tags": [
+          "instructions",
+          "repo_studios"
+        ],
+        "artifact_type": "md"
+      },
+      {
+        "id": "docs.prompt_library_usage",
+        "name": "Prompt Library Playbook",
+        "path": ".repo_studios/docs/playbooks/playbook-prompt-library.md",
+        "maturity": "incubating",
+        "status": "needs_review",
+        "consumers": [
+          "coding_agent",
+          "human_developer"
+        ],
+        "tags": [
+          "prompts",
+          "repo_studios"
+        ],
+        "artifact_type": "md"
+      },
+      {
+        "id": "docs.agent_memory_workflow",
+        "name": "Memory Refresh Playbook",
+        "path": ".repo_studios/docs/playbooks/playbook-memory-refresh.md",
+        "maturity": "incubating",
+        "status": "needs_review",
+        "consumers": [
+          "coding_agent",
+          "human_developer"
+        ],
+        "tags": [
+          "memory",
+          "repo_studios"
+        ],
+        "artifact_type": "md"
+      },
+      {
+        "id": "docs.migration_playbook",
+        "name": "Repo Studios Migration Playbook",
+        "path": ".repo_studios/docs/playbooks/playbook-migration.md",
+        "maturity": "incubating",
+        "status": "needs_review",
+        "consumers": [
+          "coding_agent",
+          "human_developer"
+        ],
+        "tags": [
+          "migration",
+          "repo_studios"
+        ],
+        "artifact_type": "md"
+      },
+      {
+        "id": "docs.alignment_ledger",
+        "name": "Repo Studios Alignment Ledger",
+        "path": ".repo_studios/docs/governance/alignment-ledger.md",
+        "maturity": "incubating",
+        "status": "needs_review",
+        "consumers": [
+          "coding_agent",
+          "human_developer"
+        ],
+        "tags": [
+          "alignment",
+          "governance"
+        ],
+        "artifact_type": "md"
+      },
+      {
+        "id": "docs.copilot_prompt_engineering_standards",
+        "name": "Prompt Engineering Standards",
+        "path": ".repo_studios/docs/standards/global/std-global-prompt-engineering.md",
+        "maturity": "incubating",
+        "status": "needs_review",
+        "consumers": [
+          "coding_agent",
+          "human_developer"
+        ],
+        "tags": [
+          "prompts",
+          "standards"
+        ],
+        "artifact_type": "md"
+      },
+      {
+        "id": "docs.copilot_prompts",
+        "name": "Repo Studios Prompt Library",
+        "path": "repo_prompts.md",
+        "maturity": "incubating",
+        "status": "needs_review",
+        "consumers": [
+          "coding_agent",
+          "human_developer"
+        ],
+        "tags": [
+          "prompts",
+          "samples"
+        ],
+        "artifact_type": "md"
+      },
+      {
+        "id": "docs.copilot_standards_chainlit",
+        "name": "Chainlit UI Standards",
+        "path": ".repo_studios/docs/standards/global/std-global-chainlit-ui.md",
+        "maturity": "incubating",
+        "status": "needs_review",
+        "consumers": [
+          "coding_agent",
+          "ci_pipeline"
+        ],
+        "tags": [
+          "chainlit",
+          "standards"
+        ],
+        "artifact_type": "md"
+      },
+      {
+        "id": "docs.copilot_standards_html",
+        "name": "HTML Engineering Standards",
+        "path": ".repo_studios/docs/standards/global/std-global-html-coding.md",
+        "maturity": "incubating",
+        "status": "needs_review",
+        "consumers": [
+          "coding_agent",
+          "docs_generator"
+        ],
+        "tags": [
+          "html",
+          "standards"
+        ],
+        "artifact_type": "md"
+      },
+      {
+        "id": "docs.copilot_standards_markdown",
+        "name": "Markdown Authoring Standards",
+        "path": ".repo_studios/docs/standards/global/std-global-markdown-authoring.md",
+        "maturity": "incubating",
+        "status": "needs_review",
+        "consumers": [
+          "coding_agent",
+          "human_developer",
+          "docs_generator"
+        ],
+        "tags": [
+          "markdown",
+          "standards"
+        ],
+        "artifact_type": "md"
+      },
+      {
+        "id": "docs.copilot_standards_python",
+        "name": "Python Engineering Standards",
+        "path": ".repo_studios/docs/standards/global/std-global-python-engineering.md",
+        "maturity": "incubating",
+        "status": "needs_review",
+        "consumers": [
+          "coding_agent",
+          "human_developer"
+        ],
+        "tags": [
+          "python",
+          "standards"
+        ],
+        "artifact_type": "md"
+      },
+      {
+        "id": "docs.copilot_standards_monkey_patch",
+        "name": "Monkey Patch Governance",
+        "path": ".repo_studios/docs/standards/global/std-global-monkey-patching.md",
+        "maturity": "incubating",
+        "status": "needs_review",
+        "consumers": [
+          "coding_agent",
+          "ci_pipeline"
+        ],
+        "tags": [
+          "monkey_patch",
+          "standards"
+        ],
+        "artifact_type": "md"
+      },
+      {
+        "id": "docs.copilot_standards_project",
+        "name": "Project Operating Standard",
+        "path": ".repo_studios/docs/standards/project/std-project-operating-standard.md",
+        "maturity": "incubating",
+        "status": "needs_review",
+        "consumers": [
+          "coding_agent",
+          "human_developer"
+        ],
+        "tags": [
+          "project",
+          "standards"
+        ],
+        "artifact_type": "md"
+      },
+      {
+        "id": "docs.copilot_instructions_python",
+        "name": "Python Remediation Instructions",
+        "path": ".repo_studios/docs/standards/project/std-project-python-instructions.md",
+        "maturity": "incubating",
+        "status": "needs_review",
+        "consumers": [
+          "coding_agent",
+          "human_developer"
+        ],
+        "tags": [
+          "python",
+          "remediation"
+        ],
+        "artifact_type": "md"
+      },
+      {
+        "id": "docs.docs_inventory_notes",
+        "name": "Docs Inventory Notes",
+        "path": ".repo_studios/docs/inventory/inventory-notes.md",
+        "maturity": "incubating",
+        "status": "needs_review",
+        "consumers": [
+          "coding_agent",
+          "human_developer"
+        ],
+        "tags": [
+          "inventory",
+          "history"
+        ],
+        "artifact_type": "md"
+      },
+      {
+        "id": "docs.standards_extraction_spec",
+        "name": "Standards Extraction Spec",
+        "path": ".repo_studios/docs/automation/standards-extraction-spec.md",
+        "maturity": "incubating",
+        "status": "needs_review",
+        "consumers": [
+          "coding_agent",
+          "ci_pipeline"
+        ],
+        "tags": [
+          "standards",
+          "extraction"
+        ],
+        "artifact_type": "md"
+      },
+      {
+        "id": "docs.standards_index_schema",
+        "name": "Standards Index Schema",
+        "path": ".repo_studios/docs/automation/standards-index-schema.md",
+        "maturity": "incubating",
+        "status": "needs_review",
+        "consumers": [
+          "coding_agent",
+          "ci_pipeline"
+        ],
+        "tags": [
+          "standards",
+          "schema"
+        ],
+        "artifact_type": "md"
+      },
+      {
+        "id": "docs.alignment_protocol",
+        "name": "Alignment Protocol",
+        "path": ".repo_studios/alignment_protocol.md",
+        "maturity": "incubating",
+        "status": "active",
+        "consumers": [
+          "coding_agent",
+          "human_developer"
+        ],
+        "tags": [
+          "alignment",
+          "collaboration"
+        ],
+        "artifact_type": "md"
+      },
+      {
+        "id": "docs.repo_studios_build_plan",
+        "name": "Repo Studios Build Plan",
+        "path": ".repo_studios/docs/repo_studios_build_plan.md",
+        "maturity": "incubating",
+        "status": "active",
+        "consumers": [
+          "coding_agent",
+          "human_developer"
+        ],
+        "tags": [
+          "roadmap",
+          "planning"
+        ],
+        "artifact_type": "md"
+      },
+      {
+        "id": "docs.inventory_spec",
+        "name": "Inventory Schema Specification",
+        "path": ".repo_studios/docs/inventory_schema_spec.md",
+        "maturity": "incubating",
+        "status": "active",
+        "consumers": [
+          "coding_agent",
+          "ci_pipeline",
+          "docs_generator"
+        ],
+        "tags": [
+          "inventory",
+          "schema"
+        ],
+        "artifact_type": "md"
+      }
+    ],
+    "scripts": [
+      {
+        "id": "scripts.health.anchor_health_report",
+        "name": "Anchor Health Report",
+        "path": ".repo_studios/scripts/consumers/generate_anchor_health_report.py",
+        "roles": [
+          "report_generator",
+          "validator"
+        ],
+        "maturity": "legacy",
+        "status": "needs_review",
+        "tags": [
+          "health",
+          "anchors"
+        ],
+        "related_assets": [
+          "scripts.health.anchor_inventory",
+          "docs.anchor_validation_protocol"
+        ],
+        "artifact_type": "py"
+      },
+      {
+        "id": "scripts.health.anchor_inventory",
+        "name": "Anchor Inventory",
+        "path": ".repo_studios/scripts/producers/generate_anchor_inventory.py",
+        "roles": [
+          "report_generator",
+          "validator"
+        ],
+        "maturity": "legacy",
+        "status": "needs_review",
+        "tags": [
+          "health",
+          "anchors"
+        ],
+        "related_assets": [
+          "scripts.health.anchor_health_report"
+        ],
+        "artifact_type": "py"
+      },
+      {
+        "id": "scripts.health.churn_complexity_heatmap",
+        "name": "Churn Complexity Heatmap",
+        "path": ".repo_studios/scripts/aggregators/generate_churn_complexity_heatmap.py",
+        "roles": [
+          "report_generator",
+          "validator"
+        ],
+        "maturity": "legacy",
+        "status": "needs_review",
+        "tags": [
+          "health",
+          "analytics"
+        ],
+        "related_assets": [
+          "docs.health_suite_overview"
+        ],
+        "artifact_type": "py"
+      },
+      {
+        "id": "scripts.health.dep_hygiene_report",
+        "name": "Dependency Hygiene Report",
+        "path": ".repo_studios/scripts/producers/generate_dependency_hygiene_report.py",
+        "roles": [
+          "report_generator",
+          "validator"
+        ],
+        "maturity": "legacy",
+        "status": "needs_review",
+        "tags": [
+          "health",
+          "dependencies"
+        ],
+        "related_assets": [
+          "scripts.health.health_suite_orchestrator"
+        ],
+        "artifact_type": "py"
+      },
+      {
+        "id": "scripts.health.import_graph_report",
+        "name": "Import Graph Report",
+        "path": ".repo_studios/scripts/producers/generate_import_graph_report.py",
+        "roles": [
+          "report_generator",
+          "validator"
+        ],
+        "maturity": "legacy",
+        "status": "needs_review",
+        "tags": [
+          "health",
+          "imports"
+        ],
+        "related_assets": [
+          "scripts.health.check_import_boundaries"
+        ],
+        "artifact_type": "py"
+      },
+      {
+        "id": "scripts.health.lizard_report",
+        "name": "Lizard Report",
+        "path": ".repo_studios/scripts/producers/generate_lizard_report.py",
+        "roles": [
+          "report_generator",
+          "validator"
+        ],
+        "maturity": "legacy",
+        "status": "needs_review",
+        "tags": [
+          "health",
+          "complexity"
+        ],
+        "related_assets": [
+          "scripts.health.health_suite_orchestrator"
+        ],
+        "artifact_type": "py"
+      },
+      {
+        "id": "scripts.health.typecheck_report",
+        "name": "Typecheck Report",
+        "path": ".repo_studios/scripts/producers/generate_typecheck_report.py",
+        "roles": [
+          "report_generator",
+          "validator"
+        ],
+        "maturity": "legacy",
+        "status": "needs_review",
+        "tags": [
+          "health",
+          "typing"
+        ],
+        "related_assets": [
+          "scripts.health.mypy_refresh_baselines"
+        ],
+        "artifact_type": "py"
+      },
+      {
+        "id": "scripts.health.mypy_refresh_baselines",
+        "name": "Mypy Refresh Baselines",
+        "path": ".repo_studios/scripts/utilities/refresh_mypy_baselines.py",
+        "roles": [
+          "orchestrator",
+          "validator"
+        ],
+        "maturity": "legacy",
+        "status": "needs_review",
+        "tags": [
+          "health",
+          "typing"
+        ],
+        "related_assets": [
+          "scripts.health.typecheck_report"
+        ],
+        "artifact_type": "py"
+      },
+      {
+        "id": "scripts.health.compare_monkey_patch_trends",
+        "name": "Compare Monkey Patch Trends",
+        "path": ".repo_studios/scripts/aggregators/analyze_monkey_patch_trends.py",
+        "roles": [
+          "report_generator",
+          "validator"
+        ],
+        "maturity": "legacy",
+        "status": "needs_review",
+        "tags": [
+          "health",
+          "monkey_patch"
+        ],
+        "related_assets": [
+          "scripts.health.monkey_patch_classify",
+          "scripts.health.scan_monkey_patches"
+        ],
+        "artifact_type": "py"
+      },
+      {
+        "id": "scripts.health.monkey_patch_classify",
+        "name": "Monkey Patch Classify",
+        "path": ".repo_studios/scripts/consumers/classify_monkey_patches.py",
+        "roles": [
+          "report_generator",
+          "validator"
+        ],
+        "maturity": "legacy",
+        "status": "needs_review",
+        "tags": [
+          "health",
+          "monkey_patch"
+        ],
+        "related_assets": [
+          "scripts.health.compare_monkey_patch_trends"
+        ],
+        "artifact_type": "py"
+      },
+      {
+        "id": "scripts.health.scan_monkey_patches",
+        "name": "Scan Monkey Patches",
+        "path": ".repo_studios/scripts/producers/scan_monkey_patches.py",
+        "roles": [
+          "validator"
+        ],
+        "maturity": "legacy",
+        "status": "needs_review",
+        "tags": [
+          "health",
+          "monkey_patch"
+        ],
+        "related_assets": [
+          "scripts.health.monkey_patch_classify"
+        ],
+        "artifact_type": "py"
+      },
+      {
+        "id": "scripts.health.test_log_health_report",
+        "name": "Test Log Health Report",
+        "path": ".repo_studios/scripts/consumers/generate_test_log_health_report.py",
+        "roles": [
+          "report_generator",
+          "validator"
+        ],
+        "maturity": "legacy",
+        "status": "needs_review",
+        "tags": [
+          "health",
+          "typing"
+        ],
+        "related_assets": [
+          "tests.health_suite.test_log_health_report_pick_best"
+        ],
+        "artifact_type": "py"
+      },
+      {
+        "id": "scripts.health.generate_fault_artifacts",
+        "name": "Generate Fault Artifacts",
+        "path": ".repo_studios/scripts/consumers/generate_fault_artifacts.py",
+        "roles": [
+          "report_generator",
+          "validator"
+        ],
+        "maturity": "legacy",
+        "status": "needs_review",
+        "tags": [
+          "health",
+          "faults"
+        ],
+        "related_assets": [
+          "scripts.health.dump_faulthandler_once"
+        ],
+        "artifact_type": "py"
+      },
+      {
+        "id": "scripts.health.dump_faulthandler_once",
+        "name": "Dump Fault Handler Once",
+        "path": ".repo_studios/scripts/utilities/dump_faulthandler_snapshot.py",
+        "roles": [
+          "validator"
+        ],
+        "maturity": "legacy",
+        "status": "needs_review",
+        "tags": [
+          "health",
+          "faults"
+        ],
+        "related_assets": [
+          "scripts.health.generate_fault_artifacts"
+        ],
+        "artifact_type": "py"
+      },
+      {
+        "id": "scripts.health.faulthandler_module",
+        "name": "Fault Handler Module",
+        "path": ".repo_studios/scripts/utilities/configure_faulthandler_runtime.py",
+        "roles": [
+          "validator"
+        ],
+        "maturity": "legacy",
+        "status": "needs_review",
+        "tags": [
+          "health",
+          "faults"
+        ],
+        "related_assets": [
+          "scripts.health.dump_faulthandler_once",
+          "scripts.health.generate_fault_artifacts"
+        ],
+        "artifact_type": "py"
+      },
+      {
+        "id": "scripts.health.collect_faulthandler_reports",
+        "name": "Collect Faulthandler Reports",
+        "path": ".repo_studios/scripts/producers/collect_faulthandler_reports.py",
+        "roles": [
+          "report_generator"
+        ],
+        "maturity": "incubating",
+        "status": "active",
+        "tags": [
+          "health",
+          "faults"
+        ],
+        "related_assets": [
+          "scripts.health.generate_fault_artifacts",
+          "scripts.health.fault_pipeline_orchestrator"
+        ],
+        "artifact_type": "py"
+      },
+      {
+        "id": "scripts.health.test_coverage_inventory",
+        "name": "Test Coverage Inventory",
+        "path": ".repo_studios/scripts/producers/generate_test_coverage_inventory.py",
+        "roles": [
+          "report_generator"
+        ],
+        "maturity": "incubating",
+        "status": "active",
+        "tags": [
+          "health",
+          "testing"
+        ],
+        "related_assets": [
+          "scripts.docs.aggregate_docs_health_signals"
+        ],
+        "artifact_type": "py"
+      },
+      {
+        "id": "scripts.health.analyze_test_hardening",
+        "name": "Analyze Test Hardening",
+        "path": ".repo_studios/scripts/producers/analyze_test_hardening.py",
+        "roles": [
+          "validator",
+          "report_generator"
+        ],
+        "maturity": "incubating",
+        "status": "active",
+        "tags": [
+          "health",
+          "testing"
+        ],
+        "related_assets": [
+          "scripts.docs.aggregate_docs_health_signals"
+        ],
+        "artifact_type": "py"
+      },
+      {
+        "id": "scripts.docs.generate_doc_index",
+        "name": "Generate Doc Index",
+        "path": ".repo_studios/scripts/producers/generate_doc_index.py",
+        "roles": [
+          "report_generator"
+        ],
+        "maturity": "incubating",
+        "status": "active",
+        "tags": [
+          "docs",
+          "health"
+        ],
+        "related_assets": [
+          "scripts.docs.code_doc_churn_report",
+          "scripts.docs.aggregate_docs_health_signals"
+        ],
+        "artifact_type": "py"
+      },
+      {
+        "id": "scripts.docs.code_doc_churn_report",
+        "name": "Code Doc Churn Report",
+        "path": ".repo_studios/scripts/producers/generate_code_doc_churn_report.py",
+        "roles": [
+          "report_generator"
+        ],
+        "maturity": "incubating",
+        "status": "active",
+        "tags": [
+          "docs",
+          "health"
+        ],
+        "related_assets": [
+          "scripts.docs.generate_doc_index",
+          "scripts.docs.aggregate_docs_health_signals"
+        ],
+        "artifact_type": "py"
+      },
+      {
+        "id": "scripts.docs.undocumented_logic_report",
+        "name": "Undocumented Logic Report",
+        "path": ".repo_studios/scripts/producers/generate_undocumented_logic_report.py",
+        "roles": [
+          "report_generator"
+        ],
+        "maturity": "incubating",
+        "status": "active",
+        "tags": [
+          "docs",
+          "health"
+        ],
+        "related_assets": [
+          "scripts.docs.generate_doc_index",
+          "scripts.docs.aggregate_docs_health_signals"
+        ],
+        "artifact_type": "py"
+      },
+      {
+        "id": "scripts.docs.aggregate_docs_health_signals",
+        "name": "Aggregate Docs Health Signals",
+        "path": ".repo_studios/scripts/aggregators/aggregate_docs_health_signals.py",
+        "roles": [
+          "summarizer",
+          "report_generator"
+        ],
+        "maturity": "incubating",
+        "status": "active",
+        "tags": [
+          "docs",
+          "health"
+        ],
+        "related_assets": [
+          "scripts.docs.generate_doc_index",
+          "scripts.docs.code_doc_churn_report",
+          "scripts.docs.undocumented_logic_report"
+        ],
+        "artifact_type": "py"
+      },
+      {
+        "id": "scripts.inventory.check_inventory_health",
+        "name": "Check Inventory Health",
+        "path": ".repo_studios/scripts/producers/check_inventory_health.py",
+        "roles": [
+          "validator",
+          "report_generator"
+        ],
+        "maturity": "incubating",
+        "status": "active",
+        "tags": [
+          "inventory",
+          "health"
+        ],
+        "related_assets": [
+          "scripts.inventory.render_inventory_views",
+          "scripts.inventory.validate_inventory"
+        ],
+        "artifact_type": "py"
+      },
+      {
+        "id": "scripts.inventory.render_inventory_views",
+        "name": "Render Inventory Views",
+        "path": ".repo_studios/scripts/producers/render_inventory_views.py",
+        "roles": [
+          "report_generator"
+        ],
+        "maturity": "incubating",
+        "status": "active",
+        "tags": [
+          "inventory",
+          "reporting"
+        ],
+        "related_assets": [
+          "scripts.inventory.check_inventory_health",
+          "scripts.inventory.validate_inventory"
+        ],
+        "artifact_type": "py"
+      },
+      {
+        "id": "scripts.inventory.validate_inventory",
+        "name": "Validate Inventory",
+        "path": ".repo_studios/scripts/producers/validate_inventory.py",
+        "roles": [
+          "validator"
+        ],
+        "maturity": "incubating",
+        "status": "active",
+        "tags": [
+          "inventory",
+          "validation"
+        ],
+        "related_assets": [
+          "scripts.inventory.render_inventory_views",
+          "scripts.inventory.check_inventory_health"
+        ],
+        "artifact_type": "py"
+      },
+      {
+        "id": "scripts.standards.build_index",
+        "name": "Build Standards Index",
+        "path": ".repo_studios/scripts/producers/generate_standards_index.py",
+        "roles": [
+          "orchestrator",
+          "standards"
+        ],
+        "maturity": "legacy",
+        "status": "needs_review",
+        "tags": [
+          "standards",
+          "inventory"
+        ],
+        "related_assets": [
+          "docs.standards_extraction_spec",
+          "repo_files.copilot_standards_index"
+        ],
+        "artifact_type": "py"
+      },
+      {
+        "id": "scripts.standards.extraction",
+        "name": "Standards Extraction",
+        "path": ".repo_studios/scripts/producers/extract_standards_rules.py",
+        "roles": [
+          "orchestrator",
+          "standards"
+        ],
+        "maturity": "legacy",
+        "status": "needs_review",
+        "tags": [
+          "standards",
+          "extraction"
+        ],
+        "related_assets": [
+          "docs.standards_extraction_spec",
+          "scripts.standards.build_index"
+        ],
+        "artifact_type": "py"
+      },
+      {
+        "id": "scripts.standards.index_diff",
+        "name": "Standards Index Diff",
+        "path": ".repo_studios/scripts/producers/diff_standards_index.py",
+        "roles": [
+          "validator",
+          "standards"
+        ],
+        "maturity": "legacy",
+        "status": "needs_review",
+        "tags": [
+          "standards",
+          "diff"
+        ],
+        "related_assets": [
+          "scripts.standards.index_cli"
+        ],
+        "artifact_type": "py"
+      },
+      {
+        "id": "scripts.standards.index_gap",
+        "name": "Standards Index Gap",
+        "path": ".repo_studios/scripts/producers/analyze_standards_index_gaps.py",
+        "roles": [
+          "validator",
+          "standards"
+        ],
+        "maturity": "legacy",
+        "status": "needs_review",
+        "tags": [
+          "standards",
+          "gap_analysis"
+        ],
+        "related_assets": [
+          "scripts.standards.build_index"
+        ],
+        "artifact_type": "py"
+      },
+      {
+        "id": "scripts.standards.prompt_seed",
+        "name": "Standards Prompt Seed",
+        "path": ".repo_studios/scripts/producers/seed_standards_prompts.py",
+        "roles": [
+          "summarizer",
+          "standards"
+        ],
+        "maturity": "legacy",
+        "status": "needs_review",
+        "tags": [
+          "standards",
+          "prompts"
+        ],
+        "related_assets": [
+          "docs.copilot_prompt_engineering_standards"
+        ],
+        "artifact_type": "py"
+      },
+      {
+        "id": "scripts.standards.summary",
+        "name": "Standards Summary",
+        "path": ".repo_studios/scripts/summarizers/summarize_standards.py",
+        "roles": [
+          "summarizer",
+          "standards"
+        ],
+        "maturity": "legacy",
+        "status": "needs_review",
+        "tags": [
+          "standards",
+          "reporting"
+        ],
+        "related_assets": [
+          "scripts.standards.build_index",
+          "scripts.standards.index_gap"
+        ],
+        "artifact_type": "py"
+      },
+      {
+        "id": "scripts.utilities.check_doc_anchors",
+        "name": "Check Doc Anchors",
+        "path": ".repo_studios/scripts/producers/validate_metrics_anchor_stubs.py",
+        "roles": [
+          "validator"
+        ],
+        "maturity": "legacy",
+        "status": "needs_review",
+        "tags": [
+          "docs",
+          "validation"
+        ],
+        "related_assets": [
+          "scripts.utilities.verify_docs_integrity"
+        ],
+        "artifact_type": "py"
+      },
+      {
+        "id": "scripts.utilities.check_markdown_anchors",
+        "name": "Check Markdown Anchors",
+        "path": ".repo_studios/scripts/producers/validate_markdown_anchors.py",
+        "roles": [
+          "validator"
+        ],
+        "maturity": "legacy",
+        "status": "needs_review",
+        "tags": [
+          "docs",
+          "validation"
+        ],
+        "related_assets": [
+          "scripts.utilities.check_doc_anchors"
+        ],
+        "artifact_type": "py"
+      },
+      {
+        "id": "scripts.utilities.check_import_boundaries",
+        "name": "Check Import Boundaries",
+        "path": ".repo_studios/scripts/producers/validate_import_boundaries.py",
+        "roles": [
+          "validator",
+          "standards"
+        ],
+        "maturity": "legacy",
+        "status": "needs_review",
+        "tags": [
+          "architecture",
+          "validation"
+        ],
+        "related_assets": [
+          "scripts.health.import_graph_report"
+        ],
+        "artifact_type": "py"
+      },
+      {
+        "id": "scripts.utilities.find_placeholders",
+        "name": "Find Placeholders",
+        "path": ".repo_studios/scripts/producers/scan_code_placeholders.py",
+        "roles": [
+          "validator"
+        ],
+        "maturity": "legacy",
+        "status": "needs_review",
+        "tags": [
+          "docs",
+          "hygiene"
+        ],
+        "related_assets": [],
+        "artifact_type": "py"
+      },
+      {
+        "id": "scripts.utilities.verify_docs_integrity",
+        "name": "Verify Docs Integrity",
+        "path": ".repo_studios/scripts/producers/verify_docs_integrity.py",
+        "roles": [
+          "orchestrator",
+          "validator"
+        ],
+        "maturity": "legacy",
+        "status": "needs_review",
+        "tags": [
+          "docs",
+          "validation"
+        ],
+        "related_assets": [
+          "scripts.health.anchor_health_report"
+        ],
+        "artifact_type": "py"
+      }
+    ],
+    "tests": [
+      {
+        "id": "tests.faults.generate_fault_artifacts",
+        "name": "Generate Fault Artifacts Tests",
+        "path": ".repo_studios/tests/tests_consumers/test_generate_fault_artifacts.py",
+        "status": "active",
+        "related_assets": [
+          "scripts.health.generate_fault_artifacts",
+          "scripts.health.collect_faulthandler_reports"
+        ],
+        "artifact_type": "py"
+      },
+      {
+        "id": "tests.health_suite.collect_faulthandler_reports",
+        "name": "Collect Faulthandler Reports Tests",
+        "path": ".repo_studios/tests/tests_producers/test_collect_faulthandler_reports.py",
+        "status": "active",
+        "related_assets": [
+          "scripts.health.collect_faulthandler_reports",
+          "scripts.health.generate_fault_artifacts"
+        ],
+        "artifact_type": "py"
+      },
+      {
+        "id": "tests.health_suite.generate_fault_artifacts",
+        "name": "Generate Fault Artifacts Tests",
+        "path": ".repo_studios/tests/tests_consumers/test_generate_fault_artifacts.py",
+        "status": "active",
+        "related_assets": [
+          "scripts.health.generate_fault_artifacts",
+          "scripts.health.collect_faulthandler_reports"
+        ],
+        "artifact_type": "py"
+      },
+      {
+        "id": "tests.health_suite.generate_lizard_report",
+        "name": "Generate Lizard Report Tests",
+        "path": ".repo_studios/tests/tests_producers/test_generate_lizard_report.py",
+        "status": "active",
+        "related_assets": [
+          "scripts.health.lizard_report"
+        ],
+        "artifact_type": "py"
+      },
+      {
+        "id": "tests.health_suite.generate_typecheck_report",
+        "name": "Generate Typecheck Report Tests",
+        "path": ".repo_studios/tests/tests_producers/test_generate_typecheck_report.py",
+        "status": "active",
+        "related_assets": [
+          "scripts.health.typecheck_report",
+          "scripts.health.mypy_refresh_baselines"
+        ],
+        "artifact_type": "py"
+      },
+      {
+        "id": "tests.health_suite.generate_test_log_health_report",
+        "name": "Generate Test Log Health Report Tests",
+        "path": ".repo_studios/tests/tests_consumers/test_generate_test_log_health_report.py",
+        "status": "active",
+        "related_assets": [
+          "scripts.health.test_log_health_report",
+          "scripts.health.collect_test_log_reports"
+        ],
+        "artifact_type": "py"
+      }
+    ]
+  },
+  "top_tags": [
+    {
+      "tag": "health",
+      "count": 23
+    },
+    {
+      "tag": "standards",
+      "count": 15
+    },
+    {
+      "tag": "docs",
+      "count": 8
+    },
+    {
+      "tag": "faults",
+      "count": 7
+    },
+    {
+      "tag": "inventory",
+      "count": 6
+    },
+    {
+      "tag": "validation",
+      "count": 5
+    },
+    {
+      "tag": "health_suite",
+      "count": 5
+    },
+    {
+      "tag": "repo_studios",
+      "count": 4
+    },
+    {
+      "tag": "prompts",
+      "count": 4
+    },
+    {
+      "tag": "monkey_patch",
+      "count": 4
+    }
+  ]
+}

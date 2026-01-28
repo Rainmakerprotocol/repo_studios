@@ -7,7 +7,7 @@
 - **Category**: Producer
 - **Topic Slug**: `import_boundary`
 - **Schema Version**: 1
-- **Planned Stage**: 4.2
+- **Status**: Active (Stage 11.1 orchestrator integration complete)
 
 ## I/O Contract
 
@@ -54,8 +54,19 @@
 
 ## Storage Integration
 
-- Uses standard PathsConfig and OptionsConfig
-- Uses `prune_run_directories` for retention
+- Uses `build_topic_path("producer", TOPIC_SLUG)` for default output path
+- Uses `prune_run_directories()` for retention
+- **Does NOT use `create_storage()`** — uses direct file writes
+- **No `latest_*` pointers** — HOP-compliant
+- **DB_INTEGRATION_MARKER tags present** at L442, L446, L464
+
+## DB Integration Markers
+
+| Line | Marker | Artifact |
+|------|--------|----------|
+| L442 | `DB_INTEGRATION_MARKER: import boundary manifest write` | manifest.json |
+| L446 | `DB_INTEGRATION_MARKER: import boundary summary markdown write` | summary.md |
+| L464 | `DB_INTEGRATION_MARKER: import boundary telemetry write` | telemetry.json |
 
 ## Dependencies
 
@@ -66,4 +77,12 @@
 
 - Structured import boundary checker with artifact emission
 - Validates imports against allowlist rules
-- Planned for Stage 4.2 (not yet integrated into orchestrator)
+- Detects cycles, forbidden edges, and static import violations
+- Orchestrator integration: Stage 11.1 `run_available_scripts_oversight.py`
+- Phase 4 compliance: Complete (2026-01-28)
+
+## Update Log
+
+| Date | Author | Changes |
+|------|--------|---------|
+| 2026-01-28 | Agent | Updated status to Active, added DB marker locations, corrected storage integration section |

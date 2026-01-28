@@ -270,11 +270,28 @@ usage: <SCRIPT_NAME> [-h] [--repo-root REPO_ROOT] ...
 
 ### 2.7.1 ScriptConfig Registry
 
+> **⚠️ CRITICAL: `supports_output_dir` Safety Warning for Child Scripts**
+>
+> When adding child scripts to the orchestrator, **default `supports_output_dir=False`** unless
+> you have a specific reason to override. This is a safety-critical setting:
+>
+> | Setting | Orchestrator Behavior | Child Script Pruning | Safety |
+> |---------|----------------------|---------------------|--------|
+> | `False` | Child uses internal `build_topic_path()` | Topic-scoped ✅ | **SAFE** |
+> | `True` | Orchestrator passes generic parent dir | Cross-topic ❌ | **DANGEROUS** |
+>
+> **Incident Reference:** Setting `supports_output_dir=True` caused orchestrator to pass
+> `--output-dir producer_reports/` to a child script, which then called `prune_run_directories()`
+> on the parent directory — deleting 343 files across ALL topic subdirectories.
+>
+> **Rule:** If a child script uses `build_topic_path()` for its default output directory,
+> set `supports_output_dir=False` in its ScriptConfig to preserve topic-aware pruning.
+
 | Script | Config | Status |
 |--------|--------|--------|
-| `<script_1>` | `ScriptConfig(name="...", path="...", ...)` | ⚠️/✅ |
-| `<script_2>` | `ScriptConfig(name="...", path="...", ...)` | ⚠️/✅ |
-| `<script_3>` | `ScriptConfig(name="...", path="...", ...)` | ⚠️/✅ |
+| `<script_1>` | `ScriptConfig(name="...", path="...", supports_output_dir=False, ...)` | ⚠️/✅ |
+| `<script_2>` | `ScriptConfig(name="...", path="...", supports_output_dir=False, ...)` | ⚠️/✅ |
+| `<script_3>` | `ScriptConfig(name="...", path="...", supports_output_dir=False, ...)` | ⚠️/✅ |
 
 ### 2.7.2 Child Invocation Pattern
 

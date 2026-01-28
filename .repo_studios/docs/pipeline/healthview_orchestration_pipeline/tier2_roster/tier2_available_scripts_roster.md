@@ -267,13 +267,15 @@ script:
   category: "consumer"
 tier3:
   metadata_block_version: "v1"
-  allowed: false
-  exists: false
+  allowed: true
+  exists: true
   name: "tier3_generate_anchor_health_report.yaml"
-  meets_template: "NA"
-  last_updated: null
+  meets_template: "yes"
+  last_updated: "2026-01-28"
+tier3_yaml: ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier3_scripts/available_scripts_oversight/tier3_generate_anchor_health_report.yaml"
+phase4_build_doc: ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/ASR-001_generate_anchor_health_report_build.md"
 cli_surfaces:
-  run_entrypoint: "main(argv) -> run(argv)" 
+  run_entrypoint: "run(*, argv=...)"
   key_flags:
     - "--inventory-report"
     - "--output-dir"
@@ -315,38 +317,36 @@ retention:
     - "Artifacts written into timestamped run directory; manifest.json contains artifact paths"
 db_integration:
   gated_by: "REPO_STUDIOS_DB_ENABLED"
-  marker_required: true
-  marker_string: "DB_INTEGRATION_MARKER:"
+  marker_required: false
+  marker_string: null
+  notes:
+    - "Script uses direct file writes (not create_storage())"
+    - "DB_INTEGRATION_MARKER tags not present — would need retrofit for dual-write"
+orchestrator_integration:
+  orchestrator_ready: true
+  promoted_to_orchestrator: true
+  target_orchestrator: "run_available_scripts_oversight.py"
+  supports_output_dir: false
+  supports_artifacts_to_keep: true
+  uses_argv_kwarg: true
 evidence:
   code_refs:
-    - ".repo_studios/scripts/consumers/generate_anchor_health_report.py#L1-L28 (HOP docstring)"
-    - ".repo_studios/scripts/consumers/generate_anchor_health_report.py#L353-L476 (write_artifacts with base package)"
+    - ".repo_studios/scripts/consumers/generate_anchor_health_report.py#L1-L27 (HOP docstring)"
+    - ".repo_studios/scripts/consumers/generate_anchor_health_report.py#L292 (OUTPUT_DIR via build_topic_path)"
+    - ".repo_studios/scripts/consumers/generate_anchor_health_report.py#L405-L513 (write_artifacts with base package)"
+    - ".repo_studios/scripts/consumers/generate_anchor_health_report.py#L558-L625 (run(*, argv=...) entry)"
   tests:
     - ".repo_studios/tests/tests_consumers/test_generate_anchor_health_report.py::test_anchor_health_uses_inventory_artifacts (PASSED)"
     - ".repo_studios/tests/tests_consumers/test_generate_anchor_health_report.py::test_anchor_health_falls_back_to_docs_scan (PASSED)"
     - ".repo_studios/tests/tests_consumers/test_generate_anchor_health_report.py::test_anchor_health_prunes_history (PASSED)"
   fixtures: []
 notes:
-  - "Classification: HOP-compliant consumer, ready for orchestrator integration."
+  - "Classification: HOP-compliant consumer, orchestrator integration complete."
   - "Contract status: ✅ aligned with HOP base package (manifest.json, summary.md, telemetry.json)"
-  - "Entry surface: CLI and importable (run(argv) returns payload dict)."
-  - "Primary purpose: generates H1/H2 markdown anchor duplication summary; emits structured artifacts for dashboarding/human review."
-  - "Phase 4 processing: Completed 2026-01-25 — artifact names updated, tests passing (3/3)."
-  - "Bug fix (2026-01-26): main() now properly passes sys.argv[1:] to run() when argv is None."
-  - "Output truth verification (2026-01-26): Strict Duplicate Count verified against clusters.tsv data."
-  - "Feature enhancement (2026-01-26): Multi-root scanning — now scans both `docs/` and `.repo_studios/docs/` with prefixed paths for disambiguation."
+  - "Entry surface: run(*, argv=...) — keyword-args signature with argv passthrough."
+  - "DB integration: NOT using create_storage(), no DB_INTEGRATION_MARKER tags."
+  - "Phase 4 processing: Code complete 2026-01-25; Doc complete 2026-01-28."
 ```
-
-##### Promotion Mapping — generate_anchor_health_report.py
-
-- Proposed future stage: **Stage 2.2** (anchor/markdown integrity consumer vertical)
-- Orchestrator wrapper: Minimal shim required — script already uses `run(argv)` entry
-  and emits HOP base package
-- **Contract status:** ✅ Aligned with HOP as of 2026-01-25
-  - Output root: `.repo_studios/reports/consumer_reports/anchor_health/<timestamp>/`
-  - Base package: `manifest.json`, `summary.md`, `telemetry.json`
-  - No `latest_*` pointers (HOP-compliant)
-  - Supplementary: `anchor_report.json`, `anchor_report.md`, `clusters.tsv`
 
 #### Implementation Workstreams (checkbox-driven) — generate_anchor_health_report.py
 
@@ -355,12 +355,10 @@ notes:
 - [x] C. Implement — docstring update, artifact names changed, return keys updated
 - [x] D. Evidence — tests passing (3/3)
 - [x] E. Bug fix — `main()` now properly passes `sys.argv[1:]` to `run()` (2026-01-26)
-- [x] F. Output truth verification — script run, output claims verified TRUE:
-  - "Strict Duplicate Count: 8" verified against clusters.tsv ✅
-  - Output location HOP-compliant ✅
-  - summary.md markdownlint 0 errors ✅
-- [ ] G. Promote — move to Stage 2.2 when orchestrator is implemented
-- [x] **DONE** — Phase 4 complete with output truth verification (2026-01-26)
+- [x] F. Output truth verification — script run, output claims verified TRUE
+- [x] G. Tier-3 YAML — created tier3_generate_anchor_health_report.yaml (Stage 11.1 location)
+- [x] H. Orchestrator integration — added to run_available_scripts_oversight.py, uses_argv_kwarg=True
+- [x] DONE — Phase 4 compliance complete (2026-01-28)
 
 ##### ASR-002: configure_faulthandler_runtime.py
 
@@ -613,9 +611,11 @@ tier3:
   exists: true
   name: "tier3_validate_import_boundaries.yaml"
   meets_template: "yes"
-  last_updated: "2026-01-26"
+  last_updated: "2026-01-28"
+tier3_yaml: ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier3_scripts/available_scripts_oversight/tier3_validate_import_boundaries.yaml"
+phase4_build_doc: ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/ASR-005_validate_import_boundaries_build.md"
 cli_surfaces:
-  run_entrypoint: "main(argv) -> run(argv)" 
+  run_entrypoint: "run(argv)"
   key_flags:
     - "--repo-root"
     - "--graph-path"
@@ -662,45 +662,37 @@ db_integration:
   marker_required: true
   marker_string: "DB_INTEGRATION_MARKER:"
   markers_present:
-    - "L441 — manifest.json write"
-    - "L445 — summary.md write"  
-    - "L463 — telemetry.json write"
+    - "L442 — manifest.json write"
+    - "L446 — summary.md write"  
+    - "L464 — telemetry.json write"
+orchestrator_integration:
+  orchestrator_ready: true
+  promoted_to_orchestrator: true
+  target_orchestrator: "run_available_scripts_oversight.py"
+  supports_output_dir: false
+  supports_artifacts_to_keep: true
 evidence:
   code_refs:
-    - ".repo_studios/scripts/producers/validate_import_boundaries.py#L61 (build_topic_path HOP path)"
-    - ".repo_studios/scripts/producers/validate_import_boundaries.py#L24 (DEFAULT_RELATIVE_GRAPH_DIR — FIXED path order)"
-    - ".repo_studios/scripts/producers/validate_import_boundaries.py#L441-L463 (DB_INTEGRATION_MARKER writes)"
-    - ".repo_studios/scripts/producers/validate_import_boundaries.py#L484 (prune_run_directories)"
+    - ".repo_studios/scripts/producers/validate_import_boundaries.py#L62 (build_topic_path HOP path)"
+    - ".repo_studios/scripts/producers/validate_import_boundaries.py#L26 (DEFAULT_RELATIVE_GRAPH_DIR — FIXED path order)"
+    - ".repo_studios/scripts/producers/validate_import_boundaries.py#L442-L464 (DB_INTEGRATION_MARKER writes)"
+    - ".repo_studios/scripts/producers/validate_import_boundaries.py#L525-L592 (run(argv) entry)"
   tests:
     - ".repo_studios/tests/tests_producers/test_validate_import_boundaries.py::test_emits_structured_artifacts_without_violations (PASSED)"
     - ".repo_studios/tests/tests_producers/test_validate_import_boundaries.py::test_detects_violations_and_honors_allowlist (PASSED)"
   fixtures: []
-  tier3_yaml: ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier3_scripts/dependency_import_hygiene/tier3_validate_import_boundaries.yaml"
   qa:
     mypy: "Success: no issues found in 1 source file"
     pytest: "2 passed in 0.19s"
     last_verified: "2026-01-26"
 notes:
-  - "Classification: HOP-compliant producer, ready for Stage 4.2 promotion."
+  - "Classification: HOP-compliant producer, orchestrator integration complete."
   - "Contract status: ✅ aligned with HOP base package (manifest.json, summary.md, telemetry.json)"
-  - "Entry surface: CLI (exits non-zero when violations exist); also importable (run(argv))."
-  - "Primary purpose: reads a module-level import graph (when available) + performs a repo walk to detect forbidden static import patterns; applies a JSON allowlist to filter accepted exceptions; emits structured reports."
-  - "Phase 4 processing: Completed 2026-01-26 — DB_INTEGRATION_MARKERs added (L441, L445, L463), Tier-3 YAML created, mypy/pytest verified."
-  - "Output quality: summary.md uses relative paths (not absolute), passes markdownlint, JSON artifacts validated."
-  - "Bug fix (2026-01-26): Corrected DEFAULT_RELATIVE_GRAPH_DIR path order from producer_reports/healthview to healthview/producer_reports — import graph now loaded correctly."
-  - "Output truth verification: All claims in summary.md verified TRUE against filesystem and graph data."
+  - "Entry surface: run(argv) returns full payload dict; main(argv) returns exit code."
+  - "DB integration: Has DB_INTEGRATION_MARKER tags at L442, L446, L464."
+  - "Phase 4 processing: Code complete 2026-01-26; Doc complete 2026-01-28."
+  - "Note: Legacy Tier-3 also exists at tier3_scripts/dependency_import_hygiene/ (S42R-001 record_id)."
 ```
-
-##### Promotion Mapping — validate_import_boundaries.py
-
-- Proposed future stage: **4.2** (import boundary / architectural integrity producer vertical)
-- Orchestrator wrapper: Minimal shim required — script already uses `run(argv)` entry
-  and emits HOP base package (manifest/summary/telemetry) under topic path
-- **Contract status:** ✅ Aligned with HOP as of 2026-01-25
-  - Output root: `.repo_studios/reports/healthview/producer_reports/import_boundary/<YYYYMMDD-HHMM>/`
-  - Base package: `manifest.json`, `summary.md`, `telemetry.json`
-  - No `latest_*` pointers (HOP-compliant)
-  - Supplementary: `violations.json`, `log.txt`
 
 #### Implementation Workstreams (checkbox-driven) — validate_import_boundaries.py
 
@@ -708,16 +700,11 @@ notes:
 - [x] B. Gap analysis — identify delta between current and target contract
 - [x] C. Modification — apply HOP alignment (docstring, artifact naming, telemetry.json)
 - [x] D. Evidence — capture tests and representative payload examples
-- [x] E. DB markers — added DB_INTEGRATION_MARKER comments to artifact writes (L441, L445, L463)
-- [x] F. Tier-3 YAML — created tier3_validate_import_boundaries.yaml with ScriptInspectionRecordV1 schema
+- [x] E. DB markers — added DB_INTEGRATION_MARKER comments to artifact writes (L442, L446, L464)
+- [x] F. Tier-3 YAML — created tier3_validate_import_boundaries.yaml (Stage 11.1 location)
 - [x] G. QA verification — mypy --strict PASSED, pytest 2/2 PASSED, CLI execution verified
-- [x] H. Output truth verification — script run via make target, output claims verified TRUE:
-  - Import graph found and loaded from correct HOP path ✅
-  - "0 violations" claim verified against rules and graph data ✅
-  - summary.md uses relative paths (not absolute) ✅
-  - markdownlint 0 errors ✅
-  - Bug fix: corrected DEFAULT_RELATIVE_GRAPH_DIR path from `producer_reports/healthview`
-    to `healthview/producer_reports` (L24)
+- [x] H. Orchestrator integration — added to run_available_scripts_oversight.py, supports_output_dir=False
+- [x] DONE — Phase 4 compliance complete (2026-01-28)
 - [ ] I. Promote — wrap in Stage 4.2 orchestrator (pending Stage 4.2 implementation)
 - [x] **DONE** — Phase 4 complete with full output truth verification (2026-01-26)
 
@@ -802,13 +789,13 @@ script:
   category: "producer"
 tier3:
   metadata_block_version: "v1"
-  allowed: false
-  exists: false
+  allowed: true
+  exists: true
   name: "tier3_check_inventory_health.yaml"
-  meets_template: "NA"
-  last_updated: null
+  meets_template: "yes"
+  last_updated: "2026-01-28"
 cli_surfaces:
-  run_entrypoint: "main(argv) -> run(argv)"
+  run_entrypoint: "run(argv)"
   key_flags:
     - "--repo-root"
     - "--summary"
@@ -858,19 +845,27 @@ db_integration:
 evidence:
   code_refs:
     - ".repo_studios/scripts/producers/check_inventory_health.py#L1-L15 (docstring)"
-    - ".repo_studios/scripts/producers/check_inventory_health.py#L489-L598 (run(argv) entry)"
+    - ".repo_studios/scripts/producers/check_inventory_health.py#L497-L609 (run(argv) entry)"
   tests:
     - ".repo_studios/tests/tests_producers/test_check_inventory_health.py::test_run_returns_payload_dict (PASSED)"
     - ".repo_studios/tests/tests_producers/test_check_inventory_health.py::test_reports_written_without_issues (PASSED)"
     - ".repo_studios/tests/tests_producers/test_check_inventory_health.py::test_threshold_breach_and_pruning (PASSED)"
   fixtures: []
-  phase4_build_doc: ".repo_studios/docs/archives/temp_check_inventory_health_build.md"
+  tier3_yaml: ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier3_scripts/available_scripts_oversight/tier3_check_inventory_health.yaml"
+  phase4_build_doc: ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/ASR-007_check_inventory_health_build.md"
+orchestrator_integration:
+  orchestrator_ready: true
+  db_integration_ready: true
+  phase_4_status: complete
+  promoted_to_orchestrator: true
+  promotion_date: "2026-01-25"
+  target_orchestrator: "run_available_scripts_oversight.py"
 notes:
-  - "Classification: HOP-compliant producer for CI health checks."
+  - "Classification: HOP-compliant producer for inventory health validation."
   - "Contract status: ✅ emits base package; run(argv) entry added 2026-01-25"
-  - "Output root: intentionally under command_center/reports/ for CI context"
-  - "Entry surface: CLI (exits 0/1/2) + importable (run(argv) returns payload dict)"
-  - "Phase 4 processing: Completed 2026-01-25 — run(argv) wrapper added, tests passing (4/4)"
+  - "Entry surface: run(argv) returns Tier A payload with 8 keys"
+  - "Output topic slug: inventory_health; run timestamps use minute granularity (YYYYMMDD-HHMM)"
+  - "Phase 4 processing: Completed 2026-01-25; Tier-3 YAML created 2026-01-28"
 ```
 
 #### Implementation Workstreams (checkbox-driven) — check_inventory_health.py
@@ -892,13 +887,15 @@ script:
   category: "producer"
 tier3:
   metadata_block_version: "v1"
-  allowed: false
-  exists: false
+  allowed: true
+  exists: true
   name: "tier3_validate_inventory.yaml"
-  meets_template: "NA"
-  last_updated: null
+  meets_template: "yes"
+  last_updated: "2026-01-28"
+tier3_yaml: ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier3_scripts/available_scripts_oversight/tier3_validate_inventory.yaml"
+phase4_build_doc: ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/ASR-008_validate_inventory_build.md"
 cli_surfaces:
-  run_entrypoint: "main(argv) -> run(argv)"
+  run_entrypoint: "run(argv)"
   key_flags:
     - "--repo-root"
     - "--schema-root"
@@ -944,8 +941,17 @@ retention:
     - "Writes HOP base package artifacts; prunes older run directories"
 db_integration:
   gated_by: "REPO_STUDIOS_DB_ENABLED"
-  marker_required: true
-  marker_string: "DB_INTEGRATION_MARKER:"
+  marker_required: false
+  marker_string: null
+  notes:
+    - "Script uses direct file writes (not create_storage())"
+    - "DB_INTEGRATION_MARKER tags not present — would need retrofit for dual-write"
+orchestrator_integration:
+  orchestrator_ready: true
+  promoted_to_orchestrator: true
+  target_orchestrator: "run_available_scripts_oversight.py"
+  supports_output_dir: false
+  supports_artifacts_to_keep: true
 evidence:
   code_refs:
     - ".repo_studios/scripts/producers/validate_inventory.py#L1-L28 (HOP docstring)"
@@ -957,11 +963,11 @@ evidence:
     - ".repo_studios/tests/tests_producers/test_validate_inventory.py::test_run_returns_payload_dict (PASSED)"
   fixtures: []
 notes:
-  - "Classification: HOP-compliant producer, ready for orchestrator integration."
+  - "Classification: HOP-compliant producer, orchestrator integration complete."
   - "Contract status: ✅ aligned with HOP base package (manifest.json, summary.md, telemetry.json)"
-  - "Entry surface: CLI and importable (run(argv) returns payload dict)."
-  - "Iterates *.yaml under schema_root (excluding enums/template/config files)."
-  - "Phase 4 processing: Completed 2026-01-25 — artifact names updated, run(argv) added, tests passing (2/2)."
+  - "Entry surface: run(argv) returns payload dict with 7 keys."
+  - "DB integration: NOT using create_storage() — needs marker retrofit for dual-write."
+  - "Phase 4 processing: Code complete 2026-01-25; Doc complete 2026-01-28."
 ```
 
 #### Implementation Workstreams (checkbox-driven) — validate_inventory.py
@@ -970,8 +976,8 @@ notes:
 - [x] B. Plan — artifact renaming to HOP base package, add run(argv)
 - [x] C. Implement — docstring update, artifact names changed, run(argv) added
 - [x] D. Evidence — tests passing (2/2)
-- [ ] E. Promote — move to Stage when orchestrator is implemented
-- [x] DONE — record updated, Phase 4 processing complete (2026-01-25)
+- [x] E. Promote — Tier-3 YAML created, build doc formalized, roster updated
+- [x] DONE — Phase 4 compliance complete (2026-01-28)
 
 ##### ASR-010: render_inventory_views.py
 
@@ -983,13 +989,15 @@ script:
   category: "producer"
 tier3:
   metadata_block_version: "v1"
-  allowed: false
-  exists: false
+  allowed: true
+  exists: true
   name: "tier3_render_inventory_views.yaml"
-  meets_template: "NA"
-  last_updated: null
+  meets_template: "yes"
+  last_updated: "2026-01-28"
+tier3_yaml: ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier3_scripts/available_scripts_oversight/tier3_render_inventory_views.yaml"
+phase4_build_doc: ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/ASR-010_render_inventory_views_build.md"
 cli_surfaces:
-  run_entrypoint: "main(argv)"
+  run_entrypoint: "run(argv)"
   key_flags:
     - "--repo-root"
     - "--schema-root"
@@ -1034,18 +1042,32 @@ db_integration:
   gated_by: "REPO_STUDIOS_DB_ENABLED"
   marker_required: true
   marker_string: "DB_INTEGRATION_MARKER:"
+  markers_present:
+    - "L539 — manifest.json write"
+    - "L541 — summary.md write"
+    - "L543 — telemetry.json write"
+orchestrator_integration:
+  orchestrator_ready: true
+  promoted_to_orchestrator: true
+  target_orchestrator: "run_available_scripts_oversight.py"
+  supports_output_dir: false
+  supports_artifacts_to_keep: false
 evidence:
   code_refs:
-    - ".repo_studios/scripts/producers/render_inventory_views.py"
+    - ".repo_studios/scripts/producers/render_inventory_views.py#L30-L33 (VIEWER_SLUG, TOPIC_SLUG)"
+    - ".repo_studios/scripts/producers/render_inventory_views.py#L538-L544 (create_storage + DB markers)"
+    - ".repo_studios/scripts/producers/render_inventory_views.py#L450-L571 (run(argv) entry)"
   tests:
-    - ".repo_studios/tests/tests_producers/test_render_inventory_views.py"
+    - ".repo_studios/tests/tests_producers/test_render_inventory_views.py::test_render_inventory_views_structured_output (PASSED)"
+    - ".repo_studios/tests/tests_producers/test_render_inventory_views.py::test_run_returns_payload_dict (PASSED)"
   fixtures: []
 notes:
-  - "Classification: HOP-compliant producer (commandview-only scope)."
-  - "Contract status: ✅ emits base package (manifest.json/summary.md/telemetry.json)"
-  - "Entry surface: main(argv) + run(argv) returning payload dict (2026-01-26)"
-  - "Output topic: inventory_overview; writes legacy redirect stubs under views_dir"
-  - "Tests: 2/2 passing (test_render_inventory_views_structured_output, test_run_returns_payload_dict)"
+  - "Classification: HOP-compliant producer, orchestrator integration complete."
+  - "Contract status: ✅ emits base package via create_storage() (manifest.json/summary.md/telemetry.json)"
+  - "Entry surface: run(argv) returns payload dict with 7 keys."
+  - "DB integration: Uses create_storage() with DB_INTEGRATION_MARKER tags at L539, L541, L543."
+  - "Special: Only Stage 11.1 script using create_storage(); hard-coded keep=1 retention."
+  - "Phase 4 processing: Code complete 2026-01-26; Doc complete 2026-01-28."
 ```
 
 #### Implementation Workstreams (checkbox-driven) — render_inventory_views.py
@@ -1054,8 +1076,9 @@ notes:
 - [x] B. Plan — add run(argv) wrapper for orchestrator integration
 - [x] C. Implement — run(argv) entry point added (2026-01-26)
 - [x] D. Evidence — tests passing 2/2
-- [ ] E. Promote — awaiting commandview orchestrator implementation
-- [x] DONE — HOP-compliant, run(argv) added (2026-01-26)
+- [x] E. Tier-3 YAML — created tier3_render_inventory_views.yaml (Stage 11.1 location)
+- [x] F. Orchestrator integration — in run_available_scripts_oversight.py
+- [x] DONE — Phase 4 compliance complete (2026-01-28)
 
 ##### ASR-011: generate_lizard_report.py
 
