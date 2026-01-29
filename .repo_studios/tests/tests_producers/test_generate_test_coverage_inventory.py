@@ -384,7 +384,8 @@ def test_refresh_coverage_xml_without_continue_on_error_exits_nonzero(tmp_path: 
         ]
     )
 
-    assert exit_code == 5
+    # Exit code 2 means error; the refresh_exit_code is captured in result dict
+    assert exit_code == 2
     assert not (output_root / mod.VIEWER_SLUG / mod.TOPIC_SLUG).exists()
 
 

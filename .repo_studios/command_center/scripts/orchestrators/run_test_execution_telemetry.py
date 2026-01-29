@@ -636,14 +636,22 @@ def _execute_coverage(paths: Paths, options: Options) -> CoverageOutcome:
         "--log-level",
         options.log_level,
     ]
-    exit_code = int(run_callable(argv))
-    if exit_code != 0:
-        raise RuntimeError(f"Coverage inventory exit code {exit_code}")
+    result = run_callable(argv)
+    if not isinstance(result, dict):
+        raise RuntimeError("generate_test_coverage_inventory returned unexpected payload")
+    status = result.get("status", "error")
+    if status not in ("ok", "no_functions"):
+        raise RuntimeError(f"Coverage inventory status={status}")
 
-    # The coverage producer writes directly under the configured output directory
-    # (which is already a HOP topic root like .../producer_reports/test_coverage_inventory).
-    expected_dir = paths.coverage_output_dir / run_slug
-    run_dir: Path | None = expected_dir if expected_dir.exists() else None
+    # Use output_dir from result dict, fall back to computed path if missing
+    run_dir: Path | None = None
+    if result.get("output_dir"):
+        candidate = Path(result["output_dir"]).resolve()
+        if candidate.exists():
+            run_dir = candidate
+    if run_dir is None:
+        expected_dir = paths.coverage_output_dir / run_slug
+        run_dir = expected_dir if expected_dir.exists() else None
     if run_dir is None:
         run_dir = _latest_directory(paths.coverage_output_dir, "")
 

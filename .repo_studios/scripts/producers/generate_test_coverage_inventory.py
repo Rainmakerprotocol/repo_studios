@@ -788,7 +788,12 @@ def _render_summary_markdown(*, timestamp_slug: str, payload: dict[str, Any]) ->
     for entry in (item for item in files if isinstance(item, dict)):
         uncovered = entry.get("uncovered_functions", [])
         uncovered_values = uncovered if isinstance(uncovered, list) else []
-        uncovered_display = ", ".join(str(value) for value in uncovered_values) if uncovered_values else "(none)"
+        # Wrap each function name in backticks to prevent MD037 (underscore emphasis)
+        uncovered_display = (
+            ", ".join(f"`{value}`" for value in uncovered_values)
+            if uncovered_values
+            else "(none)"
+        )
         lines.append(
             "| `{path}` | {total} | {covered} | {pct:.2f} | {uncovered} |".format(
                 path=entry.get("path", ""),
@@ -802,7 +807,7 @@ def _render_summary_markdown(*, timestamp_slug: str, payload: dict[str, Any]) ->
     return "\n".join(lines)
 
 
-def run(argv: Sequence[str] | None = None) -> int:
+def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     """Execute the test coverage inventory generation workflow.
 
     Parses CLI arguments, optionally refreshes coverage data via pytest,
@@ -813,7 +818,15 @@ def run(argv: Sequence[str] | None = None) -> int:
         argv: Command-line arguments. Uses sys.argv if None.
 
     Returns:
-        Exit code: 0 on success, 1 on threshold failure, 2 on validation error.
+        Result dict with keys:
+            status: "ok", "no_functions", "threshold_failed", or "error"
+            output_dir: Path to the generated bundle directory
+            coverage_xml: Path to the input coverage XML
+            total_files: Number of files analyzed
+            total_functions: Total function count
+            covered_functions: Covered function count
+            overall_coverage_pct: Overall coverage percentage
+            refresh_exit_code: Exit code from pytest refresh (or None)
     """
     args = parse_args(argv)
     logging.basicConfig(
@@ -826,7 +839,7 @@ def run(argv: Sequence[str] | None = None) -> int:
 
     if args.min_coverage is not None and (args.min_coverage < 0 or args.min_coverage > 100):
         logging.error("--min-coverage must be between 0 and 100")
-        return 2
+        return {"status": "error", "output_dir": "", "error": "min_coverage must be 0-100"}
 
     refresh_exit_code: int | None = None
     refresh_suite_results: list[dict[str, Any]] | None = None
@@ -861,11 +874,20 @@ def run(argv: Sequence[str] | None = None) -> int:
                 logging.warning("Coverage refresh had failures (exit=%s); continuing", refresh_exit_code)
             else:
                 logging.error("Coverage refresh failed (exit=%s)", refresh_exit_code)
-                return refresh_exit_code
+                return {
+                    "status": "error",
+                    "output_dir": "",
+                    "error": f"refresh failed with exit {refresh_exit_code}",
+                    "refresh_exit_code": refresh_exit_code,
+                }
 
     if not paths.coverage_xml.exists():
         logging.error("Coverage XML not found: %s", paths.coverage_xml)
-        return 1
+        return {
+            "status": "error",
+            "output_dir": "",
+            "error": f"coverage XML not found: {paths.coverage_xml}",
+        }
 
     coverage_map = _load_coverage_lines(paths.coverage_xml, repo_root=paths.repo_root)
     file_reports: list[FileCoverage] = []
@@ -1020,14 +1042,42 @@ def run(argv: Sequence[str] | None = None) -> int:
         telemetry["metrics"]["overall_coverage_pct"],
     )
 
+    # Build result payload
+    result: dict[str, Any] = {
+        "status": status,
+        "output_dir": str(bundle_dir),
+        "coverage_xml": _relative_path(paths.coverage_xml, paths.repo_root),
+        "total_files": int(telemetry["metrics"]["total_files"]),
+        "total_functions": int(telemetry["metrics"]["total_functions"]),
+        "covered_functions": int(telemetry["metrics"]["covered_functions"]),
+        "overall_coverage_pct": float(telemetry["metrics"]["overall_coverage_pct"]),
+        "refresh_exit_code": refresh_exit_code,
+    }
+
     if status == "threshold_failed":
         logging.error(
             "Coverage %.2f%% below threshold %.2f%%",
             telemetry["metrics"]["overall_coverage_pct"],
             float(telemetry["metrics"].get("threshold") or 0.0),
         )
+
+    return result
+
+
+def _exit_code_from_status(status: str) -> int:
+    """Convert status string to exit code.
+
+    Args:
+        status: Status string from run() result.
+
+    Returns:
+        Exit code: 0 for ok/no_functions, 1 for threshold_failed, 2 for error.
+    """
+    if status in ("ok", "no_functions"):
+        return 0
+    if status == "threshold_failed":
         return 1
-    return 0
+    return 2
 
 
 def main(argv: Sequence[str] | None = None) -> int:
@@ -1037,9 +1087,10 @@ def main(argv: Sequence[str] | None = None) -> int:
         argv: Command-line arguments. Uses sys.argv if None.
 
     Returns:
-        Exit code from run().
+        Exit code derived from run() result status.
     """
-    return run(argv)
+    result = run(argv)
+    return _exit_code_from_status(result.get("status", "error"))
 
 
 if __name__ == "__main__":  # pragma: no cover

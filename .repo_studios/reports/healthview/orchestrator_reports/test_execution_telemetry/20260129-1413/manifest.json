@@ -1,0 +1,121 @@
+{
+  "schema_version": 1,
+  "viewer": "orchestrator_reports",
+  "topic": "test_execution_telemetry",
+  "run_slug": "20260129-1413",
+  "generated_at": "2026-01-29T14:14:05.077493+00:00",
+  "status": "error",
+  "exit_code": 1,
+  "telemetry": {
+    "viewer": "orchestrator_reports",
+    "topic": "test-execution-telemetry",
+    "run_slug": "20260129-1413",
+    "success": false,
+    "started_at": "2026-01-29T14:13:00.293311+00:00",
+    "finished_at": "2026-01-29T14:14:05.077371+00:00",
+    "steps": [
+      {
+        "name": "collect",
+        "status": "failed",
+        "started_at": "2026-01-29T14:13:00.293318+00:00",
+        "finished_at": "2026-01-29T14:14:05.077317+00:00",
+        "detail": "int() argument must be a string, a bytes-like object or a real number, not 'dict'"
+      }
+    ],
+    "metrics": {
+      "runtime_seconds": 64.78406,
+      "step_count": 1,
+      "steps_succeeded": 0,
+      "steps_failed": 1,
+      "steps_skipped": 0,
+      "artifact_files": 3,
+      "artifact_bytes": 4608
+    },
+    "status": "error",
+    "exit_code": 1
+  },
+  "artifacts": {
+    "log_report": null,
+    "coverage_report": null,
+    "heatmap": null,
+    "hardening": null,
+    "health_report": null,
+    "health_bundle_summary": null,
+    "summary_markdown": ".repo_studios/reports/healthview/summarizer_reports/test_execution_telemetry/20260129-1413/test_execution_telemetry_summary.md",
+    "summary_json": ".repo_studios/reports/healthview/summarizer_reports/test_execution_telemetry/20260129-1413/test_execution_telemetry_summary.json"
+  },
+  "inputs": {
+    "logs_dir": ".repo_studios/reports/healthview/rawview/test_execution_runs",
+    "coverage_xml": "coverage.xml",
+    "metrics_source": null
+  },
+  "catalog": [
+    {
+      "script_path": ".repo_studios/scripts/aggregators/generate_churn_complexity_heatmap.py",
+      "topic": "test-execution-telemetry",
+      "role": "aggregator"
+    },
+    {
+      "script_path": ".repo_studios/scripts/consumers/generate_test_log_health_report.py",
+      "topic": "test-execution-telemetry",
+      "role": "consumer"
+    },
+    {
+      "script_path": ".repo_studios/command_center/scripts/orchestrators/run_test_execution_telemetry.py",
+      "topic": "test-execution-telemetry",
+      "role": "orchestrator"
+    },
+    {
+      "script_path": ".repo_studios/scripts/producers/analyze_test_hardening.py",
+      "topic": "test-execution-telemetry",
+      "role": "producer"
+    },
+    {
+      "script_path": ".repo_studios/scripts/producers/collect_test_log_reports.py",
+      "topic": "test-execution-telemetry",
+      "role": "producer"
+    },
+    {
+      "script_path": ".repo_studios/scripts/producers/generate_test_coverage_inventory.py",
+      "topic": "test-execution-telemetry",
+      "role": "producer"
+    },
+    {
+      "script_path": ".repo_studios/command_center/scripts/summarizers/summarize_test_execution_telemetry.py",
+      "topic": "test-execution-telemetry",
+      "role": "summarizer"
+    }
+  ],
+  "child_outcomes": [
+    {
+      "name": "generate_test_coverage_inventory.py",
+      "path": ".repo_studios/scripts/producers/generate_test_coverage_inventory.py",
+      "status": "error",
+      "exit_code": 2,
+      "run_dir": null,
+      "duration_seconds": 64.78235659998609,
+      "error": "int() argument must be a string, a bytes-like object or a real number, not 'dict'"
+    },
+    {
+      "name": "summarize_test_execution_telemetry.py",
+      "path": ".repo_studios/command_center/scripts/summarizers/summarize_test_execution_telemetry.py",
+      "status": "ok",
+      "exit_code": 0,
+      "run_dir": "C:/Users/genet/repo_studios/.repo_studios/reports/healthview/summarizer_reports/test_execution_telemetry/20260129-1413",
+      "duration_seconds": 0.026443200011271983,
+      "error": null
+    }
+  ],
+  "scripts_run": 2,
+  "scripts_passed": 1,
+  "scripts_failed": 1,
+  "metrics": {
+    "runtime_seconds": 64.78406,
+    "step_count": 1,
+    "steps_succeeded": 0,
+    "steps_failed": 1,
+    "steps_skipped": 0,
+    "artifact_files": 3,
+    "artifact_bytes": 4608
+  }
+}

@@ -514,7 +514,7 @@ def _inject_markdownlint_exception(markdown: str) -> str:
     Returns:
         Markdown with lint exception comment at the top.
     """
-    prefix = "<!-- markdownlint-disable MD013 -->"
+    prefix = "<!-- markdownlint-disable MD013 MD041 -->"
     stripped = markdown.lstrip()
     if markdown.startswith(prefix):
         return markdown if markdown.endswith("\n") else markdown + "\n"
@@ -806,6 +806,7 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
         len(pruned),
     )
     return {
+        "status": "ok",
         "output_dir": str(out_dir.resolve()),
         "source": source,
         "producer_bundle_dir": str(used_bundle) if used_bundle else None,

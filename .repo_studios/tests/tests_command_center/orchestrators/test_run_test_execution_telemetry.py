@@ -131,7 +131,7 @@ def test_execute_coverage_finds_run_dir(tmp_path: Path, monkeypatch: pytest.Monk
                 json.dumps({"payload": {"summary": {"status": "ok", "total_files": 1}}}),
                 encoding="utf-8",
             )
-            return 0
+            return {"status": "ok", "output_dir": str(expected_run_dir)}
 
         return _runner
 

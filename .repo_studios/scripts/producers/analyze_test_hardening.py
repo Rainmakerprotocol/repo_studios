@@ -13,7 +13,7 @@ import sys
 from collections import Counter
 from dataclasses import dataclass, field, replace
 from pathlib import Path
-from typing import List, Sequence, cast
+from typing import Any, List, Sequence, cast
 
 LIBRARIES_ROOT = Path(__file__).resolve().parents[3] / ".repo_studios" / "command_center" / "scripts"
 
@@ -718,7 +718,7 @@ def analyze_all(paths: Paths, tests_dirs: list[Path] | None = None) -> list[Test
     return results
 
 
-def compose_payload(paths: Paths, options: Options, results: list[TestFileAnalysis], timestamp: dt.datetime) -> dict:
+def compose_payload(paths: Paths, options: Options, results: list[TestFileAnalysis], timestamp: dt.datetime) -> dict[str, Any]:
     """Build the main JSON payload from analysis results.
 
     Aggregate severity totals, identify clean and priority files, and structure output.
@@ -816,7 +816,7 @@ def compose_payload(paths: Paths, options: Options, results: list[TestFileAnalys
     }
 
 
-def render_markdown_report(payload: dict) -> str:
+def render_markdown_report(payload: dict[str, Any]) -> str:
     """Render the analysis payload as a Markdown summary report.
 
     Format summary statistics, top priority files, clean files, and recommendations.
@@ -887,10 +887,10 @@ def render_markdown_report(payload: dict) -> str:
     lines.extend(
         [
             "1. Address high severity issues before medium/low findings.",
-            "2. Decompose long tests into focused units.",
-            "3. Mock external dependencies and remove global state.",
-            "4. Replace time.sleep() with deterministic waits.",
-            "5. Use descriptive names following given-when-then style.",
+            "1. Decompose long tests into focused units.",
+            "1. Mock external dependencies and remove global state.",
+            "1. Replace time.sleep() with deterministic waits.",
+            "1. Use descriptive names following given-when-then style.",
         ]
     )
 
@@ -907,7 +907,7 @@ def build_manifest(
     status: str,
     exit_code: int,
     tests_dirs: list[Path] | None = None,
-) -> dict:
+) -> dict[str, Any]:
     """Build the manifest metadata for this analysis run.
 
     Create provenance and configuration metadata for artifact tracking.
@@ -959,7 +959,7 @@ def build_manifest(
     }
 
 
-def build_telemetry(payload: dict, *, timestamp_slug: str) -> dict:
+def build_telemetry(payload: dict[str, Any], *, timestamp_slug: str) -> dict[str, Any]:
     """Build telemetry data structure from the analysis payload.
 
     Extract metrics and component data for downstream telemetry consumers.
@@ -1051,7 +1051,7 @@ def _relativize(path: Path, repo_root: Path) -> str:
         return path.as_posix()
 
 
-def run(argv: Sequence[str] | None = None) -> dict:
+def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     """Execute the test hardening analysis pipeline.
 
     Parse arguments, analyze test files, compose payload, and write artifacts.

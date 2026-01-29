@@ -35,6 +35,7 @@ related_files:
 > passed Phase 4 build processing.
 >
 > **Prerequisite:** Script MUST have completed Phase 4 build processing with:
+>
 > - ✅ `run(argv) -> dict` entry point
 > - ✅ Tier-3 YAML created
 > - ✅ All verification tests passing

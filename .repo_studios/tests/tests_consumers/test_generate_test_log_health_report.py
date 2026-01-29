@@ -379,7 +379,7 @@ def test_markdownlint_injection_is_idempotent(tmp_path, monkeypatch):
 
     raw = "# Report\n\nBody\n"
     injected = consumer_mod._inject_markdownlint_exception(raw)
-    assert injected.startswith("<!-- markdownlint-disable MD013 -->")
+    assert injected.startswith("<!-- markdownlint-disable MD013 MD041 -->")
     injected_again = consumer_mod._inject_markdownlint_exception(injected)
     assert injected_again == injected
 

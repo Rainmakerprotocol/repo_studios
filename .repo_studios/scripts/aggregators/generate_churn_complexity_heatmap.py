@@ -828,6 +828,7 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     )
 
     return {
+        "status": "ok",
         "mode": mode,
         "output_dir": str(run_dir.resolve()),
         "heatmap_json": str(heatmap_json_path.resolve()),

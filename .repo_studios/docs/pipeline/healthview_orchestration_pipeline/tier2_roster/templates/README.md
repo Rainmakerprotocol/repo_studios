@@ -11,8 +11,8 @@ role:
   - template-guide
   - phase-4-reference
 status: active
-version: 1.1.0
-updated_at: 2026-01-27
+version: 1.2.0
+updated_at: 2026-01-28
 tags:
   - stage-12
   - templates
@@ -277,6 +277,102 @@ you must fix the issue before proceeding.
 2. Update Tier-2 roster record
 3. Move to archive location (if applicable)
 
+### 2.7 Complete Workflow — End-to-End Conclusion Steps
+
+> **⚠️ CRITICAL: The build.md is NOT done when you fill in the sections.**
+>
+> The full workflow includes conclusion steps that happen AFTER the build.md content is complete.
+> These steps ensure the script is truly verified, integrated, and tracked. Missing these steps
+> results in "zombie scripts" — documented but never actually proven to work.
+
+**The complete Phase 4A workflow is a 13-step process:**
+
+```text
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ PHASE 4A COMPLETE WORKFLOW (Build + Verify + Finalize)                      │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ DISCOVERY (Template Sections 1-2)                                           │
+│ ─────────────────────────────────                                           │
+│  1. SELECT script from Tier-2 roster                                        │
+│  2. COPY template → working_docs/<ID>_<name>_build.md                       │
+│  3. POPULATE script identity and current state (Sections 1-2)               │
+│                                                                             │
+│ ANALYSIS (Template Sections 2-3)                                            │
+│ ───────────────────────────────                                             │
+│  4. ASSESS compliance gaps (Section 2.4)                                    │
+│  5. DRAFT gap closure plan (Section 3)                                      │
+│                                                                             │
+│ IMPLEMENTATION (Template Sections 4-5)                                      │
+│ ─────────────────────────────────────                                       │
+│  6. IMPLEMENT code changes if needed (Section 4)                            │
+│  7. RUN tests — mypy, pytest, CLI execution (Section 5)                     │
+│                                                                             │
+│ ⚠️ TRUTH GATE (Template Section 2.5) — CANNOT BE SKIPPED                    │
+│ ────────────────────────────────────                                        │
+│  8. RUN THE SCRIPT with actual inputs                                       │
+│  9. INSPECT every output artifact                                           │
+│ 10. VERIFY each claim against ground truth                                  │
+│     → If ANY claim is FALSE, script is BROKEN — fix before proceeding       │
+│                                                                             │
+│ CONCLUSION (Template Section 7 + Roster)                                    │
+│ ─────────────────────────────────────────                                   │
+│ 11. CREATE/UPDATE Tier-3 YAML (Section 2.6)                                 │
+│ 12. UPDATE Tier-2 roster workstream checkboxes                              │
+│     → Check boxes A through H in the roster record                          │
+│     → Mark per-script "DONE — Phase 4 compliance complete (YYYY-MM-DD)"     │
+│ 13. FINALIZE build.md frontmatter → status: complete, version: 1.0.0        │
+│                                                                             │
+│ STAGE FINALIZATION (After ALL scripts in stage are done)                    │
+│ ──────────────────                                                          │
+│ 14. UPDATE Tier-2 roster frontmatter → status: active, version: 1.0.0       │
+│ 15. ADD Update Log entry → "Stage X.X finalized (YYYY-MM-DD)"               │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+
+#### Workstream Checkboxes (A-H Pattern)
+
+The Tier-2 roster uses checkbox-driven workstreams for each script. All must be checked
+before marking DONE:
+
+| Workstream | Description | When Complete |
+|------------|-------------|---------------|
+| **A. Discovery** | Inspect CLI, outputs, retention, consumers | Section 2 populated |
+| **B. Plan** | Draft gap closure plan | Section 3 populated |
+| **C. Implement** | Make code changes | Section 4 populated |
+| **D. Evidence** | Tests passing | Section 5 populated |
+| **E. Bug fix** | Address issues found | Any fixes applied |
+| **F. Output truth verification** | Script run, claims verified TRUE | Section 2.5 complete |
+| **G. Tier-3 YAML** | Created/updated machine-readable contract | Section 2.6 complete |
+| **H. Orchestrator integration** | Wired to parent orchestrator | Section 6 complete |
+| **DONE** | Phase 4 compliance complete | All above checked |
+
+#### Evidence Requirements for DONE
+
+A script is only DONE when:
+
+1. **Build.md exists** with all mandatory sections completed
+2. **Tests pass** — mypy, pytest, CLI execution verified
+3. **Output verified** — Script actually run, every claim in output is TRUE
+4. **Tier-3 YAML exists** — Machine-readable contract created/updated
+5. **Roster updated** — Workstream checkboxes A-H all checked in Tier-2 roster
+6. **Build.md finalized** — Frontmatter shows `status: complete`
+
+#### Stage Finalization Criteria
+
+After ALL scripts in a stage have DONE status:
+
+1. **Roster frontmatter promotion:**
+   - Change `status: draft` → `status: active`
+   - Change `version: 0.x.x` → `version: 1.0.0`
+
+2. **Update Log entry:**
+
+   ```markdown
+   | YYYY-MM-DD | **Stage X.X finalized:** All N scripts have Phase 4 compliance (Tier-3 YAML + build doc + roster update). Status promoted to `active` v1.0.0. | Author | N/A | N/N suite |
+   ```
+
+3. **Tier-1 linkage:** Ensure Tier-1 stage section links to finalized Tier-2 roster
+
 ---
 
 ## 3. Template Selection Decision Tree
@@ -408,7 +504,7 @@ you must fix the issue before proceeding.
 
 | Requirement | Description |
 |-------------|-------------|
-| `run(argv)` entry point | Function that accepts `list[str] | None` |
+| `run(argv)` entry point | Function that accepts `list[str] \| None` |
 | Returns `dict[str, Any]` | NOT an integer exit code |
 | `status` key in return | "ok", "error", or type-specific values |
 | `exit_code` key in return | 0=success, 1=warning/skipped, 2=error |
@@ -504,6 +600,13 @@ The template documents which approach the script uses.
 
 | Template | Version | Last Updated | Major Changes |
 |----------|---------|--------------|---------------|
+| README | 1.2.0 | 2026-01-28 | Added Section 2.7 Complete Workflow with conclusion steps (F-H), roster finalization |
+| Producer | 2.1.0 | 2026-01-28 | Enhanced Section 7 with full completion workflow, roster update, truth verification |
+| Consumer | 2.1.0 | 2026-01-28 | Enhanced Section 7 with full completion workflow, roster update, truth verification |
+| Aggregator | 2.1.0 | 2026-01-28 | Enhanced Section 7 with full completion workflow, roster update, truth verification |
+| Summarizer | 2.1.0 | 2026-01-28 | Enhanced Section 7 with full completion workflow, roster update, truth verification |
+| Orchestrator | 2.1.0 | 2026-01-28 | Enhanced Section 7 with full completion workflow, child script verification |
+| Utility | 2.1.0 | 2026-01-28 | Enhanced Section 7 with full completion workflow (Tier B variant) |
 | Producer | 2.0.0 | 2026-01-26 | Universal Law, Tier-3 YAML, DB Integration |
 | Consumer | 2.0.0 | 2026-01-26 | Universal Law, Tier-3 YAML, DB Integration |
 | Aggregator | 2.0.0 | 2026-01-26 | Universal Law, Tier-3 YAML, DB Integration |

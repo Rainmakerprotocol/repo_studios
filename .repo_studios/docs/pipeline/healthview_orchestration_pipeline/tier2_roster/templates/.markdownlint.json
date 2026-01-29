@@ -1,0 +1,7 @@
+{
+  "extends": "../../../../../../.markdownlint.json",
+  "MD033": false,
+  "MD029": {
+    "style": "ordered"
+  }
+}

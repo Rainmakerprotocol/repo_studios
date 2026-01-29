@@ -19,9 +19,10 @@ import json
 import logging
 import subprocess
 import sys
+import types
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any, Sequence
+from typing import Any, Sequence, cast
 
 SCRIPTS_ROOT = Path(__file__).resolve().parents[1]
 if str(SCRIPTS_ROOT) not in sys.path:
@@ -59,7 +60,7 @@ DEFAULT_OUTPUT_DIR = build_topic_path("rawview", TOPIC_SLUG)
 DEFAULT_KEEP = get_keep("collect_test_log_reports")
 
 
-def _load_element_tree():
+def _load_element_tree() -> types.ModuleType:
     """Load an XML ElementTree implementation with security preference.
 
     Attempts to import defusedxml for safer XML parsing. Falls back to
@@ -69,13 +70,13 @@ def _load_element_tree():
         The ElementTree module to use for XML parsing.
     """
     try:
-        import defusedxml.ElementTree as ElementTree  # type: ignore
+        import defusedxml.ElementTree as ElementTree  # type: ignore[import-untyped]
 
-        return ElementTree
+        return cast(types.ModuleType, ElementTree)
     except Exception:
         import xml.etree.ElementTree as ElementTree
 
-        return ElementTree
+        return cast(types.ModuleType, ElementTree)
 
 
 def _parse_args(argv: Sequence[str] | None) -> argparse.Namespace:

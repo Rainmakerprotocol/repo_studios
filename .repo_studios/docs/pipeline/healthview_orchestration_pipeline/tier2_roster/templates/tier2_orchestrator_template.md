@@ -223,7 +223,7 @@ usage: <SCRIPT_NAME> [-h] [--repo-root REPO_ROOT] ...
 | telemetry.json valid JSON | ⚠️/✅ | `python -m json.tool <file>` |
 | Schema version present | ⚠️/✅ | `schema_version` field in manifest |
 | Timestamp ISO 8601 format | ⚠️/✅ | `YYYY-MM-DDTHH:MM:SS+00:00` |
-| Status field present | ⚠️/✅ | `status: ok|error|partial` |
+| Status field present | ⚠️/✅ | `status: ok\|error\|partial` |
 | Consistent key naming | ⚠️/✅ | snake_case throughout |
 | child_outcomes array valid | ⚠️/✅ | Each outcome has name, status, exit_code |
 
@@ -562,18 +562,115 @@ storage.write_artifact("child_outcomes.json", child_outcomes_list)
 
 ## 7. Completion
 
-**Phase 4 processing complete (<YYYY-MM-DD>)**
+> **⚠️ This section is the FINAL GATE. Do not mark complete until ALL items are checked.**
+>
+> The build.md is NOT done when you fill in the sections. It is done when:
+>
+> 1. The orchestrator has been RUN and outputs verified TRUE
+> 2. ALL child scripts executed successfully
+> 3. The Tier-3 YAML exists and is validated
+> 4. The roster checkboxes are all checked including DONE
+> 5. This document's frontmatter shows `status: complete`
 
-- [ ] Universal compliance verified (Section 2.2.1)
-- [ ] HOP bundle compliance verified (Section 2.5.2)
-- [ ] Output quality verified (Section 2.6)
-- [ ] Child script management verified (Section 2.7)
-- [ ] Tier-3 YAML created/updated (Section 2.8)
-- [ ] DB Integration prepared (Section 2.9)
-- [ ] Orchestrator-specific validation passed (Section 6)
-- [ ] Frontmatter updated: `status: archived`
-- [ ] Tier-2 roster record updated
-- [ ] Working document archived
+### 7.1 Build Document Completion Checklist
+
+**Discovery & Analysis:**
+
+- [ ] Section 1 (Script Identity) — All fields populated
+- [ ] Section 2.1 (CLI Interface) — Flags documented from `--help` output
+- [ ] Section 2.2 (Entry Points) — Signatures verified against code
+- [ ] Section 2.4 (Compliance Assessment) — All checks have evidence
+
+**Implementation & Testing:**
+
+- [ ] Section 3 (Gap Analysis) — Gaps identified with priority/effort
+- [ ] Section 4 (Changes Made) — All modifications documented with line numbers
+- [ ] Section 5 (Evidence) — Test results captured (pytest/mypy/coverage)
+
+**Truth Verification (CRITICAL):**
+
+- [ ] Section 2.6.1 — QA tests passed (mypy, pytest, CLI execution)
+- [ ] Section 2.6.5 — Output truth verified: **ORCHESTRATOR WAS ACTUALLY RUN**
+- [ ] Section 2.6.5 — Every claim in manifest/summary/telemetry verified against ground truth
+- [ ] Section 2.7 — All child scripts executed in correct order
+- [ ] **If any claim was FALSE, it was FIXED before checking this box**
+
+**Tier-3 & DB Integration:**
+
+- [ ] Section 2.8 — Tier-3 YAML created/updated and validated
+- [ ] Section 2.9 — DB Integration markers present at all write points
+
+**Orchestrator-Specific Validation:**
+
+- [ ] Section 6 — All orchestrator validation checks pass
+- [ ] Child script registry complete
+- [ ] ScriptConfig entries verified for all children
+
+### 7.2 Tier-2 Roster Update
+
+> **After completing Section 7.1, update the parent Tier-2 roster document.**
+
+**Roster location:** `../tier2_<stage>_roster.md`
+
+**Workstream checkboxes to update:**
+
+```markdown
+#### Implementation Workstreams (checkbox-driven) — <SCRIPT_NAME>
+
+- [x] A. Discovery — confirm CLI surfaces, child scripts, outputs, retention
+- [x] B. Plan — draft gap closure plan
+- [x] C. Implement — code changes applied (or N/A if already compliant)
+- [x] D. Evidence — tests passing (N/N)
+- [x] E. Bug fix — issues addressed (or N/A if none found)
+- [x] F. Output truth verification — orchestrator run, all claims verified TRUE
+- [x] G. Tier-3 YAML — created/updated <tier3_name>.yaml
+- [x] H. Child script registry — all children documented with ScriptConfig
+- [x] DONE — Phase 4 compliance complete (<YYYY-MM-DD>)
+```
+
+**Roster update checklist:**
+
+- [ ] Located script record in Tier-2 roster
+- [ ] Checked workstream boxes A through H
+- [ ] Added DONE marker with date
+- [ ] Updated `phase4_build_doc` field to point to this document
+- [ ] Updated `tier3_yaml` field to point to Tier-3 YAML path
+
+### 7.3 Document Finalization
+
+**Update this document's frontmatter:**
+
+```yaml
+status: complete        # Changed from: active
+version: "1.0.0"        # Changed from: working version
+updated_at: <YYYY-MM-DD>
+```
+
+**Final verification:**
+
+- [ ] Frontmatter `status` changed to `complete`
+- [ ] Frontmatter `version` changed to `1.0.0`
+- [ ] Frontmatter `updated_at` reflects completion date
+- [ ] No `<PLACEHOLDER>` variables remain in document
+
+### 7.4 Phase 4 Processing Complete
+
+**Completion timestamp:** `<YYYY-MM-DD HH:MM UTC>`
+
+**Summary:**
+
+| Aspect | Status | Evidence |
+|--------|--------|----------|
+| Universal compliance | ✅ | Section 2.2.1 all checked |
+| HOP bundle compliance | ✅ | Section 2.5.2 all checked |
+| Output truth verified | ✅ | Section 2.6.5 — all claims TRUE |
+| Child scripts executed | ✅ | Section 2.7 — all N children ran |
+| Tier-3 YAML | ✅ | `<tier3_yaml_path>` |
+| DB Integration ready | ✅ | Markers at L<xxx>, L<yyy>, L<zzz> |
+| Roster updated | ✅ | Workstreams A-H + DONE checked |
+
+**Next step:** Orchestrators typically don't need Phase 4B promotion (they ARE the orchestrators).
+If this orchestrator is a child of a meta-orchestrator, proceed to Phase 4B.
 
 ---
 
@@ -598,5 +695,6 @@ Replace these placeholders when using this template:
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 2.1.0 | 2026-01-28 | Enhanced Section 7 with complete conclusion workflow (truth verification, child script verification, roster update, finalization steps) |
 | 2.0.0 | 2026-01-26 | Added Universal Law, Compliance Tiers, Tier-3 YAML, DB Integration Preparation, Child Script Management, Orchestrator-Specific Validation |
 | 1.0.0 | (original) | Initial template with HOP compliance focus |

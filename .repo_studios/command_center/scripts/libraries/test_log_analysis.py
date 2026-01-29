@@ -5,6 +5,7 @@ from __future__ import annotations
 import importlib
 import importlib.util
 import re
+import types
 from collections import Counter
 from dataclasses import dataclass
 from datetime import datetime
@@ -63,7 +64,7 @@ def read_text(path: Path | None) -> str:
         return ""
 
 
-def _load_element_tree():
+def _load_element_tree() -> types.ModuleType:
     try:
         spec = importlib.util.find_spec("defusedxml.ElementTree")
     except ModuleNotFoundError:
@@ -369,7 +370,7 @@ def build_test_log_report(
 
 def render_markdown(report: dict[str, Any]) -> str:
     lines: list[str] = []
-    lines.append("## Test Log Health Report")
+    lines.append("# Test Log Health Report")
     lines.append("")
     meta = report.get("meta", {})
     lines.append(f"Generated: {meta.get('generated_at', 'unknown')}")

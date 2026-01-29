@@ -5,3 +5,6 @@ command_center_script_verification_temp.md
 repo_prompts.md
 docs/standards/global/**
 docs/standards/project/**
+
+# Tier-2 templates intentionally use <placeholder> syntax for user replacement
+.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/templates/tier2_*.md

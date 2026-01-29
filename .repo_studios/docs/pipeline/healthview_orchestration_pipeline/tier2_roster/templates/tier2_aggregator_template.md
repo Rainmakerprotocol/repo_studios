@@ -214,7 +214,7 @@ usage: <SCRIPT_NAME> [-h] [--repo-root REPO_ROOT] ...
 | telemetry.json valid JSON | ⚠️/✅ | `python -m json.tool <file>` |
 | Schema version present | ⚠️/✅ | `schema_version` field in manifest |
 | Timestamp ISO 8601 format | ⚠️/✅ | `YYYY-MM-DDTHH:MM:SS+00:00` |
-| Status field present | ⚠️/✅ | `status: ok|error|violations` |
+| Status field present | ⚠️/✅ | `status: ok\|error\|violations` |
 | Consistent key naming | ⚠️/✅ | snake_case throughout |
 
 #### 2.5.4 DB Integration Markers
@@ -507,17 +507,111 @@ ScriptConfig(
 
 ## 7. Completion
 
-**Phase 4 processing complete (<YYYY-MM-DD>)**
+> **⚠️ This section is the FINAL GATE. Do not mark complete until ALL items are checked.**
+>
+> The build.md is NOT done when you fill in the sections. It is done when:
+>
+> 1. The script has been RUN and outputs verified TRUE
+> 2. The Tier-3 YAML exists and is validated
+> 3. The roster checkboxes are all checked including DONE
+> 4. This document's frontmatter shows `status: complete`
 
-- [ ] Universal compliance verified (Section 2.2.1)
-- [ ] HOP bundle compliance verified (Section 2.4.2)
-- [ ] Output quality verified (Section 2.5)
-- [ ] Tier-3 YAML created/updated (Section 2.6)
-- [ ] DB Integration prepared (Section 2.7)
-- [ ] Orchestration readiness verified (Section 6.3)
-- [ ] Frontmatter updated: `status: archived`
-- [ ] Tier-2 roster record updated
-- [ ] Working document archived
+### 7.1 Build Document Completion Checklist
+
+**Discovery & Analysis:**
+
+- [ ] Section 1 (Script Identity) — All fields populated
+- [ ] Section 2.1 (CLI Interface) — Flags documented from `--help` output
+- [ ] Section 2.2 (Entry Points) — Signatures verified against code
+- [ ] Section 2.4 (Compliance Assessment) — All checks have evidence
+
+**Implementation & Testing:**
+
+- [ ] Section 3 (Gap Analysis) — Gaps identified with priority/effort
+- [ ] Section 4 (Changes Made) — All modifications documented with line numbers
+- [ ] Section 5 (Evidence) — Test results captured (pytest/mypy/coverage)
+
+**Truth Verification (CRITICAL):**
+
+- [ ] Section 2.5.1 — QA tests passed (mypy, pytest, CLI execution)
+- [ ] Section 2.5.5 — Output truth verified: **SCRIPT WAS ACTUALLY RUN**
+- [ ] Section 2.5.5 — Every claim in output artifacts verified against ground truth
+- [ ] **If any claim was FALSE, it was FIXED before checking this box**
+
+**Tier-3 & DB Integration:**
+
+- [ ] Section 2.6 — Tier-3 YAML created/updated and validated
+- [ ] Section 2.7 — DB Integration markers present at all write points
+
+**Orchestrator Readiness:**
+
+- [ ] Section 6.3 — All orchestration readiness checks pass
+
+### 7.2 Tier-2 Roster Update
+
+> **After completing Section 7.1, update the parent Tier-2 roster document.**
+
+**Roster location:** `../tier2_<stage>_roster.md`
+
+**Workstream checkboxes to update:**
+
+```markdown
+#### Implementation Workstreams (checkbox-driven) — <SCRIPT_NAME>
+
+- [x] A. Discovery — confirm CLI surfaces, outputs, retention, and consumers
+- [x] B. Plan — draft gap closure plan
+- [x] C. Implement — code changes applied (or N/A if already compliant)
+- [x] D. Evidence — tests passing (N/N)
+- [x] E. Bug fix — issues addressed (or N/A if none found)
+- [x] F. Output truth verification — script run, output claims verified TRUE
+- [x] G. Tier-3 YAML — created/updated <tier3_name>.yaml
+- [x] H. Orchestrator integration — ScriptConfig documented (Section 6.2)
+- [x] DONE — Phase 4 compliance complete (<YYYY-MM-DD>)
+```
+
+**Roster update checklist:**
+
+- [ ] Located script record in Tier-2 roster
+- [ ] Checked workstream boxes A through H
+- [ ] Added DONE marker with date
+- [ ] Updated `phase4_build_doc` field to point to this document
+- [ ] Updated `tier3_yaml` field to point to Tier-3 YAML path
+
+### 7.3 Document Finalization
+
+**Update this document's frontmatter:**
+
+```yaml
+status: complete        # Changed from: active
+version: "1.0.0"        # Changed from: working version
+updated_at: <YYYY-MM-DD>
+```
+
+**Final verification:**
+
+- [ ] Frontmatter `status` changed to `complete`
+- [ ] Frontmatter `version` changed to `1.0.0`
+- [ ] Frontmatter `updated_at` reflects completion date
+- [ ] No `<PLACEHOLDER>` variables remain in document
+
+### 7.4 Phase 4 Processing Complete
+
+**Completion timestamp:** `<YYYY-MM-DD HH:MM UTC>`
+
+**Summary:**
+
+| Aspect | Status | Evidence |
+|--------|--------|----------|
+| Universal compliance | ✅ | Section 2.2.1 all checked |
+| HOP bundle compliance | ✅ | Section 2.4.2 all checked |
+| Output truth verified | ✅ | Section 2.5.5 — all claims TRUE |
+| Tier-3 YAML | ✅ | `<tier3_yaml_path>` |
+| DB Integration ready | ✅ | Markers at L<xxx>, L<yyy>, L<zzz> |
+| Orchestrator ready | ✅ | Section 6.3 all checked |
+| Roster updated | ✅ | Workstreams A-H + DONE checked |
+
+**Next step:** If this script needs orchestrator wiring, proceed to Phase 4B using
+`tier2_promotion_template.md`.
 
 ---
 
@@ -542,5 +636,6 @@ Replace these placeholders when using this template:
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 2.1.0 | 2026-01-28 | Enhanced Section 7 with complete conclusion workflow (truth verification, roster update, finalization steps) |
 | 2.0.0 | 2026-01-26 | Added Universal Law, Compliance Tiers, Tier-3 YAML, DB Integration Preparation, Orchestration Readiness Checklist, ScriptConfig section |
 | 1.0.0 | (original) | Initial template with HOP compliance focus |

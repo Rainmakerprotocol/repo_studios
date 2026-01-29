@@ -168,7 +168,7 @@ Implementation Workstreams are inactive until Discovery (Workstream A) is comple
 **Records index:**
 
 - [Fixture Example (Permanent) — `run_test_execution_telemetry.py`](#fixture-example-permanent--run_test_execution_telemetrypy)
-- [Record — collect_test_log_reports.py](#record--collect_test_log_reportspy)
+- [TER-002 — `collect_test_log_reports.py`](#ter-002-collect_test_log_reportspy)
 - [Record — generate_test_coverage_inventory.py](#record--generate_test_coverage_inventorypy)
 - [Record — analyze_test_hardening.py](#record--analyze_test_hardeningpy)
 - [Record — generate_test_log_health_report.py](#record--generate_test_log_health_reportpy)
@@ -178,7 +178,7 @@ Implementation Workstreams are inactive until Discovery (Workstream A) is comple
 **Pruning index:**
 
 - [Fixture Example (Permanent)](#fixture-example-permanent--run_test_execution_telemetrypy) (shared-helper)
-- [Record — collect_test_log_reports.py](#record--collect_test_log_reportspy) (shared-helper)
+- [TER-002 — `collect_test_log_reports.py`](#ter-002-collect_test_log_reportspy) (shared-helper)
 - [Record — generate_test_coverage_inventory.py](#record--generate_test_coverage_inventorypy) (shared-helper)
 - [Record — analyze_test_hardening.py](#record--analyze_test_hardeningpy) (shared-helper)
 - [Record — generate_test_log_health_report.py](#record--generate_test_log_health_reportpy) (shared-helper)
@@ -348,138 +348,106 @@ Evidence (2025-12-25):
 
 - [x] DONE — run_test_execution_telemetry.py complete; update Tier-1 Stage 1.1 script gate
 
-#### Record — collect_test_log_reports.py
+##### TER-002: collect_test_log_reports.py
 
-- **Script:** `.repo_studios/scripts/producers/collect_test_log_reports.py`
-  - **Role:** Producer
-  - **Entry surface:** `run(argv)` and `main(argv)`
-  - **Key CLI inputs (selected):**
-    - `--logs-dir` (default: `.repo_studios/reports/healthview/rawview/test_execution_runs`)
-    - `--logs-run` (optional explicit run directory)
-    - `--output-dir` (default: `.repo_studios/reports/healthview`)
-    - `--run-timestamp` (UTC slug in `YYYYMMDD-HHMM`)
-    - `--artifacts-to-keep`
-  - **Current output roots:**
-    - `.repo_studios/reports/healthview/rawview/test_log_reports/<YYYYmmdd-HHMM>/`
-  - **Current artifacts (observed):**
-    - Base package (Tier-1 HealthView contract):
-      - `manifest.json` (emitted)
-      - `summary.md` (emitted)
-      - `telemetry.json` (emitted)
-    - Additional artifacts (allowed): none observed.
-  - **Retention surface:**
-    - `--artifacts-to-keep` forwarded to `prune_run_directories(..., keep=..., ...)`.
-
-  Pruning:
-  - Mechanism: shared-helper
-  - Surface: callsite `prune_run_directories(base_dir, keep=..., current_run=bundle_dir, ...)`
-  - Target: `--output-dir/rawview/test_log_reports/<YYYYmmdd-HHMM>/`
-  - Evidence:
-    - `.repo_studios/scripts/producers/collect_test_log_reports.py` (`prune_run_directories`)
-    - `.repo_studios/tests/tests_producers/test_collect_test_log_reports.py` (prunes history)
-
-  - **Output root compliant (Tier-1 HealthView contract):** ✅
-  - **Base package compliant (manifest + summary + telemetry):** ✅
-  - **DB integration:** ✅
-    - `DB_INTEGRATION_MARKER:` callsites present for manifest/summary/telemetry writes.
-  - **Tier-3 appropriate:** yes (decision: create Tier-3 YAML)
-  - **Tier-3 YAML exists:** yes
-  - **Tier-3 YAML name:** `tier3_collect_test_log_reports.yaml`
-  - **Tier-3 meets template:** yes (Tier-3 agent pipeline YAML template)
-  - **Tier-3 last updated:** 2025-12-21
-  - **Tests:** `.repo_studios/tests/tests_producers/test_collect_test_log_reports.py`
-  - **Evidence:**
-    - Defaults: `DEFAULT_OUTPUT_DIR = build_topic_path("rawview", TOPIC_SLUG)`.
-    - Bundle paths: `bundle_dir = output_dir / timestamp`.
-    - Artifact filenames: `manifest.json`, `summary.md`, `telemetry.json`.
-    - Discovery (2025-12-21): this workspace had no existing run directories under
-      `.repo_studios/reports/healthview/rawview/test_log_reports/` or
-      `.repo_studios/reports/healthview/rawview/test_execution_runs/` at time of inspection.
-    - Retention helper:
-      `prune_run_directories(base_dir=output_dir, current_run=bundle_dir, keep=...)`
-      sorts candidates by filesystem `st_mtime` (not directory name) and deletes beyond `keep`,
-      honoring `.keep`.
-    - Unit test evidence:
-      `.\.venv/Scripts/python.exe -m pytest -q .repo_studios/tests/tests_producers/test_collect_test_log_reports.py`
-      (3 passed).
-    - Focused regression evidence:
-      `.\.venv/Scripts/python.exe -m pytest -q`
-      `.repo_studios/tests/tests_producers/test_collect_test_log_reports.py`
-      `.repo_studios/tests/tests_consumers/test_generate_test_log_health_report.py`
-      `.repo_studios/tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py`
-      (8 passed).
-    - Mypy evidence (2025-12-21):
-      `.\.venv/Scripts/python.exe -m mypy .repo_studios/scripts/producers/collect_test_log_reports.py`
-      (success).
-    - Coverage evidence (2025-12-21):
-      `.\.venv/Scripts/python.exe -m coverage run -m pytest -q`
-      `.repo_studios/tests/tests_producers/test_collect_test_log_reports.py`
-      - `.\.venv/Scripts/python.exe -m coverage report`
-        `--include=.repo_studios/scripts/producers/collect_test_log_reports.py`
-        `--fail-under=80`
-      (84%).
-    - Doc-index evidence (2025-12-21):
-      `make -C .repo_studios doc-index LOG_LEVEL=INFO` (timestamp: 20251221-2237).
-    - Tier-3 YAML evidence (2025-12-21):
-      `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/`
-      `tier3_scripts/test_execution_telemetry/tier3_collect_test_log_reports.yaml`
-      validated via
-      `\.\.venv/Scripts/python.exe -m pytest -q .repo_studios/docs/pipeline/tier3_index/test_tier3_index.py`.
-    - Orchestrator wiring:
-      `.repo_studios/command_center/scripts/orchestrators/run_test_execution_telemetry.py` passes
-      `--output-dir <test_log_reports_dir>` into this script, where `test_log_reports_dir` is
-      controlled by the orchestrator flag `--test-log-reports-dir` and defaults to
-      `.repo_studios/reports/healthview`.
-
-#### Implementation Workstreams (checkbox-driven) — collect_test_log_reports.py
-
-Workstream A — Discovery
-
-- [x] Inspect outputs + pruning/retention surfaces; record findings
-
-Workstream B — Plan
-
-- [x] Draft plan to migrate outputs into Tier-1 canonical root
-
-Plan notes (draft):
-
-- Target output root (Tier-1 HOP contract): write bundles under
-  `.repo_studios/reports/healthview/rawview/test_log_reports/<YYYYmmdd-HHMM>/`.
-- Producer change: update `DEFAULT_OUTPUT_DIR` to use `build_topic_path("rawview", TOPIC_SLUG)`
-  (removes separate `VIEWER_SLUG` constant).
-- Orchestrator compatibility: because
-  `.repo_studios/command_center/scripts/orchestrators/run_test_execution_telemetry.py` always passes
-  `--output-dir` into the producer, we must also either:
-  - update the orchestrator default `--test-log-reports-dir` to `.repo_studios/reports/healthview`,
-    or
-  - keep the orchestrator default as-is for a migration window, but explicitly set
-    `--test-log-reports-dir .repo_studios/reports/healthview` in any HealthView contract runs.
-- Consumer/orchestrator compatibility: update consumers that read producer bundles to prefer the new
-  root but fall back to the legacy root when the new location is empty (migration window).
-  - Example dependent: `.repo_studios/scripts/consumers/generate_test_log_health_report.py`.
-- Tests: update/add coverage so:
-  - default output location is validated,
-  - pruning continues to honor `.keep` and does not delete the current run,
-  - no pointer artifacts are created.
-
-Workstream C — Implement
-
-- [x] Implement accepted plan; update record and stop-gate status with evidence.
-
-Workstream D — Tier-3 YAML
-
-- [x] Confirm Tier-3 is appropriate for this script; record decision (create)
-- [x] Inspect Tier-3 template requirements
-- [x] Draft `tier3_collect_test_log_reports.yaml`
-- [x] Validate Tier-3 YAML
-
-Workstream E — QA & Evidence
-
-- [x] Pytest evidence captured
-- [x] Mypy evidence captured or marked N/A (in record)
-- [x] Coverage ≥80% (or exception recorded) + doc-index timestamp recorded
-
-- [x] DONE — collect_test_log_reports.py complete; update Tier-1 Stage 1.1 script gate
+```yaml
+record_id: "TER-002"
+script:
+  path: ".repo_studios/scripts/producers/collect_test_log_reports.py"
+  name: "collect_test_log_reports.py"
+  category: "producer"
+tier3:
+  metadata_block_version: "v1"
+  allowed: true
+  exists: true
+  name: "tier3_collect_test_log_reports.yaml"
+  meets_template: "yes"
+  last_updated: "2025-12-27"
+tier3_yaml: ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier3_scripts/test_execution_telemetry/tier3_collect_test_log_reports.yaml"
+phase4_build_doc: ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_1_1/TER-002_collect_test_log_reports_build.md"
+db_integration_doc: ".repo_studios/command_center/docs/db_integrations/db_integration_test_log_reports.md"
+cli_surfaces:
+  run_entrypoint: "run(argv)"
+  key_flags:
+    - "--repo-root"
+    - "--logs-dir"
+    - "--logs-run"
+    - "--output-dir"
+    - "--run-timestamp"
+    - "--summarize-existing"
+    - "--run-pytest/--no-run-pytest"
+    - "--artifacts-to-keep"
+    - "--log-level"
+io_contract:
+  inputs:
+    - "Pytest log run directories under --logs-dir (default: rawview/test_execution_runs)"
+    - "JUnit XML files (junit_*.xml) within log run directories"
+    - "Pytest text output files (pytest_*.txt) within log run directories"
+  outputs:
+    current:
+      root: ".repo_studios/reports/healthview/rawview/test_log_reports/<YYYYMMDD-HHMM>/"
+      artifacts:
+        - "manifest.json"
+        - "summary.md"
+        - "telemetry.json"
+    target:
+      root: ".repo_studios/reports/healthview/rawview/test_log_reports/<YYYYMMDD-HHMM>/"
+      artifacts:
+        - "manifest.json"
+        - "summary.md"
+        - "telemetry.json"
+    status: "✅ Base package aligned (2026-01-29)"
+retention:
+  surfaces:
+    - "--artifacts-to-keep (default: 5 via retention_policy.yaml)"
+    - "Run directory format: YYYYMMDD-HHMM"
+  mechanism: "prune_run_directories(base_dir, keep=N, current_run=bundle_dir)"
+  targets:
+    - ".repo_studios/reports/healthview/rawview/test_log_reports/"
+  guardrails:
+    - "Keeps current run; prunes older run directories beyond keep"
+    - "No latest_* pointers (HOP-compliant)"
+  evidence:
+    - "prune_run_directories() called with keep=artifacts_to_keep"
+    - "Test: test_collect_test_log_reports_prunes_history (PASSED)"
+db_integration:
+  gated_by: "REPO_STUDIOS_DB_ENABLED"
+  marker_required: true
+  marker_string: "DB_INTEGRATION_MARKER:"
+  notes:
+    - "DB schema documented in db_integration_test_log_reports.md (134 lines)"
+    - "Tables: report_runs, report_artifacts, test_metrics"
+    - "Telemetry extraction mapping defined for time-series queries"
+orchestrator_integration:
+  orchestrator_ready: true
+  promoted_to_orchestrator: true
+  target_orchestrator: "run_test_execution_telemetry.py"
+  supports_output_dir: true
+  supports_artifacts_to_keep: true
+  uses_argv_kwarg: false
+evidence:
+  code_refs:
+    - ".repo_studios/scripts/producers/collect_test_log_reports.py#L1-L13 (module docstring)"
+    - ".repo_studios/scripts/producers/collect_test_log_reports.py#L617 (run(argv) entry)"
+    - ".repo_studios/scripts/producers/collect_test_log_reports.py#L598-L613 (artifact writing)"
+  tests:
+    - "test_collect_test_log_reports_emits_artifacts (PASSED)"
+    - "test_collect_test_log_reports_prunes_history (PASSED)"
+    - "test_collect_test_log_reports_handles_missing_runs (PASSED)"
+    - "test_collect_test_log_reports_can_run_pytest (PASSED)"
+    - "test_collect_test_log_reports_summarize_existing_skips_pytest (PASSED)"
+  fixtures: []
+  qa_evidence:
+    mypy_strict: "✅ Success (2026-01-29)"
+    pytest: "✅ 5/5 passed (2026-01-29)"
+    output_truth: "✅ 6/6 claims verified TRUE against JUnit XML ground truth"
+notes:
+  - "Classification: HOP-compliant producer, orchestrator integration complete."
+  - "Contract status: ✅ aligned with HOP base package (manifest.json, summary.md, telemetry.json)"
+  - "Entry surface: run(argv) — standard positional argv signature."
+  - "DB integration: Schema documented; markers not yet in code (doc exists separately)."
+  - "Phase 4 processing: Complete 2026-01-29; see phase4_build_doc for verification details."
+```
 
 #### Record — generate_test_coverage_inventory.py
 
@@ -652,8 +620,8 @@ Workstream E — QA & Evidence
     - Defaults: `DEFAULT_OUTPUT_DIR = build_topic_path("producer", TOPIC_SLUG)`.
     - Orchestrator wiring:
       `.repo_studios/command_center/scripts/orchestrators/run_test_execution_telemetry.py` defaults
-      `--hardening-output-dir` to `build_topic_path("producer", "test_hardening")` and passes `--timestamp` into
-      this producer for deterministic positional bundles.
+      `--hardening-output-dir` to `build_topic_path("producer", "test_hardening")` and passes
+      `--timestamp` into this producer for deterministic positional bundles.
 
 #### Implementation Workstreams (checkbox-driven) — analyze_test_hardening.py
 
