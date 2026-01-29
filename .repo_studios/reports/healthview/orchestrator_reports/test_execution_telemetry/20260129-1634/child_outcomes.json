@@ -1,0 +1,56 @@
+[
+  {
+    "duration_seconds": 64.42896169997402,
+    "error": null,
+    "exit_code": 0,
+    "name": "generate_test_coverage_inventory.py",
+    "path": ".repo_studios/scripts/producers/generate_test_coverage_inventory.py",
+    "run_dir": "C:/Users/genet/repo_studios/.repo_studios/reports/healthview/producer_reports/test_coverage_inventory/20260129-1634",
+    "status": "ok"
+  },
+  {
+    "duration_seconds": 0.0357359999907203,
+    "error": null,
+    "exit_code": 0,
+    "name": "collect_test_log_reports.py",
+    "path": ".repo_studios/scripts/producers/collect_test_log_reports.py",
+    "run_dir": "C:/Users/genet/repo_studios/.repo_studios/reports/healthview/rawview/test_log_reports/20260129-1634",
+    "status": "ok"
+  },
+  {
+    "duration_seconds": 0.7453243999916594,
+    "error": null,
+    "exit_code": 1,
+    "name": "analyze_test_hardening.py",
+    "path": ".repo_studios/scripts/producers/analyze_test_hardening.py",
+    "run_dir": "C:/Users/genet/repo_studios/.repo_studios/reports/healthview/producer_reports/test_hardening/20260129-1634",
+    "status": "issues-found"
+  },
+  {
+    "duration_seconds": 8.976524199999403,
+    "error": null,
+    "exit_code": 0,
+    "name": "generate_churn_complexity_heatmap.py",
+    "path": ".repo_studios/scripts/aggregators/generate_churn_complexity_heatmap.py",
+    "run_dir": "C:/Users/genet/repo_studios/.repo_studios/reports/healthview/aggregator_reports/churn_complexity_heatmap/20260129-1635",
+    "status": "ok"
+  },
+  {
+    "duration_seconds": 0.018251200002850965,
+    "error": null,
+    "exit_code": 0,
+    "name": "generate_test_log_health_report.py",
+    "path": ".repo_studios/scripts/consumers/generate_test_log_health_report.py",
+    "run_dir": "C:/Users/genet/repo_studios/.repo_studios/reports/healthview/consumer_reports/test_log_health_reports/20260129-1634",
+    "status": "ok"
+  },
+  {
+    "duration_seconds": 0.017967000021599233,
+    "error": null,
+    "exit_code": 0,
+    "name": "summarize_test_execution_telemetry.py",
+    "path": ".repo_studios/command_center/scripts/summarizers/summarize_test_execution_telemetry.py",
+    "run_dir": "C:/Users/genet/repo_studios/.repo_studios/reports/healthview/summarizer_reports/test_execution_telemetry/20260129-1634",
+    "status": "ok"
+  }
+]

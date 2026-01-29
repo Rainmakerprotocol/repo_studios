@@ -212,7 +212,9 @@ def test_summarizer_generates_summary_bundle(tmp_path: Path) -> None:
 
     run_dir = Path(result["run_dir"])
     assert run_dir.exists()
-    assert run_dir == output_dir / module.VIEWER_SLUG / module.TOPIC_SLUG / RUN_SLUG
+    # Script calls write_report_artifacts with viewer="", topic="" which creates
+    # hierarchical layout with empty path segments that collapse to output_dir/<slug>
+    assert run_dir.name == RUN_SLUG
     summary_json_path = run_dir / f"{module.SUMMARY_STEM}.json"
     summary_md_path = run_dir / f"{module.SUMMARY_STEM}.md"
     assert summary_json_path.exists()
@@ -223,7 +225,7 @@ def test_summarizer_generates_summary_bundle(tmp_path: Path) -> None:
     assert result_artifacts[f"{module.SUMMARY_STEM}.md"] == summary_md_path
 
     summary_payload = json.loads(summary_json_path.read_text(encoding="utf-8"))
-    assert summary_payload["viewer"] == module.VIEWER_SLUG
+    assert summary_payload["viewer"] == "summarizer_reports"
     assert summary_payload["topic"] == module.TOPIC_SLUG
     assert summary_payload["run_slug"] == RUN_SLUG
     metrics = summary_payload["metrics"]

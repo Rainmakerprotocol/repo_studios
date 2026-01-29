@@ -39,8 +39,11 @@ if LIBRARIES_ROOT_STR and LIBRARIES_ROOT_STR not in sys.path:
 from libraries import prune_run_directories
 from libraries.cli import resolve_repo_root
 from libraries.report_paths import build_topic_path
+from libraries.retention_policy import DEFAULT_FALLBACK_KEEP
 
 TOPIC_SLUG = "fault_snapshot"
+# Healthview standard default retention (align with DEFAULT_FALLBACK_KEEP)
+DEFAULT_ARTIFACTS_TO_KEEP = DEFAULT_FALLBACK_KEEP
 
 
 def _default_base_dir(allow_legacy: bool) -> Path:
@@ -89,7 +92,7 @@ def _resolve_settings(env: Mapping[str, str], now: Callable[[], datetime]) -> Sn
         derived = True
 
     artifacts_flag = env.get("FAULT_SNAPSHOT_TO_KEEP") or env.get("FAULT_ARTIFACTS_TO_KEEP")
-    keep = max(1, _safe_int(artifacts_flag, 10))
+    keep = max(1, _safe_int(artifacts_flag, DEFAULT_ARTIFACTS_TO_KEEP))
 
     env_snapshot = {
         "FAULT_SNAPSHOT_BASE_DIR": base_override or "",
@@ -263,6 +266,15 @@ def main(argv: list[str] | None = None) -> int:
             "directory (origin: this script)."
         ),
     )
+    parser.add_argument(
+        "--artifacts-to-keep",
+        type=int,
+        default=None,
+        help=(
+            f"Maximum run directories to retain (default: {DEFAULT_ARTIFACTS_TO_KEEP}). "
+            "Can also be set via FAULT_SNAPSHOT_TO_KEEP or FAULT_ARTIFACTS_TO_KEEP env var."
+        ),
+    )
     args = parser.parse_args(argv)
     resolved_root = resolve_repo_root(explicit=args.repo_root, origin=Path(__file__))
     if resolved_root != ROOT:
@@ -270,7 +282,13 @@ def main(argv: list[str] | None = None) -> int:
             f"Resolved repo root {resolved_root} does not match script repo root {ROOT}. "
             "Invoke the script from the intended repo checkout."
         )
-    dump_snapshot()
+    # Build env overrides from CLI args
+    env_overrides: Dict[str, str] = {}
+    if args.artifacts_to_keep is not None:
+        env_overrides["FAULT_SNAPSHOT_TO_KEEP"] = str(args.artifacts_to_keep)
+    # Merge CLI-driven overrides with actual environment
+    merged_env = {**os.environ, **env_overrides}
+    dump_snapshot(env=merged_env)
     return 0
 
 

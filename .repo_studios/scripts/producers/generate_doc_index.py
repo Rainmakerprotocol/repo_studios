@@ -9,12 +9,13 @@ database sink.
 
 import argparse
 import csv
+import importlib.util
 import json
 import logging
 import re
-import textwrap
-import importlib.util
 import sys
+import textwrap
+import types
 from collections import Counter, OrderedDict
 from dataclasses import asdict, dataclass
 from datetime import date, datetime, timezone
@@ -29,6 +30,7 @@ LINK_RE = re.compile(r"(?<!!)\[[^\]]+\]\(([^)]+)\)")
 CODE_FENCE_RE = re.compile(r"^(```|~~~)")
 
 TOPIC_SLUG = "doc_index"
+VIEWER_SLUG = "producer_reports"
 
 CHECKBOX_REPORT_SCRIPT = Path(
   ".repo_studios/docs/pipeline/checkbox_report/checkbox_report.py"
@@ -64,8 +66,8 @@ try:  # pragma: no cover - import guard for standalone execution
   from libraries import (
     KeepSpec,
     OptionsConfig,
-    PathSpec,
     PathsConfig,
+    PathSpec,
     build_standard_options,
     build_standard_paths,
   )
@@ -81,8 +83,8 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when script is run di
   from libraries import (
     KeepSpec,
     OptionsConfig,
-    PathSpec,
     PathsConfig,
+    PathSpec,
     build_standard_options,
     build_standard_paths,
   )
@@ -942,7 +944,7 @@ def _parse_timestamp(raw: str | None) -> datetime:
   try:
     return datetime.fromisoformat(raw)
   except ValueError as exc:  # pragma: no cover - validated via CLI
-    raise SystemExit(f"Invalid --timestamp value: {exc}")
+    raise SystemExit(f"Invalid --timestamp value: {exc}") from None
 
 
 def handle_database_placeholder(target: str, logger: logging.Logger) -> None:
@@ -1007,7 +1009,7 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
   return parser.parse_args(argv)
 
 
-def _load_module_from_path(path: Path, module_name: str):
+def _load_module_from_path(path: Path, module_name: str) -> types.ModuleType:
   """Dynamically load a Python module from a file path.
 
   Import a module by its file path, registering it in sys.modules
@@ -1252,12 +1254,24 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
   )
 
   return {
+    "status": "ok",
+    "exit_code": 0,
     "run_dir": str(run_dir),
-    "slug": timestamp_slug,
+    "output_dir": str(paths.output_dir),
+    "run_id": timestamp_slug,
+    "slug": timestamp_slug,  # Alias for backward compatibility
+    "manifest": manifest,
+    "telemetry": telemetry,
+    "summary": {
+      "total_documents": summary["total_documents"],
+      "total_headings": summary["total_headings"],
+      "total_links": summary["total_links"],
+    },
     "artifacts": {
       "manifest.json": str(run_dir / "manifest.json"),
       "summary.md": str(run_dir / "summary.md"),
       "telemetry.json": str(run_dir / "telemetry.json"),
+      "doc_index.csv": str(run_dir / "doc_index.csv"),
     },
     "documents": summary["total_documents"],
     "headings": summary["total_headings"],

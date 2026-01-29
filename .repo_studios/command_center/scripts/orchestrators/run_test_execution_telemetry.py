@@ -22,7 +22,7 @@ import time
 from dataclasses import dataclass, replace
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Sequence, cast
+from typing import Any, Callable, Sequence, cast
 
 LIBRARIES_ROOT = Path(__file__).resolve().parents[1]
 if str(LIBRARIES_ROOT) not in sys.path:
@@ -37,6 +37,7 @@ from libraries import (
     ReportArtifact,
     TopicContext,
     TopicStep,
+    TopicStepOutcome,
     build_pipeline_telemetry,
     build_standard_options,
     build_standard_paths,
@@ -53,6 +54,8 @@ from libraries.retention_policy import get_keep, get_orchestrator_config
 
 LOGGER = logging.getLogger(__name__)
 
+# TOPIC_SLUG uses hyphens for telemetry/external API compatibility (URL-friendly).
+# HEALTHVIEW_TOPIC uses underscores for filesystem paths and viewer routing.
 TOPIC_SLUG = "test-execution-telemetry"
 HEALTHVIEW_TOPIC = "test_execution_telemetry"
 SCHEMA_VERSION = 1
@@ -85,6 +88,7 @@ SUMMARIZER_MODULE = "command_center.scripts.summarizers.summarize_test_execution
 
 DEFAULT_LOGS_DIR = build_topic_path("rawview", "test_execution_runs")
 DEFAULT_TEST_LOG_REPORTS_DIR = build_topic_path("rawview", "test_log_reports")
+DEFAULT_TESTS_DIR = Path(".repo_studios/tests")
 DEFAULT_TEST_LOG_HEALTH_DIR = build_topic_path("consumer", "test_log_health_reports")
 DEFAULT_COVERAGE_OUTPUT_DIR = build_topic_path("producer", "test_coverage_inventory")
 DEFAULT_COVERAGE_XML = Path("coverage.xml")
@@ -137,6 +141,7 @@ class Paths:
         hardening_output_dir: Output directory for hardening analysis.
         healthview_root: Root directory for healthview bundles.
         summarizer_output_dir: Output directory for summarizer artifacts.
+        tests_dir: Directory containing test files for hardening analysis.
     """
 
     repo_root: Path
@@ -149,6 +154,7 @@ class Paths:
     hardening_output_dir: Path
     healthview_root: Path
     summarizer_output_dir: Path
+    tests_dir: Path
 
 
 PATHS_CONFIG = PathsConfig(
@@ -178,6 +184,9 @@ PATHS_CONFIG = PathsConfig(
         ),
         "summarizer_output_dir": PathSpec(
             field="summarizer_output_dir", default=DEFAULT_SUMMARIZER_OUTPUT_DIR, ensure_dir=True, within_repo=False
+        ),
+        "tests_dir": PathSpec(
+            field="tests_dir", default=DEFAULT_TESTS_DIR, ensure_dir=False, within_repo=True
         ),
     },
     repo_root_depth=4,
@@ -392,6 +401,7 @@ def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser.add_argument("--heatmap-metrics-source")
     parser.add_argument("--heatmap-window", type=int, default=500)
     parser.add_argument("--hardening-output-dir", default=str(DEFAULT_HARDENING_OUTPUT_DIR))
+    parser.add_argument("--tests-dir", default=str(DEFAULT_TESTS_DIR), help="Directory containing test files for hardening analysis")
     parser.add_argument("--healthview-root", default=str(DEFAULT_HEALTHVIEW_ROOT))
     parser.add_argument(
         "--artifacts-to-keep",
@@ -522,7 +532,9 @@ def configure_logging(level: str) -> None:
     logging.basicConfig(level=getattr(logging, level.upper(), logging.INFO), format="%(levelname)s %(message)s")
 
 
-def _load_run_callable(script_path: Path, module_name: str):
+def _load_run_callable(
+    script_path: Path, module_name: str
+) -> Callable[[Sequence[str] | None], dict[str, Any]]:
     """Dynamically load a module and return its run() callable.
 
     Args:
@@ -538,7 +550,10 @@ def _load_run_callable(script_path: Path, module_name: str):
     """
     script_path = script_path.resolve()
     if module_name in sys.modules:
-        return getattr(sys.modules[module_name], "run")
+        return cast(
+            Callable[[Sequence[str] | None], dict[str, Any]],
+            getattr(sys.modules[module_name], "run"),
+        )
     spec = importlib.util.spec_from_file_location(module_name, script_path)
     if spec is None or spec.loader is None:
         raise ImportError(f"Unable to load module from {script_path}")
@@ -548,7 +563,7 @@ def _load_run_callable(script_path: Path, module_name: str):
     run_callable = getattr(module, "run", None)
     if not callable(run_callable):
         raise AttributeError(f"Module at {script_path} does not expose a callable run() helper")
-    return run_callable
+    return cast(Callable[[Sequence[str] | None], dict[str, Any]], run_callable)
 
 
 def _latest_directory(base: Path, prefix: str) -> Path | None:
@@ -769,7 +784,7 @@ def _execute_hardening(paths: Paths, options: Options) -> HardeningOutcome:
         "--output-dir",
         str(paths.hardening_output_dir),
         "--tests-dir",
-        ".repo_studios/tests",
+        str(paths.tests_dir),
         "--timestamp",
         options.run_timestamp.isoformat(),
         "--artifacts-to-keep",
@@ -925,6 +940,10 @@ def _section_pipeline_status(result_steps: Sequence[Any]) -> list[str]:
     return lines
 
 
+# Default slow test threshold in seconds
+SLOW_TEST_THRESHOLD_SECONDS = 5.0
+
+
 def _section_test_results(
     collect_outcome: CollectOutcome,
     artifact_path: str | None,
@@ -963,9 +982,48 @@ def _section_test_results(
         f"| Passed | {passed} |",
         f"| Failed | {failed} |",
         f"| Warnings | {warnings} |",
-        f"| Slow | {slow} |",
+        f"| Slow (>{SLOW_TEST_THRESHOLD_SECONDS:.0f}s) | {slow} |",
         "",
     ])
+
+    # Extract failed test names from payload
+    failures = payload.get("failures", [])
+    if isinstance(failures, list) and failures:
+        lines.append("**Failed Tests:**")
+        lines.append("")
+        for failure in failures[:10]:  # Limit to 10
+            if isinstance(failure, dict):
+                name = failure.get("name", "unknown")
+                message = failure.get("message", "")
+                # Truncate long messages
+                if len(message) > 100:
+                    message = message[:97] + "..."
+                lines.append(f"- `{name}`: {message}")
+        if len(failures) > 10:
+            lines.append(f"- ... and {len(failures) - 10} more")
+        lines.append("")
+
+    # Extract warning categories from payload
+    warnings_data = payload.get("warnings", {})
+    by_type = warnings_data.get("by_type", {}) if isinstance(warnings_data, dict) else {}
+    if by_type:
+        lines.append("**Warning Categories:**")
+        lines.append("")
+        for category, count in sorted(by_type.items(), key=lambda x: -x[1])[:5]:
+            lines.append(f"- {category}: {count}")
+        lines.append("")
+
+    # Extract slow test details
+    slow_tests = payload.get("slow_tests", [])
+    if isinstance(slow_tests, list) and slow_tests:
+        lines.append("**Slow Tests:**")
+        lines.append("")
+        for test in slow_tests[:5]:
+            if isinstance(test, dict):
+                name = test.get("name", "unknown")
+                duration = test.get("duration", 0)
+                lines.append(f"- `{name}`: {duration:.2f}s")
+        lines.append("")
 
     concerns: list[str] = []
     if failed > 0:
@@ -1055,6 +1113,8 @@ def _section_coverage(
     except (TypeError, ValueError):
         threshold = 50.0
 
+    threshold_label = f"{threshold:.1f}%" if threshold_configured else f"{threshold:.1f}% (heuristic)"
+
     lines.extend([
         "| Metric | Value |",
         "| --- | ---:|",
@@ -1062,6 +1122,7 @@ def _section_coverage(
         f"| Functions | {total_functions} |",
         f"| Covered | {covered_functions} |",
         f"| Coverage % | {pct:.1f} |",
+        f"| Threshold | {threshold_label} |",
         "",
     ])
 
@@ -1146,6 +1207,57 @@ def _section_hardening(
         "",
     ])
 
+    # Extract detailed breakdown from the telemetry dict directly
+    # (telemetry is already loaded; no need to call _load_hardening_details)
+    category_counts: dict[str, int] = {}
+    top_issues_list: list[dict[str, Any]] = []
+
+    telemetry_payload = telemetry.get("payload", {})
+    if isinstance(telemetry_payload, dict):
+        files_list = telemetry_payload.get("files", [])
+        if isinstance(files_list, list):
+            for file_record in files_list:
+                if not isinstance(file_record, dict):
+                    continue
+                issues_items = file_record.get("issues", [])
+                if not isinstance(issues_items, list):
+                    continue
+                for issue_item in issues_items:
+                    if not isinstance(issue_item, dict):
+                        continue
+                    cat = issue_item.get("category", "unknown")
+                    category_counts[cat] = category_counts.get(cat, 0) + 1
+                    # Collect high severity for top issues
+                    if issue_item.get("severity") == "high" and len(top_issues_list) < 5:
+                        top_issues_list.append({
+                            "file": file_record.get("path", "unknown"),
+                            "type": cat,
+                            "message": issue_item.get("message", ""),
+                            "line": issue_item.get("line_number"),
+                        })
+
+    # Show issue categories breakdown.
+    if category_counts:
+        lines.append("### Issue Categories")
+        lines.append("")
+        lines.append("| Category | Count |")
+        lines.append("| --- | ---:|")
+        for category_name, count in sorted(category_counts.items(), key=lambda x: -x[1]):
+            lines.append(f"| {category_name} | {count} |")
+        lines.append("")
+
+    # Show top 5 issues as examples.
+    if top_issues_list:
+        lines.append("### Top Issues (up to 5)")
+        lines.append("")
+        for issue in top_issues_list[:5]:
+            issue_type = issue.get("type", "unknown")
+            issue_file = issue.get("file", "unknown")
+            issue_line = issue.get("line", "?")
+            issue_msg = issue.get("message", "")
+            lines.append(f"- **{issue_type}** at `{issue_file}:{issue_line}` — {issue_msg}")
+        lines.append("")
+
     concerns: list[str] = []
     if high_severity > 0:
         concerns.append(f"❌ {high_severity} high-severity issue(s)")
@@ -1191,13 +1303,13 @@ def _section_hotspots(
         ])
         exceeds_count = 0
         for i, entry in enumerate(top_files, 1):
-            fname = entry.get("file", "unknown")
-            if "/" in fname or "\\" in fname:
-                fname = fname.replace("\\", "/").rsplit("/", 1)[-1]
+            # Show full path (normalized to forward slashes) instead of just filename
+            full_path = entry.get("file", "unknown")
+            full_path = full_path.replace("\\", "/")
             score = entry.get("score", 0.0)
             if score > threshold:
                 exceeds_count += 1
-            lines.append(f"| {i} | {fname} | {score:.2f} |")
+            lines.append(f"| {i} | `{full_path}` | {score:.2f} |")
         lines.append("")
 
         if exceeds_count > 0:
@@ -1286,6 +1398,9 @@ class EnhancedSummaryContext:
         health_outcome: HealthReportOutcome from health step, or None.
         artifacts_section: Mapping of artifact names to relative paths.
         repo_root: Repository root path for resolving artifacts.
+        child_outcomes: List of ChildOutcome records from delegated scripts.
+        paths: Paths configuration for input parameters display.
+        options: Options configuration for input parameters display.
     """
 
     run_slug: str
@@ -1298,6 +1413,9 @@ class EnhancedSummaryContext:
     health_outcome: HealthReportOutcome | None
     artifacts_section: dict[str, Any]
     repo_root: Path
+    child_outcomes: list[ChildOutcome]
+    paths: Paths
+    options: Options
 
 
 def _load_artifact_telemetry(artifact_dir: Path | None) -> dict[str, Any]:
@@ -1352,6 +1470,174 @@ def _load_health_comparisons(health_dir: Path | None) -> dict[str, Any]:
     return comparisons
 
 
+def _load_hardening_details(hardening_dir: Path | None) -> dict[str, Any]:
+    """Load detailed hardening report data.
+
+    Args:
+        hardening_dir: Path to the hardening artifact directory, or None.
+
+    Returns:
+        Dictionary with category_counts and top_issues lists.
+    """
+    if hardening_dir is None or not hardening_dir.exists():
+        return {}
+    telemetry = _read_json(hardening_dir / "telemetry.json") or {}
+    payload = telemetry.get("payload", {})
+    if not isinstance(payload, dict):
+        return {}
+
+    # Extract issue categories from file reports
+    files = payload.get("files", [])
+    if not isinstance(files, list):
+        return {}
+
+    category_counts: dict[str, int] = {}
+    top_issues: list[dict[str, Any]] = []
+
+    for file_record in files:
+        if not isinstance(file_record, dict):
+            continue
+        issues = file_record.get("issues", [])
+        if not isinstance(issues, list):
+            continue
+        for issue in issues:
+            if not isinstance(issue, dict):
+                continue
+            category = issue.get("category", "unknown")
+            category_counts[category] = category_counts.get(category, 0) + 1
+            # Collect high severity for top issues
+            if issue.get("severity") == "high" and len(top_issues) < 5:
+                top_issues.append({
+                    "file": file_record.get("path", "unknown"),
+                    "category": category,
+                    "message": issue.get("message", ""),
+                    "line": issue.get("line_number"),
+                })
+
+    return {"category_counts": category_counts, "top_issues": top_issues}
+
+
+def _section_total_runtime(child_outcomes: list[ChildOutcome]) -> list[str]:
+    """Render total pipeline runtime as Markdown lines.
+
+    Args:
+        child_outcomes: List of ChildOutcome records from child scripts.
+
+    Returns:
+        List of Markdown lines for total runtime display.
+    """
+    total_seconds = sum(outcome.duration_seconds for outcome in child_outcomes)
+    lines = [
+        f"**Total Runtime:** {total_seconds:.2f} seconds",
+        "",
+    ]
+    return lines
+
+
+def _section_child_scripts(child_outcomes: list[ChildOutcome]) -> list[str]:
+    """Render child script status table as Markdown lines.
+
+    Args:
+        child_outcomes: List of ChildOutcome records.
+
+    Returns:
+        List of Markdown lines for the child scripts table.
+    """
+    if not child_outcomes:
+        return []
+
+    lines = [
+        "## Child Script Outcomes",
+        "",
+        "| Script | Status | Exit | Duration (s) |",
+        "| --- | --- | ---: | ---: |",
+    ]
+    for outcome in child_outcomes:
+        icon = "✅" if outcome.exit_code == 0 else "⚠️" if outcome.exit_code == 1 else "❌"
+        lines.append(
+            f"| {outcome.name} | {icon} {outcome.status} | {outcome.exit_code} | {outcome.duration_seconds:.2f} |"
+        )
+    lines.append("")
+    return lines
+
+
+def _section_input_config(paths: Paths, options: Options, repo_root: Path) -> list[str]:
+    """Render input configuration section as Markdown lines.
+
+    Args:
+        paths: Paths configuration.
+        options: Options configuration.
+        repo_root: Repository root for relativization.
+
+    Returns:
+        List of Markdown lines for the input configuration section.
+    """
+    def _rel(p: Path | None) -> str:
+        if p is None:
+            return "N/A"
+        return _relativize(p, repo_root) or str(p)
+
+    lines = [
+        "## Input Configuration",
+        "",
+        "| Parameter | Value |",
+        "| --- | --- |",
+        f"| logs_dir | `{_rel(paths.logs_dir)}` |",
+        f"| tests_dir | `{_rel(paths.tests_dir)}` |",
+        f"| coverage_xml | `{_rel(paths.coverage_xml)}` |",
+        f"| heatmap_window | {options.heatmap_window} |",
+        f"| metrics_source | `{_rel(options.metrics_source)}` |",
+        "",
+        "**Retention Settings:**",
+        "",
+        "| Scope | Keep |",
+        "| --- | ---: |",
+        f"| orchestrator | {options.artifacts_to_keep} |",
+        f"| collector | {options.collector_keep} |",
+        f"| coverage | {options.coverage_keep} |",
+        f"| heatmap | {options.heatmap_keep} |",
+        f"| hardening | {options.hardening_keep} |",
+        f"| health | {options.health_keep} |",
+        "",
+    ]
+    return lines
+
+
+def _section_artifacts_index(
+    artifacts_section: dict[str, Any],
+    run_dir: str,
+) -> list[str]:
+    """Render artifacts index section as Markdown lines.
+
+    Args:
+        artifacts_section: Mapping of artifact names to paths.
+        run_dir: Path to the orchestrator run directory.
+
+    Returns:
+        List of Markdown lines for the artifacts index.
+    """
+    lines = [
+        "## Artifacts Index",
+        "",
+        f"**Run Directory:** `{run_dir}`",
+        "",
+        "**Base Package:**",
+        "",
+        "- `manifest.json` — Pipeline manifest with child outcomes",
+        "- `summary.md` — This summary report",
+        "- `telemetry.json` — Metrics and timing data",
+        "- `child_outcomes.json` — Per-script execution records",
+        "",
+        "**Child Artifacts:**",
+        "",
+    ]
+    for name, path in artifacts_section.items():
+        if path:
+            lines.append(f"- **{name}:** `{path}`")
+    lines.append("")
+    return lines
+
+
 def _build_enhanced_summary(ctx: EnhancedSummaryContext) -> str:
     """Build the enhanced Markdown summary from context.
 
@@ -1368,7 +1654,16 @@ def _build_enhanced_summary(ctx: EnhancedSummaryContext) -> str:
     lines.append(f"Run: `{ctx.run_slug}` | Completed: {ctx.completed_at.isoformat()}")
     lines.append("")
 
+    # Total pipeline runtime section
+    lines.extend(_section_total_runtime(ctx.child_outcomes))
+    lines.append("")
+
     lines.extend(_section_pipeline_status(ctx.result_steps))
+    lines.append("---")
+    lines.append("")
+
+    # Child script status table
+    lines.extend(_section_child_scripts(ctx.child_outcomes))
     lines.append("---")
     lines.append("")
 
@@ -1422,6 +1717,17 @@ def _build_enhanced_summary(ctx: EnhancedSummaryContext) -> str:
     lines.extend(_section_trend(
         ctx.health_outcome, health_path, health_comparisons
     ))
+    lines.append("---")
+    lines.append("")
+
+    # Input configuration section
+    lines.extend(_section_input_config(ctx.paths, ctx.options, ctx.repo_root))
+    lines.append("---")
+    lines.append("")
+
+    # Artifacts index section
+    run_dir_str = _relativize(ctx.paths.healthview_root, ctx.repo_root) or str(ctx.paths.healthview_root)
+    lines.extend(_section_artifacts_index(ctx.artifacts_section, run_dir_str))
 
     return "\n".join(lines)
 
@@ -1472,13 +1778,15 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
             )
         )
 
+    # Holder dictionaries are used because Python closures cannot rebind outer
+    # scope variables. Step functions mutate these dicts to share state.
     collect_outcome_holder: dict[str, CollectOutcome] = {}
     coverage_outcome_holder: dict[str, CoverageOutcome] = {}
     heatmap_outcome_holder: dict[str, HeatmapOutcome] = {}
     hardening_outcome_holder: dict[str, HardeningOutcome] = {}
     health_outcome_holder: dict[str, HealthReportOutcome | None] = {"value": None}
 
-    def collect_step(ctx: TopicContext):
+    def collect_step(ctx: TopicContext) -> TopicStepOutcome:
         LOGGER.info("Collecting pytest telemetry artifacts")
         coverage_start = time.perf_counter()
         try:
@@ -1550,7 +1858,7 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
             return step_failed(detail=detail, payload=payload)
         return step_success(detail=detail, payload=payload)
 
-    def analyse_step(ctx: TopicContext):
+    def analyse_step(ctx: TopicContext) -> TopicStepOutcome:
         LOGGER.info("Running telemetry analysis scripts")
         hardening_start = time.perf_counter()
         try:
@@ -1620,7 +1928,7 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
             },
         )
 
-    def summarize_step(ctx: TopicContext):
+    def summarize_step(ctx: TopicContext) -> TopicStepOutcome:
         collect_outcome = collect_outcome_holder.get("value")
         if collect_outcome is None or collect_outcome.producer_bundle_dir is None:
             return step_skipped(detail="no structured log report found")
@@ -1751,6 +2059,9 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
         health_outcome=health_outcome,
         artifacts_section=artifacts_section,
         repo_root=paths.repo_root,
+        child_outcomes=child_outcomes,
+        paths=paths,
+        options=options,
     )
     summary_markdown = _build_enhanced_summary(summary_ctx)
 
@@ -1769,6 +2080,8 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
         topic="",
     )
 
+    # Summarizer runs AFTER the pipeline completes because it requires the
+    # orchestrator's manifest.json and telemetry.json artifacts as input.
     summarizer_start = time.perf_counter()
     summarizer_run = _load_run_callable(paths.repo_root / SUMMARIZER_SCRIPT, SUMMARIZER_MODULE)
     summary_args = [

@@ -436,18 +436,15 @@ ScriptConfig(
 
 **Roster location:** `tier2_test_execution_telemetry_roster.md`
 
-**Workstream checkboxes already complete per roster:**
+**Roster updated:** ✅ 2026-01-29
 
-```markdown
-#### Implementation Workstreams (checkbox-driven) — generate_test_log_health_report.py
-
-- [x] A. Discovery — confirm CLI surfaces, outputs, retention, and consumers
-- [x] B. Plan — draft gap closure plan
-- [x] C. Implement — code changes applied
-- [x] D. Tier-3 YAML — tier3_generate_test_log_health_report.yaml exists
-- [x] E. QA & Evidence — pytest 8/8, mypy success, coverage 80%
-- [x] DONE — generate_test_log_health_report.py complete
-```
+- Converted TER-005 record from bullet-point to YAML format
+- Updated Records Index with `#ter-005-generate_test_log_health_reportpy` anchor
+- Updated Pruning Index with TER-005 anchor
+- Added phase4_build_doc reference
+- Added qa_evidence section with output truth verification (63/64=98.44%)
+- Removed legacy workstream section
+- Added Update Log entry
 
 ### 7.3 Document Finalization
 

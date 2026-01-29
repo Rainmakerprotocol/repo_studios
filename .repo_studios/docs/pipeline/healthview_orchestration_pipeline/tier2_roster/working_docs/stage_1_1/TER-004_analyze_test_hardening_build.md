@@ -489,6 +489,15 @@ ScriptConfig(
 
 **Roster location:** `tier2_test_execution_telemetry_roster.md`
 
+**Roster updated:** ✅ 2026-01-29
+
+- Converted TER-004 record from bullet-point to YAML format
+- Updated Records Index with `#ter-004-analyze_test_hardeningpy` anchor
+- Updated Pruning Index with TER-004 anchor
+- Added phase4_build_doc and db_integration_doc references
+- Added qa_evidence section with output truth verification
+- Added Update Log entry
+
 **Workstream checkboxes already complete per roster:**
 
 ```markdown

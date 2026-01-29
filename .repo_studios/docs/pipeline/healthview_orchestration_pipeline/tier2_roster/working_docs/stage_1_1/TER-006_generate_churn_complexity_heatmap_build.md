@@ -401,18 +401,15 @@ ScriptConfig(
 
 **Roster location:** `tier2_test_execution_telemetry_roster.md`
 
-**Workstream checkboxes already complete per roster:**
+**Roster updated:** ✅ 2026-01-29
 
-```markdown
-#### Implementation Workstreams (checkbox-driven) — generate_churn_complexity_heatmap.py
-
-- [x] A. Discovery — confirm CLI surfaces, outputs, retention, and consumers
-- [x] B. Plan — draft gap closure plan
-- [x] C. Implement — code changes applied
-- [x] D. Tier-3 YAML — tier3_generate_churn_complexity_heatmap.yaml exists
-- [x] E. QA & Evidence — pytest 6/6, mypy success, coverage 81%
-- [x] DONE — generate_churn_complexity_heatmap.py complete
-```
+- Converted TER-006 record from bullet-point to YAML format
+- Updated Records Index with `#ter-006-generate_churn_complexity_heatmappy` anchor
+- Updated Pruning Index with TER-006 anchor
+- Added phase4_build_doc reference
+- Added qa_evidence section with output truth verification (261 files, window=500, top_score=15.67)
+- Removed legacy workstream section
+- Added Update Log entry
 
 ### 7.3 Document Finalization
 

@@ -148,6 +148,7 @@ def test_execute_coverage_finds_run_dir(tmp_path: Path, monkeypatch: pytest.Monk
         hardening_output_dir=tmp_path / "hardening",
         healthview_root=tmp_path / "healthview",
         summarizer_output_dir=tmp_path / "summarizer",
+        tests_dir=tmp_path / "tests",
     )
 
     options = telemetry_module.Options(
@@ -193,6 +194,9 @@ def test_execute_hardening_passes_tests_dir(tmp_path: Path, monkeypatch: pytest.
 
     monkeypatch.setattr(telemetry_module, "_load_run_callable", fake_load_run_callable)
 
+    tests_dir = tmp_path / "custom_tests"
+    tests_dir.mkdir(parents=True, exist_ok=True)
+
     paths = telemetry_module.Paths(
         repo_root=repo_root,
         logs_dir=tmp_path / "logs",
@@ -204,6 +208,7 @@ def test_execute_hardening_passes_tests_dir(tmp_path: Path, monkeypatch: pytest.
         hardening_output_dir=hardening_output_dir,
         healthview_root=tmp_path / "healthview",
         summarizer_output_dir=tmp_path / "summarizer",
+        tests_dir=tests_dir,
     )
 
     options = telemetry_module.Options(
@@ -227,7 +232,7 @@ def test_execute_hardening_passes_tests_dir(tmp_path: Path, monkeypatch: pytest.
     assert argv is not None
     assert "--tests-dir" in argv
     tests_dir_value = argv[argv.index("--tests-dir") + 1]
-    assert tests_dir_value == ".repo_studios/tests"
+    assert tests_dir_value == str(tests_dir)
 
 
 def test_section_hardening_uses_telemetry_metrics(telemetry_module) -> None:

@@ -55,7 +55,9 @@ Refer to [Guide](../../docs/guide.md).
 
     (repo_root / ".venv" / "ignore.md").write_text("# Ignore\n", encoding="utf-8")
 
-    output_dir = repo_root / ".repo_studios" / "reports" / "healthview"
+    # output_dir must include VIEWER_SLUG/TOPIC_SLUG since the script expects
+    # the full topic path (it appends only the timestamp).
+    output_dir = repo_root / ".repo_studios" / "reports" / "healthview" / mod.VIEWER_SLUG / mod.TOPIC_SLUG
 
     exit_code = mod.main(
         [
@@ -75,7 +77,7 @@ Refer to [Guide](../../docs/guide.md).
     )
 
     assert exit_code == 0
-    run_dir = output_dir / mod.VIEWER_SLUG / mod.TOPIC_SLUG / "20240102-0000"
+    run_dir = output_dir / "20240102-0000"
     assert run_dir.is_dir()
 
     csv_path = run_dir / "doc_index.csv"
@@ -177,7 +179,9 @@ def test_doc_index_retention_keeps_single_run(tmp_path):
     docs_dir.mkdir(parents=True)
     (docs_dir / "one.md").write_text("# Title\n", encoding="utf-8")
 
-    output_dir = repo_root / "out"
+    # output_dir must include VIEWER_SLUG/TOPIC_SLUG since the script expects
+    # the full topic path (it appends only the timestamp).
+    output_dir = repo_root / "out" / mod.VIEWER_SLUG / mod.TOPIC_SLUG
 
     mod.run(
         [
@@ -209,10 +213,11 @@ def test_doc_index_retention_keeps_single_run(tmp_path):
         ]
     )
 
-    topic_dir = output_dir / mod.VIEWER_SLUG / mod.TOPIC_SLUG
-    run_dirs = sorted(node.name for node in topic_dir.iterdir() if node.is_dir())
+    # output_dir already is the topic path; run_dirs are direct children
+    run_dirs = sorted(node.name for node in output_dir.iterdir() if node.is_dir())
     assert run_dirs == ["20240102-0000"]
-    assert not (output_dir / "latest_doc_index.json").exists()
+    # Legacy pointer no longer expected at base output
+    assert not (repo_root / "out" / "latest_doc_index.json").exists()
 
 
 def test_doc_index_refreshes_checkbox_report_and_tier3_index(tmp_path):
@@ -279,7 +284,9 @@ def run(argv):
         encoding="utf-8",
     )
 
-    output_dir = repo_root / ".repo_studios" / "reports" / "healthview"
+    # output_dir must include VIEWER_SLUG/TOPIC_SLUG since the script expects
+    # the full topic path (it appends only the timestamp).
+    output_dir = repo_root / ".repo_studios" / "reports" / "healthview" / mod.VIEWER_SLUG / mod.TOPIC_SLUG
 
     exit_code = mod.main(
         [
@@ -309,7 +316,7 @@ def run(argv):
     tier3_outputs = repo_root / ".repo_studios" / "docs" / "pipeline" / "tier3_index" / "outputs"
     assert (tier3_outputs / "tier3_scripts_index.yaml").exists()
 
-    run_dir = output_dir / mod.VIEWER_SLUG / mod.TOPIC_SLUG / "20240102-0000"
+    run_dir = output_dir / "20240102-0000"
     telemetry = json.loads((run_dir / "telemetry.json").read_text(encoding="utf-8"))
     filenames = {doc["filename"] for doc in telemetry["payload"]["documents"]}
     assert ".repo_studios/docs/pipeline/checkbox_report/outputs/checkbox_report.md" in filenames

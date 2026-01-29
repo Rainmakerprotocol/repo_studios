@@ -1,0 +1,10 @@
+{
+  "status": "error",
+  "timestamp": "20260129-1646",
+  "metrics": {
+    "files_checked": 1,
+    "records_checked": 1,
+    "errors": 1,
+    "warnings": 0
+  }
+}

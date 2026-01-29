@@ -530,6 +530,8 @@ notes:
   - "DB markers present for manifest/summary/telemetry writes; doc_index.csv write is explicitly marked as no-DB."
   - "--db-target is a placeholder only; when provided, producer logs a warning and performs no DB writes."
   - "Return payload omits doc_index.csv path even though the file is written into the bundle dir."
+  - "Phase 4 build doc: .repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-002_generate_doc_index_build.md"
+  - "Return payload compliance: status, exit_code, output_dir, run_id, manifest, telemetry, summary keys added (2026-01-29)"
 ```
 
 #### Implementation Workstreams (checkbox-driven) — generate_doc_index.py

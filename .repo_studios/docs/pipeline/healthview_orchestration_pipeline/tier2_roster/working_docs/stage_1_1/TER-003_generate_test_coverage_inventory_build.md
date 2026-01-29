@@ -590,6 +590,15 @@ ScriptConfig(
 
 **Roster location:** `tier2_test_execution_telemetry_roster.md`
 
+**Roster updated:** ✅ 2026-01-29
+
+- Converted record from bullet-point format to YAML format (ScriptInspectionRecordV1)
+- Added `phase4_build_doc` reference to this document
+- Added `db_integration_doc` reference
+- Added `qa_evidence` section with mypy_strict, pytest, output_truth
+- Updated Records index and Pruning index with TER-003 anchor
+- Added Update Log entry
+
 ### 7.3 Document Finalization
 
 **Current status:** `complete`

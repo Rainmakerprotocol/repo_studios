@@ -1,0 +1,34 @@
+{
+  "comparisons": {
+    "previous_run": {
+      "pass_rate": {
+        "current": 98.44,
+        "delta": 0.0,
+        "previous": 98.44
+      },
+      "summary_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\consumer_reports\\test_log_health_reports\\20260129-1756"
+    }
+  },
+  "meta": {
+    "full_log": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\rawview\\test_execution_runs\\20260103-1346\\pytest_20260103-1346.txt",
+    "generated_at": "2026-01-29T17:58:10.533092+00:00",
+    "junit": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\rawview\\test_execution_runs\\20260103-1346\\junit_20260103-1346.xml",
+    "logs_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\rawview\\test_execution_runs\\20260103-1346"
+  },
+  "schema_version": 1,
+  "slow_tests": [],
+  "summary": {
+    "errors": 0,
+    "failed": 1,
+    "passed": 63,
+    "skipped": 0,
+    "total": 64,
+    "tracebacks": 0,
+    "warnings_total": 0,
+    "xfailed": 0
+  },
+  "warnings": {
+    "by_file": {},
+    "by_type": {}
+  }
+}
