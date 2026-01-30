@@ -113,6 +113,7 @@ Complete each script end-to-end before moving to the next.
 
 **Execution Note:** Phase 4 was executed as a pragmatic HOP-alignment pass rather than the
 granular 14-step template workflow below. All 12 scripts were processed:
+
 - 7 producers/consumers aligned with HOP base package and `run(argv)` entry points
 - 4 libraries/utilities classified (no changes needed)
 - 1 rawview utility deferred

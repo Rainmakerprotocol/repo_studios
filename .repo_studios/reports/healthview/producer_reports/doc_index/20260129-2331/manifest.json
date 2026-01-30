@@ -2,8 +2,8 @@
   "schema_version": 1,
   "viewer_slug": "producer_reports",
   "topic": "doc_index",
-  "run_timestamp": "20260129-2027",
-  "generated_utc": "2026-01-29T20:27:46.367779+00:00",
+  "run_timestamp": "20260129-2331",
+  "generated_utc": "2026-01-29T23:31:47.357418+00:00",
   "status": "ok",
   "catalog": [
     "scripts.docs.generate_doc_index"

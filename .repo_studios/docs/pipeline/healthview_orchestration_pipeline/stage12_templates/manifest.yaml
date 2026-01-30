@@ -1,0 +1,89 @@
+# Stage 12 Templates Manifest
+# Machine-readable registry for agent and indexer discovery
+# Path: stage12_templates/manifest.yaml
+
+version: "1.0.0"
+updated_at: "2026-01-30"
+pipeline: healthview
+stage: "12"
+purpose: "Phase 4 script compliance templates and workflows"
+
+templates:
+  - id: producer_build
+    path: producer/build_template.md
+    category: producer
+    compliance_tier: A
+    phase: "4A"
+    use_when: "Processing existing or new producer script for Universal Law compliance"
+    produces: "{RECORD_ID}_{script_stem}_build.md"
+    metaprompts:
+      - path: producer/review_metaprompts.md
+        use_case: "Existing script Phase 4A review"
+      - path: producer/create_metaprompts.md
+        use_case: "New script from scratch"
+
+  - id: consumer_build
+    path: consumer/build_template.md
+    category: consumer
+    compliance_tier: A
+    phase: "4A"
+    use_when: "Processing existing or new consumer script for Universal Law compliance"
+    produces: "{RECORD_ID}_{script_stem}_build.md"
+    metaprompts:
+      - path: consumer/review_metaprompts.md
+        use_case: "Existing script Phase 4A review"
+
+  - id: aggregator_build
+    path: aggregator/build_template.md
+    category: aggregator
+    compliance_tier: A
+    phase: "4A"
+    use_when: "Processing existing or new aggregator script for Universal Law compliance"
+    produces: "{RECORD_ID}_{script_stem}_build.md"
+    metaprompts:
+      - path: aggregator/review_metaprompts.md
+        use_case: "Existing script Phase 4A review"
+
+  - id: summarizer_build
+    path: summarizer/build_template.md
+    category: summarizer
+    compliance_tier: A
+    phase: "4A"
+    use_when: "Processing existing or new summarizer script for Universal Law compliance"
+    produces: "{RECORD_ID}_{script_stem}_build.md"
+    metaprompts:
+      - path: summarizer/review_metaprompts.md
+        use_case: "Existing script Phase 4A review"
+
+  - id: orchestrator_build
+    path: orchestrator/build_template.md
+    category: orchestrator
+    compliance_tier: A
+    phase: "4A"
+    use_when: "Designing or modifying orchestrator for stage pipeline"
+    produces: "{RECORD_ID}_{script_stem}_build.md"
+    metaprompts:
+      - path: orchestrator/design_metaprompts.md
+        use_case: "Orchestrator design and implementation"
+
+  - id: utility_build
+    path: utility/build_template.md
+    category: utility
+    compliance_tier: B
+    phase: "4A"
+    use_when: "Processing utility script (no HOP bundle output)"
+    produces: "{RECORD_ID}_{script_stem}_build.md"
+    metaprompts:
+      - path: utility/review_metaprompts.md
+        use_case: "Existing utility script Phase 4A review"
+
+  - id: promotion_build
+    path: promotion/build_template.md
+    category: promotion
+    compliance_tier: null
+    phase: "4B"
+    use_when: "Wiring compliant script into orchestrator"
+    produces: "{RECORD_ID}_{script_stem}_promotion.md"
+    metaprompts:
+      - path: promotion/wire_metaprompts.md
+        use_case: "Phase 4B orchestrator integration"

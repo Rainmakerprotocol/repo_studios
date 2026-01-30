@@ -26,8 +26,8 @@ try:  # pragma: no cover - import guard for standalone execution
     from libraries import (
         KeepSpec,
         OptionsConfig,
-        PathSpec,
         PathsConfig,
+        PathSpec,
         build_standard_options,
         build_standard_paths,
     )
@@ -43,8 +43,8 @@ except ModuleNotFoundError:  # pragma: no cover - fallback when script is run di
     from libraries import (
         KeepSpec,
         OptionsConfig,
-        PathSpec,
         PathsConfig,
+        PathSpec,
         build_standard_options,
         build_standard_paths,
     )
@@ -531,7 +531,7 @@ def build_cross_file_membership(duplicates: Sequence[SlugStat]) -> dict[str, lis
             membership[path].append(entry.slug)
     for slugs in membership.values():
         slugs.sort()
-    return {path: slugs for path, slugs in sorted(membership.items())}
+    return dict(sorted(membership.items()))
 
 
 def build_document_payload(
@@ -850,7 +850,7 @@ def _parse_timestamp(raw: str | None) -> datetime:
     try:
         return datetime.fromisoformat(raw)
     except ValueError as exc:  # pragma: no cover - validated via CLI
-        raise SystemExit(f"Invalid --timestamp value: {exc}")
+        raise SystemExit(f"Invalid --timestamp value: {exc}") from None
 
 
 def _normalize_timestamp(moment: datetime) -> datetime:
@@ -1076,8 +1076,19 @@ def run(argv: Sequence[str] | None = None) -> dict[str, Any]:
     emit_summary_log(logger, ordered_slugs, duplicates, report["summary"], report.get("documents", []))
 
     return {
+        "status": "ok",
+        "exit_code": 0,
         "run_dir": str(bundle_dir),
-        "slug": run_timestamp,
+        "output_dir": str(paths.output_dir),
+        "run_id": run_timestamp,
+        "slug": run_timestamp,  # Alias for backward compatibility
+        "manifest": manifest,
+        "telemetry": telemetry,
+        "summary": {
+            "total_slugs": report["summary"]["total_slugs"],
+            "cross_file_duplicates": report["summary"]["cross_file_duplicates"],
+            "total_documents": report["summary"]["total_documents"],
+        },
         "artifacts": {
             "manifest.json": str(manifest_path),
             "summary.md": str(summary_path),

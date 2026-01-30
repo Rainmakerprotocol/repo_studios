@@ -2,27 +2,27 @@
   "schema_version": 1,
   "viewer_slug": "producer_reports",
   "topic": "doc_index",
-  "run_timestamp": "20260129-2027",
-  "generated_utc": "2026-01-29T20:27:46.367779+00:00",
+  "run_timestamp": "20260129-2331",
+  "generated_utc": "2026-01-29T23:31:47.357418+00:00",
   "status": "ok",
   "metrics": {
-    "total_documents": 362,
-    "total_headings": 2788,
+    "total_documents": 364,
+    "total_headings": 2812,
     "total_links": 308,
     "duplicate_slug_count": 7,
     "documents_missing_description_count": 41,
-    "placeholder_documents_count": 92,
-    "link_density": 0.850828729281768
+    "placeholder_documents_count": 93,
+    "link_density": 0.8461538461538461
   },
   "payload": {
     "schema_version": 1,
-    "generated_utc": "2026-01-29T20:27:46.367779+00:00",
+    "generated_utc": "2026-01-29T23:31:47.357418+00:00",
     "repo_root": "C:\\Users\\genet\\repo_studios",
     "summary": {
-      "total_documents": 362,
-      "total_h1": 365,
-      "total_h2": 2423,
-      "total_headings": 2788,
+      "total_documents": 364,
+      "total_h1": 367,
+      "total_h2": 2445,
+      "total_headings": 2812,
       "total_links": 308
     },
     "metrics": {
@@ -48,15 +48,15 @@
           "count": 12
         },
         {
+          "directory": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans",
+          "count": 11
+        },
+        {
           "directory": ".repo_studios/docs/standards/global",
           "count": 11
         },
         {
           "directory": ".repo_studios/command_center/docs/phase_7",
-          "count": 10
-        },
-        {
-          "directory": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans",
           "count": 10
         },
         {
@@ -111,10 +111,10 @@
       "documents_missing_description_count": 41,
       "documents_without_h1_count": 16,
       "documents_without_h2_count": 17,
-      "placeholder_documents_count": 92,
+      "placeholder_documents_count": 93,
       "duplicate_slug_count": 7,
       "documents_outside_docs_tree_count": 188,
-      "link_density": 0.850828729281768
+      "link_density": 0.8461538461538461
     },
     "advisories": {
       "documents_missing_description": [
@@ -18106,6 +18106,149 @@
       },
       {
         "folder": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans",
+        "filename": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage12_metaprompts.md",
+        "slug": "stage-12-metaprompts-phase-4-walkthrough",
+        "h1_headings": [
+          {
+            "title": "Stage 12 Metaprompts \u2014 Phase 4 Walkthrough",
+            "slug": "stage-12-metaprompts-phase-4-walkthrough",
+            "line": 28
+          }
+        ],
+        "h2_headings": [
+          {
+            "title": "How to Use These Prompts",
+            "slug": "how-to-use-these-prompts",
+            "line": 38,
+            "parent_title": "Stage 12 Metaprompts \u2014 Phase 4 Walkthrough",
+            "parent_slug": "stage-12-metaprompts-phase-4-walkthrough"
+          },
+          {
+            "title": "Prompt 1 \u2014 Context and Purpose",
+            "slug": "prompt-1-context-and-purpose",
+            "line": 49,
+            "parent_title": "Stage 12 Metaprompts \u2014 Phase 4 Walkthrough",
+            "parent_slug": "stage-12-metaprompts-phase-4-walkthrough"
+          },
+          {
+            "title": "Prompt 2 \u2014 Select Template and Understand Structure",
+            "slug": "prompt-2-select-template-and-understand-structure",
+            "line": 80,
+            "parent_title": "Stage 12 Metaprompts \u2014 Phase 4 Walkthrough",
+            "parent_slug": "stage-12-metaprompts-phase-4-walkthrough"
+          },
+          {
+            "title": "Prompt 3 \u2014 Select Script from Roster (Ignore Legacy)",
+            "slug": "prompt-3-select-script-from-roster-ignore-legacy",
+            "line": 112,
+            "parent_title": "Stage 12 Metaprompts \u2014 Phase 4 Walkthrough",
+            "parent_slug": "stage-12-metaprompts-phase-4-walkthrough"
+          },
+          {
+            "title": "Prompt 4 \u2014 Inspect Script and Document Issues",
+            "slug": "prompt-4-inspect-script-and-document-issues",
+            "line": 140,
+            "parent_title": "Stage 12 Metaprompts \u2014 Phase 4 Walkthrough",
+            "parent_slug": "stage-12-metaprompts-phase-4-walkthrough"
+          },
+          {
+            "title": "Prompt 5 \u2014 Resolve Issues",
+            "slug": "prompt-5-resolve-issues",
+            "line": 186,
+            "parent_title": "Stage 12 Metaprompts \u2014 Phase 4 Walkthrough",
+            "parent_slug": "stage-12-metaprompts-phase-4-walkthrough"
+          },
+          {
+            "title": "Prompt 6 \u2014 Verify Ruff/Mypy/Tests Pass",
+            "slug": "prompt-6-verify-ruffmypytests-pass",
+            "line": 217,
+            "parent_title": "Stage 12 Metaprompts \u2014 Phase 4 Walkthrough",
+            "parent_slug": "stage-12-metaprompts-phase-4-walkthrough"
+          },
+          {
+            "title": "Prompt 7 \u2014 Prepare Tier-2 Roster Section",
+            "slug": "prompt-7-prepare-tier-2-roster-section",
+            "line": 262,
+            "parent_title": "Stage 12 Metaprompts \u2014 Phase 4 Walkthrough",
+            "parent_slug": "stage-12-metaprompts-phase-4-walkthrough"
+          },
+          {
+            "title": "Prompt 8 \u2014 Replace Roster Section and Review",
+            "slug": "prompt-8-replace-roster-section-and-review",
+            "line": 338,
+            "parent_title": "Stage 12 Metaprompts \u2014 Phase 4 Walkthrough",
+            "parent_slug": "stage-12-metaprompts-phase-4-walkthrough"
+          },
+          {
+            "title": "Quick Reference \u2014 File Locations",
+            "slug": "quick-reference-file-locations",
+            "line": 382,
+            "parent_title": "Stage 12 Metaprompts \u2014 Phase 4 Walkthrough",
+            "parent_slug": "stage-12-metaprompts-phase-4-walkthrough"
+          },
+          {
+            "title": "Quick Reference \u2014 Universal Interface Contract",
+            "slug": "quick-reference-universal-interface-contract",
+            "line": 393,
+            "parent_title": "Stage 12 Metaprompts \u2014 Phase 4 Walkthrough",
+            "parent_slug": "stage-12-metaprompts-phase-4-walkthrough"
+          },
+          {
+            "title": "Update Log",
+            "slug": "update-log",
+            "line": 411,
+            "parent_title": "Stage 12 Metaprompts \u2014 Phase 4 Walkthrough",
+            "parent_slug": "stage-12-metaprompts-phase-4-walkthrough"
+          }
+        ],
+        "links": [],
+        "description": "1. Copy a prompt into your conversation with the coding agent 2. Wait for the agent to complete the work before moving to the next prompt 3. If issues arise, resolve them before proceeding 4. Each prompt is self-contained but assumes prior\u2026",
+        "size_bytes": 13311,
+        "modified_utc": "2026-01-29T23:22:49.323196+00:00",
+        "tags": [
+          "pipeline",
+          "healthview",
+          "phase-4",
+          "metaprompt"
+        ],
+        "owners": [
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "status": "active",
+        "frontmatter": {
+          "title": "Stage 12 Metaprompts \u2014 Phase 4 Walkthrough",
+          "tier": "tier-2",
+          "audience": [
+            "coding_agent",
+            "human_developer"
+          ],
+          "owners": [
+            "repo_studios_team@rainmakerprotocol.dev"
+          ],
+          "role": [
+            "metaprompt",
+            "workflow-guide"
+          ],
+          "status": "active",
+          "version": "1.0.0",
+          "updated_at": "2026-01-29",
+          "tags": [
+            "pipeline",
+            "healthview",
+            "phase-4",
+            "metaprompt"
+          ],
+          "related_files": [
+            ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage12_template_development_plan.md",
+            ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/templates/tier2_producer_template.md",
+            ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_test_execution_telemetry_roster.md",
+            ".github/instructions/markdown.instructions.md"
+          ]
+        },
+        "contains_placeholder": false
+      },
+      {
+        "folder": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans",
         "filename": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage12_template_development_plan.md",
         "slug": "stage-12-template-development-plan",
         "h1_headings": [
@@ -18161,43 +18304,43 @@
           {
             "title": "Phase 5: Template Finalization \u2705",
             "slug": "phase-5-template-finalization",
-            "line": 235,
+            "line": 236,
             "parent_title": "Stage 12 Template Development Plan",
             "parent_slug": "stage-12-template-development-plan"
           },
           {
             "title": "Phase 6: Apply Templates to Existing Stage 1.1 Scripts",
             "slug": "phase-6-apply-templates-to-existing-stage-11-scripts",
-            "line": 269,
+            "line": 270,
             "parent_title": "Stage 12 Template Development Plan",
             "parent_slug": "stage-12-template-development-plan"
           },
           {
             "title": "Checkpoint: Template Maturity Assessment",
             "slug": "checkpoint-template-maturity-assessment",
-            "line": 284,
+            "line": 285,
             "parent_title": "Stage 12 Template Development Plan",
             "parent_slug": "stage-12-template-development-plan"
           },
           {
             "title": "Notes",
             "slug": "notes",
-            "line": 300,
+            "line": 301,
             "parent_title": "Stage 12 Template Development Plan",
             "parent_slug": "stage-12-template-development-plan"
           },
           {
             "title": "Evidence Log",
             "slug": "evidence-log",
-            "line": 310,
+            "line": 311,
             "parent_title": "Stage 12 Template Development Plan",
             "parent_slug": "stage-12-template-development-plan"
           }
         ],
         "links": [],
         "description": "This document is designed as a reusable template for similar development efforts.",
-        "size_bytes": 15221,
-        "modified_utc": "2026-01-28T11:28:08.825536+00:00",
+        "size_bytes": 15223,
+        "modified_utc": "2026-01-29T22:51:03.440599+00:00",
         "tags": [],
         "owners": [],
         "status": null,
@@ -20979,35 +21122,35 @@
           {
             "title": "4. Signals & Telemetry",
             "slug": "4-signals-telemetry",
-            "line": 1707,
+            "line": 1406,
             "parent_title": "Tier-2 Roster \u2014 Stage 2.1 Docs Health Overview",
             "parent_slug": "tier-2-roster-stage-21-docs-health-overview"
           },
           {
             "title": "5. Dependencies & Stop-Gates",
             "slug": "5-dependencies-stop-gates",
-            "line": 1725,
+            "line": 1424,
             "parent_title": "Tier-2 Roster \u2014 Stage 2.1 Docs Health Overview",
             "parent_slug": "tier-2-roster-stage-21-docs-health-overview"
           },
           {
             "title": "6. Instruction Block (Required by Tier Rules)",
             "slug": "6-instruction-block-required-by-tier-rules",
-            "line": 1746,
+            "line": 1445,
             "parent_title": "Tier-2 Roster \u2014 Stage 2.1 Docs Health Overview",
             "parent_slug": "tier-2-roster-stage-21-docs-health-overview"
           },
           {
             "title": "7. Agent Automation Block",
             "slug": "7-agent-automation-block",
-            "line": 1758,
+            "line": 1457,
             "parent_title": "Tier-2 Roster \u2014 Stage 2.1 Docs Health Overview",
             "parent_slug": "tier-2-roster-stage-21-docs-health-overview"
           },
           {
             "title": "8. Update Log",
             "slug": "8-update-log",
-            "line": 1789,
+            "line": 1488,
             "parent_title": "Tier-2 Roster \u2014 Stage 2.1 Docs Health Overview",
             "parent_slug": "tier-2-roster-stage-21-docs-health-overview"
           }
@@ -21024,8 +21167,8 @@
           "#s21r-009-aggregate-docs-health-signals"
         ],
         "description": "`tier1_healthview_orchestration_pipeline.md`.",
-        "size_bytes": 70784,
-        "modified_utc": "2026-01-29T20:25:30.235761+00:00",
+        "size_bytes": 58384,
+        "modified_utc": "2026-01-29T22:50:59.976703+00:00",
         "tags": [
           "pipeline",
           "healthview",
@@ -23956,7 +24099,7 @@
         "links": [],
         "description": "Producers, Consumers, Aggregators, Summarizers.",
         "size_bytes": 25717,
-        "modified_utc": "2026-01-29T20:25:37.048127+00:00",
+        "modified_utc": "2026-01-29T20:29:47.917582+00:00",
         "tags": [
           "stage-2.1",
           "producer",
@@ -23995,6 +24138,136 @@
             ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_docs_health_overview_roster.md",
             ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier3_scripts/docs_health_overview/tier3_generate_doc_index.yaml",
             ".repo_studios/tests/tests_producers/test_generate_doc_index.py",
+            ".repo_studios/command_center/scripts/libraries/database_integration.py"
+          ]
+        },
+        "contains_placeholder": true
+      },
+      {
+        "folder": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1",
+        "filename": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-003_generate_anchor_inventory_build.md",
+        "slug": "script-build-template-generateanchorinventorypy",
+        "h1_headings": [
+          {
+            "title": "Script Build Template \u2014 generate_anchor_inventory.py",
+            "slug": "script-build-template-generateanchorinventorypy",
+            "line": 29
+          }
+        ],
+        "h2_headings": [
+          {
+            "title": "1. Script Identity",
+            "slug": "1-script-identity",
+            "line": 46,
+            "parent_title": "Script Build Template \u2014 generate_anchor_inventory.py",
+            "parent_slug": "script-build-template-generateanchorinventorypy"
+          },
+          {
+            "title": "2. Current State Analysis",
+            "slug": "2-current-state-analysis",
+            "line": 86,
+            "parent_title": "Script Build Template \u2014 generate_anchor_inventory.py",
+            "parent_slug": "script-build-template-generateanchorinventorypy"
+          },
+          {
+            "title": "2.6 Agent Discoverability (Tier-3 YAML)",
+            "slug": "26-agent-discoverability-tier-3-yaml",
+            "line": 255,
+            "parent_title": "Script Build Template \u2014 generate_anchor_inventory.py",
+            "parent_slug": "script-build-template-generateanchorinventorypy"
+          },
+          {
+            "title": "2.7 Database Integration Preparation",
+            "slug": "27-database-integration-preparation",
+            "line": 269,
+            "parent_title": "Script Build Template \u2014 generate_anchor_inventory.py",
+            "parent_slug": "script-build-template-generateanchorinventorypy"
+          },
+          {
+            "title": "3. Gap Analysis",
+            "slug": "3-gap-analysis",
+            "line": 283,
+            "parent_title": "Script Build Template \u2014 generate_anchor_inventory.py",
+            "parent_slug": "script-build-template-generateanchorinventorypy"
+          },
+          {
+            "title": "4. Changes Made",
+            "slug": "4-changes-made",
+            "line": 309,
+            "parent_title": "Script Build Template \u2014 generate_anchor_inventory.py",
+            "parent_slug": "script-build-template-generateanchorinventorypy"
+          },
+          {
+            "title": "5. Evidence",
+            "slug": "5-evidence",
+            "line": 332,
+            "parent_title": "Script Build Template \u2014 generate_anchor_inventory.py",
+            "parent_slug": "script-build-template-generateanchorinventorypy"
+          },
+          {
+            "title": "6. Orchestrator Integration",
+            "slug": "6-orchestrator-integration",
+            "line": 354,
+            "parent_title": "Script Build Template \u2014 generate_anchor_inventory.py",
+            "parent_slug": "script-build-template-generateanchorinventorypy"
+          },
+          {
+            "title": "7. Completion",
+            "slug": "7-completion",
+            "line": 395,
+            "parent_title": "Script Build Template \u2014 generate_anchor_inventory.py",
+            "parent_slug": "script-build-template-generateanchorinventorypy"
+          },
+          {
+            "title": "8. Version History",
+            "slug": "8-version-history",
+            "line": 470,
+            "parent_title": "Script Build Template \u2014 generate_anchor_inventory.py",
+            "parent_slug": "script-build-template-generateanchorinventorypy"
+          }
+        ],
+        "links": [],
+        "description": "Producers, Consumers, Aggregators, Summarizers.",
+        "size_bytes": 18399,
+        "modified_utc": "2026-01-29T22:37:38.153121+00:00",
+        "tags": [
+          "stage-2.1",
+          "producer",
+          "phase-4",
+          "S21R-003"
+        ],
+        "owners": [
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "status": "complete",
+        "frontmatter": {
+          "title": "Script Build Template \u2014 generate_anchor_inventory.py",
+          "tier": "working-document",
+          "audience": [
+            "coding_agent",
+            "human_developer"
+          ],
+          "owners": [
+            "repo_studios_team@rainmakerprotocol.dev"
+          ],
+          "role": [
+            "build-template",
+            "phase-4-artifact"
+          ],
+          "status": "complete",
+          "version": "1.0.0",
+          "updated_at": "2026-01-29",
+          "tags": [
+            "stage-2.1",
+            "producer",
+            "phase-4",
+            "S21R-003"
+          ],
+          "related_files": [
+            ".repo_studios/scripts/producers/generate_anchor_inventory.py",
+            ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_docs_health_overview_roster.md",
+            ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier3_scripts/docs_health_overview/tier3_generate_anchor_inventory.yaml",
+            ".repo_studios/tests/tests_producers/test_generate_anchor_inventory.py",
             ".repo_studios/command_center/scripts/libraries/database_integration.py"
           ]
         },

@@ -4,20 +4,24 @@ import csv
 import importlib.util
 import io
 import json
+import types
 from pathlib import Path
+from typing import Any
 
 _MODULE_PATH = Path(__file__).resolve().parents[2] / "scripts" / "producers" / "generate_doc_index.py"
 
 
-def _load_module():
+def _load_module() -> types.ModuleType:
+    """Load the generate_doc_index module dynamically."""
     spec = importlib.util.spec_from_file_location("generate_doc_index", _MODULE_PATH)
+    if spec is None or spec.loader is None:
+        raise RuntimeError(f"Unable to load module spec for {_MODULE_PATH}")
     module = importlib.util.module_from_spec(spec)
-    assert spec.loader is not None
     spec.loader.exec_module(module)
     return module
 
 
-def test_doc_index_produces_artifacts_and_placeholder(tmp_path):
+def test_doc_index_produces_artifacts_and_placeholder(tmp_path: Path) -> None:
     mod = _load_module()
     repo_root = tmp_path / "repo"
     (repo_root / ".repo_studios").mkdir(parents=True)
@@ -171,7 +175,7 @@ Refer to [Guide](../../docs/guide.md).
     assert not (output_dir / "latest_doc_index.csv").exists()
 
 
-def test_doc_index_retention_keeps_single_run(tmp_path):
+def test_doc_index_retention_keeps_single_run(tmp_path: Path) -> None:
     mod = _load_module()
     repo_root = tmp_path / "workspace"
     (repo_root / ".repo_studios").mkdir(parents=True)
@@ -220,7 +224,7 @@ def test_doc_index_retention_keeps_single_run(tmp_path):
     assert not (repo_root / "out" / "latest_doc_index.json").exists()
 
 
-def test_doc_index_refreshes_checkbox_report_and_tier3_index(tmp_path):
+def test_doc_index_refreshes_checkbox_report_and_tier3_index(tmp_path: Path) -> None:
     mod = _load_module()
     repo_root = tmp_path / "workspace"
     (repo_root / ".repo_studios").mkdir(parents=True)

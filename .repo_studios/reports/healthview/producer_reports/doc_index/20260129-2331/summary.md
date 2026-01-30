@@ -1,8 +1,8 @@
 ---
 schema_version: 1
-generated_utc: 2026-01-29T20:27:46.367779+00:00
-total_documents: 362
-total_headings: 2788
+generated_utc: 2026-01-29T23:31:47.357418+00:00
+total_documents: 364
+total_headings: 2812
 total_links: 308
 ---
 
@@ -16,16 +16,16 @@ total_links: 308
 
 ## Summary
 
-- documents: 362
-- h1 headings: 365
-- h2 headings: 2423
+- documents: 364
+- h1 headings: 367
+- h2 headings: 2445
 - links: 308
 
 ## Metrics
 
-- link density: 0.851
+- link density: 0.846
 - duplicate slug groups: 7
-- placeholder documents: 92
+- placeholder documents: 93
 - documents outside docs tree: 188
 - top directories: .repo_studios/command_center/docs/db_integrations (52), .repo_studios/docs/automation (45), .repo_studios/command_center/docs/mermaid/view_specs (28), .repo_studios/command_center/docs (17), .repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster (12)
 - see JSON section for full metric payload.
@@ -18033,6 +18033,149 @@ total_links: 308
       ]
     },
     {
+      "contains_placeholder": false,
+      "description": "1. Copy a prompt into your conversation with the coding agent 2. Wait for the agent to complete the work before moving to the next prompt 3. If issues arise, resolve them before proceeding 4. Each prompt is self-contained but assumes prior\u2026",
+      "filename": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage12_metaprompts.md",
+      "folder": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans",
+      "frontmatter": {
+        "audience": [
+          "coding_agent",
+          "human_developer"
+        ],
+        "owners": [
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "related_files": [
+          ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage12_template_development_plan.md",
+          ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/templates/tier2_producer_template.md",
+          ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_test_execution_telemetry_roster.md",
+          ".github/instructions/markdown.instructions.md"
+        ],
+        "role": [
+          "metaprompt",
+          "workflow-guide"
+        ],
+        "status": "active",
+        "tags": [
+          "pipeline",
+          "healthview",
+          "phase-4",
+          "metaprompt"
+        ],
+        "tier": "tier-2",
+        "title": "Stage 12 Metaprompts \u2014 Phase 4 Walkthrough",
+        "updated_at": "2026-01-29",
+        "version": "1.0.0"
+      },
+      "h1_headings": [
+        {
+          "line": 28,
+          "slug": "stage-12-metaprompts-phase-4-walkthrough",
+          "title": "Stage 12 Metaprompts \u2014 Phase 4 Walkthrough"
+        }
+      ],
+      "h2_headings": [
+        {
+          "line": 38,
+          "parent_slug": "stage-12-metaprompts-phase-4-walkthrough",
+          "parent_title": "Stage 12 Metaprompts \u2014 Phase 4 Walkthrough",
+          "slug": "how-to-use-these-prompts",
+          "title": "How to Use These Prompts"
+        },
+        {
+          "line": 49,
+          "parent_slug": "stage-12-metaprompts-phase-4-walkthrough",
+          "parent_title": "Stage 12 Metaprompts \u2014 Phase 4 Walkthrough",
+          "slug": "prompt-1-context-and-purpose",
+          "title": "Prompt 1 \u2014 Context and Purpose"
+        },
+        {
+          "line": 80,
+          "parent_slug": "stage-12-metaprompts-phase-4-walkthrough",
+          "parent_title": "Stage 12 Metaprompts \u2014 Phase 4 Walkthrough",
+          "slug": "prompt-2-select-template-and-understand-structure",
+          "title": "Prompt 2 \u2014 Select Template and Understand Structure"
+        },
+        {
+          "line": 112,
+          "parent_slug": "stage-12-metaprompts-phase-4-walkthrough",
+          "parent_title": "Stage 12 Metaprompts \u2014 Phase 4 Walkthrough",
+          "slug": "prompt-3-select-script-from-roster-ignore-legacy",
+          "title": "Prompt 3 \u2014 Select Script from Roster (Ignore Legacy)"
+        },
+        {
+          "line": 140,
+          "parent_slug": "stage-12-metaprompts-phase-4-walkthrough",
+          "parent_title": "Stage 12 Metaprompts \u2014 Phase 4 Walkthrough",
+          "slug": "prompt-4-inspect-script-and-document-issues",
+          "title": "Prompt 4 \u2014 Inspect Script and Document Issues"
+        },
+        {
+          "line": 186,
+          "parent_slug": "stage-12-metaprompts-phase-4-walkthrough",
+          "parent_title": "Stage 12 Metaprompts \u2014 Phase 4 Walkthrough",
+          "slug": "prompt-5-resolve-issues",
+          "title": "Prompt 5 \u2014 Resolve Issues"
+        },
+        {
+          "line": 217,
+          "parent_slug": "stage-12-metaprompts-phase-4-walkthrough",
+          "parent_title": "Stage 12 Metaprompts \u2014 Phase 4 Walkthrough",
+          "slug": "prompt-6-verify-ruffmypytests-pass",
+          "title": "Prompt 6 \u2014 Verify Ruff/Mypy/Tests Pass"
+        },
+        {
+          "line": 262,
+          "parent_slug": "stage-12-metaprompts-phase-4-walkthrough",
+          "parent_title": "Stage 12 Metaprompts \u2014 Phase 4 Walkthrough",
+          "slug": "prompt-7-prepare-tier-2-roster-section",
+          "title": "Prompt 7 \u2014 Prepare Tier-2 Roster Section"
+        },
+        {
+          "line": 338,
+          "parent_slug": "stage-12-metaprompts-phase-4-walkthrough",
+          "parent_title": "Stage 12 Metaprompts \u2014 Phase 4 Walkthrough",
+          "slug": "prompt-8-replace-roster-section-and-review",
+          "title": "Prompt 8 \u2014 Replace Roster Section and Review"
+        },
+        {
+          "line": 382,
+          "parent_slug": "stage-12-metaprompts-phase-4-walkthrough",
+          "parent_title": "Stage 12 Metaprompts \u2014 Phase 4 Walkthrough",
+          "slug": "quick-reference-file-locations",
+          "title": "Quick Reference \u2014 File Locations"
+        },
+        {
+          "line": 393,
+          "parent_slug": "stage-12-metaprompts-phase-4-walkthrough",
+          "parent_title": "Stage 12 Metaprompts \u2014 Phase 4 Walkthrough",
+          "slug": "quick-reference-universal-interface-contract",
+          "title": "Quick Reference \u2014 Universal Interface Contract"
+        },
+        {
+          "line": 411,
+          "parent_slug": "stage-12-metaprompts-phase-4-walkthrough",
+          "parent_title": "Stage 12 Metaprompts \u2014 Phase 4 Walkthrough",
+          "slug": "update-log",
+          "title": "Update Log"
+        }
+      ],
+      "links": [],
+      "modified_utc": "2026-01-29T23:22:49.323196+00:00",
+      "owners": [
+        "repo_studios_team@rainmakerprotocol.dev"
+      ],
+      "size_bytes": 13311,
+      "slug": "stage-12-metaprompts-phase-4-walkthrough",
+      "status": "active",
+      "tags": [
+        "pipeline",
+        "healthview",
+        "phase-4",
+        "metaprompt"
+      ]
+    },
+    {
       "contains_placeholder": true,
       "description": "This document is designed as a reusable template for similar development efforts.",
       "filename": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage12_template_development_plan.md",
@@ -18089,35 +18232,35 @@ total_links: 308
           "title": "Phase 4: Per-Script Process (Repeat for Each Script) \u2705"
         },
         {
-          "line": 235,
+          "line": 236,
           "parent_slug": "stage-12-template-development-plan",
           "parent_title": "Stage 12 Template Development Plan",
           "slug": "phase-5-template-finalization",
           "title": "Phase 5: Template Finalization \u2705"
         },
         {
-          "line": 269,
+          "line": 270,
           "parent_slug": "stage-12-template-development-plan",
           "parent_title": "Stage 12 Template Development Plan",
           "slug": "phase-6-apply-templates-to-existing-stage-11-scripts",
           "title": "Phase 6: Apply Templates to Existing Stage 1.1 Scripts"
         },
         {
-          "line": 284,
+          "line": 285,
           "parent_slug": "stage-12-template-development-plan",
           "parent_title": "Stage 12 Template Development Plan",
           "slug": "checkpoint-template-maturity-assessment",
           "title": "Checkpoint: Template Maturity Assessment"
         },
         {
-          "line": 300,
+          "line": 301,
           "parent_slug": "stage-12-template-development-plan",
           "parent_title": "Stage 12 Template Development Plan",
           "slug": "notes",
           "title": "Notes"
         },
         {
-          "line": 310,
+          "line": 311,
           "parent_slug": "stage-12-template-development-plan",
           "parent_title": "Stage 12 Template Development Plan",
           "slug": "evidence-log",
@@ -18125,9 +18268,9 @@ total_links: 308
         }
       ],
       "links": [],
-      "modified_utc": "2026-01-28T11:28:08.825536+00:00",
+      "modified_utc": "2026-01-29T22:51:03.440599+00:00",
       "owners": [],
-      "size_bytes": 15221,
+      "size_bytes": 15223,
       "slug": "stage-12-template-development-plan",
       "status": null,
       "tags": []
@@ -20940,35 +21083,35 @@ total_links: 308
           "title": "3. Stage Narrative \u2014 Stage 2.1 Docs Health Overview"
         },
         {
-          "line": 1707,
+          "line": 1406,
           "parent_slug": "tier-2-roster-stage-21-docs-health-overview",
           "parent_title": "Tier-2 Roster \u2014 Stage 2.1 Docs Health Overview",
           "slug": "4-signals-telemetry",
           "title": "4. Signals & Telemetry"
         },
         {
-          "line": 1725,
+          "line": 1424,
           "parent_slug": "tier-2-roster-stage-21-docs-health-overview",
           "parent_title": "Tier-2 Roster \u2014 Stage 2.1 Docs Health Overview",
           "slug": "5-dependencies-stop-gates",
           "title": "5. Dependencies & Stop-Gates"
         },
         {
-          "line": 1746,
+          "line": 1445,
           "parent_slug": "tier-2-roster-stage-21-docs-health-overview",
           "parent_title": "Tier-2 Roster \u2014 Stage 2.1 Docs Health Overview",
           "slug": "6-instruction-block-required-by-tier-rules",
           "title": "6. Instruction Block (Required by Tier Rules)"
         },
         {
-          "line": 1758,
+          "line": 1457,
           "parent_slug": "tier-2-roster-stage-21-docs-health-overview",
           "parent_title": "Tier-2 Roster \u2014 Stage 2.1 Docs Health Overview",
           "slug": "7-agent-automation-block",
           "title": "7. Agent Automation Block"
         },
         {
-          "line": 1789,
+          "line": 1488,
           "parent_slug": "tier-2-roster-stage-21-docs-health-overview",
           "parent_title": "Tier-2 Roster \u2014 Stage 2.1 Docs Health Overview",
           "slug": "8-update-log",
@@ -20986,11 +21129,11 @@ total_links: 308
         "#s21r-008-generate-undocumented-logic-report",
         "#s21r-009-aggregate-docs-health-signals"
       ],
-      "modified_utc": "2026-01-29T20:25:30.235761+00:00",
+      "modified_utc": "2026-01-29T22:50:59.976703+00:00",
       "owners": [
         "repo_studios_team@rainmakerprotocol.dev"
       ],
-      "size_bytes": 70784,
+      "size_bytes": 58384,
       "slug": "tier-2-roster-stage-21-docs-health-overview",
       "status": "seeded",
       "tags": [
@@ -23914,7 +24057,7 @@ total_links: 308
         }
       ],
       "links": [],
-      "modified_utc": "2026-01-29T20:25:37.048127+00:00",
+      "modified_utc": "2026-01-29T20:29:47.917582+00:00",
       "owners": [
         "repo_studios_team@rainmakerprotocol.dev"
       ],
@@ -23926,6 +24069,136 @@ total_links: 308
         "producer",
         "phase-4",
         "S21R-002"
+      ]
+    },
+    {
+      "contains_placeholder": true,
+      "description": "Producers, Consumers, Aggregators, Summarizers.",
+      "filename": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-003_generate_anchor_inventory_build.md",
+      "folder": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1",
+      "frontmatter": {
+        "audience": [
+          "coding_agent",
+          "human_developer"
+        ],
+        "owners": [
+          "repo_studios_team@rainmakerprotocol.dev"
+        ],
+        "related_files": [
+          ".repo_studios/scripts/producers/generate_anchor_inventory.py",
+          ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_docs_health_overview_roster.md",
+          ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier3_scripts/docs_health_overview/tier3_generate_anchor_inventory.yaml",
+          ".repo_studios/tests/tests_producers/test_generate_anchor_inventory.py",
+          ".repo_studios/command_center/scripts/libraries/database_integration.py"
+        ],
+        "role": [
+          "build-template",
+          "phase-4-artifact"
+        ],
+        "status": "complete",
+        "tags": [
+          "stage-2.1",
+          "producer",
+          "phase-4",
+          "S21R-003"
+        ],
+        "tier": "working-document",
+        "title": "Script Build Template \u2014 generate_anchor_inventory.py",
+        "updated_at": "2026-01-29",
+        "version": "1.0.0"
+      },
+      "h1_headings": [
+        {
+          "line": 29,
+          "slug": "script-build-template-generateanchorinventorypy",
+          "title": "Script Build Template \u2014 generate_anchor_inventory.py"
+        }
+      ],
+      "h2_headings": [
+        {
+          "line": 46,
+          "parent_slug": "script-build-template-generateanchorinventorypy",
+          "parent_title": "Script Build Template \u2014 generate_anchor_inventory.py",
+          "slug": "1-script-identity",
+          "title": "1. Script Identity"
+        },
+        {
+          "line": 86,
+          "parent_slug": "script-build-template-generateanchorinventorypy",
+          "parent_title": "Script Build Template \u2014 generate_anchor_inventory.py",
+          "slug": "2-current-state-analysis",
+          "title": "2. Current State Analysis"
+        },
+        {
+          "line": 255,
+          "parent_slug": "script-build-template-generateanchorinventorypy",
+          "parent_title": "Script Build Template \u2014 generate_anchor_inventory.py",
+          "slug": "26-agent-discoverability-tier-3-yaml",
+          "title": "2.6 Agent Discoverability (Tier-3 YAML)"
+        },
+        {
+          "line": 269,
+          "parent_slug": "script-build-template-generateanchorinventorypy",
+          "parent_title": "Script Build Template \u2014 generate_anchor_inventory.py",
+          "slug": "27-database-integration-preparation",
+          "title": "2.7 Database Integration Preparation"
+        },
+        {
+          "line": 283,
+          "parent_slug": "script-build-template-generateanchorinventorypy",
+          "parent_title": "Script Build Template \u2014 generate_anchor_inventory.py",
+          "slug": "3-gap-analysis",
+          "title": "3. Gap Analysis"
+        },
+        {
+          "line": 309,
+          "parent_slug": "script-build-template-generateanchorinventorypy",
+          "parent_title": "Script Build Template \u2014 generate_anchor_inventory.py",
+          "slug": "4-changes-made",
+          "title": "4. Changes Made"
+        },
+        {
+          "line": 332,
+          "parent_slug": "script-build-template-generateanchorinventorypy",
+          "parent_title": "Script Build Template \u2014 generate_anchor_inventory.py",
+          "slug": "5-evidence",
+          "title": "5. Evidence"
+        },
+        {
+          "line": 354,
+          "parent_slug": "script-build-template-generateanchorinventorypy",
+          "parent_title": "Script Build Template \u2014 generate_anchor_inventory.py",
+          "slug": "6-orchestrator-integration",
+          "title": "6. Orchestrator Integration"
+        },
+        {
+          "line": 395,
+          "parent_slug": "script-build-template-generateanchorinventorypy",
+          "parent_title": "Script Build Template \u2014 generate_anchor_inventory.py",
+          "slug": "7-completion",
+          "title": "7. Completion"
+        },
+        {
+          "line": 470,
+          "parent_slug": "script-build-template-generateanchorinventorypy",
+          "parent_title": "Script Build Template \u2014 generate_anchor_inventory.py",
+          "slug": "8-version-history",
+          "title": "8. Version History"
+        }
+      ],
+      "links": [],
+      "modified_utc": "2026-01-29T22:37:38.153121+00:00",
+      "owners": [
+        "repo_studios_team@rainmakerprotocol.dev"
+      ],
+      "size_bytes": 18399,
+      "slug": "script-build-template-generateanchorinventorypy",
+      "status": "complete",
+      "tags": [
+        "stage-2.1",
+        "producer",
+        "phase-4",
+        "S21R-003"
       ]
     },
     {
@@ -30342,7 +30615,7 @@ total_links: 308
       "tags": []
     }
   ],
-  "generated_utc": "2026-01-29T20:27:46.367779+00:00",
+  "generated_utc": "2026-01-29T23:31:47.357418+00:00",
   "metrics": {
     "documents_missing_description_count": 41,
     "documents_outside_docs_tree_count": 188,
@@ -30369,15 +30642,15 @@ total_links: 308
       },
       {
         "count": 11,
+        "directory": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans"
+      },
+      {
+        "count": 11,
         "directory": ".repo_studios/docs/standards/global"
       },
       {
         "count": 10,
         "directory": ".repo_studios/command_center/docs/phase_7"
-      },
-      {
-        "count": 10,
-        "directory": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans"
       },
       {
         "count": 9,
@@ -30431,8 +30704,8 @@ total_links: 308
     "documents_without_h1_count": 16,
     "documents_without_h2_count": 17,
     "duplicate_slug_count": 7,
-    "link_density": 0.850828729281768,
-    "placeholder_documents_count": 92
+    "link_density": 0.8461538461538461,
+    "placeholder_documents_count": 93
   },
   "outputs": {
     "files": {
@@ -30464,10 +30737,10 @@ total_links: 308
   },
   "schema_version": 1,
   "summary": {
-    "total_documents": 362,
-    "total_h1": 365,
-    "total_h2": 2423,
-    "total_headings": 2788,
+    "total_documents": 364,
+    "total_h1": 367,
+    "total_h2": 2445,
+    "total_headings": 2812,
     "total_links": 308
   }
 }
@@ -30477,13 +30750,13 @@ total_links: 308
 
 ```yaml
 schema_version: 1
-generated_utc: '2026-01-29T20:27:46.367779+00:00'
+generated_utc: '2026-01-29T23:31:47.357418+00:00'
 repo_root: C:\Users\genet\repo_studios
 summary:
-  total_documents: 362
-  total_h1: 365
-  total_h2: 2423
-  total_headings: 2788
+  total_documents: 364
+  total_h1: 367
+  total_h2: 2445
+  total_headings: 2812
   total_links: 308
 metrics:
   documents_per_directory:
@@ -30497,11 +30770,11 @@ metrics:
     count: 17
   - directory: .repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster
     count: 12
+  - directory: .repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans
+    count: 11
   - directory: .repo_studios/docs/standards/global
     count: 11
   - directory: .repo_studios/command_center/docs/phase_7
-    count: 10
-  - directory: .repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans
     count: 10
   - directory: docs/standards/global
     count: 9
@@ -30530,10 +30803,10 @@ metrics:
   documents_missing_description_count: 41
   documents_without_h1_count: 16
   documents_without_h2_count: 17
-  placeholder_documents_count: 92
+  placeholder_documents_count: 93
   duplicate_slug_count: 7
   documents_outside_docs_tree_count: 188
-  link_density: 0.850828729281768
+  link_density: 0.8461538461538461
 advisories:
   documents_missing_description:
   - .copilot_todo.md
@@ -44067,6 +44340,114 @@ documents:
     - compliance
   contains_placeholder: true
 - folder: .repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans
+  filename: .repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage12_metaprompts.md
+  slug: stage-12-metaprompts-phase-4-walkthrough
+  h1_headings:
+  - title: "Stage 12 Metaprompts \u2014 Phase 4 Walkthrough"
+    slug: stage-12-metaprompts-phase-4-walkthrough
+    line: 28
+  h2_headings:
+  - title: How to Use These Prompts
+    slug: how-to-use-these-prompts
+    line: 38
+    parent_title: "Stage 12 Metaprompts \u2014 Phase 4 Walkthrough"
+    parent_slug: stage-12-metaprompts-phase-4-walkthrough
+  - title: "Prompt 1 \u2014 Context and Purpose"
+    slug: prompt-1-context-and-purpose
+    line: 49
+    parent_title: "Stage 12 Metaprompts \u2014 Phase 4 Walkthrough"
+    parent_slug: stage-12-metaprompts-phase-4-walkthrough
+  - title: "Prompt 2 \u2014 Select Template and Understand Structure"
+    slug: prompt-2-select-template-and-understand-structure
+    line: 80
+    parent_title: "Stage 12 Metaprompts \u2014 Phase 4 Walkthrough"
+    parent_slug: stage-12-metaprompts-phase-4-walkthrough
+  - title: "Prompt 3 \u2014 Select Script from Roster (Ignore Legacy)"
+    slug: prompt-3-select-script-from-roster-ignore-legacy
+    line: 112
+    parent_title: "Stage 12 Metaprompts \u2014 Phase 4 Walkthrough"
+    parent_slug: stage-12-metaprompts-phase-4-walkthrough
+  - title: "Prompt 4 \u2014 Inspect Script and Document Issues"
+    slug: prompt-4-inspect-script-and-document-issues
+    line: 140
+    parent_title: "Stage 12 Metaprompts \u2014 Phase 4 Walkthrough"
+    parent_slug: stage-12-metaprompts-phase-4-walkthrough
+  - title: "Prompt 5 \u2014 Resolve Issues"
+    slug: prompt-5-resolve-issues
+    line: 186
+    parent_title: "Stage 12 Metaprompts \u2014 Phase 4 Walkthrough"
+    parent_slug: stage-12-metaprompts-phase-4-walkthrough
+  - title: "Prompt 6 \u2014 Verify Ruff/Mypy/Tests Pass"
+    slug: prompt-6-verify-ruffmypytests-pass
+    line: 217
+    parent_title: "Stage 12 Metaprompts \u2014 Phase 4 Walkthrough"
+    parent_slug: stage-12-metaprompts-phase-4-walkthrough
+  - title: "Prompt 7 \u2014 Prepare Tier-2 Roster Section"
+    slug: prompt-7-prepare-tier-2-roster-section
+    line: 262
+    parent_title: "Stage 12 Metaprompts \u2014 Phase 4 Walkthrough"
+    parent_slug: stage-12-metaprompts-phase-4-walkthrough
+  - title: "Prompt 8 \u2014 Replace Roster Section and Review"
+    slug: prompt-8-replace-roster-section-and-review
+    line: 338
+    parent_title: "Stage 12 Metaprompts \u2014 Phase 4 Walkthrough"
+    parent_slug: stage-12-metaprompts-phase-4-walkthrough
+  - title: "Quick Reference \u2014 File Locations"
+    slug: quick-reference-file-locations
+    line: 382
+    parent_title: "Stage 12 Metaprompts \u2014 Phase 4 Walkthrough"
+    parent_slug: stage-12-metaprompts-phase-4-walkthrough
+  - title: "Quick Reference \u2014 Universal Interface Contract"
+    slug: quick-reference-universal-interface-contract
+    line: 393
+    parent_title: "Stage 12 Metaprompts \u2014 Phase 4 Walkthrough"
+    parent_slug: stage-12-metaprompts-phase-4-walkthrough
+  - title: Update Log
+    slug: update-log
+    line: 411
+    parent_title: "Stage 12 Metaprompts \u2014 Phase 4 Walkthrough"
+    parent_slug: stage-12-metaprompts-phase-4-walkthrough
+  links: []
+  description: "1. Copy a prompt into your conversation with the coding agent 2. Wait\
+    \ for the agent to complete the work before moving to the next prompt 3. If issues\
+    \ arise, resolve them before proceeding 4. Each prompt is self-contained but assumes\
+    \ prior\u2026"
+  size_bytes: 13311
+  modified_utc: '2026-01-29T23:22:49.323196+00:00'
+  tags:
+  - pipeline
+  - healthview
+  - phase-4
+  - metaprompt
+  owners:
+  - repo_studios_team@rainmakerprotocol.dev
+  status: active
+  frontmatter:
+    title: "Stage 12 Metaprompts \u2014 Phase 4 Walkthrough"
+    tier: tier-2
+    audience:
+    - coding_agent
+    - human_developer
+    owners:
+    - repo_studios_team@rainmakerprotocol.dev
+    role:
+    - metaprompt
+    - workflow-guide
+    status: active
+    version: 1.0.0
+    updated_at: '2026-01-29'
+    tags:
+    - pipeline
+    - healthview
+    - phase-4
+    - metaprompt
+    related_files:
+    - .repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage12_template_development_plan.md
+    - .repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/templates/tier2_producer_template.md
+    - .repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_test_execution_telemetry_roster.md
+    - .github/instructions/markdown.instructions.md
+  contains_placeholder: false
+- folder: .repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans
   filename: .repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage12_template_development_plan.md
   slug: stage-12-template-development-plan
   h1_headings:
@@ -44106,34 +44487,34 @@ documents:
     parent_slug: stage-12-template-development-plan
   - title: "Phase 5: Template Finalization \u2705"
     slug: phase-5-template-finalization
-    line: 235
+    line: 236
     parent_title: Stage 12 Template Development Plan
     parent_slug: stage-12-template-development-plan
   - title: 'Phase 6: Apply Templates to Existing Stage 1.1 Scripts'
     slug: phase-6-apply-templates-to-existing-stage-11-scripts
-    line: 269
+    line: 270
     parent_title: Stage 12 Template Development Plan
     parent_slug: stage-12-template-development-plan
   - title: 'Checkpoint: Template Maturity Assessment'
     slug: checkpoint-template-maturity-assessment
-    line: 284
+    line: 285
     parent_title: Stage 12 Template Development Plan
     parent_slug: stage-12-template-development-plan
   - title: Notes
     slug: notes
-    line: 300
+    line: 301
     parent_title: Stage 12 Template Development Plan
     parent_slug: stage-12-template-development-plan
   - title: Evidence Log
     slug: evidence-log
-    line: 310
+    line: 311
     parent_title: Stage 12 Template Development Plan
     parent_slug: stage-12-template-development-plan
   links: []
   description: This document is designed as a reusable template for similar development
     efforts.
-  size_bytes: 15221
-  modified_utc: '2026-01-28T11:28:08.825536+00:00'
+  size_bytes: 15223
+  modified_utc: '2026-01-29T22:51:03.440599+00:00'
   tags: []
   owners: []
   status: null
@@ -46254,27 +46635,27 @@ documents:
     parent_slug: tier-2-roster-stage-21-docs-health-overview
   - title: 4. Signals & Telemetry
     slug: 4-signals-telemetry
-    line: 1707
+    line: 1406
     parent_title: "Tier-2 Roster \u2014 Stage 2.1 Docs Health Overview"
     parent_slug: tier-2-roster-stage-21-docs-health-overview
   - title: 5. Dependencies & Stop-Gates
     slug: 5-dependencies-stop-gates
-    line: 1725
+    line: 1424
     parent_title: "Tier-2 Roster \u2014 Stage 2.1 Docs Health Overview"
     parent_slug: tier-2-roster-stage-21-docs-health-overview
   - title: 6. Instruction Block (Required by Tier Rules)
     slug: 6-instruction-block-required-by-tier-rules
-    line: 1746
+    line: 1445
     parent_title: "Tier-2 Roster \u2014 Stage 2.1 Docs Health Overview"
     parent_slug: tier-2-roster-stage-21-docs-health-overview
   - title: 7. Agent Automation Block
     slug: 7-agent-automation-block
-    line: 1758
+    line: 1457
     parent_title: "Tier-2 Roster \u2014 Stage 2.1 Docs Health Overview"
     parent_slug: tier-2-roster-stage-21-docs-health-overview
   - title: 8. Update Log
     slug: 8-update-log
-    line: 1789
+    line: 1488
     parent_title: "Tier-2 Roster \u2014 Stage 2.1 Docs Health Overview"
     parent_slug: tier-2-roster-stage-21-docs-health-overview
   links:
@@ -46288,8 +46669,8 @@ documents:
   - '#s21r-008-generate-undocumented-logic-report'
   - '#s21r-009-aggregate-docs-health-signals'
   description: '`tier1_healthview_orchestration_pipeline.md`.'
-  size_bytes: 70784
-  modified_utc: '2026-01-29T20:25:30.235761+00:00'
+  size_bytes: 58384
+  modified_utc: '2026-01-29T22:50:59.976703+00:00'
   tags:
   - pipeline
   - healthview
@@ -48485,7 +48866,7 @@ documents:
   links: []
   description: Producers, Consumers, Aggregators, Summarizers.
   size_bytes: 25717
-  modified_utc: '2026-01-29T20:25:37.048127+00:00'
+  modified_utc: '2026-01-29T20:29:47.917582+00:00'
   tags:
   - stage-2.1
   - producer
@@ -48518,6 +48899,102 @@ documents:
     - .repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_docs_health_overview_roster.md
     - .repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier3_scripts/docs_health_overview/tier3_generate_doc_index.yaml
     - .repo_studios/tests/tests_producers/test_generate_doc_index.py
+    - .repo_studios/command_center/scripts/libraries/database_integration.py
+  contains_placeholder: true
+- folder: .repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1
+  filename: .repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-003_generate_anchor_inventory_build.md
+  slug: script-build-template-generateanchorinventorypy
+  h1_headings:
+  - title: "Script Build Template \u2014 generate_anchor_inventory.py"
+    slug: script-build-template-generateanchorinventorypy
+    line: 29
+  h2_headings:
+  - title: 1. Script Identity
+    slug: 1-script-identity
+    line: 46
+    parent_title: "Script Build Template \u2014 generate_anchor_inventory.py"
+    parent_slug: script-build-template-generateanchorinventorypy
+  - title: 2. Current State Analysis
+    slug: 2-current-state-analysis
+    line: 86
+    parent_title: "Script Build Template \u2014 generate_anchor_inventory.py"
+    parent_slug: script-build-template-generateanchorinventorypy
+  - title: 2.6 Agent Discoverability (Tier-3 YAML)
+    slug: 26-agent-discoverability-tier-3-yaml
+    line: 255
+    parent_title: "Script Build Template \u2014 generate_anchor_inventory.py"
+    parent_slug: script-build-template-generateanchorinventorypy
+  - title: 2.7 Database Integration Preparation
+    slug: 27-database-integration-preparation
+    line: 269
+    parent_title: "Script Build Template \u2014 generate_anchor_inventory.py"
+    parent_slug: script-build-template-generateanchorinventorypy
+  - title: 3. Gap Analysis
+    slug: 3-gap-analysis
+    line: 283
+    parent_title: "Script Build Template \u2014 generate_anchor_inventory.py"
+    parent_slug: script-build-template-generateanchorinventorypy
+  - title: 4. Changes Made
+    slug: 4-changes-made
+    line: 309
+    parent_title: "Script Build Template \u2014 generate_anchor_inventory.py"
+    parent_slug: script-build-template-generateanchorinventorypy
+  - title: 5. Evidence
+    slug: 5-evidence
+    line: 332
+    parent_title: "Script Build Template \u2014 generate_anchor_inventory.py"
+    parent_slug: script-build-template-generateanchorinventorypy
+  - title: 6. Orchestrator Integration
+    slug: 6-orchestrator-integration
+    line: 354
+    parent_title: "Script Build Template \u2014 generate_anchor_inventory.py"
+    parent_slug: script-build-template-generateanchorinventorypy
+  - title: 7. Completion
+    slug: 7-completion
+    line: 395
+    parent_title: "Script Build Template \u2014 generate_anchor_inventory.py"
+    parent_slug: script-build-template-generateanchorinventorypy
+  - title: 8. Version History
+    slug: 8-version-history
+    line: 470
+    parent_title: "Script Build Template \u2014 generate_anchor_inventory.py"
+    parent_slug: script-build-template-generateanchorinventorypy
+  links: []
+  description: Producers, Consumers, Aggregators, Summarizers.
+  size_bytes: 18399
+  modified_utc: '2026-01-29T22:37:38.153121+00:00'
+  tags:
+  - stage-2.1
+  - producer
+  - phase-4
+  - S21R-003
+  owners:
+  - repo_studios_team@rainmakerprotocol.dev
+  status: complete
+  frontmatter:
+    title: "Script Build Template \u2014 generate_anchor_inventory.py"
+    tier: working-document
+    audience:
+    - coding_agent
+    - human_developer
+    owners:
+    - repo_studios_team@rainmakerprotocol.dev
+    role:
+    - build-template
+    - phase-4-artifact
+    status: complete
+    version: 1.0.0
+    updated_at: '2026-01-29'
+    tags:
+    - stage-2.1
+    - producer
+    - phase-4
+    - S21R-003
+    related_files:
+    - .repo_studios/scripts/producers/generate_anchor_inventory.py
+    - .repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_docs_health_overview_roster.md
+    - .repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier3_scripts/docs_health_overview/tier3_generate_anchor_inventory.yaml
+    - .repo_studios/tests/tests_producers/test_generate_anchor_inventory.py
     - .repo_studios/command_center/scripts/libraries/database_integration.py
   contains_placeholder: true
 - folder: .repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs
@@ -55058,18 +55535,31 @@ folder,filename,level,heading,slug,parent_slug,description,size_bytes,modified_u
 .repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/docstring_compliance_plan.md,h2,Summary Statistics,summary-statistics,docstring-compliance-plan,"Telemetry runs."")",16987,2026-01-02T23:09:44.580423+00:00,docstring;google-style;healthview;pipeline;compliance,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,https://google.github.io/styleguide/pyguide.html#38-comments-and-docstrings
 .repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/docstring_compliance_plan.md,h2,Progress Log,progress-log,docstring-compliance-plan,"Telemetry runs."")",16987,2026-01-02T23:09:44.580423+00:00,docstring;google-style;healthview;pipeline;compliance,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,https://google.github.io/styleguide/pyguide.html#38-comments-and-docstrings
 .repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/docstring_compliance_plan.md,h2,Update Log,update-log,docstring-compliance-plan,"Telemetry runs."")",16987,2026-01-02T23:09:44.580423+00:00,docstring;google-style;healthview;pipeline;compliance,repo_studios_team@rainmakerprotocol.dev,in-progress,yes,https://google.github.io/styleguide/pyguide.html#38-comments-and-docstrings
-.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage12_template_development_plan.md,h1,Stage 12 Template Development Plan,stage-12-template-development-plan,,This document is designed as a reusable template for similar development efforts.,15221,2026-01-28T11:28:08.825536+00:00,,,,yes,
-.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage12_template_development_plan.md,h2,How to Reuse This Plan,how-to-reuse-this-plan,stage-12-template-development-plan,This document is designed as a reusable template for similar development efforts.,15221,2026-01-28T11:28:08.825536+00:00,,,,yes,
-.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage12_template_development_plan.md,h2,Overview,overview,stage-12-template-development-plan,This document is designed as a reusable template for similar development efforts.,15221,2026-01-28T11:28:08.825536+00:00,,,,yes,
-.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage12_template_development_plan.md,h2,Phase 1: Seed Stage 12 and Orchestrator Tier-2 ✅,phase-1-seed-stage-12-and-orchestrator-tier-2,stage-12-template-development-plan,This document is designed as a reusable template for similar development efforts.,15221,2026-01-28T11:28:08.825536+00:00,,,,yes,
-.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage12_template_development_plan.md,h2,Phase 2: Review Existing Orchestrators for Patterns ✅,phase-2-review-existing-orchestrators-for-patterns,stage-12-template-development-plan,This document is designed as a reusable template for similar development efforts.,15221,2026-01-28T11:28:08.825536+00:00,,,,yes,
-.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage12_template_development_plan.md,h2,Phase 3: Order Stage 11.1 Script Roster ✅,phase-3-order-stage-111-script-roster,stage-12-template-development-plan,This document is designed as a reusable template for similar development efforts.,15221,2026-01-28T11:28:08.825536+00:00,,,,yes,
-.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage12_template_development_plan.md,h2,Phase 4: Per-Script Process (Repeat for Each Script) ✅,phase-4-per-script-process-repeat-for-each-script,stage-12-template-development-plan,This document is designed as a reusable template for similar development efforts.,15221,2026-01-28T11:28:08.825536+00:00,,,,yes,
-.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage12_template_development_plan.md,h2,Phase 5: Template Finalization ✅,phase-5-template-finalization,stage-12-template-development-plan,This document is designed as a reusable template for similar development efforts.,15221,2026-01-28T11:28:08.825536+00:00,,,,yes,
-.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage12_template_development_plan.md,h2,Phase 6: Apply Templates to Existing Stage 1.1 Scripts,phase-6-apply-templates-to-existing-stage-11-scripts,stage-12-template-development-plan,This document is designed as a reusable template for similar development efforts.,15221,2026-01-28T11:28:08.825536+00:00,,,,yes,
-.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage12_template_development_plan.md,h2,Checkpoint: Template Maturity Assessment,checkpoint-template-maturity-assessment,stage-12-template-development-plan,This document is designed as a reusable template for similar development efforts.,15221,2026-01-28T11:28:08.825536+00:00,,,,yes,
-.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage12_template_development_plan.md,h2,Notes,notes,stage-12-template-development-plan,This document is designed as a reusable template for similar development efforts.,15221,2026-01-28T11:28:08.825536+00:00,,,,yes,
-.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage12_template_development_plan.md,h2,Evidence Log,evidence-log,stage-12-template-development-plan,This document is designed as a reusable template for similar development efforts.,15221,2026-01-28T11:28:08.825536+00:00,,,,yes,
+.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage12_metaprompts.md,h1,Stage 12 Metaprompts — Phase 4 Walkthrough,stage-12-metaprompts-phase-4-walkthrough,,"1. Copy a prompt into your conversation with the coding agent 2. Wait for the agent to complete the work before moving to the next prompt 3. If issues arise, resolve them before proceeding 4. Each prompt is self-contained but assumes prior…",13311,2026-01-29T23:22:49.323196+00:00,pipeline;healthview;phase-4;metaprompt,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage12_metaprompts.md,h2,How to Use These Prompts,how-to-use-these-prompts,stage-12-metaprompts-phase-4-walkthrough,"1. Copy a prompt into your conversation with the coding agent 2. Wait for the agent to complete the work before moving to the next prompt 3. If issues arise, resolve them before proceeding 4. Each prompt is self-contained but assumes prior…",13311,2026-01-29T23:22:49.323196+00:00,pipeline;healthview;phase-4;metaprompt,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage12_metaprompts.md,h2,Prompt 1 — Context and Purpose,prompt-1-context-and-purpose,stage-12-metaprompts-phase-4-walkthrough,"1. Copy a prompt into your conversation with the coding agent 2. Wait for the agent to complete the work before moving to the next prompt 3. If issues arise, resolve them before proceeding 4. Each prompt is self-contained but assumes prior…",13311,2026-01-29T23:22:49.323196+00:00,pipeline;healthview;phase-4;metaprompt,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage12_metaprompts.md,h2,Prompt 2 — Select Template and Understand Structure,prompt-2-select-template-and-understand-structure,stage-12-metaprompts-phase-4-walkthrough,"1. Copy a prompt into your conversation with the coding agent 2. Wait for the agent to complete the work before moving to the next prompt 3. If issues arise, resolve them before proceeding 4. Each prompt is self-contained but assumes prior…",13311,2026-01-29T23:22:49.323196+00:00,pipeline;healthview;phase-4;metaprompt,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage12_metaprompts.md,h2,Prompt 3 — Select Script from Roster (Ignore Legacy),prompt-3-select-script-from-roster-ignore-legacy,stage-12-metaprompts-phase-4-walkthrough,"1. Copy a prompt into your conversation with the coding agent 2. Wait for the agent to complete the work before moving to the next prompt 3. If issues arise, resolve them before proceeding 4. Each prompt is self-contained but assumes prior…",13311,2026-01-29T23:22:49.323196+00:00,pipeline;healthview;phase-4;metaprompt,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage12_metaprompts.md,h2,Prompt 4 — Inspect Script and Document Issues,prompt-4-inspect-script-and-document-issues,stage-12-metaprompts-phase-4-walkthrough,"1. Copy a prompt into your conversation with the coding agent 2. Wait for the agent to complete the work before moving to the next prompt 3. If issues arise, resolve them before proceeding 4. Each prompt is self-contained but assumes prior…",13311,2026-01-29T23:22:49.323196+00:00,pipeline;healthview;phase-4;metaprompt,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage12_metaprompts.md,h2,Prompt 5 — Resolve Issues,prompt-5-resolve-issues,stage-12-metaprompts-phase-4-walkthrough,"1. Copy a prompt into your conversation with the coding agent 2. Wait for the agent to complete the work before moving to the next prompt 3. If issues arise, resolve them before proceeding 4. Each prompt is self-contained but assumes prior…",13311,2026-01-29T23:22:49.323196+00:00,pipeline;healthview;phase-4;metaprompt,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage12_metaprompts.md,h2,Prompt 6 — Verify Ruff/Mypy/Tests Pass,prompt-6-verify-ruffmypytests-pass,stage-12-metaprompts-phase-4-walkthrough,"1. Copy a prompt into your conversation with the coding agent 2. Wait for the agent to complete the work before moving to the next prompt 3. If issues arise, resolve them before proceeding 4. Each prompt is self-contained but assumes prior…",13311,2026-01-29T23:22:49.323196+00:00,pipeline;healthview;phase-4;metaprompt,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage12_metaprompts.md,h2,Prompt 7 — Prepare Tier-2 Roster Section,prompt-7-prepare-tier-2-roster-section,stage-12-metaprompts-phase-4-walkthrough,"1. Copy a prompt into your conversation with the coding agent 2. Wait for the agent to complete the work before moving to the next prompt 3. If issues arise, resolve them before proceeding 4. Each prompt is self-contained but assumes prior…",13311,2026-01-29T23:22:49.323196+00:00,pipeline;healthview;phase-4;metaprompt,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage12_metaprompts.md,h2,Prompt 8 — Replace Roster Section and Review,prompt-8-replace-roster-section-and-review,stage-12-metaprompts-phase-4-walkthrough,"1. Copy a prompt into your conversation with the coding agent 2. Wait for the agent to complete the work before moving to the next prompt 3. If issues arise, resolve them before proceeding 4. Each prompt is self-contained but assumes prior…",13311,2026-01-29T23:22:49.323196+00:00,pipeline;healthview;phase-4;metaprompt,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage12_metaprompts.md,h2,Quick Reference — File Locations,quick-reference-file-locations,stage-12-metaprompts-phase-4-walkthrough,"1. Copy a prompt into your conversation with the coding agent 2. Wait for the agent to complete the work before moving to the next prompt 3. If issues arise, resolve them before proceeding 4. Each prompt is self-contained but assumes prior…",13311,2026-01-29T23:22:49.323196+00:00,pipeline;healthview;phase-4;metaprompt,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage12_metaprompts.md,h2,Quick Reference — Universal Interface Contract,quick-reference-universal-interface-contract,stage-12-metaprompts-phase-4-walkthrough,"1. Copy a prompt into your conversation with the coding agent 2. Wait for the agent to complete the work before moving to the next prompt 3. If issues arise, resolve them before proceeding 4. Each prompt is self-contained but assumes prior…",13311,2026-01-29T23:22:49.323196+00:00,pipeline;healthview;phase-4;metaprompt,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage12_metaprompts.md,h2,Update Log,update-log,stage-12-metaprompts-phase-4-walkthrough,"1. Copy a prompt into your conversation with the coding agent 2. Wait for the agent to complete the work before moving to the next prompt 3. If issues arise, resolve them before proceeding 4. Each prompt is self-contained but assumes prior…",13311,2026-01-29T23:22:49.323196+00:00,pipeline;healthview;phase-4;metaprompt,repo_studios_team@rainmakerprotocol.dev,active,no,
+.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage12_template_development_plan.md,h1,Stage 12 Template Development Plan,stage-12-template-development-plan,,This document is designed as a reusable template for similar development efforts.,15223,2026-01-29T22:51:03.440599+00:00,,,,yes,
+.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage12_template_development_plan.md,h2,How to Reuse This Plan,how-to-reuse-this-plan,stage-12-template-development-plan,This document is designed as a reusable template for similar development efforts.,15223,2026-01-29T22:51:03.440599+00:00,,,,yes,
+.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage12_template_development_plan.md,h2,Overview,overview,stage-12-template-development-plan,This document is designed as a reusable template for similar development efforts.,15223,2026-01-29T22:51:03.440599+00:00,,,,yes,
+.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage12_template_development_plan.md,h2,Phase 1: Seed Stage 12 and Orchestrator Tier-2 ✅,phase-1-seed-stage-12-and-orchestrator-tier-2,stage-12-template-development-plan,This document is designed as a reusable template for similar development efforts.,15223,2026-01-29T22:51:03.440599+00:00,,,,yes,
+.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage12_template_development_plan.md,h2,Phase 2: Review Existing Orchestrators for Patterns ✅,phase-2-review-existing-orchestrators-for-patterns,stage-12-template-development-plan,This document is designed as a reusable template for similar development efforts.,15223,2026-01-29T22:51:03.440599+00:00,,,,yes,
+.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage12_template_development_plan.md,h2,Phase 3: Order Stage 11.1 Script Roster ✅,phase-3-order-stage-111-script-roster,stage-12-template-development-plan,This document is designed as a reusable template for similar development efforts.,15223,2026-01-29T22:51:03.440599+00:00,,,,yes,
+.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage12_template_development_plan.md,h2,Phase 4: Per-Script Process (Repeat for Each Script) ✅,phase-4-per-script-process-repeat-for-each-script,stage-12-template-development-plan,This document is designed as a reusable template for similar development efforts.,15223,2026-01-29T22:51:03.440599+00:00,,,,yes,
+.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage12_template_development_plan.md,h2,Phase 5: Template Finalization ✅,phase-5-template-finalization,stage-12-template-development-plan,This document is designed as a reusable template for similar development efforts.,15223,2026-01-29T22:51:03.440599+00:00,,,,yes,
+.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage12_template_development_plan.md,h2,Phase 6: Apply Templates to Existing Stage 1.1 Scripts,phase-6-apply-templates-to-existing-stage-11-scripts,stage-12-template-development-plan,This document is designed as a reusable template for similar development efforts.,15223,2026-01-29T22:51:03.440599+00:00,,,,yes,
+.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage12_template_development_plan.md,h2,Checkpoint: Template Maturity Assessment,checkpoint-template-maturity-assessment,stage-12-template-development-plan,This document is designed as a reusable template for similar development efforts.,15223,2026-01-29T22:51:03.440599+00:00,,,,yes,
+.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage12_template_development_plan.md,h2,Notes,notes,stage-12-template-development-plan,This document is designed as a reusable template for similar development efforts.,15223,2026-01-29T22:51:03.440599+00:00,,,,yes,
+.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage12_template_development_plan.md,h2,Evidence Log,evidence-log,stage-12-template-development-plan,This document is designed as a reusable template for similar development efforts.,15223,2026-01-29T22:51:03.440599+00:00,,,,yes,
 .repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage_11_1_implementation_plan.md,h1,Stage 11.1 Implementation Plan — Available Scripts (Holding Area),stage-111-implementation-plan-available-scripts-holding-area,,Stage 11.1 is a **holding area** for scripts that are available to HealthView but **not yet wired into any orchestrator chain** (Stages 1.1–7). This plan tracks HOP migration work needed to make these scripts promotion-ready.,9337,2025-12-31T17:25:50.134299+00:00,,,,no,../tier2_roster/tier2_available_scripts_roster.md
 .repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage_11_1_implementation_plan.md,h2,Purpose,purpose,stage-111-implementation-plan-available-scripts-holding-area,Stage 11.1 is a **holding area** for scripts that are available to HealthView but **not yet wired into any orchestrator chain** (Stages 1.1–7). This plan tracks HOP migration work needed to make these scripts promotion-ready.,9337,2025-12-31T17:25:50.134299+00:00,,,,no,../tier2_roster/tier2_available_scripts_roster.md
 .repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage_11_1_implementation_plan.md,h2,Scripts Inventory (12 total),scripts-inventory-12-total,stage-111-implementation-plan-available-scripts-holding-area,Stage 11.1 is a **holding area** for scripts that are available to HealthView but **not yet wired into any orchestrator chain** (Stages 1.1–7). This plan tracks HOP migration work needed to make these scripts promotion-ready.,9337,2025-12-31T17:25:50.134299+00:00,,,,no,../tier2_roster/tier2_available_scripts_roster.md
@@ -55321,16 +55811,16 @@ folder,filename,level,heading,slug,parent_slug,description,size_bytes,modified_u
 .repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_dependency_import_hygiene_roster.md,h2,6. Instruction Block (Required by Tier Rules),6-instruction-block-required-by-tier-rules,tier-2-roster-stage-41-dependency-import-hygiene,`tier1_healthview_orchestration_pipeline.md`.,44319,2026-01-15T01:43:07.548110+00:00,pipeline;healthview;tier-2;stage-4-1,repo_studios_team@rainmakerprotocol.dev,seeded,yes,
 .repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_dependency_import_hygiene_roster.md,h2,7. Agent Automation Block,7-agent-automation-block,tier-2-roster-stage-41-dependency-import-hygiene,`tier1_healthview_orchestration_pipeline.md`.,44319,2026-01-15T01:43:07.548110+00:00,pipeline;healthview;tier-2;stage-4-1,repo_studios_team@rainmakerprotocol.dev,seeded,yes,
 .repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_dependency_import_hygiene_roster.md,h2,8. Update Log,8-update-log,tier-2-roster-stage-41-dependency-import-hygiene,`tier1_healthview_orchestration_pipeline.md`.,44319,2026-01-15T01:43:07.548110+00:00,pipeline;healthview;tier-2;stage-4-1,repo_studios_team@rainmakerprotocol.dev,seeded,yes,
-.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_docs_health_overview_roster.md,h1,Tier-2 Roster — Stage 2.1 Docs Health Overview,tier-2-roster-stage-21-docs-health-overview,,`tier1_healthview_orchestration_pipeline.md`.,70784,2026-01-29T20:25:30.235761+00:00,pipeline;healthview;hop;tier-2;stage-2-1,repo_studios_team@rainmakerprotocol.dev,seeded,yes,#s21r-001-docs-health-overview-orchestrator;#s21r-002-generate-doc-index;#s21r-003-generate-anchor-inventory;#s21r-004-validate-markdown-anchors;#s21r-005-verify-docs-integrity;#s21r-006-validate-metrics-anchor-stubs;#s21r-007-generate-code-doc-churn-report;#s21r-008-generate-undocumented-logic-report;#s21r-009-aggregate-docs-health-signals
-.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_docs_health_overview_roster.md,h2,0. Instruction Block for Editors & AI Assistants,0-instruction-block-for-editors-ai-assistants,tier-2-roster-stage-21-docs-health-overview,`tier1_healthview_orchestration_pipeline.md`.,70784,2026-01-29T20:25:30.235761+00:00,pipeline;healthview;hop;tier-2;stage-2-1,repo_studios_team@rainmakerprotocol.dev,seeded,yes,#s21r-001-docs-health-overview-orchestrator;#s21r-002-generate-doc-index;#s21r-003-generate-anchor-inventory;#s21r-004-validate-markdown-anchors;#s21r-005-verify-docs-integrity;#s21r-006-validate-metrics-anchor-stubs;#s21r-007-generate-code-doc-churn-report;#s21r-008-generate-undocumented-logic-report;#s21r-009-aggregate-docs-health-signals
-.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_docs_health_overview_roster.md,h2,1. Goals & Success Criteria,1-goals-success-criteria,tier-2-roster-stage-21-docs-health-overview,`tier1_healthview_orchestration_pipeline.md`.,70784,2026-01-29T20:25:30.235761+00:00,pipeline;healthview;hop;tier-2;stage-2-1,repo_studios_team@rainmakerprotocol.dev,seeded,yes,#s21r-001-docs-health-overview-orchestrator;#s21r-002-generate-doc-index;#s21r-003-generate-anchor-inventory;#s21r-004-validate-markdown-anchors;#s21r-005-verify-docs-integrity;#s21r-006-validate-metrics-anchor-stubs;#s21r-007-generate-code-doc-churn-report;#s21r-008-generate-undocumented-logic-report;#s21r-009-aggregate-docs-health-signals
-.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_docs_health_overview_roster.md,h2,2. System Context,2-system-context,tier-2-roster-stage-21-docs-health-overview,`tier1_healthview_orchestration_pipeline.md`.,70784,2026-01-29T20:25:30.235761+00:00,pipeline;healthview;hop;tier-2;stage-2-1,repo_studios_team@rainmakerprotocol.dev,seeded,yes,#s21r-001-docs-health-overview-orchestrator;#s21r-002-generate-doc-index;#s21r-003-generate-anchor-inventory;#s21r-004-validate-markdown-anchors;#s21r-005-verify-docs-integrity;#s21r-006-validate-metrics-anchor-stubs;#s21r-007-generate-code-doc-churn-report;#s21r-008-generate-undocumented-logic-report;#s21r-009-aggregate-docs-health-signals
-.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_docs_health_overview_roster.md,h2,3. Stage Narrative — Stage 2.1 Docs Health Overview,3-stage-narrative-stage-21-docs-health-overview,tier-2-roster-stage-21-docs-health-overview,`tier1_healthview_orchestration_pipeline.md`.,70784,2026-01-29T20:25:30.235761+00:00,pipeline;healthview;hop;tier-2;stage-2-1,repo_studios_team@rainmakerprotocol.dev,seeded,yes,#s21r-001-docs-health-overview-orchestrator;#s21r-002-generate-doc-index;#s21r-003-generate-anchor-inventory;#s21r-004-validate-markdown-anchors;#s21r-005-verify-docs-integrity;#s21r-006-validate-metrics-anchor-stubs;#s21r-007-generate-code-doc-churn-report;#s21r-008-generate-undocumented-logic-report;#s21r-009-aggregate-docs-health-signals
-.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_docs_health_overview_roster.md,h2,4. Signals & Telemetry,4-signals-telemetry,tier-2-roster-stage-21-docs-health-overview,`tier1_healthview_orchestration_pipeline.md`.,70784,2026-01-29T20:25:30.235761+00:00,pipeline;healthview;hop;tier-2;stage-2-1,repo_studios_team@rainmakerprotocol.dev,seeded,yes,#s21r-001-docs-health-overview-orchestrator;#s21r-002-generate-doc-index;#s21r-003-generate-anchor-inventory;#s21r-004-validate-markdown-anchors;#s21r-005-verify-docs-integrity;#s21r-006-validate-metrics-anchor-stubs;#s21r-007-generate-code-doc-churn-report;#s21r-008-generate-undocumented-logic-report;#s21r-009-aggregate-docs-health-signals
-.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_docs_health_overview_roster.md,h2,5. Dependencies & Stop-Gates,5-dependencies-stop-gates,tier-2-roster-stage-21-docs-health-overview,`tier1_healthview_orchestration_pipeline.md`.,70784,2026-01-29T20:25:30.235761+00:00,pipeline;healthview;hop;tier-2;stage-2-1,repo_studios_team@rainmakerprotocol.dev,seeded,yes,#s21r-001-docs-health-overview-orchestrator;#s21r-002-generate-doc-index;#s21r-003-generate-anchor-inventory;#s21r-004-validate-markdown-anchors;#s21r-005-verify-docs-integrity;#s21r-006-validate-metrics-anchor-stubs;#s21r-007-generate-code-doc-churn-report;#s21r-008-generate-undocumented-logic-report;#s21r-009-aggregate-docs-health-signals
-.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_docs_health_overview_roster.md,h2,6. Instruction Block (Required by Tier Rules),6-instruction-block-required-by-tier-rules,tier-2-roster-stage-21-docs-health-overview,`tier1_healthview_orchestration_pipeline.md`.,70784,2026-01-29T20:25:30.235761+00:00,pipeline;healthview;hop;tier-2;stage-2-1,repo_studios_team@rainmakerprotocol.dev,seeded,yes,#s21r-001-docs-health-overview-orchestrator;#s21r-002-generate-doc-index;#s21r-003-generate-anchor-inventory;#s21r-004-validate-markdown-anchors;#s21r-005-verify-docs-integrity;#s21r-006-validate-metrics-anchor-stubs;#s21r-007-generate-code-doc-churn-report;#s21r-008-generate-undocumented-logic-report;#s21r-009-aggregate-docs-health-signals
-.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_docs_health_overview_roster.md,h2,7. Agent Automation Block,7-agent-automation-block,tier-2-roster-stage-21-docs-health-overview,`tier1_healthview_orchestration_pipeline.md`.,70784,2026-01-29T20:25:30.235761+00:00,pipeline;healthview;hop;tier-2;stage-2-1,repo_studios_team@rainmakerprotocol.dev,seeded,yes,#s21r-001-docs-health-overview-orchestrator;#s21r-002-generate-doc-index;#s21r-003-generate-anchor-inventory;#s21r-004-validate-markdown-anchors;#s21r-005-verify-docs-integrity;#s21r-006-validate-metrics-anchor-stubs;#s21r-007-generate-code-doc-churn-report;#s21r-008-generate-undocumented-logic-report;#s21r-009-aggregate-docs-health-signals
-.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_docs_health_overview_roster.md,h2,8. Update Log,8-update-log,tier-2-roster-stage-21-docs-health-overview,`tier1_healthview_orchestration_pipeline.md`.,70784,2026-01-29T20:25:30.235761+00:00,pipeline;healthview;hop;tier-2;stage-2-1,repo_studios_team@rainmakerprotocol.dev,seeded,yes,#s21r-001-docs-health-overview-orchestrator;#s21r-002-generate-doc-index;#s21r-003-generate-anchor-inventory;#s21r-004-validate-markdown-anchors;#s21r-005-verify-docs-integrity;#s21r-006-validate-metrics-anchor-stubs;#s21r-007-generate-code-doc-churn-report;#s21r-008-generate-undocumented-logic-report;#s21r-009-aggregate-docs-health-signals
+.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_docs_health_overview_roster.md,h1,Tier-2 Roster — Stage 2.1 Docs Health Overview,tier-2-roster-stage-21-docs-health-overview,,`tier1_healthview_orchestration_pipeline.md`.,58384,2026-01-29T22:50:59.976703+00:00,pipeline;healthview;hop;tier-2;stage-2-1,repo_studios_team@rainmakerprotocol.dev,seeded,yes,#s21r-001-docs-health-overview-orchestrator;#s21r-002-generate-doc-index;#s21r-003-generate-anchor-inventory;#s21r-004-validate-markdown-anchors;#s21r-005-verify-docs-integrity;#s21r-006-validate-metrics-anchor-stubs;#s21r-007-generate-code-doc-churn-report;#s21r-008-generate-undocumented-logic-report;#s21r-009-aggregate-docs-health-signals
+.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_docs_health_overview_roster.md,h2,0. Instruction Block for Editors & AI Assistants,0-instruction-block-for-editors-ai-assistants,tier-2-roster-stage-21-docs-health-overview,`tier1_healthview_orchestration_pipeline.md`.,58384,2026-01-29T22:50:59.976703+00:00,pipeline;healthview;hop;tier-2;stage-2-1,repo_studios_team@rainmakerprotocol.dev,seeded,yes,#s21r-001-docs-health-overview-orchestrator;#s21r-002-generate-doc-index;#s21r-003-generate-anchor-inventory;#s21r-004-validate-markdown-anchors;#s21r-005-verify-docs-integrity;#s21r-006-validate-metrics-anchor-stubs;#s21r-007-generate-code-doc-churn-report;#s21r-008-generate-undocumented-logic-report;#s21r-009-aggregate-docs-health-signals
+.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_docs_health_overview_roster.md,h2,1. Goals & Success Criteria,1-goals-success-criteria,tier-2-roster-stage-21-docs-health-overview,`tier1_healthview_orchestration_pipeline.md`.,58384,2026-01-29T22:50:59.976703+00:00,pipeline;healthview;hop;tier-2;stage-2-1,repo_studios_team@rainmakerprotocol.dev,seeded,yes,#s21r-001-docs-health-overview-orchestrator;#s21r-002-generate-doc-index;#s21r-003-generate-anchor-inventory;#s21r-004-validate-markdown-anchors;#s21r-005-verify-docs-integrity;#s21r-006-validate-metrics-anchor-stubs;#s21r-007-generate-code-doc-churn-report;#s21r-008-generate-undocumented-logic-report;#s21r-009-aggregate-docs-health-signals
+.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_docs_health_overview_roster.md,h2,2. System Context,2-system-context,tier-2-roster-stage-21-docs-health-overview,`tier1_healthview_orchestration_pipeline.md`.,58384,2026-01-29T22:50:59.976703+00:00,pipeline;healthview;hop;tier-2;stage-2-1,repo_studios_team@rainmakerprotocol.dev,seeded,yes,#s21r-001-docs-health-overview-orchestrator;#s21r-002-generate-doc-index;#s21r-003-generate-anchor-inventory;#s21r-004-validate-markdown-anchors;#s21r-005-verify-docs-integrity;#s21r-006-validate-metrics-anchor-stubs;#s21r-007-generate-code-doc-churn-report;#s21r-008-generate-undocumented-logic-report;#s21r-009-aggregate-docs-health-signals
+.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_docs_health_overview_roster.md,h2,3. Stage Narrative — Stage 2.1 Docs Health Overview,3-stage-narrative-stage-21-docs-health-overview,tier-2-roster-stage-21-docs-health-overview,`tier1_healthview_orchestration_pipeline.md`.,58384,2026-01-29T22:50:59.976703+00:00,pipeline;healthview;hop;tier-2;stage-2-1,repo_studios_team@rainmakerprotocol.dev,seeded,yes,#s21r-001-docs-health-overview-orchestrator;#s21r-002-generate-doc-index;#s21r-003-generate-anchor-inventory;#s21r-004-validate-markdown-anchors;#s21r-005-verify-docs-integrity;#s21r-006-validate-metrics-anchor-stubs;#s21r-007-generate-code-doc-churn-report;#s21r-008-generate-undocumented-logic-report;#s21r-009-aggregate-docs-health-signals
+.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_docs_health_overview_roster.md,h2,4. Signals & Telemetry,4-signals-telemetry,tier-2-roster-stage-21-docs-health-overview,`tier1_healthview_orchestration_pipeline.md`.,58384,2026-01-29T22:50:59.976703+00:00,pipeline;healthview;hop;tier-2;stage-2-1,repo_studios_team@rainmakerprotocol.dev,seeded,yes,#s21r-001-docs-health-overview-orchestrator;#s21r-002-generate-doc-index;#s21r-003-generate-anchor-inventory;#s21r-004-validate-markdown-anchors;#s21r-005-verify-docs-integrity;#s21r-006-validate-metrics-anchor-stubs;#s21r-007-generate-code-doc-churn-report;#s21r-008-generate-undocumented-logic-report;#s21r-009-aggregate-docs-health-signals
+.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_docs_health_overview_roster.md,h2,5. Dependencies & Stop-Gates,5-dependencies-stop-gates,tier-2-roster-stage-21-docs-health-overview,`tier1_healthview_orchestration_pipeline.md`.,58384,2026-01-29T22:50:59.976703+00:00,pipeline;healthview;hop;tier-2;stage-2-1,repo_studios_team@rainmakerprotocol.dev,seeded,yes,#s21r-001-docs-health-overview-orchestrator;#s21r-002-generate-doc-index;#s21r-003-generate-anchor-inventory;#s21r-004-validate-markdown-anchors;#s21r-005-verify-docs-integrity;#s21r-006-validate-metrics-anchor-stubs;#s21r-007-generate-code-doc-churn-report;#s21r-008-generate-undocumented-logic-report;#s21r-009-aggregate-docs-health-signals
+.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_docs_health_overview_roster.md,h2,6. Instruction Block (Required by Tier Rules),6-instruction-block-required-by-tier-rules,tier-2-roster-stage-21-docs-health-overview,`tier1_healthview_orchestration_pipeline.md`.,58384,2026-01-29T22:50:59.976703+00:00,pipeline;healthview;hop;tier-2;stage-2-1,repo_studios_team@rainmakerprotocol.dev,seeded,yes,#s21r-001-docs-health-overview-orchestrator;#s21r-002-generate-doc-index;#s21r-003-generate-anchor-inventory;#s21r-004-validate-markdown-anchors;#s21r-005-verify-docs-integrity;#s21r-006-validate-metrics-anchor-stubs;#s21r-007-generate-code-doc-churn-report;#s21r-008-generate-undocumented-logic-report;#s21r-009-aggregate-docs-health-signals
+.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_docs_health_overview_roster.md,h2,7. Agent Automation Block,7-agent-automation-block,tier-2-roster-stage-21-docs-health-overview,`tier1_healthview_orchestration_pipeline.md`.,58384,2026-01-29T22:50:59.976703+00:00,pipeline;healthview;hop;tier-2;stage-2-1,repo_studios_team@rainmakerprotocol.dev,seeded,yes,#s21r-001-docs-health-overview-orchestrator;#s21r-002-generate-doc-index;#s21r-003-generate-anchor-inventory;#s21r-004-validate-markdown-anchors;#s21r-005-verify-docs-integrity;#s21r-006-validate-metrics-anchor-stubs;#s21r-007-generate-code-doc-churn-report;#s21r-008-generate-undocumented-logic-report;#s21r-009-aggregate-docs-health-signals
+.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_docs_health_overview_roster.md,h2,8. Update Log,8-update-log,tier-2-roster-stage-21-docs-health-overview,`tier1_healthview_orchestration_pipeline.md`.,58384,2026-01-29T22:50:59.976703+00:00,pipeline;healthview;hop;tier-2;stage-2-1,repo_studios_team@rainmakerprotocol.dev,seeded,yes,#s21r-001-docs-health-overview-orchestrator;#s21r-002-generate-doc-index;#s21r-003-generate-anchor-inventory;#s21r-004-validate-markdown-anchors;#s21r-005-verify-docs-integrity;#s21r-006-validate-metrics-anchor-stubs;#s21r-007-generate-code-doc-churn-report;#s21r-008-generate-undocumented-logic-report;#s21r-009-aggregate-docs-health-signals
 .repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_fault_diagnostics_overview_roster.md,h1,Tier-2 Roster — Stage 3.1 Fault Diagnostics Overview,tier-2-roster-stage-31-fault-diagnostics-overview,,`tier1_healthview_orchestration_pipeline.md`.,35655,2025-12-31T19:32:47.677872+00:00,pipeline;healthview;tier-2;stage-3-1,repo_studios_team@rainmakerprotocol.dev,seeded,yes,#s31r-001-fault-diagnostics-overview-orchestrator;#s31r-002-collect-faulthandler-reports;#s31r-003-generate-fault-artifacts;#s31r-004-summarize-fault-diagnostics-overview
 .repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_fault_diagnostics_overview_roster.md,h2,0. Instruction Block for Editors & AI Assistants,0-instruction-block-for-editors-ai-assistants,tier-2-roster-stage-31-fault-diagnostics-overview,`tier1_healthview_orchestration_pipeline.md`.,35655,2025-12-31T19:32:47.677872+00:00,pipeline;healthview;tier-2;stage-3-1,repo_studios_team@rainmakerprotocol.dev,seeded,yes,#s31r-001-fault-diagnostics-overview-orchestrator;#s31r-002-collect-faulthandler-reports;#s31r-003-generate-fault-artifacts;#s31r-004-summarize-fault-diagnostics-overview
 .repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_fault_diagnostics_overview_roster.md,h2,1. Goals & Success Criteria,1-goals-success-criteria,tier-2-roster-stage-31-fault-diagnostics-overview,`tier1_healthview_orchestration_pipeline.md`.,35655,2025-12-31T19:32:47.677872+00:00,pipeline;healthview;tier-2;stage-3-1,repo_studios_team@rainmakerprotocol.dev,seeded,yes,#s31r-001-fault-diagnostics-overview-orchestrator;#s31r-002-collect-faulthandler-reports;#s31r-003-generate-fault-artifacts;#s31r-004-summarize-fault-diagnostics-overview
@@ -55555,17 +56045,28 @@ folder,filename,level,heading,slug,parent_slug,description,size_bytes,modified_u
 .repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_1_1,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_1_1/TER-007_summarize_test_execution_telemetry_build.md,h2,6. Orchestrator Integration,6-orchestrator-integration,script-build-template-summarizetestexecutiontelemetrypy,"1. **Tier A (Report Generator):** Produces HOP bundles (manifest/summary/telemetry). Includes Producers, Consumers, Aggregators, Summarizers, and Orchestrators. 1. **Tier B (Action Utility):** Performs actions without HOP bundles. Includes…",14028,2026-01-29T19:18:45.867548+00:00,stage-1.1;summarizer;phase-4;TER-007,repo_studios_team@rainmakerprotocol.dev,complete,no,
 .repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_1_1,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_1_1/TER-007_summarize_test_execution_telemetry_build.md,h2,7. Completion,7-completion,script-build-template-summarizetestexecutiontelemetrypy,"1. **Tier A (Report Generator):** Produces HOP bundles (manifest/summary/telemetry). Includes Producers, Consumers, Aggregators, Summarizers, and Orchestrators. 1. **Tier B (Action Utility):** Performs actions without HOP bundles. Includes…",14028,2026-01-29T19:18:45.867548+00:00,stage-1.1;summarizer;phase-4;TER-007,repo_studios_team@rainmakerprotocol.dev,complete,no,
 .repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_1_1,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_1_1/TER-007_summarize_test_execution_telemetry_build.md,h2,8. Version History,8-version-history,script-build-template-summarizetestexecutiontelemetrypy,"1. **Tier A (Report Generator):** Produces HOP bundles (manifest/summary/telemetry). Includes Producers, Consumers, Aggregators, Summarizers, and Orchestrators. 1. **Tier B (Action Utility):** Performs actions without HOP bundles. Includes…",14028,2026-01-29T19:18:45.867548+00:00,stage-1.1;summarizer;phase-4;TER-007,repo_studios_team@rainmakerprotocol.dev,complete,no,
-.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-002_generate_doc_index_build.md,h1,Script Build Template — generate_doc_index.py,script-build-template-generatedocindexpy,,"Producers, Consumers, Aggregators, Summarizers.",25717,2026-01-29T20:25:37.048127+00:00,stage-2.1;producer;phase-4;S21R-002,repo_studios_team@rainmakerprotocol.dev,complete,yes,
-.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-002_generate_doc_index_build.md,h2,1. Script Identity,1-script-identity,script-build-template-generatedocindexpy,"Producers, Consumers, Aggregators, Summarizers.",25717,2026-01-29T20:25:37.048127+00:00,stage-2.1;producer;phase-4;S21R-002,repo_studios_team@rainmakerprotocol.dev,complete,yes,
-.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-002_generate_doc_index_build.md,h2,2. Current State Analysis,2-current-state-analysis,script-build-template-generatedocindexpy,"Producers, Consumers, Aggregators, Summarizers.",25717,2026-01-29T20:25:37.048127+00:00,stage-2.1;producer;phase-4;S21R-002,repo_studios_team@rainmakerprotocol.dev,complete,yes,
-.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-002_generate_doc_index_build.md,h2,2.6 Agent Discoverability (Tier-3 YAML),26-agent-discoverability-tier-3-yaml,script-build-template-generatedocindexpy,"Producers, Consumers, Aggregators, Summarizers.",25717,2026-01-29T20:25:37.048127+00:00,stage-2.1;producer;phase-4;S21R-002,repo_studios_team@rainmakerprotocol.dev,complete,yes,
-.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-002_generate_doc_index_build.md,h2,2.7 Database Integration Preparation,27-database-integration-preparation,script-build-template-generatedocindexpy,"Producers, Consumers, Aggregators, Summarizers.",25717,2026-01-29T20:25:37.048127+00:00,stage-2.1;producer;phase-4;S21R-002,repo_studios_team@rainmakerprotocol.dev,complete,yes,
-.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-002_generate_doc_index_build.md,h2,3. Gap Analysis,3-gap-analysis,script-build-template-generatedocindexpy,"Producers, Consumers, Aggregators, Summarizers.",25717,2026-01-29T20:25:37.048127+00:00,stage-2.1;producer;phase-4;S21R-002,repo_studios_team@rainmakerprotocol.dev,complete,yes,
-.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-002_generate_doc_index_build.md,h2,4. Changes Made,4-changes-made,script-build-template-generatedocindexpy,"Producers, Consumers, Aggregators, Summarizers.",25717,2026-01-29T20:25:37.048127+00:00,stage-2.1;producer;phase-4;S21R-002,repo_studios_team@rainmakerprotocol.dev,complete,yes,
-.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-002_generate_doc_index_build.md,h2,5. Evidence,5-evidence,script-build-template-generatedocindexpy,"Producers, Consumers, Aggregators, Summarizers.",25717,2026-01-29T20:25:37.048127+00:00,stage-2.1;producer;phase-4;S21R-002,repo_studios_team@rainmakerprotocol.dev,complete,yes,
-.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-002_generate_doc_index_build.md,h2,6. Orchestrator Integration,6-orchestrator-integration,script-build-template-generatedocindexpy,"Producers, Consumers, Aggregators, Summarizers.",25717,2026-01-29T20:25:37.048127+00:00,stage-2.1;producer;phase-4;S21R-002,repo_studios_team@rainmakerprotocol.dev,complete,yes,
-.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-002_generate_doc_index_build.md,h2,7. Completion,7-completion,script-build-template-generatedocindexpy,"Producers, Consumers, Aggregators, Summarizers.",25717,2026-01-29T20:25:37.048127+00:00,stage-2.1;producer;phase-4;S21R-002,repo_studios_team@rainmakerprotocol.dev,complete,yes,
-.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-002_generate_doc_index_build.md,h2,8. Version History,8-version-history,script-build-template-generatedocindexpy,"Producers, Consumers, Aggregators, Summarizers.",25717,2026-01-29T20:25:37.048127+00:00,stage-2.1;producer;phase-4;S21R-002,repo_studios_team@rainmakerprotocol.dev,complete,yes,
+.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-002_generate_doc_index_build.md,h1,Script Build Template — generate_doc_index.py,script-build-template-generatedocindexpy,,"Producers, Consumers, Aggregators, Summarizers.",25717,2026-01-29T20:29:47.917582+00:00,stage-2.1;producer;phase-4;S21R-002,repo_studios_team@rainmakerprotocol.dev,complete,yes,
+.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-002_generate_doc_index_build.md,h2,1. Script Identity,1-script-identity,script-build-template-generatedocindexpy,"Producers, Consumers, Aggregators, Summarizers.",25717,2026-01-29T20:29:47.917582+00:00,stage-2.1;producer;phase-4;S21R-002,repo_studios_team@rainmakerprotocol.dev,complete,yes,
+.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-002_generate_doc_index_build.md,h2,2. Current State Analysis,2-current-state-analysis,script-build-template-generatedocindexpy,"Producers, Consumers, Aggregators, Summarizers.",25717,2026-01-29T20:29:47.917582+00:00,stage-2.1;producer;phase-4;S21R-002,repo_studios_team@rainmakerprotocol.dev,complete,yes,
+.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-002_generate_doc_index_build.md,h2,2.6 Agent Discoverability (Tier-3 YAML),26-agent-discoverability-tier-3-yaml,script-build-template-generatedocindexpy,"Producers, Consumers, Aggregators, Summarizers.",25717,2026-01-29T20:29:47.917582+00:00,stage-2.1;producer;phase-4;S21R-002,repo_studios_team@rainmakerprotocol.dev,complete,yes,
+.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-002_generate_doc_index_build.md,h2,2.7 Database Integration Preparation,27-database-integration-preparation,script-build-template-generatedocindexpy,"Producers, Consumers, Aggregators, Summarizers.",25717,2026-01-29T20:29:47.917582+00:00,stage-2.1;producer;phase-4;S21R-002,repo_studios_team@rainmakerprotocol.dev,complete,yes,
+.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-002_generate_doc_index_build.md,h2,3. Gap Analysis,3-gap-analysis,script-build-template-generatedocindexpy,"Producers, Consumers, Aggregators, Summarizers.",25717,2026-01-29T20:29:47.917582+00:00,stage-2.1;producer;phase-4;S21R-002,repo_studios_team@rainmakerprotocol.dev,complete,yes,
+.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-002_generate_doc_index_build.md,h2,4. Changes Made,4-changes-made,script-build-template-generatedocindexpy,"Producers, Consumers, Aggregators, Summarizers.",25717,2026-01-29T20:29:47.917582+00:00,stage-2.1;producer;phase-4;S21R-002,repo_studios_team@rainmakerprotocol.dev,complete,yes,
+.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-002_generate_doc_index_build.md,h2,5. Evidence,5-evidence,script-build-template-generatedocindexpy,"Producers, Consumers, Aggregators, Summarizers.",25717,2026-01-29T20:29:47.917582+00:00,stage-2.1;producer;phase-4;S21R-002,repo_studios_team@rainmakerprotocol.dev,complete,yes,
+.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-002_generate_doc_index_build.md,h2,6. Orchestrator Integration,6-orchestrator-integration,script-build-template-generatedocindexpy,"Producers, Consumers, Aggregators, Summarizers.",25717,2026-01-29T20:29:47.917582+00:00,stage-2.1;producer;phase-4;S21R-002,repo_studios_team@rainmakerprotocol.dev,complete,yes,
+.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-002_generate_doc_index_build.md,h2,7. Completion,7-completion,script-build-template-generatedocindexpy,"Producers, Consumers, Aggregators, Summarizers.",25717,2026-01-29T20:29:47.917582+00:00,stage-2.1;producer;phase-4;S21R-002,repo_studios_team@rainmakerprotocol.dev,complete,yes,
+.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-002_generate_doc_index_build.md,h2,8. Version History,8-version-history,script-build-template-generatedocindexpy,"Producers, Consumers, Aggregators, Summarizers.",25717,2026-01-29T20:29:47.917582+00:00,stage-2.1;producer;phase-4;S21R-002,repo_studios_team@rainmakerprotocol.dev,complete,yes,
+.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-003_generate_anchor_inventory_build.md,h1,Script Build Template — generate_anchor_inventory.py,script-build-template-generateanchorinventorypy,,"Producers, Consumers, Aggregators, Summarizers.",18399,2026-01-29T22:37:38.153121+00:00,stage-2.1;producer;phase-4;S21R-003,repo_studios_team@rainmakerprotocol.dev,complete,yes,
+.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-003_generate_anchor_inventory_build.md,h2,1. Script Identity,1-script-identity,script-build-template-generateanchorinventorypy,"Producers, Consumers, Aggregators, Summarizers.",18399,2026-01-29T22:37:38.153121+00:00,stage-2.1;producer;phase-4;S21R-003,repo_studios_team@rainmakerprotocol.dev,complete,yes,
+.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-003_generate_anchor_inventory_build.md,h2,2. Current State Analysis,2-current-state-analysis,script-build-template-generateanchorinventorypy,"Producers, Consumers, Aggregators, Summarizers.",18399,2026-01-29T22:37:38.153121+00:00,stage-2.1;producer;phase-4;S21R-003,repo_studios_team@rainmakerprotocol.dev,complete,yes,
+.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-003_generate_anchor_inventory_build.md,h2,2.6 Agent Discoverability (Tier-3 YAML),26-agent-discoverability-tier-3-yaml,script-build-template-generateanchorinventorypy,"Producers, Consumers, Aggregators, Summarizers.",18399,2026-01-29T22:37:38.153121+00:00,stage-2.1;producer;phase-4;S21R-003,repo_studios_team@rainmakerprotocol.dev,complete,yes,
+.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-003_generate_anchor_inventory_build.md,h2,2.7 Database Integration Preparation,27-database-integration-preparation,script-build-template-generateanchorinventorypy,"Producers, Consumers, Aggregators, Summarizers.",18399,2026-01-29T22:37:38.153121+00:00,stage-2.1;producer;phase-4;S21R-003,repo_studios_team@rainmakerprotocol.dev,complete,yes,
+.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-003_generate_anchor_inventory_build.md,h2,3. Gap Analysis,3-gap-analysis,script-build-template-generateanchorinventorypy,"Producers, Consumers, Aggregators, Summarizers.",18399,2026-01-29T22:37:38.153121+00:00,stage-2.1;producer;phase-4;S21R-003,repo_studios_team@rainmakerprotocol.dev,complete,yes,
+.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-003_generate_anchor_inventory_build.md,h2,4. Changes Made,4-changes-made,script-build-template-generateanchorinventorypy,"Producers, Consumers, Aggregators, Summarizers.",18399,2026-01-29T22:37:38.153121+00:00,stage-2.1;producer;phase-4;S21R-003,repo_studios_team@rainmakerprotocol.dev,complete,yes,
+.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-003_generate_anchor_inventory_build.md,h2,5. Evidence,5-evidence,script-build-template-generateanchorinventorypy,"Producers, Consumers, Aggregators, Summarizers.",18399,2026-01-29T22:37:38.153121+00:00,stage-2.1;producer;phase-4;S21R-003,repo_studios_team@rainmakerprotocol.dev,complete,yes,
+.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-003_generate_anchor_inventory_build.md,h2,6. Orchestrator Integration,6-orchestrator-integration,script-build-template-generateanchorinventorypy,"Producers, Consumers, Aggregators, Summarizers.",18399,2026-01-29T22:37:38.153121+00:00,stage-2.1;producer;phase-4;S21R-003,repo_studios_team@rainmakerprotocol.dev,complete,yes,
+.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-003_generate_anchor_inventory_build.md,h2,7. Completion,7-completion,script-build-template-generateanchorinventorypy,"Producers, Consumers, Aggregators, Summarizers.",18399,2026-01-29T22:37:38.153121+00:00,stage-2.1;producer;phase-4;S21R-003,repo_studios_team@rainmakerprotocol.dev,complete,yes,
+.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-003_generate_anchor_inventory_build.md,h2,8. Version History,8-version-history,script-build-template-generateanchorinventorypy,"Producers, Consumers, Aggregators, Summarizers.",18399,2026-01-29T22:37:38.153121+00:00,stage-2.1;producer;phase-4;S21R-003,repo_studios_team@rainmakerprotocol.dev,complete,yes,
 .repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_tier2_compliance_alignment.md,h1,Stage Tier-2 Compliance Alignment — Template Processing Guide,stage-tier-2-compliance-alignment-template-processing-guide,,Stage 11.1 was processed through Phase 4 templates with:,15513,2026-01-28T23:20:23.282806+00:00,stage-compliance;template-processing;tier-2-alignment;phase-4,repo_studios_team@rainmakerprotocol.dev,active,no,
 .repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_tier2_compliance_alignment.md,h2,1. Problem Statement,1-problem-statement,stage-tier-2-compliance-alignment-template-processing-guide,Stage 11.1 was processed through Phase 4 templates with:,15513,2026-01-28T23:20:23.282806+00:00,stage-compliance;template-processing;tier-2-alignment;phase-4,repo_studios_team@rainmakerprotocol.dev,active,no,
 .repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs,.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_tier2_compliance_alignment.md,h2,2. Solution: Template-Driven Stage Processing,2-solution-template-driven-stage-processing,stage-tier-2-compliance-alignment-template-processing-guide,Stage 11.1 was processed through Phase 4 templates with:,15513,2026-01-28T23:20:23.282806+00:00,stage-compliance;template-processing;tier-2-alignment;phase-4,repo_studios_team@rainmakerprotocol.dev,active,no,
