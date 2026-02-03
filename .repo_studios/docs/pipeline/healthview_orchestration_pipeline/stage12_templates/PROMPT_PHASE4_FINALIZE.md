@@ -8,7 +8,7 @@ phase: 4
 checkpoints:
   - CHECKPOINT-9
   - CHECKPOINT-10
-version: 1.0.0
+version: 1.3.0
 updated_at: 2026-02-02
 related_files:
   - .repo_studios/docs/pipeline/healthview_orchestration_pipeline/stage12_templates/common/review_metaprompts.md
@@ -276,6 +276,300 @@ fatal: path 'tier2_roster/...' did not match any files
 
 ---
 
+### Step 4E: REPLACE Script Section with Agent Router — CRITICAL
+
+> ⚠️ **REPLACE REGARDLESS PRINCIPLE**
+>
+> Do NOT check if the existing section is "already complete."
+> Do NOT skip this step because "it looks fine."
+> **REPLACE the entire script section with the standardized template, EVERY TIME.**
+>
+> Why? Existing data may be stale, formats may not match, and we need machine-parseable output.
+
+#### 4E.1 Locate the Script Section in Roster
+
+Find the `<!-- AGENT_ROUTER:START {RECORD_ID} -->` marker, OR find the `### {RECORD_ID}` heading.
+
+#### 4E.2 DELETE the Existing Section — CRITICAL
+
+> ⚠️ **YOU MUST DELETE BEFORE INSERTING**
+>
+> The git diff MUST show deleted lines (`-`) for the old content.
+> If your diff only shows additions (`+`), you have NOT replaced — you have duplicated.
+
+**How to identify the section to delete:**
+
+The old section may be in ONE of these formats:
+
+**Format A: Old YAML record block**
+
+```text
+##### S21R-XXX {script_name}
+
+```yaml
+record_id: "S21R-XXX"
+script:
+  path: "..."
+...
+```
+```
+
+**Format B: Previous Agent Router (if re-inspecting)**
+
+```text
+<!-- AGENT_ROUTER:START S21R-XXX -->
+### S21R-XXX — {script_name}
+...
+<!-- AGENT_ROUTER:END S21R-XXX -->
+```
+
+**Boundaries to delete:**
+
+| If format is... | Start boundary | End boundary |
+|-----------------|----------------|---------------|
+| Old YAML block | `##### S21R-XXX` heading | Next `##### S21R-` heading OR next `---` separator OR `<!-- AGENT_ROUTER:START` |
+| Previous Agent Router | `<!-- AGENT_ROUTER:START S21R-XXX -->` | `<!-- AGENT_ROUTER:END S21R-XXX -->` |
+
+**Python snippet to locate boundaries:**
+
+```python
+import re
+from pathlib import Path
+
+roster_path = Path("{ROSTER_PATH}")
+content = roster_path.read_text(encoding='utf-8')
+record_id = "{RECORD_ID}"  # e.g., "S21R-005"
+
+# Pattern for old YAML block
+yaml_pattern = rf'(##### {record_id}.*?(?=##### S21R-|<!-- AGENT_ROUTER:START|---\n\n##|\Z))'
+
+# Pattern for existing Agent Router
+router_pattern = rf'(<!-- AGENT_ROUTER:START {record_id} -->.*?<!-- AGENT_ROUTER:END {record_id} -->)'
+
+# Find and remove old content
+content_cleaned = re.sub(yaml_pattern, '', content, flags=re.DOTALL)
+content_cleaned = re.sub(router_pattern, '', content_cleaned, flags=re.DOTALL)
+
+# Now insert new Agent Router at appropriate location
+# (after the workstream checkboxes for this script)
+```
+
+**Verification requirement:**
+
+Your git diff for Tier-2 roster MUST show:
+1. **Deleted lines (`-`)** — The old YAML block or old Agent Router
+2. **Added lines (`+`)** — The new Agent Router template
+
+**Example of VALID git diff:**
+
+```diff
+-##### S21R-005 verify docs integrity
+-
+-```yaml
+-record_id: "S21R-005"
+-script:
+-  path: ".repo_studios/scripts/producers/verify_docs_integrity.py"
+-  name: "verify_docs_integrity.py"
+-  category: "producer"
+-...
+-```
++<!-- AGENT_ROUTER:START S21R-005 -->
++### S21R-005 — verify_docs_integrity.py
++...
++<!-- AGENT_ROUTER:END S21R-005 -->
+```
+
+**Example of INVALID git diff (duplication detected):**
+
+```diff
+ - [x] DONE — verify_docs_integrity.py complete
+
++<!-- AGENT_ROUTER:START S21R-005 -->
++### S21R-005 — verify_docs_integrity.py
+```
+
+☝️ **This is WRONG** — no deletions shown, old content still exists.
+
+#### 4E.3 INSERT the Standardized Agent Router Template
+
+**REPLACE WITH THIS TEMPLATE (populate all fields):**
+
+````markdown
+<!-- AGENT_ROUTER:START {RECORD_ID} -->
+### {RECORD_ID} — {SCRIPT_NAME}
+
+> **One-liner:** {ONE_LINE_DESCRIPTION}
+
+**Keywords:** `{KEYWORD_1}`, `{KEYWORD_2}`, `{KEYWORD_3}`
+
+#### Resource Paths
+| Resource | Path |
+|----------|------|
+| Script | `{SCRIPT_PATH}` |
+| Tier-3 YAML | `{TIER3_YAML_PATH}` |
+| Build Doc | `{BUILD_DOC_PATH}` |
+| Output Root | `{OUTPUT_ROOT}` |
+
+#### Invocation
+```bash
+{INVOCATION_COMMAND}
+```
+
+| Aspect | Value |
+|--------|-------|
+| Entry Point | `{ENTRY_FUNCTION}` |
+| Typical Runtime | {RUNTIME} |
+| Exit Codes | 0=success, 1=error, 2=no-op |
+
+#### Outputs
+| Artifact | Format | Description |
+|----------|--------|-------------|
+| {ARTIFACT_1} | {FORMAT_1} | {DESCRIPTION_1} |
+| {ARTIFACT_2} | {FORMAT_2} | {DESCRIPTION_2} |
+
+#### Compliance
+| Aspect | Status | Notes |
+|--------|--------|-------|
+| HOP Bundle | {YES/PARTIAL/NO} | {NOTES} |
+| UIC Interface | {YES/PARTIAL/NO} | {NOTES} |
+| Tier-3 YAML | {YES/NO} | {NOTES} |
+
+#### Orchestrator
+| Pipeline | Status | Config Path |
+|----------|--------|-------------|
+| {PIPELINE_NAME} | {WIRED/NOT_WIRED/CANDIDATE} | {CONFIG_PATH_OR_NA} |
+
+#### Pipeline Position
+| Field | Value |
+|-------|-------|
+| Step Number | {N} of {TOTAL} |
+| Execution Mode | {SEQUENTIAL/PARALLEL/CONDITIONAL} |
+| Orchestrator Script | `{ORCHESTRATOR_SCRIPT_PATH}` |
+
+#### Dependencies & Consumers
+| Direction | Record ID | Script | Data Flow |
+|-----------|-----------|--------|-----------|
+| ⬆️ DEPENDS ON | {UPSTREAM_RECORD_ID} | `{UPSTREAM_SCRIPT}` | Requires `{ARTIFACT}` from `{OUTPUT_PATH}` |
+| ⬇️ CONSUMED BY | {DOWNSTREAM_RECORD_ID} | `{DOWNSTREAM_SCRIPT}` | Provides `{ARTIFACT}` to `{INPUT_PATH}` |
+<!-- If no upstream dependencies: "| ⬆️ DEPENDS ON | (none) | — | First in pipeline, no upstream dependencies |" -->
+<!-- If no downstream consumers: "| ⬇️ CONSUMED BY | (none) | — | Terminal node, outputs consumed by orchestrator |" -->
+
+#### Known Limitations
+- {LIMITATION_1}
+- {LIMITATION_2}
+<!-- If none: "None documented." -->
+
+#### Verification
+| Field | Value |
+|-------|-------|
+| Last Verified | {YYYY-MM-DD} |
+| Verified By | {AGENT_ID} |
+| Build Doc Version | {BUILD_DOC_VERSION} |
+<!-- AGENT_ROUTER:END {RECORD_ID} -->
+````
+
+#### 4E.4 Field Population Guide
+
+**Where to get each field:**
+
+| Field | Source |
+|-------|--------|
+| `{ONE_LINE_DESCRIPTION}` | Build Doc Section 1 — Script purpose |
+| `{KEYWORD_1,2,3}` | Derive from script purpose and outputs |
+| `{SCRIPT_PATH}` | Build Doc Section 1 |
+| `{TIER3_YAML_PATH}` | Build Doc Section 3 |
+| `{BUILD_DOC_PATH}` | Current document path |
+| `{OUTPUT_ROOT}` | Build Doc Section 2.5 — Output Truth |
+| `{INVOCATION_COMMAND}` | Build Doc Section 2 — CLI Interface |
+| `{ENTRY_FUNCTION}` | Build Doc Section 2 — Entry Points |
+| `{RUNTIME}` | Build Doc Section 2.5 — Execution time |
+| `{ARTIFACT_N}` | Build Doc Section 2.5 — Output artifacts |
+| Compliance status | Build Doc Section 5 — Gaps (YES if no gaps, PARTIAL/NO if gaps) |
+| Orchestrator status | Build Doc Section 8 |
+| `{N}` / `{TOTAL}` | Orchestrator source code — TopicStep list order |
+| `{EXECUTION_MODE}` | Orchestrator source — SEQUENTIAL (most), PARALLEL (if concurrent), CONDITIONAL (if guarded) |
+| `{ORCHESTRATOR_SCRIPT_PATH}` | Build Doc Section 8 — orchestrator reference |
+| `{UPSTREAM_RECORD_ID}` | Inspect orchestrator for data dependencies; trace `load_*` calls |
+| `{DOWNSTREAM_RECORD_ID}` | Inspect aggregators/consumers that import this script's outputs |
+| Limitations | Build Doc Section 5 — Gaps (convert to limitations) |
+
+#### 4E.5 Example: Populated Agent Router
+
+```markdown
+<!-- AGENT_ROUTER:START S21R-003 -->
+### S21R-003 — generate_anchor_inventory.py
+
+> **One-liner:** Extracts markdown anchor targets and references for cross-document link validation.
+
+**Keywords:** `markdown`, `anchors`, `validation`, `links`, `inventory`
+
+#### Resource Paths
+| Resource | Path |
+|----------|------|
+| Script | `.repo_studios/scripts/producers/generate_anchor_inventory.py` |
+| Tier-3 YAML | `.repo_studios/scripts/producers/generate_anchor_inventory.tier3.yaml` |
+| Build Doc | `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-003_generate_anchor_inventory_build.md` |
+| Output Root | `.repo_studios/reports/healthview/producer_reports/anchor_inventory/` |
+
+#### Invocation
+```bash
+python -m scripts.producers.generate_anchor_inventory --repo-root . --log-level INFO
+```
+
+| Aspect | Value |
+|--------|-------|
+| Entry Point | `run(argv)` / `main()` |
+| Typical Runtime | ~10 seconds |
+| Exit Codes | 0=success, 1=error, 2=no-op |
+
+#### Outputs
+| Artifact | Format | Description |
+|----------|--------|-------------|
+| manifest.json | JSON | Bundle metadata with file inventory |
+| summary.md | Markdown | Human-readable anchor statistics |
+| anchors_targets.json | JSON | All anchor targets extracted |
+| anchors_references.json | JSON | All anchor references extracted |
+
+#### Compliance
+| Aspect | Status | Notes |
+|--------|--------|-------|
+| HOP Bundle | YES | Timestamped bundles with manifest |
+| UIC Interface | YES | run(argv) entry point |
+| Tier-3 YAML | YES | Created during inspection |
+
+#### Orchestrator
+| Pipeline | Status | Config Path |
+|----------|--------|-------------|
+| HealthView | CANDIDATE | N/A — not yet wired |
+
+#### Pipeline Position
+| Field | Value |
+|-------|-------|
+| Step Number | 2 of 8 |
+| Execution Mode | SEQUENTIAL |
+| Orchestrator Script | `.repo_studios/scripts/orchestrators/run_docs_health_overview.py` |
+
+#### Dependencies & Consumers
+| Direction | Record ID | Script | Data Flow |
+|-----------|-----------|--------|-----------|
+| ⬆️ DEPENDS ON | (none) | — | First in data chain, no upstream dependencies |
+| ⬇️ CONSUMED BY | S21R-004 | `validate_markdown_anchors.py` | Provides `anchors_targets.json` for validation |
+| ⬇️ CONSUMED BY | S21R-009 | `aggregate_docs_health_signals.py` | Provides anchor data for aggregation |
+
+#### Known Limitations
+- None documented.
+
+#### Verification
+| Field | Value |
+|-------|-------|
+| Last Verified | 2026-02-02 |
+| Verified By | GitHub Copilot |
+| Build Doc Version | 1.0.0 |
+<!-- AGENT_ROUTER:END S21R-003 -->
+```
+
+---
+
 ### Step 5: UPDATE Tier-1 Registry (Section 10.3) — CRITICAL
 
 > ⚠️ **YOU MUST ACTUALLY EDIT THE EXTERNAL FILE**
@@ -392,6 +686,10 @@ Command: git diff "{path}"
 
 {PASTE ACTUAL GIT DIFF OUTPUT HERE}
 
+The diff MUST show:
+1. Workstream checkboxes changed from `- [ ]` to `- [x]`
+2. Agent Router section replaced (look for `<!-- AGENT_ROUTER:START -->`)
+
 ═══════════════════════════════════════════════════════════════════
 GIT DIFF EVIDENCE — TIER-1 REGISTRY
 ═══════════════════════════════════════════════════════════════════
@@ -435,6 +733,8 @@ After emitting the completion signals above, **STOP** and wait for the human ope
 | Check | How to verify |
 |-------|---------------|
 | **Git diff for Tier-2 is real** | Diff output shows actual `- [ ]` → `- [x]` changes |
+| **Agent Router replaced** | Diff shows `<!-- AGENT_ROUTER:START -->` markers |
+| **Old content deleted** | Diff shows `-` lines removing old YAML block or previous Agent Router |
 | **Git diff for Tier-1 is real** | Diff output shows row added/updated |
 | **No empty diffs** | Neither diff section says "no changes" |
 | **Placeholder sweep clean** | grep result shows 0 matches |
@@ -447,6 +747,11 @@ After emitting the completion signals above, **STOP** and wait for the human ope
 | Empty git diff | "GIT DIFF EVIDENCE" section is blank |
 | "No changes detected" | Diff command ran but produced no output |
 | Diff shows wrong file | Path doesn't match ROSTER_MAP lookup |
+| Agent Router missing | No `<!-- AGENT_ROUTER:START -->` in diff |
+| Agent Router not replaced | Diff shows only checkbox changes, no router block |
+| **No deletions in diff** | Diff shows only `+` lines, no `-` lines for old section |
+| **Duplicate sections** | Both old YAML block AND new Agent Router exist in file |
+| **Wrong section deleted** | Workstream checkboxes deleted instead of YAML block |
 | Placeholder sweep skipped | No grep command output shown |
 | Checkboxes not actually changed | Diff doesn't show `- [ ]` → `- [x]` |
 | Missing Tier-1 entry | Diff doesn't show new/updated row |
@@ -541,4 +846,7 @@ Test-Path "{file_path}"
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.3.0 | 2026-02-02 | Strengthened Step 4E.2 with explicit deletion instructions: format identification (YAML vs Router), boundary detection, Python snippet, valid/invalid diff examples; added "Old content deleted" to verification checklist; added red flags for no deletions, duplicate sections, wrong section deleted |
+| 1.2.0 | 2026-02-02 | Added Pipeline Position + Dependencies & Consumers sections to Agent Router template; updated Field Population Guide with dependency tracing sources; enhanced example with verbal graph fields |
+| 1.1.0 | 2026-02-02 | Added "REPLACE REGARDLESS" principle; added standardized Agent Router template for Tier-2 script sections; added Step 4E |
 | 1.0.0 | 2026-02-02 | Initial phase extraction; added mandatory git diff verification |

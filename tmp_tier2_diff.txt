@@ -1,0 +1,335 @@
+diff --git a/.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_docs_health_overview_roster.md b/.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_docs_health_overview_roster.md
+index aec72f8..b5245af 100644
+--- a/.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_docs_health_overview_roster.md
++++ b/.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_docs_health_overview_roster.md
+@@ -456,158 +456,203 @@ Workstream E ΓÇö QA & Evidence
+ 
+ - [x] DONE ΓÇö run_docs_health_overview.py complete; update Tier-1 Stage 2.1 script gate
+ 
+-##### S21R-004 validate markdown anchors
++<!-- AGENT_ROUTER:START S21R-002 -->
++##### S21R-002 ΓÇö generate_doc_index.py
+ 
+-```yaml
+-record_id: "S21R-004"
+-script:
+-  path: ".repo_studios/scripts/producers/validate_markdown_anchors.py"
+-  name: "validate_markdown_anchors.py"
+-  category: "producer"
+-tier3:
+-  metadata_block_version: "v1"
+-  allowed: true
+-  exists: true
+-  name: "tier3_validate_markdown_anchors.yaml"
+-  meets_template: "yes"
+-  last_updated: "2025-12-29"
+-cli_surfaces:
+-  run_entrypoint: "main(argv)"
+-  key_flags:
+-    - "--repo-root"
+-    - "--root"
+-    - "--glob (repeatable)"
+-    - "--output-dir"
+-    - "--timestamp"
+-    - "--log-level"
+-    - "--artifacts-to-keep"
+-io_contract:
+-  inputs:
+-    - "Scans selected markdown files and validates internal + cross-file anchors"
+-  outputs:
+-    current:
+-      root: ".repo_studios/reports/healthview/healthview/markdown_anchor_validation/YYYYMMDD-HHMM/"
+-      artifacts:
+-        - "manifest.json"
+-        - "summary.md"
+-        - "telemetry.json"
+-    target:
+-      root: ".repo_studios/reports/healthview/<class>/<topic>/<timestamp>/"
+-      artifacts:
+-        - "manifest.json"
+-        - "summary.md"
+-        - "telemetry.json"
+-retention:
+-  surfaces:
+-    - "--artifacts-to-keep"
+-    - "prune_run_directories(... keep=options.artifacts_to_keep, current_run=run_dir)"
+-  mechanism: "prune_by_keep_budget"
+-  targets:
+-    - ".repo_studios/reports/healthview/healthview/markdown_anchor_validation"
+-  guardrails:
+-    - "current_run protection when pruning"
+-  evidence:
+-    - "create_storage(...) bundle writer + prune_run_directories(...)"
+-db_integration:
+-  gated_by: "REPO_STUDIOS_DB_ENABLED"
+-  marker_required: true
+-  marker_string: "DB_INTEGRATION_MARKER:"
+-evidence:
+-  code_refs:
+-    - ".repo_studios/scripts/producers/validate_markdown_anchors.py#L1-L33"
+-    - ".repo_studios/scripts/producers/validate_markdown_anchors.py#L365-L406"
+-    - ".repo_studios/scripts/producers/validate_markdown_anchors.py#L426-L466"
+-  tests:
+-    - "<pytest path>"
+-  fixtures:
+-    - "<fixture path>"
+-notes:
+-  - "DB markers present for manifest/summary/telemetry writes."
+-  - "This producer does not expose a run(argv) helper; orchestrators must invoke main(argv) or shell out."
++> **One-liner:** Scans repository for markdown files, extracts headings and metadata, builds multi-format document inventory.
++
++**Keywords:** `markdown`, `documentation`, `index`, `inventory`, `metadata`, `frontmatter`
++
++###### Resource Paths
++
++| Resource | Path |
++|----------|------|
++| Script | `.repo_studios/scripts/producers/generate_doc_index.py` |
++| Tier-3 YAML | `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier3_scripts/docs_health_overview/tier3_generate_doc_index.yaml` |
++| Build Doc | `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-003_generate_doc_index_build.md` |
++| Output Root | `.repo_studios/reports/healthview/producer_reports/doc_index/` |
++
++###### Invocation
++
++```bash
++python .repo_studios/scripts/producers/generate_doc_index.py --repo-root . --log-level INFO
+ ```
+ 
+-#### Implementation Workstreams (checkbox-driven) ΓÇö validate_markdown_anchors.py
++| Aspect | Value |
++|--------|-------|
++| Entry Point | `run(argv)` / `main(argv)` |
++| Typical Runtime | ~15 seconds |
++| Exit Codes | 0=success, 1=error |
+ 
+-Workstream A ΓÇö Discovery
++###### Outputs
+ 
+-- [x] Inspect outputs + pruning/retention surfaces; record findings
++| Artifact | Format | Description |
++|----------|--------|-------------|
++| manifest.json | JSON | Schema version, status, inputs, artifact catalog |
++| summary.md | Markdown | Human-readable bundle with embedded JSON/YAML/CSV |
++| telemetry.json | JSON | Execution metrics (doc/heading/link counts) |
++| doc_index.csv | CSV | Tabular document inventory for spreadsheet import |
+ 
+-**Discovery Findings (2025-12-29):**
++###### Compliance
+ 
+-| Surface | Current | Target (HOP) |
+-|---------|---------|--------------|
+-| `DEFAULT_OUTPUT_DIR` | `build_topic_path("producer", TOPIC_SLUG)` | HOP-compliant Γ£ô |
+-| Bundle Path | `output_dir / timestamp` | Full path embedded in DEFAULT |
+-| Prune Target | `output_dir` | Same (full HOP path) |
+-| Test Fixture | Uses HOP paths | Updated Γ£ô |
++| Aspect | Status | Notes |
++|--------|--------|-------|
++| HOP Bundle | YES | Full manifest/summary/telemetry package |
++| UIC Interface | YES | `run(argv) ΓåÆ dict[str, Any]` with status/exit_code |
++| Tier-3 YAML | YES | 268-line comprehensive YAML |
+ 
+-- **TOPIC_SLUG:** `markdown_anchor_validation`
+-- **Retention:** `prune_run_directories(... keep=options.artifacts_to_keep, current_run=run_dir)` ΓÇö
+-  no change needed
+-- **DB markers:** Present for manifest/summary/telemetry writes
+-- **Test file:** `.repo_studios/tests/tests_producers/test_validate_markdown_anchors.py`
+-  (lines 27, 72 need update)
+-- **Note:** Uses `main(argv)` not `run(argv)` ΓÇö roster already documents this
++###### Orchestrator
+ 
+-Workstream B ΓÇö Plan
++| Pipeline | Status | Config |
++|----------|--------|--------|
++| run_docs_health_overview.py | WIRED | Step 1 in docs health chain |
+ 
+-- [x] Draft plan to close output-root/base-package stop-gates
++###### Known Limitations
+ 
+-**Migration Plan (2025-12-29):**
++- None documented.
+ 
+-- **Script change:** Update `REPORTS_ROOT` from `Path(".repo_studios/reports/producer_reports")` to
+-  `Path(".repo_studios/reports/healthview")` (line 80)
+-- **Test fixture updates:** Change `"reports" / "producer_reports"` ΓåÆ `"reports" / "healthview"` at
+-  lines 27 and 72
+-- **No dual-write:** Legacy path retired immediately (matches S21R-002/003 pattern)
+-- **io_contract update:** Update `current.root` to HOP path after implementation
+-- **Validation:** Run script directly to confirm bundle lands in new location
++###### Verification
+ 
+-Workstream C ΓÇö Implement
++| Field | Value |
++|-------|-------|
++| Last Verified | 2026-02-02 |
++| Verified By | GitHub Copilot |
++| Build Doc Version | 1.0.0 |
++<!-- AGENT_ROUTER:END S21R-002 -->
+ 
+-- [x] Implement accepted plan; update record and stop-gate status with evidence.
++---
+ 
+-**Implementation Evidence (2025-12-29, updated 2025-12-30):**
++<!-- AGENT_ROUTER:START S21R-003 -->
++##### S21R-003 ΓÇö generate_anchor_inventory.py
+ 
+-- Script updated: Now uses `DEFAULT_OUTPUT_DIR = build_topic_path("producer", TOPIC_SLUG)`
+-  for HOP-compliant paths
+-- Tests updated: lines 27, 72 now use `"reports" / "healthview"`
+-- Tests pass: 2 passed in 0.17s
+-- Bundle created: `.repo_studios/reports/healthview/producer_reports/markdown_anchor_validation/<timestamp>/`
+-- Artifacts: manifest.json (621 bytes), summary.md (245 bytes), telemetry.json (10,644 bytes)
+-- io_contract.current.root updated to HOP path
+-- retention.targets updated to HOP path
++> **One-liner:** Extracts H1/H2 headings from markdown, computes URL-friendly slugs, detects cross-file duplicates.
+ 
+-Workstream D ΓÇö Tier-3 YAML
++**Keywords:** `markdown`, `anchors`, `slugs`, `duplicates`, `headings`, `inventory`
+ 
+-- [x] Confirm Tier-3 is appropriate for this script; record decision (create vs defer)
+-- [x] Inspect Tier-3 template requirements
+-- [x] Draft `tier3_validate_markdown_anchors.yaml`
+-- [x] Validate Tier-3 YAML
++###### Resource Paths
+ 
+-**Tier-3 Evidence (2025-12-29):**
++| Resource | Path |
++|----------|------|
++| Script | `.repo_studios/scripts/producers/generate_anchor_inventory.py` |
++| Tier-3 YAML | `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier3_scripts/docs_health_overview/tier3_generate_anchor_inventory.yaml` |
++| Build Doc | `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-002_generate_anchor_inventory_build.md` |
++| Output Root | `.repo_studios/reports/healthview/producer_reports/anchor_inventory/` |
+ 
+-- Decision: CREATE ΓÇö mature producer for docs validation workflows
+-- Created: `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier3_scripts/docs_health_overview/tier3_validate_markdown_anchors.yaml`
+-- Tier-3 index refreshed: 12 scripts indexed (was 11)
+-- Template compliance: follows tier3_generate_anchor_inventory.yaml pattern
+-- Note: Uses main(argv) not run(argv) ΓÇö documented in invocation section
++###### Invocation
+ 
+-Workstream E ΓÇö QA & Evidence
++```bash
++python .repo_studios/scripts/producers/generate_anchor_inventory.py --repo-root . --log-level INFO
++```
+ 
+-- [x] Pytest evidence captured
+-- [x] Mypy evidence captured or marked N/A (in record)
+-- [x] Coverage ΓëÑ80% (or exception recorded) + doc-index timestamp recorded
++| Aspect | Value |
++|--------|-------|
++| Entry Point | `run(argv)` / `main(argv)` |
++| Typical Runtime | ~10 seconds |
++| Exit Codes | 0=success, 1=issues found |
++
++###### Outputs
++
++| Artifact | Format | Description |
++|----------|--------|-------------|
++| manifest.json | JSON | Run metadata with viewer_slug, topic, catalog |
++| summary.md | Markdown | Heading inventory with duplicate clusters |
++| telemetry.json | JSON | Metrics: total_slugs, cross_file_duplicates, doc stats |
++
++###### Compliance
+ 
+-**QA Evidence (2025-12-29):**
++| Aspect | Status | Notes |
++|--------|--------|-------|
++| HOP Bundle | YES | Full manifest/summary/telemetry package |
++| UIC Interface | YES | `run(argv) ΓåÆ dict[str, Any]` with status/exit_code |
++| Tier-3 YAML | YES | 286-line comprehensive YAML |
+ 
+-- Mypy (clean):
+-  `.venv/Scripts/python.exe -m mypy .repo_studios/scripts/producers/validate_markdown_anchors.py` ΓåÆ
+-  Success: no issues found
+-- Pytest: 2 passed in 0.20s
+-- Coverage: 90% (194 stmts, 19 miss) ΓÇö exceeds 80% threshold
++###### Orchestrator
+ 
+-- [x] DONE ΓÇö validate_markdown_anchors.py complete; update Tier-1 Stage 2.1 script gate
++| Pipeline | Status | Config |
++|----------|--------|--------|
++| run_docs_health_overview.py | WIRED | Step 2 in docs health chain |
++
++###### Known Limitations
++
++- None documented.
++
++###### Verification
++
++| Field | Value |
++|-------|-------|
++| Last Verified | 2026-02-02 |
++| Verified By | GitHub Copilot |
++| Build Doc Version | 1.0.0 |
++<!-- AGENT_ROUTER:END S21R-003 -->
++
++---
++
++<!-- AGENT_ROUTER:START S21R-004 -->
++##### S21R-004 ΓÇö validate_markdown_anchors.py
++
++> **One-liner:** Validates internal markdown anchors and cross-file links, reports broken references.
++
++**Keywords:** `markdown`, `anchors`, `validation`, `links`, `broken-links`, `cross-reference`
++
++###### Resource Paths
++
++| Resource | Path |
++|----------|------|
++| Script | `.repo_studios/scripts/producers/validate_markdown_anchors.py` |
++| Tier-3 YAML | `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier3_scripts/docs_health_overview/tier3_validate_markdown_anchors.yaml` |
++| Build Doc | `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-004_validate_markdown_anchors_build.md` |
++| Output Root | `.repo_studios/reports/healthview/producer_reports/markdown_anchor_validation/` |
++
++###### Invocation
++
++```bash
++python .repo_studios/scripts/producers/validate_markdown_anchors.py --repo-root . --log-level INFO
++```
++
++| Aspect | Value |
++|--------|-------|
++| Entry Point | `main(argv)` ΓÇö **NO run()** |
++| Typical Runtime | ~5 seconds |
++| Exit Codes | 0=success, 1=issues found |
++
++###### Outputs
++
++| Artifact | Format | Description |
++|----------|--------|-------------|
++| manifest.json | JSON | Run metadata with viewer_slug, topic, catalog |
++| summary.md | Markdown | Broken link/anchor report with file locations |
++| telemetry.json | JSON | Validation metrics: checked, broken, by-type |
++
++###### Compliance
++
++| Aspect | Status | Notes |
++|--------|--------|-------|
++| HOP Bundle | YES | Full manifest/summary/telemetry package |
++| UIC Interface | PARTIAL | Missing `run(argv) ΓåÆ dict` ΓÇö uses `main(argv) ΓåÆ int` |
++| Tier-3 YAML | YES | Correctly documents `importable: false` |
++
++###### Orchestrator
++
++| Pipeline | Status | Config |
++|----------|--------|--------|
++| run_docs_health_overview.py | WIRED | Step 3 ΓÇö requires shell-out (no importable run()) |
++
++###### Known Limitations
++
++- Missing `run(argv) ΓåÆ dict[str, Any]` entry point ΓÇö orchestrators must shell-out or call `main(argv)`.
++- Returns exit code only ΓÇö no structured payload for orchestrator consumption.
++- See build doc Section 5 (Gap Analysis) for remediation plan.
++
++###### Verification
++
++| Field | Value |
++|-------|-------|
++| Last Verified | 2026-02-02 |
++| Verified By | GitHub Copilot |
++| Build Doc Version | 3.5.0 |
++<!-- AGENT_ROUTER:END S21R-004 -->
++
++---
+ 
+ ##### S21R-005 verify docs integrity
+ 

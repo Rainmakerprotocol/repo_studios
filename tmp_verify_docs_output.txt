@@ -1,0 +1,8 @@
+INFO Repo root: C:\Users\genet\repo_studios
+INFO Index path: C:\Users\genet\repo_studios\.repo_studios\docs\standards\docs_index.md
+INFO Output directory: C:\Users\genet\repo_studios\.repo_studios\reports\healthview\producer_reports\docs_integrity_validation
+DEBUG DB_INTEGRATION_MARKER: Database writes DORMANT
+DEBUG Wrote manifest to C:\Users\genet\repo_studios\.repo_studios\reports\healthview\producer_reports\docs_integrity_validation\20260203-0151\manifest.json
+DEBUG Wrote summary to C:\Users\genet\repo_studios\.repo_studios\reports\healthview\producer_reports\docs_integrity_validation\20260203-0151\summary.md
+DEBUG Wrote telemetry to C:\Users\genet\repo_studios\.repo_studios\reports\healthview\producer_reports\docs_integrity_validation\20260203-0151\telemetry.json
+DEBUG Pruned docs integrity bundles: kept=5 removed=1 protected=0 failures=0

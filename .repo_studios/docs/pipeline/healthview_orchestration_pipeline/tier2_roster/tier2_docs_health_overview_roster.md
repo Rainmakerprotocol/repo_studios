@@ -456,525 +456,475 @@ Workstream E — QA & Evidence
 
 - [x] DONE — run_docs_health_overview.py complete; update Tier-1 Stage 2.1 script gate
 
-##### S21R-004 validate markdown anchors
+<!-- AGENT_ROUTER:START S21R-002 -->
+##### S21R-002 — generate_doc_index.py
 
-```yaml
-record_id: "S21R-004"
-script:
-  path: ".repo_studios/scripts/producers/validate_markdown_anchors.py"
-  name: "validate_markdown_anchors.py"
-  category: "producer"
-tier3:
-  metadata_block_version: "v1"
-  allowed: true
-  exists: true
-  name: "tier3_validate_markdown_anchors.yaml"
-  meets_template: "yes"
-  last_updated: "2025-12-29"
-cli_surfaces:
-  run_entrypoint: "main(argv)"
-  key_flags:
-    - "--repo-root"
-    - "--root"
-    - "--glob (repeatable)"
-    - "--output-dir"
-    - "--timestamp"
-    - "--log-level"
-    - "--artifacts-to-keep"
-io_contract:
-  inputs:
-    - "Scans selected markdown files and validates internal + cross-file anchors"
-  outputs:
-    current:
-      root: ".repo_studios/reports/healthview/healthview/markdown_anchor_validation/YYYYMMDD-HHMM/"
-      artifacts:
-        - "manifest.json"
-        - "summary.md"
-        - "telemetry.json"
-    target:
-      root: ".repo_studios/reports/healthview/<class>/<topic>/<timestamp>/"
-      artifacts:
-        - "manifest.json"
-        - "summary.md"
-        - "telemetry.json"
-retention:
-  surfaces:
-    - "--artifacts-to-keep"
-    - "prune_run_directories(... keep=options.artifacts_to_keep, current_run=run_dir)"
-  mechanism: "prune_by_keep_budget"
-  targets:
-    - ".repo_studios/reports/healthview/healthview/markdown_anchor_validation"
-  guardrails:
-    - "current_run protection when pruning"
-  evidence:
-    - "create_storage(...) bundle writer + prune_run_directories(...)"
-db_integration:
-  gated_by: "REPO_STUDIOS_DB_ENABLED"
-  marker_required: true
-  marker_string: "DB_INTEGRATION_MARKER:"
-evidence:
-  code_refs:
-    - ".repo_studios/scripts/producers/validate_markdown_anchors.py#L1-L33"
-    - ".repo_studios/scripts/producers/validate_markdown_anchors.py#L365-L406"
-    - ".repo_studios/scripts/producers/validate_markdown_anchors.py#L426-L466"
-  tests:
-    - "<pytest path>"
-  fixtures:
-    - "<fixture path>"
-notes:
-  - "DB markers present for manifest/summary/telemetry writes."
-  - "This producer does not expose a run(argv) helper; orchestrators must invoke main(argv) or shell out."
+> **One-liner:** Scans repository for markdown files, extracts headings and metadata, builds multi-format document inventory.
+
+**Keywords:** `markdown`, `documentation`, `index`, `inventory`, `metadata`, `frontmatter`
+
+###### Resource Paths
+
+| Resource | Path |
+|----------|------|
+| Script | `.repo_studios/scripts/producers/generate_doc_index.py` |
+| Tier-3 YAML | `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier3_scripts/docs_health_overview/tier3_generate_doc_index.yaml` |
+| Build Doc | `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-003_generate_doc_index_build.md` |
+| Output Root | `.repo_studios/reports/healthview/producer_reports/doc_index/` |
+
+###### Invocation
+
+```bash
+python .repo_studios/scripts/producers/generate_doc_index.py --repo-root . --log-level INFO
 ```
 
-#### Implementation Workstreams (checkbox-driven) — validate_markdown_anchors.py
+| Aspect | Value |
+|--------|-------|
+| Entry Point | `run(argv)` / `main(argv)` |
+| Typical Runtime | ~15 seconds |
+| Exit Codes | 0=success, 1=error |
 
-Workstream A — Discovery
+###### Outputs
 
-- [x] Inspect outputs + pruning/retention surfaces; record findings
+| Artifact | Format | Description |
+|----------|--------|-------------|
+| manifest.json | JSON | Schema version, status, inputs, artifact catalog |
+| summary.md | Markdown | Human-readable bundle with embedded JSON/YAML/CSV |
+| telemetry.json | JSON | Execution metrics (doc/heading/link counts) |
+| doc_index.csv | CSV | Tabular document inventory for spreadsheet import |
 
-**Discovery Findings (2025-12-29):**
+###### Compliance
 
-| Surface | Current | Target (HOP) |
-|---------|---------|--------------|
-| `DEFAULT_OUTPUT_DIR` | `build_topic_path("producer", TOPIC_SLUG)` | HOP-compliant ✓ |
-| Bundle Path | `output_dir / timestamp` | Full path embedded in DEFAULT |
-| Prune Target | `output_dir` | Same (full HOP path) |
-| Test Fixture | Uses HOP paths | Updated ✓ |
+| Aspect | Status | Notes |
+|--------|--------|-------|
+| HOP Bundle | YES | Full manifest/summary/telemetry package |
+| UIC Interface | YES | `run(argv) → dict[str, Any]` with status/exit_code |
+| Tier-3 YAML | YES | 268-line comprehensive YAML |
 
-- **TOPIC_SLUG:** `markdown_anchor_validation`
-- **Retention:** `prune_run_directories(... keep=options.artifacts_to_keep, current_run=run_dir)` —
-  no change needed
-- **DB markers:** Present for manifest/summary/telemetry writes
-- **Test file:** `.repo_studios/tests/tests_producers/test_validate_markdown_anchors.py`
-  (lines 27, 72 need update)
-- **Note:** Uses `main(argv)` not `run(argv)` — roster already documents this
+###### Orchestrator
 
-Workstream B — Plan
+| Pipeline | Status | Config |
+|----------|--------|--------|
+| run_docs_health_overview.py | WIRED | Step 1 in docs health chain |
 
-- [x] Draft plan to close output-root/base-package stop-gates
+###### Pipeline Position
 
-**Migration Plan (2025-12-29):**
+| Field | Value |
+|-------|-------|
+| Step Number | 1 of 8 |
+| Execution Mode | SEQUENTIAL |
+| Orchestrator Script | `.repo_studios/scripts/orchestrators/run_docs_health_overview.py` |
 
-- **Script change:** Update `REPORTS_ROOT` from `Path(".repo_studios/reports/producer_reports")` to
-  `Path(".repo_studios/reports/healthview")` (line 80)
-- **Test fixture updates:** Change `"reports" / "producer_reports"` → `"reports" / "healthview"` at
-  lines 27 and 72
-- **No dual-write:** Legacy path retired immediately (matches S21R-002/003 pattern)
-- **io_contract update:** Update `current.root` to HOP path after implementation
-- **Validation:** Run script directly to confirm bundle lands in new location
+###### Dependencies & Consumers
 
-Workstream C — Implement
+| Direction | Record ID | Script | Data Flow |
+|-----------|-----------|--------|-----------|
+| ⬆️ DEPENDS ON | (none) | — | First in pipeline, no upstream dependencies |
+| ⬇️ CONSUMED BY | S21R-009 | `aggregate_docs_health_signals.py` | Provides `doc_index.csv` for aggregation |
 
-- [x] Implement accepted plan; update record and stop-gate status with evidence.
+###### Known Limitations
 
-**Implementation Evidence (2025-12-29, updated 2025-12-30):**
+- None documented.
 
-- Script updated: Now uses `DEFAULT_OUTPUT_DIR = build_topic_path("producer", TOPIC_SLUG)`
-  for HOP-compliant paths
-- Tests updated: lines 27, 72 now use `"reports" / "healthview"`
-- Tests pass: 2 passed in 0.17s
-- Bundle created: `.repo_studios/reports/healthview/producer_reports/markdown_anchor_validation/<timestamp>/`
-- Artifacts: manifest.json (621 bytes), summary.md (245 bytes), telemetry.json (10,644 bytes)
-- io_contract.current.root updated to HOP path
-- retention.targets updated to HOP path
+###### Verification
 
-Workstream D — Tier-3 YAML
+| Field | Value |
+|-------|-------|
+| Last Verified | 2026-02-02 |
+| Verified By | GitHub Copilot |
+| Build Doc Version | 1.0.0 |
+<!-- AGENT_ROUTER:END S21R-002 -->
 
-- [x] Confirm Tier-3 is appropriate for this script; record decision (create vs defer)
-- [x] Inspect Tier-3 template requirements
-- [x] Draft `tier3_validate_markdown_anchors.yaml`
-- [x] Validate Tier-3 YAML
+---
 
-**Tier-3 Evidence (2025-12-29):**
+<!-- AGENT_ROUTER:START S21R-003 -->
+##### S21R-003 — generate_anchor_inventory.py
 
-- Decision: CREATE — mature producer for docs validation workflows
-- Created: `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier3_scripts/docs_health_overview/tier3_validate_markdown_anchors.yaml`
-- Tier-3 index refreshed: 12 scripts indexed (was 11)
-- Template compliance: follows tier3_generate_anchor_inventory.yaml pattern
-- Note: Uses main(argv) not run(argv) — documented in invocation section
+> **One-liner:** Extracts H1/H2 headings from markdown, computes URL-friendly slugs, detects cross-file duplicates.
 
-Workstream E — QA & Evidence
+**Keywords:** `markdown`, `anchors`, `slugs`, `duplicates`, `headings`, `inventory`
 
-- [x] Pytest evidence captured
-- [x] Mypy evidence captured or marked N/A (in record)
-- [x] Coverage ≥80% (or exception recorded) + doc-index timestamp recorded
+###### Resource Paths
 
-**QA Evidence (2025-12-29):**
+| Resource | Path |
+|----------|------|
+| Script | `.repo_studios/scripts/producers/generate_anchor_inventory.py` |
+| Tier-3 YAML | `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier3_scripts/docs_health_overview/tier3_generate_anchor_inventory.yaml` |
+| Build Doc | `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-002_generate_anchor_inventory_build.md` |
+| Output Root | `.repo_studios/reports/healthview/producer_reports/anchor_inventory/` |
 
-- Mypy (clean):
-  `.venv/Scripts/python.exe -m mypy .repo_studios/scripts/producers/validate_markdown_anchors.py` →
-  Success: no issues found
-- Pytest: 2 passed in 0.20s
-- Coverage: 90% (194 stmts, 19 miss) — exceeds 80% threshold
+###### Invocation
 
-- [x] DONE — validate_markdown_anchors.py complete; update Tier-1 Stage 2.1 script gate
-
-##### S21R-005 verify docs integrity
-
-```yaml
-record_id: "S21R-005"
-script:
-  path: ".repo_studios/scripts/producers/verify_docs_integrity.py"
-  name: "verify_docs_integrity.py"
-  category: "producer"
-tier3:
-  metadata_block_version: "v1"
-  allowed: true
-  exists: true
-  name: "tier3_verify_docs_integrity.yaml"
-  meets_template: "yes"
-  last_updated: "2025-12-30"
-cli_surfaces:
-  run_entrypoint: "run(argv)"
-  key_flags:
-    - "--repo-root"
-    - "--index"
-    - "--output-dir"
-    - "--update"
-    - "--no-table"
-    - "--artifacts-to-keep"
-    - "--log-level"
-    - "--exit-codes-hash"
-io_contract:
-  inputs:
-    - "Validates governed JSON blocks and content_hash stability (optionally updates mismatches)"
-  outputs:
-    current:
-      root: ".repo_studios/reports/healthview/producer_reports/docs_integrity_validation/YYYYMMDD-HHMM/"
-      artifacts:
-        - "manifest.json"
-        - "summary.md"
-        - "telemetry.json"
-    target:
-      root: ".repo_studios/reports/healthview/<class>/<topic>/<timestamp>/"
-      artifacts:
-        - "manifest.json"
-        - "summary.md"
-        - "telemetry.json"
-retention:
-  surfaces:
-    - "--artifacts-to-keep"
-    - "prune_run_directories(... keep=max(options.artifacts_to_keep, 1), current_run=run_dir)"
-  mechanism: "prune_by_keep_budget"
-  targets:
-    - ".repo_studios/reports/producer_reports/healthview/docs_integrity_validation"
-  guardrails:
-    - "current_run protection when pruning"
-  evidence:
-    - "Module docstring describes canonical bundle root + artifacts"
-    - "create_storage(...) bundle writer + prune_run_directories(...)"
-db_integration:
-  gated_by: "REPO_STUDIOS_DB_ENABLED"
-  marker_required: true
-  marker_string: "DB_INTEGRATION_MARKER:"
-evidence:
-  code_refs:
-    - ".repo_studios/scripts/producers/verify_docs_integrity.py#L1-L23"
-    - ".repo_studios/scripts/producers/verify_docs_integrity.py#L155-L236"
-    - ".repo_studios/scripts/producers/verify_docs_integrity.py#L579-L688"
-  tests:
-    - "<pytest path>"
-  fixtures:
-    - "<fixture path>"
-notes:
-  - "DB markers present for manifest/summary/telemetry writes."
+```bash
+python .repo_studios/scripts/producers/generate_anchor_inventory.py --repo-root . --log-level INFO
 ```
 
-#### Implementation Workstreams (checkbox-driven) — verify_docs_integrity.py
+| Aspect | Value |
+|--------|-------|
+| Entry Point | `run(argv)` / `main(argv)` |
+| Typical Runtime | ~10 seconds |
+| Exit Codes | 0=success, 1=issues found |
 
-Workstream A — Discovery
+###### Outputs
 
-- [x] Inspect outputs + pruning/retention surfaces; record findings
+| Artifact | Format | Description |
+|----------|--------|-------------|
+| manifest.json | JSON | Run metadata with viewer_slug, topic, catalog |
+| summary.md | Markdown | Heading inventory with duplicate clusters |
+| telemetry.json | JSON | Metrics: total_slugs, cross_file_duplicates, doc stats |
 
-**Discovery Findings (2025-12-29):**
+###### Compliance
 
-| Surface | Current | Target (HOP) |
-|---------|---------|--------------|
-| `DEFAULT_OUTPUT_DIR` | `build_topic_path("producer", TOPIC_SLUG)` | HOP-compliant ✓ |
-| Bundle Path | `output_dir / timestamp` | Full path embedded in DEFAULT |
-| Prune Target | `output_dir` | Same (full HOP path) |
-| Test Fixtures | Uses relative paths | No changes needed ✓ |
+| Aspect | Status | Notes |
+|--------|--------|-------|
+| HOP Bundle | YES | Full manifest/summary/telemetry package |
+| UIC Interface | YES | `run(argv) → dict[str, Any]` with status/exit_code |
+| Tier-3 YAML | YES | 286-line comprehensive YAML |
 
-- **TOPIC_SLUG:** `docs_integrity_validation`
-- **Retention:** `prune_run_directories(... keep=max(options.artifacts_to_keep, 1), current_run=run_dir)` —
-  no change needed
-- **DB markers:** Present for manifest/summary/telemetry writes
-- **Test file:** `.repo_studios/tests/tests_producers/test_verify_docs_integrity.py` —
-  uses relative paths, no changes needed
-- **Entry point:** Uses `run(argv)` ✓
+###### Orchestrator
 
-Workstream B — Plan
+| Pipeline | Status | Config |
+|----------|--------|--------|
+| run_docs_health_overview.py | WIRED | Step 2 in docs health chain |
 
-- [x] Draft plan to close output-root/base-package stop-gates
+###### Pipeline Position
 
-**Migration Plan (4 steps):**
+| Field | Value |
+|-------|-------|
+| Step Number | 2 of 8 |
+| Execution Mode | SEQUENTIAL |
+| Orchestrator Script | `.repo_studios/scripts/orchestrators/run_docs_health_overview.py` |
 
-- **Update REPORTS_ROOT** — Line 41: Change from `.repo_studios/reports/producer_reports` to `.repo_studios/reports/healthview`
-- **Run tests** — `pytest -v tests/tests_producers/test_verify_docs_integrity.py`
-  (should pass without test changes)
-- **Execute script** — Validate bundle creation at new HOP location
-- **Inspect bundle** — Confirm manifest.json, summary.md, telemetry.json present
+###### Dependencies & Consumers
 
-Workstream C — Implement
+| Direction | Record ID | Script | Data Flow |
+|-----------|-----------|--------|-----------|
+| ⬆️ DEPENDS ON | (none) | — | Parallel-capable, no upstream dependencies |
+| ⬇️ CONSUMED BY | S21R-004 | `validate_markdown_anchors.py` | Provides `anchors_targets.json` for validation |
+| ⬇️ CONSUMED BY | S21R-009 | `aggregate_docs_health_signals.py` | Provides anchor data via `load_anchor_inventory()` |
 
-- [x] Implement accepted plan; update record and stop-gate status with evidence.
+###### Known Limitations
 
-**Implementation Evidence (2025-12-30, updated 2025-12-30):**
+- None documented.
 
-- **Updated DEFAULT_OUTPUT_DIR** — Now uses `build_topic_path("producer", TOPIC_SLUG)`
-  for HOP-compliant paths
-- **Tests passed:** 2 in 0.21s
-- **Bundle created:** `.repo_studios/reports/healthview/producer_reports/docs_integrity_validation/<timestamp>/`
-- **Artifacts verified:** manifest.json, summary.md, telemetry.json present
+###### Verification
 
-Workstream D — Tier-3 YAML
+| Field | Value |
+|-------|-------|
+| Last Verified | 2026-02-02 |
+| Verified By | GitHub Copilot |
+| Build Doc Version | 1.0.0 |
+<!-- AGENT_ROUTER:END S21R-003 -->
 
-- [x] Confirm Tier-3 is appropriate for this script; record decision (create vs defer)
-- [x] Inspect Tier-3 template requirements
-- [x] Draft `tier3_verify_docs_integrity.yaml`
-- [x] Validate Tier-3 YAML
+---
 
-**Tier-3 Evidence (2025-12-30):**
+<!-- AGENT_ROUTER:START S21R-004 -->
+##### S21R-004 — validate_markdown_anchors.py
 
-- **Decision:** Create — mature producer with stable CLI, HOP-compliant output, and well-defined io_contract
-- **File created:** `tier3_scripts/docs_health_overview/tier3_verify_docs_integrity.yaml`
-- **YAML validation:** Passed
-- **Tier-3 index count:** 11 scripts (was 10)
-- **tier3.allowed:** `true`
+> **One-liner:** Validates internal markdown anchors and cross-file links, reports broken references.
 
-Workstream E — QA & Evidence
+**Keywords:** `markdown`, `anchors`, `validation`, `links`, `broken-links`, `cross-reference`
 
-- [x] Pytest evidence captured
-- [x] Mypy evidence captured or marked N/A (in record)
-- [x] Coverage ≥80% (or exception recorded) + doc-index timestamp recorded
+###### Resource Paths
 
-**QA Evidence (2025-12-30):**
+| Resource | Path |
+|----------|------|
+| Script | `.repo_studios/scripts/producers/validate_markdown_anchors.py` |
+| Tier-3 YAML | `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier3_scripts/docs_health_overview/tier3_validate_markdown_anchors.yaml` |
+| Build Doc | `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-004_validate_markdown_anchors_build.md` |
+| Output Root | `.repo_studios/reports/healthview/producer_reports/markdown_anchor_validation/` |
 
-| Check | Result |
-|-------|--------|
-| Pytest | 2 passed in 0.27s |
-| Mypy | Clean (`Success: no issues found in 1 source file`) |
-| Coverage | N/A — test uses `importlib.util` dynamic import (known coverage limitation) |
+###### Invocation
 
-- [x] DONE — verify_docs_integrity.py complete; update Tier-1 Stage 2.1 script gate
-
-##### S21R-006 validate metrics anchor stubs
-
-```yaml
-record_id: "S21R-006"
-script:
-  path: ".repo_studios/scripts/producers/validate_metrics_anchor_stubs.py"
-  name: "validate_metrics_anchor_stubs.py"
-  category: "producer"
-tier3:
-  metadata_block_version: "v1"
-  allowed: false
-  exists: false
-  name: "tier3_validate_metrics_anchor_stubs.yaml"
-  meets_template: "NA"
-  last_updated: null
-cli_surfaces:
-  run_entrypoint: "run(argv)"
-  key_flags:
-    - "--repo-root"
-    - "--output-dir"
-    - "--legacy-file"
-    - "--allowlist-path"
-    - "--artifacts-to-keep"
-    - "--log-level"
-io_contract:
-  inputs:
-    - "Scans markdown for metrics_orchestrator.md#<anchor> links and validates legacy stub headings"
-  outputs:
-    current:
-      root: ".repo_studios/reports/producer_reports/healthview/metrics_anchor_stub_validation/YYYYMMDD-HHMM/"
-      artifacts:
-        - "manifest.json"
-        - "summary.md"
-        - "telemetry.json"
-    target:
-      root: ".repo_studios/reports/healthview/<class>/<topic>/<timestamp>/"
-      artifacts:
-        - "manifest.json"
-        - "summary.md"
-        - "telemetry.json"
-retention:
-  surfaces:
-    - "--artifacts-to-keep"
-    - "prune_run_directories(... keep=max(keep, 1), current_run=run_dir)"
-  mechanism: "prune_by_keep_budget"
-  targets:
-    - ".repo_studios/reports/producer_reports/healthview/metrics_anchor_stub_validation"
-  guardrails:
-    - "current_run protection when pruning"
-  evidence:
-    - "Module docstring describes canonical bundle root + artifacts"
-    - "create_storage(...) bundle writer + prune_run_directories(...)"
-db_integration:
-  gated_by: "REPO_STUDIOS_DB_ENABLED"
-  marker_required: true
-  marker_string: "DB_INTEGRATION_MARKER:"
-evidence:
-  code_refs:
-    - ".repo_studios/scripts/producers/validate_metrics_anchor_stubs.py#L1-L27"
-    - ".repo_studios/scripts/producers/validate_metrics_anchor_stubs.py#L109-L159"
-    - ".repo_studios/scripts/producers/validate_metrics_anchor_stubs.py#L375-L466"
-  tests:
-    - "<pytest path>"
-  fixtures:
-    - "<fixture path>"
-notes:
-  - "DB markers present for manifest/summary/telemetry writes."
-  - "Return payload does not include an artifacts mapping; consumers must infer paths from output_dir + run_timestamp."
+```bash
+python .repo_studios/scripts/producers/validate_markdown_anchors.py --repo-root . --log-level INFO
 ```
 
-#### Implementation Workstreams (checkbox-driven) — validate_metrics_anchor_stubs.py
+| Aspect | Value |
+|--------|-------|
+| Entry Point | `main(argv)` — **NO run()** |
+| Typical Runtime | ~5 seconds |
+| Exit Codes | 0=success, 1=issues found |
 
-Workstream A — Discovery
+###### Outputs
 
-- [x] Inspect outputs + pruning/retention surfaces; record findings
+| Artifact | Format | Description |
+|----------|--------|-------------|
+| manifest.json | JSON | Run metadata with viewer_slug, topic, catalog |
+| summary.md | Markdown | Broken link/anchor report with file locations |
+| telemetry.json | JSON | Validation metrics: checked, broken, by-type |
 
-**Discovery Findings (2025-12-30):**
+###### Compliance
 
-| Surface | Current | Target (HOP) |
-|---------|---------|--------------|
-| `DEFAULT_OUTPUT_DIR` | `build_topic_path("producer", TOPIC_SLUG)` | HOP-compliant ✓ |
-| Bundle Path | `output_dir / timestamp` | Full path embedded in DEFAULT |
-| Prune Target | `output_dir` | Same (full HOP path) |
-| Test Fixtures | Uses script default | No changes needed ✓ |
+| Aspect | Status | Notes |
+|--------|--------|-------|
+| HOP Bundle | YES | Full manifest/summary/telemetry package |
+| UIC Interface | PARTIAL | Missing `run(argv) → dict` — uses `main(argv) → int` |
+| Tier-3 YAML | YES | Correctly documents `importable: false` |
 
-- **TOPIC_SLUG:** `metrics_anchor_stub_validation`
-- **Retention:** `prune_run_directories(... keep=max(keep, 1), current_run=run_dir)`
-- **DB markers:** Present for manifest/summary/telemetry writes
-- **Test file:** `.repo_studios/tests/tests_producers/test_validate_metrics_anchor_stubs.py` —
-  uses default, no changes needed
-- **Entry point:** Uses `run(argv)` ✓
+###### Orchestrator
 
-Workstream B — Plan
+| Pipeline | Status | Config |
+|----------|--------|--------|
+| run_docs_health_overview.py | WIRED | Step 3 — requires shell-out (no importable run()) |
 
-- [x] Draft plan to close output-root/base-package stop-gates
+###### Pipeline Position
 
-**Migration Plan (3 steps):**
+| Field | Value |
+|-------|-------|
+| Step Number | 3 of 8 |
+| Execution Mode | SEQUENTIAL |
+| Orchestrator Script | `.repo_studios/scripts/orchestrators/run_docs_health_overview.py` |
 
-- **Update REPORTS_ROOT** — Line 36: Change from `.repo_studios/reports/producer_reports` to `.repo_studios/reports`
-- **Run tests** — `pytest -v tests/tests_producers/test_validate_metrics_anchor_stubs.py`
-  (should pass without test changes)
-- **Execute script** — Validate bundle creation at new HOP location
+###### Dependencies & Consumers
 
-Workstream C — Implement
+| Direction | Record ID | Script | Data Flow |
+|-----------|-----------|--------|-----------|
+| ⬆️ DEPENDS ON | S21R-003 | `generate_anchor_inventory.py` | Requires anchor targets for validation reference |
+| ⬇️ CONSUMED BY | S21R-009 | `aggregate_docs_health_signals.py` | Provides validation results via `load_anchor_inventory()` |
 
-- [x] Implement accepted plan; update record and stop-gate status with evidence.
+###### Known Limitations
 
-**Implementation Evidence (2025-12-30, updated 2025-12-30):**
+- Missing `run(argv) → dict[str, Any]` entry point — orchestrators must shell-out or call `main(argv)`.
+- Returns exit code only — no structured payload for orchestrator consumption.
+- See build doc Section 5 (Gap Analysis) for remediation plan.
 
-- **Updated DEFAULT_OUTPUT_DIR** — Now uses `build_topic_path("producer", TOPIC_SLUG)` for
-  HOP-compliant paths
-- **Tests passed:** 2 in 0.40s
-- **Bundle created:** `.repo_studios/reports/healthview/producer_reports/metrics_anchor_stub_validation/<timestamp>/`
-- **Artifacts verified:** manifest.json, summary.md, telemetry.json present
+###### Verification
 
-Workstream D — Tier-3 YAML
+| Field | Value |
+|-------|-------|
+| Last Verified | 2026-02-02 |
+| Verified By | GitHub Copilot |
+| Build Doc Version | 3.5.0 |
+<!-- AGENT_ROUTER:END S21R-004 -->
 
-- [x] Confirm Tier-3 is appropriate for this script; record decision (create vs defer)
-- [x] Inspect Tier-3 template requirements
-- [x] Draft `tier3_validate_metrics_anchor_stubs.yaml`
-- [x] Validate Tier-3 YAML
+---
 
-**Tier-3 Evidence (2025-12-30):**
+<!-- AGENT_ROUTER:START S21R-005 -->
+### S21R-005 — verify_docs_integrity.py
 
-- **Decision:** Create — mature producer with stable CLI, HOP-compliant output
-- **File created:** `tier3_scripts/docs_health_overview/tier3_validate_metrics_anchor_stubs.yaml`
-- **YAML validation:** Passed
-- **Tier-3 index count:** 12 scripts (was 11)
-- **tier3.allowed:** `true`
+> **One-liner:** Validates governed JSON `content_hash` blocks and refreshes the docs index navigation table.
 
-Workstream E — QA & Evidence
+**Keywords:** `docs`, `integrity`, `validation`, `content_hash`, `index`
 
-- [x] Pytest evidence captured
-- [x] Mypy evidence captured or marked N/A (in record)
-- [x] Coverage ≥80% (or exception recorded) + doc-index timestamp recorded
+#### Resource Paths
 
-**QA Evidence (2025-12-30):**
+| Resource | Path |
+|----------|------|
+| Script | `.repo_studios/scripts/producers/verify_docs_integrity.py` |
+| Tier-3 YAML | `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier3_scripts/docs_health_overview/tier3_verify_docs_integrity.yaml` |
+| Build Doc | `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-005_verify_docs_integrity_build.md` |
+| Output Root | `.repo_studios/reports/healthview/producer_reports/docs_integrity_validation/` |
 
-| Check | Result |
-|-------|--------|
-| Pytest | 2 passed in 0.40s |
-| Mypy | Clean (`Success: no issues found in 1 source file`) |
-| Coverage | N/A — test uses `importlib.util` dynamic import (known coverage limitation) |
+#### Invocation
 
-- [x] DONE — validate_metrics_anchor_stubs.py complete; update Tier-1 Stage 2.1 script gate
-
-##### S21R-007 generate code doc churn report
-
-```yaml
-record_id: "S21R-007"
-script:
-  path: ".repo_studios/scripts/producers/generate_code_doc_churn_report.py"
-  name: "generate_code_doc_churn_report.py"
-  category: "producer"
-tier3:
-  metadata_block_version: "v1"
-  allowed: false
-  exists: false
-  name: "tier3_generate_code_doc_churn_report.yaml"
-  meets_template: "NA"
-  last_updated: null
-cli_surfaces:
-  run_entrypoint: "run(argv)"
-  key_flags:
-    - "--repo-root"
-    - "--output-dir"
-    - "--doc-index"
-    - "--anchor-inventory"
-    - "--allowlist"
-    - "--git-window"
-    - "--git-until"
-    - "--artifacts-to-keep"
-    - "--log-level"
-io_contract:
-  inputs:
-    - "Reads git history for code churn and correlates to doc index candidates"
-    - "Loads doc index + anchor inventory from canonical topic dirs (expects telemetry.json bundles)"
-  outputs:
-    current:
-      root: ".repo_studios/reports/producer_reports/healthview/code_doc_churn/YYYYMMDD-HHMM/"
-      artifacts:
-        - "manifest.json"
-        - "summary.md"
-        - "telemetry.json"
-    target:
-      root: ".repo_studios/reports/healthview/<class>/<topic>/<timestamp>/"
-      artifacts:
-        - "manifest.json"
-        - "summary.md"
-        - "telemetry.json"
-retention:
-  surfaces:
-    - "--artifacts-to-keep"
-    - "prune_run_directories(... keep=options.artifacts_to_keep, current_run=run_dir)"
-  mechanism: "prune_by_keep_budget"
-  targets:
-    - ".repo_studios/reports/producer_reports/healthview/code_doc_churn"
-  guardrails:
-    - "current_run protection when pruning"
-  evidence:
-    - "create_storage(...) bundle writer + prune_run_directories(...)"
-db_integration:
-  gated_by: "REPO_STUDIOS_DB_ENABLED"
-  marker_required: true
-  marker_string: "DB_INTEGRATION_MARKER:"
-evidence:
-  code_refs:
-    - ".repo_studios/scripts/producers/generate_code_doc_churn_report.py#L1-L29"
-    - ".repo_studios/scripts/producers/generate_code_doc_churn_report.py#L165-L216"
-    - ".repo_studios/scripts/producers/generate_code_doc_churn_report.py#L538-L671"
-  tests:
-    - "<pytest path>"
-  fixtures:
-    - "<fixture path>"
-notes:
-  - "DB markers present for manifest/summary/telemetry writes."
+```bash
+python -m scripts.producers.verify_docs_integrity --repo-root . --log-level INFO
 ```
+
+| Aspect | Value |
+|--------|-------|
+| Entry Point | `run(argv)` / `main()` |
+| Typical Runtime | ~5 seconds |
+| Exit Codes | 0=success, 1=error |
+
+#### Outputs
+
+| Artifact | Format | Description |
+|----------|--------|-------------|
+| manifest.json | JSON | Bundle metadata with validation results |
+| summary.md | Markdown | Human-readable integrity report |
+| telemetry.json | JSON | Execution metrics and full payload |
+
+#### Compliance
+
+| Aspect | Status | Notes |
+|--------|--------|-------|
+| HOP Bundle | YES | Timestamped bundles with manifest/summary/telemetry |
+| UIC Interface | YES | `run(argv) → dict[str, Any]` entry point |
+| Tier-3 YAML | YES | `tier3_verify_docs_integrity.yaml` exists |
+
+#### Orchestrator
+
+| Pipeline | Status | Config Path |
+|----------|--------|-------------|
+| docs_health_overview | WIRED | `run_docs_health_overview.py` L1248-L1303 |
+
+#### Pipeline Position
+
+| Field | Value |
+|-------|-------|
+| Step Number | 4 of 8 |
+| Execution Mode | SEQUENTIAL |
+| Orchestrator Script | `.repo_studios/command_center/scripts/orchestrators/run_docs_health_overview.py` |
+
+#### Dependencies & Consumers
+
+| Direction | Record ID | Script | Data Flow |
+|-----------|-----------|--------|-----------|
+| ⬆️ DEPENDS ON | (none) | — | Reads `docs_index.md` directly, no upstream script dependencies |
+| ⬇️ CONSUMED BY | S21R-009 | `aggregate_docs_health_signals.py` | Provides integrity data for docs health aggregation |
+
+#### Known Limitations
+
+- None documented.
+
+#### Verification
+
+| Field | Value |
+|-------|-------|
+| Last Verified | 2026-02-02 |
+| Verified By | GitHub Copilot |
+| Build Doc Version | 1.0.0 |
+<!-- AGENT_ROUTER:END S21R-005 -->
+
+<!-- AGENT_ROUTER:START S21R-006 -->
+### S21R-006 — validate_metrics_anchor_stubs.py
+
+> **One-liner:** Scans repository markdown for `metrics_orchestrator.md#<anchor>` links and validates against legacy stub headings.
+
+**Keywords:** `metrics`, `anchors`, `validation`, `legacy-stubs`, `producer`
+
+#### Resource Paths
+
+| Resource | Path |
+|----------|------|
+| Script | `.repo_studios/scripts/producers/validate_metrics_anchor_stubs.py` |
+| Tier-3 YAML | `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier3_scripts/docs_health_overview/tier3_validate_metrics_anchor_stubs.yaml` |
+| Build Doc | `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-006_validate_metrics_anchor_stubs_build.md` |
+| Output Root | `.repo_studios/reports/healthview/producer_reports/metrics_anchor_stub_validation/` |
+
+#### Invocation
+
+```bash
+python .repo_studios/scripts/producers/validate_metrics_anchor_stubs.py --repo-root . --log-level INFO
+```
+
+| Aspect | Value |
+|--------|-------|
+| Entry Point | `run(argv)` / `main()` |
+| Typical Runtime | ~5 seconds |
+| Exit Codes | 0=success (no missing), 1=missing anchors detected |
+
+#### Outputs
+
+| Artifact | Format | Description |
+|----------|--------|-------------|
+| manifest.json | JSON | Bundle metadata with run info and summary |
+| summary.md | Markdown | Human-readable validation results |
+| telemetry.json | JSON | Structured metrics for aggregators |
+
+#### Compliance
+
+| Aspect | Status | Notes |
+|--------|--------|-------|
+| HOP Bundle | YES | Timestamped bundles with manifest/summary/telemetry |
+| UIC Interface | YES | `run(argv) → dict[str, Any]` entry point |
+| Tier-3 YAML | YES | Created and validated |
+
+#### Orchestrator
+
+| Pipeline | Status | Config Path |
+|----------|--------|-------------|
+| HealthView Docs Health Overview | WIRED | `.repo_studios/command_center/scripts/orchestrators/run_docs_health_overview.py` |
+
+#### Pipeline Position
+
+| Field | Value |
+|-------|-------|
+| Step Number | 5 of 8 |
+| Execution Mode | SEQUENTIAL |
+| Orchestrator Script | `.repo_studios/command_center/scripts/orchestrators/run_docs_health_overview.py` |
+
+#### Dependencies & Consumers
+
+| Direction | Record ID | Script | Data Flow |
+|-----------|-----------|--------|-----------|
+| ⬆️ DEPENDS ON | (none) | — | Reads markdown files directly, no upstream bundle dependency |
+| ⬇️ CONSUMED BY | S21R-009 | `aggregate_docs_health_signals.py` | Provides telemetry.json for health aggregation |
+
+#### Known Limitations
+
+- None documented.
+
+#### Verification
+
+| Field | Value |
+|-------|-------|
+| Last Verified | 2026-02-02 |
+| Verified By | GitHub Copilot |
+| Build Doc Version | 1.0.0 |
+<!-- AGENT_ROUTER:END S21R-006 -->
+
+<!-- AGENT_ROUTER:START S21R-007 -->
+### S21R-007 — generate_code_doc_churn_report.py
+
+> **One-liner:** Compares code file churn vs. documentation churn to identify staleness risk areas.
+
+**Keywords:** `churn`, `documentation`, `staleness`, `git-history`, `code-doc-sync`
+
+#### Resource Paths
+| Resource | Path |
+|----------|------|
+| Script | `.repo_studios/scripts/producers/generate_code_doc_churn_report.py` |
+| Tier-3 YAML | `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier3_scripts/docs_health_overview/tier3_generate_code_doc_churn_report.yaml` |
+| Build Doc | `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-007_generate_code_doc_churn_report_build.md` |
+| Output Root | `.repo_studios/reports/healthview/producer_reports/code_doc_churn/` |
+
+#### Invocation
+```bash
+python -m scripts.producers.generate_code_doc_churn_report --repo-root . --log-level INFO
+```
+
+| Aspect | Value |
+|--------|-------|
+| Entry Point | `run(argv)` |
+| Typical Runtime | ~5-10 seconds |
+| Exit Codes | 0=success, 1=error |
+
+#### Outputs
+| Artifact | Format | Description |
+|----------|--------|-------------|
+| manifest.json | JSON | Bundle metadata with execution context |
+| summary.md | Markdown | Human-readable churn analysis digest |
+| telemetry.json | JSON | Detailed churn metrics and file-level data |
+
+#### Compliance
+| Aspect | Status | Notes |
+|--------|--------|-------|
+| HOP Bundle | YES | Timestamped bundles with manifest/summary/telemetry |
+| UIC Interface | YES | `run(argv)` entry point, dict return |
+| Tier-3 YAML | YES | Created and validated |
+
+#### Orchestrator
+| Pipeline | Status | Config Path |
+|----------|--------|-------------|
+| run_docs_health_overview.py | WIRED | L1359-1405 (`_execute_churn`) |
+
+#### Pipeline Position
+| Field | Value |
+|-------|-------|
+| Step Number | 6 of 8 |
+| Execution Mode | SEQUENTIAL |
+| Orchestrator Script | `.repo_studios/command_center/scripts/orchestrators/run_docs_health_overview.py` |
+
+#### Dependencies & Consumers
+| Direction | Record ID | Script | Data Flow |
+|-----------|-----------|--------|-----------|
+| ⬆️ DEPENDS ON | S21R-002 | `generate_doc_index.py` | Uses doc-index telemetry for correlation |
+| ⬆️ DEPENDS ON | S21R-003 | `generate_anchor_inventory.py` | Uses anchor inventory for doc mapping |
+| ⬇️ CONSUMED BY | S21R-009 | `aggregate_docs_health_signals.py` | Provides churn metrics for aggregation |
+
+#### Known Limitations
+- None documented. Script is fully HOP-compliant.
+
+#### Verification
+| Field | Value |
+|-------|-------|
+| Last Verified | 2026-02-03 |
+| Verified By | GitHub Copilot |
+| Build Doc Version | 1.0.0 |
+<!-- AGENT_ROUTER:END S21R-007 -->
 
 #### Implementation Workstreams (checkbox-driven) — generate_code_doc_churn_report.py
 
@@ -1010,14 +960,14 @@ Workstream C — Implement
 
 - [x] Implement accepted plan; update record and stop-gate status with evidence.
 
-**Implementation Evidence (2025-12-30, updated 2025-12-30):**
+**Implementation Evidence (2025-12-30, updated 2026-02-03):**
 
 - **Updated DEFAULT_OUTPUT_DIR** — Now uses `build_topic_path("producer", TOPIC_SLUG)`
   for HOP-compliant paths
 - **Updated test fixtures** — Removed `/producer_reports` hardcoding
-- **Tests passed:** 3 in 1.87s
-- **Bundle created:** `.repo_studios/reports/healthview/producer_reports/code_doc_churn/<timestamp>/`
-- **Artifacts verified:** manifest.json, summary.md, telemetry.json present
+- **Tests passed:** 4 passed in 3.00s (2026-02-03)
+- **Bundle created:** `.repo_studios/reports/healthview/producer_reports/code_doc_churn/20260203-1150/`
+- **Artifacts verified:** manifest.json (1,245B), summary.md (1,781B), telemetry.json (48,834B)
 
 Workstream D — Tier-3 YAML
 
@@ -1026,13 +976,13 @@ Workstream D — Tier-3 YAML
 - [x] Draft `tier3_generate_code_doc_churn_report.yaml`
 - [x] Validate Tier-3 YAML
 
-**Tier-3 Evidence (2025-12-30):**
+**Tier-3 Evidence (2025-12-30, verified 2026-02-03):**
 
 - **Decision:** Create — mature producer with stable CLI, HOP-compliant output
 - **File created:** `tier3_scripts/docs_health_overview/tier3_generate_code_doc_churn_report.yaml`
-- **YAML validation:** Passed
-- **Tier-3 index count:** 13 scripts (was 12)
+- **YAML validation:** Passed (`python -c "import yaml; yaml.safe_load(...)"` → "YAML valid")
 - **tier3.allowed:** `true`
+- **tier3.exists:** `true`
 
 Workstream E — QA & Evidence
 
@@ -1040,11 +990,11 @@ Workstream E — QA & Evidence
 - [x] Mypy evidence captured or marked N/A (in record)
 - [x] Coverage ≥80% (or exception recorded) + doc-index timestamp recorded
 
-**QA Evidence (2025-12-30):**
+**QA Evidence (2026-02-03):**
 
 | Check | Result |
 |-------|--------|
-| Pytest | 3 passed in 1.87s |
+| Pytest | 4 passed in 3.00s |
 | Mypy | Clean (`Success: no issues found in 1 source file`) |
 | Coverage | N/A — test uses `importlib.util` dynamic import (known coverage limitation) |
 

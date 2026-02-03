@@ -673,9 +673,9 @@ anchor validation and churn aggregation. Replaces legacy ad hoc docs inventory/a
 | `generate_doc_index.py` | Producer | Scan repository for markdown files, extract headings, build document inventory | TBD |
 | `generate_anchor_inventory.py` | Producer | Extract markdown anchor IDs, build cross-reference map with duplicates flagged | TBD |
 | `validate_markdown_anchors.py` | Producer | Check for broken internal links, orphaned anchors, cross-file reference errors | TBD |
-| `verify_docs_integrity.py` | Producer | Validate governed JSON `content_hash` blocks and refresh the docs index table | TBD |
-| `validate_metrics_anchor_stubs.py` | Producer | Ensure metric definitions have corresponding anchor points for linking | TBD |
-| `generate_code_doc_churn_report.py` | Producer | Compare code file churn vs. doc file churn, identify staleness risk areas | TBD |
+| `verify_docs_integrity.py` | Producer | Validate governed JSON `content_hash` blocks and refresh the docs index table | [tier3_verify_docs_integrity.yaml](tier3_scripts/docs_health_overview/tier3_verify_docs_integrity.yaml) |
+| `validate_metrics_anchor_stubs.py` | Producer | Ensure metric definitions have corresponding anchor points for linking | [tier3_validate_metrics_anchor_stubs.yaml](tier3_scripts/docs_health_overview/tier3_validate_metrics_anchor_stubs.yaml) |
+| `generate_code_doc_churn_report.py` | Producer | Compare code file churn vs. doc file churn, identify staleness risk areas | [tier3_generate_code_doc_churn_report.yaml](tier3_scripts/docs_health_overview/tier3_generate_code_doc_churn_report.yaml) |
 | `generate_undocumented_logic_report.py` | Producer | Identify functions/classes lacking docstrings or external doc references | TBD |
 | `aggregate_docs_health_signals.py` | Aggregator | Synthesize all doc metrics into single health score, trend report, signal matrix | TBD |
 
@@ -827,8 +827,8 @@ The Fault Diagnostics Overview orchestrator chains a 3-script pipeline
 | Script | Category | Purpose | Tier-3 YAML |
 | ------ | -------- | ------- | ----------- |
 | `collect_faulthandler_reports.py` | Producer | Scan HealthView rawview fault diagnostics runs, parse faulthandler dumps, categorize faults | [tier3_collect_faulthandler_reports.yaml](tier3_scripts/fault_diagnostics_overview/tier3_collect_faulthandler_reports.yaml) |
-| `generate_fault_artifacts.py` | Consumer | Process producer output into structured artifacts (CSV, JSON, SUMMARY.md) | TBD |
-| `summarize_fault_diagnostics_overview.py` | Summarizer | Generate HealthView overview bundle with cross-run comparisons | TBD |
+| `generate_fault_artifacts.py` | Consumer | Process producer output into structured artifacts (CSV, JSON, SUMMARY.md) | [tier3_generate_fault_artifacts.yaml](tier3_scripts/fault_diagnostics_overview/tier3_generate_fault_artifacts.yaml) |
+| `summarize_fault_diagnostics_overview.py` | Summarizer | Generate HealthView overview bundle with cross-run comparisons | [tier3_summarize_fault_diagnostics_overview.yaml](tier3_scripts/fault_diagnostics_overview/tier3_summarize_fault_diagnostics_overview.yaml) |
 
 **Inputs:**
 
