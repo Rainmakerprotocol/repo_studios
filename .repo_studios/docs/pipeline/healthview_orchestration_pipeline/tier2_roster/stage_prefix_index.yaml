@@ -1,0 +1,136 @@
+# Stage Prefix Index
+# Single source of truth for stage-to-prefix mappings
+# Used by BOOTSTRAP.md for automatic record ID assignment
+#
+# Version: 1.0.0
+# Updated: 2026-02-01
+# Source: stage_tier2_compliance_alignment.md Section 2.2
+
+schema_version: "1.0.0"
+
+# Default stage for scripts that don't match any topic keywords
+default_stage: "11.1"
+
+stages:
+  "1.1":
+    prefix: TER
+    name: "Test Execution Record"
+    roster: tier2_test_execution_telemetry_roster.md
+    working_docs: working_docs/stage_1_1/
+    topic_keywords:
+      - test
+      - telemetry
+      - execution
+      - pytest
+      - coverage
+    description: "Scripts related to test execution, telemetry collection, and test reporting"
+
+  "2.1":
+    prefix: S21R
+    name: "Stage 2.1 Record"
+    roster: tier2_docs_health_overview_roster.md
+    working_docs: working_docs/stage_2_1/
+    topic_keywords:
+      - docs
+      - health
+      - documentation
+      - overview
+    description: "Scripts related to documentation health and overview reporting"
+
+  "3.1":
+    prefix: FDR
+    name: "Fault Diagnostics Record"
+    roster: tier2_fault_diagnostics_overview_roster.md
+    working_docs: working_docs/stage_3_1/
+    topic_keywords:
+      - fault
+      - diagnostic
+      - error
+      - failure
+    description: "Scripts related to fault detection and diagnostics"
+
+  "4.1":
+    prefix: DIR
+    name: "Dependency/Import Record"
+    roster: tier2_dependency_import_hygiene_roster.md
+    working_docs: working_docs/stage_4_1/
+    topic_keywords:
+      - dependency
+      - import
+      - hygiene
+      - boundary
+    description: "Scripts related to dependency management and import hygiene"
+
+  "5.1":
+    prefix: CHR
+    name: "Churn/Heatmap Record"
+    roster: tier2_monkey_patch_oversight_roster.md
+    working_docs: working_docs/stage_5_1/
+    topic_keywords:
+      - churn
+      - heatmap
+      - complexity
+      - monkey
+      - patch
+    description: "Scripts related to code churn analysis and complexity heatmaps"
+
+  "6.1":
+    prefix: SIR
+    name: "Standards/Inventory Record"
+    roster: tier2_standards_integrity_roster.md
+    working_docs: working_docs/stage_6_1/
+    topic_keywords:
+      - standards
+      - integrity
+      - inventory
+      - validate
+      - schema
+    description: "Scripts related to standards enforcement and inventory validation"
+
+  "10.1":
+    prefix: PIR
+    name: "Pipeline Integration Record"
+    roster: tier2_full_suite_overview_roster.md
+    working_docs: working_docs/stage_10_1/
+    topic_keywords:
+      - pipeline
+      - integration
+      - orchestrator
+      - suite
+      - full
+    description: "Scripts related to pipeline orchestration and full suite execution"
+
+  "11.1":
+    prefix: ASR
+    name: "Available Scripts Record"
+    roster: tier2_available_scripts_roster.md
+    working_docs: working_docs/stage_11_1/
+    topic_keywords: []  # Catch-all, no specific keywords
+    description: "Default holding stage for scripts awaiting topic assignment"
+
+# Template class mappings
+# Maps script class to template folder
+# NOTE: library/ removed 2026-02-02 — no library scripts exist yet.
+#       Re-add when library scripts are created.
+template_classes:
+  producer: producer/
+  consumer: consumer/
+  aggregator: aggregator/
+  summarizer: summarizer/
+  utility: utility/
+  orchestrator: orchestrator/
+  promotion: promotion/
+
+# Compliance tier indicators
+# Patterns in code that indicate Tier A (Report Generator)
+tier_a_indicators:
+  - "build_topic_path("
+  - "create_storage("
+  - "storage.write_manifest"
+  - "storage.write_summary"
+  - "storage.write_telemetry"
+  - "manifest.json"
+  - "summary.md"
+  - "telemetry.json"
+
+# If none of the above patterns found, script is Tier B (Action Utility)

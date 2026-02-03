@@ -123,13 +123,16 @@ Each stage uses a unique record ID prefix:
 | Stage | Prefix | Meaning | Example |
 |-------|--------|---------|---------|
 | 1.1 | TER | Test Execution Record | TER-001, TER-002, ... |
-| 2.1 | AHR | Anchor Health Record | AHR-001, AHR-002, ... |
+| 2.1 | S21R | Stage 2.1 Record | S21R-001, S21R-002, ... |
 | 3.1 | FDR | Fault Diagnostics Record | FDR-001, FDR-002, ... |
 | 4.1 | DIR | Dependency/Import Record | DIR-001, DIR-002, ... |
 | 5.1 | CHR | Churn/Heatmap Record | CHR-001, CHR-002, ... |
 | 6.1 | SIR | Standards/Inventory Record | SIR-001, SIR-002, ... |
 | 10.1 | PIR | Pipeline Integration Record | PIR-001, PIR-002, ... |
 | 11.1 | ASR | Available Scripts Record | ASR-001, ASR-002, ... |
+
+> **Note:** Stage 2.1 prefix was changed from AHR to S21R on 2026-02-01 to align with
+> deployed usage in tier2_docs_health_overview_roster.md and stage12_metaprompts.md.
 
 ### 2.3 Folder Structure
 

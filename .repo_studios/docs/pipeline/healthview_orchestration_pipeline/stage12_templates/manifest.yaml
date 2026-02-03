@@ -2,11 +2,66 @@
 # Machine-readable registry for agent and indexer discovery
 # Path: stage12_templates/manifest.yaml
 
-version: "1.0.0"
-updated_at: "2026-01-30"
+version: "1.2.0"
+updated_at: "2026-02-02"
 pipeline: healthview
 stage: "12"
 purpose: "Phase 4 script compliance templates and workflows"
+
+# ═══════════════════════════════════════════════════════════════════
+# 4-PHASE WORKFLOW ARCHITECTURE (v2.0.0)
+# ═══════════════════════════════════════════════════════════════════
+# The inspection workflow is split into 4 phases with mandatory human
+# verification between each phase. This prevents LLM attention decay
+# and ensures external file updates (Tier-2 roster, Tier-1 registry)
+# are actually performed with git diff evidence.
+#
+# Entry point: PROMPT_ZERO.md (delivers phase-specific prompts)
+# Phase files: PROMPT_PHASE{1-4}_*.md (detailed instructions per phase)
+# ═══════════════════════════════════════════════════════════════════
+
+# Phase prompt files for 4-phase workflow
+phases:
+  - path: PROMPT_PHASE1_BOOTSTRAP.md
+    title: "Phase 1: Bootstrap + Setup"
+    phase: 1
+    checkpoints: [CHECKPOINT-0, CHECKPOINT-1]
+    version: "1.0.0"
+    scope: "PROMPT-00-BOOTSTRAP, PROMPT-01-SETUP"
+
+  - path: PROMPT_PHASE2_ANALYSIS.md
+    title: "Phase 2: Analysis + Verification"
+    phase: 2
+    checkpoints: [CHECKPOINT-2A, CHECKPOINT-2B, CHECKPOINT-3, CHECKPOINT-4]
+    version: "1.0.0"
+    scope: "PROMPT-2A-ANALYZE, PROMPT-2B-VERIFY, PROMPT-34-PREPARE"
+
+  - path: PROMPT_PHASE3_EVIDENCE.md
+    title: "Phase 3: Gaps + Evidence"
+    phase: 3
+    checkpoints: [CHECKPOINT-5, CHECKPOINT-6, CHECKPOINT-7, CHECKPOINT-8]
+    version: "1.0.0"
+    scope: "PROMPT-5-GAPS, PROMPT-67-EVIDENCE, PROMPT-8-ORCHESTRATOR"
+
+  - path: PROMPT_PHASE4_FINALIZE.md
+    title: "Phase 4: Finalization + Propagation"
+    phase: 4
+    checkpoints: [CHECKPOINT-9, CHECKPOINT-10]
+    version: "1.0.0"
+    scope: "PROMPT-910-CLOSE (Attestation + External updates)"
+
+# Entry point for workflow
+entry_point:
+  path: PROMPT_ZERO.md
+  version: "2.0.0"
+  description: "Human-facing entry point with copy-paste phase prompts"
+
+# Shared review metaprompts for all classes
+shared:
+  review_metaprompts:
+    path: common/review_metaprompts.md
+    use_case: "Existing script Phase 4A review (all classes)"
+    version: "1.1.0"
 
 templates:
   - id: producer_build
@@ -17,7 +72,7 @@ templates:
     use_when: "Processing existing or new producer script for Universal Law compliance"
     produces: "{RECORD_ID}_{script_stem}_build.md"
     metaprompts:
-      - path: producer/review_metaprompts.md
+      - path: common/review_metaprompts.md
         use_case: "Existing script Phase 4A review"
       - path: producer/create_metaprompts.md
         use_case: "New script from scratch"
@@ -30,7 +85,7 @@ templates:
     use_when: "Processing existing or new consumer script for Universal Law compliance"
     produces: "{RECORD_ID}_{script_stem}_build.md"
     metaprompts:
-      - path: consumer/review_metaprompts.md
+      - path: common/review_metaprompts.md
         use_case: "Existing script Phase 4A review"
 
   - id: aggregator_build
@@ -41,7 +96,7 @@ templates:
     use_when: "Processing existing or new aggregator script for Universal Law compliance"
     produces: "{RECORD_ID}_{script_stem}_build.md"
     metaprompts:
-      - path: aggregator/review_metaprompts.md
+      - path: common/review_metaprompts.md
         use_case: "Existing script Phase 4A review"
 
   - id: summarizer_build
@@ -52,7 +107,7 @@ templates:
     use_when: "Processing existing or new summarizer script for Universal Law compliance"
     produces: "{RECORD_ID}_{script_stem}_build.md"
     metaprompts:
-      - path: summarizer/review_metaprompts.md
+      - path: common/review_metaprompts.md
         use_case: "Existing script Phase 4A review"
 
   - id: orchestrator_build
@@ -63,6 +118,8 @@ templates:
     use_when: "Designing or modifying orchestrator for stage pipeline"
     produces: "{RECORD_ID}_{script_stem}_build.md"
     metaprompts:
+      - path: common/review_metaprompts.md
+        use_case: "Existing orchestrator Phase 4A review"
       - path: orchestrator/design_metaprompts.md
         use_case: "Orchestrator design and implementation"
 
@@ -74,7 +131,7 @@ templates:
     use_when: "Processing utility script (no HOP bundle output)"
     produces: "{RECORD_ID}_{script_stem}_build.md"
     metaprompts:
-      - path: utility/review_metaprompts.md
+      - path: common/review_metaprompts.md
         use_case: "Existing utility script Phase 4A review"
 
   - id: promotion_build

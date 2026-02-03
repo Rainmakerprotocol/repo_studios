@@ -10,6 +10,7 @@
 
 | I want to... | Go to |
 |--------------|-------|
+| Quick-verify a mostly-compliant producer | [producer/QUICK_START.md](producer/QUICK_START.md) |
 | Process an existing producer | [producer/review_metaprompts.md](producer/review_metaprompts.md) |
 | Process an existing consumer | [consumer/review_metaprompts.md](consumer/review_metaprompts.md) |
 | Process an existing aggregator | [aggregator/review_metaprompts.md](aggregator/review_metaprompts.md) |

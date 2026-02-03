@@ -1,6 +1,6 @@
 # Anchor Inventory Report
 
-Generated (UTC): 2026-01-23T23:42:53.857779+00:00
+Generated (UTC): 2026-02-02T19:39:10.429691+00:00
 Docs Root: C:\Users\genet\repo_studios\docs
 
 Scanned Roots:
@@ -10,21 +10,21 @@ Scanned Roots:
 
 ## Summary
 
-- total slugs: 794
-- cross-file duplicates: 81
+- total slugs: 1070
+- cross-file duplicates: 194
 - generic allow size: 4
 - allowlist size: None
-- total documents: 144
+- total documents: 189
 - documents missing H1: 7
 - documents missing H2 (with H1 present): 3
-- documents with repeated anchors (same file): 0
-- documents with cross-file duplicates: 115
+- documents with repeated anchors (same file): 3
+- documents with cross-file duplicates: 158
 
 ## Document Root Coverage
 
 Top directories by document count (up to 10):
 
-- `.repo_studios` — 120 documents
+- `.repo_studios` — 165 documents
 - `standards` — 12 documents
 - `automation` — 6 documents
 - `templates` — 4 documents
@@ -34,64 +34,67 @@ Top directories by document count (up to 10):
 ## Top Cross-File Duplicates (up to 25)
 
 - `testing` — 28 files (28 headings)
+- `update-log` — 28 files (28 headings)
 - `purpose` — 27 files (27 headings)
+- `1-script-identity` — 23 files (23 headings)
+- `2-current-state-analysis` — 23 files (23 headings)
 - `invocation` — 23 files (23 headings)
 - `outputs` — 23 files (23 headings)
-- `update-log` — 23 files (23 headings)
+- `3-gap-analysis` — 19 files (19 headings)
+- `4-changes-made` — 19 files (19 headings)
+- `5-evidence` — 19 files (19 headings)
+- `7-completion` — 19 files (19 headings)
+- `6-orchestrator-integration` — 17 files (17 headings)
+- `8-template-variables` — 17 files (17 headings)
+- `9-version-history` — 17 files (17 headings)
 - `goals` — 17 files (17 headings)
 - `operational-notes` — 16 files (16 headings)
+- `0-instruction-block-for-editors-ai-assistants` — 15 files (15 headings)
+- `26-agent-discoverability-tier-3-yaml` — 15 files (15 headings)
 - `system-context` — 15 files (15 headings)
-- `0-instruction-block-for-editors-ai-assistants` — 14 files (14 headings)
+- `8-update-log` — 14 files (14 headings)
+- `27-database-integration-preparation` — 13 files (13 headings)
 - `agent-instructions` — 13 files (13 headings)
-- `1-goals-success-criteria` — 11 files (11 headings)
-- `2-system-context` — 11 files (11 headings)
-- `7-agent-automation-block` — 11 files (11 headings)
-- `4-signals-telemetry` — 10 files (10 headings)
-- `5-dependencies-stop-gates` — 10 files (10 headings)
-- `8-update-log` — 10 files (10 headings)
-- `agent-block-machine-readable` — 10 files (10 headings)
-- `human-notes` — 10 files (10 headings)
-- `6-instruction-block-required-by-tier-rules` — 9 files (9 headings)
-- `reference-prompts` — 9 files (9 headings)
-- `diagnostics` — 7 files (7 headings)
-- `references` — 6 files (6 headings)
-- `verification-checklist` — 6 files (6 headings)
-- `objective` — 5 files (5 headings)
-- `open-questions` — 5 files (5 headings)
+- `tier-3-metadata-for-scriptname` — 13 files (13 headings)
+- `1-goals-success-criteria` — 12 files (12 headings)
+- `script-build-template-scriptname` — 12 files (12 headings)
 
 ## Top Slugs by File Coverage (up to 25)
 
 - `testing` — 28 files (28 headings)
+- `update-log` — 28 files (28 headings)
 - `purpose` — 27 files (27 headings)
+- `1-script-identity` — 23 files (23 headings)
+- `2-current-state-analysis` — 23 files (23 headings)
 - `invocation` — 23 files (23 headings)
 - `outputs` — 23 files (23 headings)
-- `update-log` — 23 files (23 headings)
+- `3-gap-analysis` — 19 files (19 headings)
+- `4-changes-made` — 19 files (19 headings)
+- `5-evidence` — 19 files (19 headings)
+- `7-completion` — 19 files (19 headings)
+- `6-orchestrator-integration` — 17 files (17 headings)
+- `8-template-variables` — 17 files (17 headings)
+- `9-version-history` — 17 files (17 headings)
 - `goals` — 17 files (17 headings)
 - `operational-notes` — 16 files (16 headings)
+- `0-instruction-block-for-editors-ai-assistants` — 15 files (15 headings)
+- `26-agent-discoverability-tier-3-yaml` — 15 files (15 headings)
 - `system-context` — 15 files (15 headings)
-- `0-instruction-block-for-editors-ai-assistants` — 14 files (14 headings)
+- `8-update-log` — 14 files (14 headings)
+- `27-database-integration-preparation` — 13 files (13 headings)
 - `agent-instructions` — 13 files (13 headings)
-- `overview` — 12 files (12 headings)
-- `1-goals-success-criteria` — 11 files (11 headings)
-- `2-system-context` — 11 files (11 headings)
-- `7-agent-automation-block` — 11 files (11 headings)
-- `4-signals-telemetry` — 10 files (10 headings)
-- `5-dependencies-stop-gates` — 10 files (10 headings)
-- `8-update-log` — 10 files (10 headings)
-- `agent-block-machine-readable` — 10 files (10 headings)
-- `human-notes` — 10 files (10 headings)
-- `6-instruction-block-required-by-tier-rules` — 9 files (9 headings)
-- `reference-prompts` — 9 files (9 headings)
-- `diagnostics` — 7 files (7 headings)
-- `references` — 6 files (6 headings)
-- `verification-checklist` — 6 files (6 headings)
-- `objective` — 5 files (5 headings)
+- `overview` — 13 files (13 headings)
+- `tier-3-metadata-for-scriptname` — 13 files (13 headings)
+- `1-goals-success-criteria` — 12 files (12 headings)
 
 ## Documents With Cross-File Duplicates (up to 15)
 
 <!-- markdownlint-disable MD013 -->
 
 - `.repo_studios/docs/Repo_Studios_MOU_Strategic_Architecture.md` — `executive-summary`
+- `.repo_studios/docs/archives/temp_check_inventory_health_build.md` — `1-script-identity`, `2-current-state-analysis`, `3-build-plan`, `4-alteration-locations`, `5-modifications-log`, `6-test-section`, `7-transfer-checklist`, `8-update-log`, `script-build-template-checkinventoryhealthpy`
+- `.repo_studios/docs/archives/temp_validate_import_boundaries_build.md` — `1-script-identity`, `10-future-considerations`, `11-update-log`, `2-current-state-analysis`, `3-build-plan`, `4-alteration-locations`, `5-modifications-log`, `6-documentation-section`, `7-test-section`, `8-transfer-checklist`, `9-qa-section-prove-it`, `payloadstatus-ok-or-violations`
+- `.repo_studios/docs/archives/temp_validate_inventory_build.md` — `assessment-2026-01-25`, `completion`, `evidence`
 - `.repo_studios/docs/automation/aggregate_docs_health_signals.md` — `purpose`
 - `.repo_studios/docs/automation/analyze_test_hardening.md` — `invocation`, `operational-notes`, `outputs`, `purpose`, `testing`
 - `.repo_studios/docs/automation/check_inventory_health.md` — `agent-instructions`, `goals`, `human-notes`, `reference-prompts`, `system-context`, `update-log`
@@ -103,9 +106,6 @@ Top directories by document count (up to 10):
 - `.repo_studios/docs/automation/diff_standards_index.md` — `agent-instructions`, `goals`, `human-notes`, `outputs`, `reference-prompts`, `system-context`, `testing`, `update-log`
 - `.repo_studios/docs/automation/dump_faulthandler_snapshot.md` — `environment-flags`, `legacy-compatibility`, `responsibilities`, `testing`, `usage`
 - `.repo_studios/docs/automation/extract_standards_rules.md` — `integration-notes`, `invocation`, `purpose`, `testing`
-- `.repo_studios/docs/automation/function_analysis_guide.md` — `future-enhancements`
-- `.repo_studios/docs/automation/function_inventory_integration_plan.md` — `decisions-captured`, `outstanding-considerations`
-- `.repo_studios/docs/automation/generate_anchor_health_report.md` — `inputs`, `purpose`, `testing`
 
 <!-- markdownlint-enable MD013 -->
 
@@ -127,7 +127,9 @@ Top directories by document count (up to 10):
 
 ## Documents With Repeated Anchors (up to 15)
 
-- (none)
+- `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/stage12_templates/BOOTSTRAP.md` — ``
+- `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/stage12_templates/promotion/build_template.md` — `scriptname-brief-description`
+- `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/templates/tier2_promotion_template.md` — `scriptname-brief-description`
 
 ## Generic Allowlist
 
@@ -140,4 +142,4 @@ Top directories by document count (up to 10):
 
 - Docs Root: `C:\Users\genet\repo_studios\docs`
 - Additional Root: `C:\Users\genet\repo_studios\.repo_studios\docs`
-- Generated UTC: `2026-01-23T23:42:53.857779+00:00`
+- Generated UTC: `2026-02-02T19:39:10.429691+00:00`
