@@ -1,0 +1,7 @@
+INFO: Scan mode: owned packages (.repo_studios, legacy)
+INFO: Scanned 260 Python files
+DEBUG: DB_INTEGRATION_MARKER: Database writes DORMANT
+DEBUG: Wrote manifest to C:\Users\genet\repo_studios\.repo_studios\reports\healthview\producer_reports\import_graph\20260204-1237\manifest.json
+DEBUG: Wrote summary to C:\Users\genet\repo_studios\.repo_studios\reports\healthview\producer_reports\import_graph\20260204-1237\summary.md
+DEBUG: Wrote telemetry to C:\Users\genet\repo_studios\.repo_studios\reports\healthview\producer_reports\import_graph\20260204-1237\telemetry.json
+INFO: Import graph report written to C:\Users\genet\repo_studios\.repo_studios\reports\healthview\producer_reports\import_graph\20260204-1237

@@ -1,0 +1,202 @@
+# Undocumented Logic Report
+
+## Summary
+
+- Modules scanned: 43
+- Modules with findings: 16
+- Entities scanned: 479
+- Entities missing docs: 172
+- Docstring coverage: 64.09%
+
+## Modules With Undocumented Logic
+
+<!-- markdownlint-disable MD013 -->
+- `.repo_studios/scripts/producers/validate_inventory.py` — missing 29 of 34 entities (coverage 14.71%).
+  - class `.repo_studios.scripts.producers.validate_inventory.ValidationIssue` line 116 — missing docstring
+  - method `.repo_studios.scripts.producers.validate_inventory.ValidationIssue.to_dict` line 122 — missing docstring
+  - class `.repo_studios.scripts.producers.validate_inventory.ValidationReport` line 136 — missing docstring
+  - method `.repo_studios.scripts.producers.validate_inventory.ValidationReport.add` line 139 — missing docstring
+  - method `.repo_studios.scripts.producers.validate_inventory.ValidationReport.errors` line 143 — missing docstring
+  - method `.repo_studios.scripts.producers.validate_inventory.ValidationReport.warnings` line 147 — missing docstring
+  - method `.repo_studios.scripts.producers.validate_inventory.ValidationReport.to_json` line 150 — missing docstring
+  - class `.repo_studios.scripts.producers.validate_inventory.ValidationStats` line 155 — missing docstring
+  - method `.repo_studios.scripts.producers.validate_inventory.ValidationStats.to_dict` line 159 — missing docstring
+  - class `.repo_studios.scripts.producers.validate_inventory.EnumRegistry` line 167 — missing docstring
+  - method `.repo_studios.scripts.producers.validate_inventory.EnumRegistry.load` line 171 — missing docstring
+  - method `.repo_studios.scripts.producers.validate_inventory.EnumRegistry.ensure` line 179 — missing docstring
+  - class `.repo_studios.scripts.producers.validate_inventory.ValidatorConfig` line 200 — missing docstring
+  - method `.repo_studios.scripts.producers.validate_inventory.ValidatorConfig.load` line 207 — missing docstring
+  - method `.repo_studios.scripts.producers.validate_inventory.ValidatorConfig.is_suppressed` line 226 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_inventory.prune_history` line 261 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_inventory.iterate_inventory_files` line 302 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_inventory.validate_record` line 417 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_inventory.validate_file` line 433 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_inventory.render_markdown` line 473 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_inventory.compose_payload` line 556 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_inventory.compose_raw_payload` line 594 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_inventory.build_parser` line 608 — missing docstring
+  - class `.repo_studios.scripts.producers.validate_inventory.Paths` line 637 — missing docstring
+  - class `.repo_studios.scripts.producers.validate_inventory.BasePaths` line 646 — missing docstring
+  - class `.repo_studios.scripts.producers.validate_inventory.Options` line 653 — missing docstring
+  - class `.repo_studios.scripts.producers.validate_inventory.KeepOptions` line 688 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_inventory.build_paths` line 713 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_inventory.build_options` line 751 — missing docstring
+- `.repo_studios/scripts/producers/seed_standards_prompts.py` — missing 21 of 22 entities (coverage 4.55%).
+  - class `.repo_studios.scripts.producers.seed_standards_prompts.Paths` line 59 — missing docstring
+  - class `.repo_studios.scripts.producers.seed_standards_prompts.Options` line 66 — missing docstring
+  - class `.repo_studios.scripts.producers.seed_standards_prompts.KeepOptions` line 97 — missing docstring
+  - function `.repo_studios.scripts.producers.seed_standards_prompts.parse_args` line 107 — missing docstring
+  - function `.repo_studios.scripts.producers.seed_standards_prompts.configure_logging` line 155 — missing docstring
+  - function `.repo_studios.scripts.producers.seed_standards_prompts.build_paths` line 159 — missing docstring
+  - function `.repo_studios.scripts.producers.seed_standards_prompts.build_options` line 163 — missing docstring
+  - function `.repo_studios.scripts.producers.seed_standards_prompts.load_index` line 177 — missing docstring
+  - function `.repo_studios.scripts.producers.seed_standards_prompts.build_seed` line 185 — missing docstring
+  - function `.repo_studios.scripts.producers.seed_standards_prompts.summarize_seed` line 210 — missing docstring
+  - function `.repo_studios.scripts.producers.seed_standards_prompts.render_seed` line 245 — missing docstring
+  - function `.repo_studios.scripts.producers.seed_standards_prompts.ensure_run_directory` line 262 — missing docstring
+  - function `.repo_studios.scripts.producers.seed_standards_prompts.write_seed_files` line 268 — missing docstring
+  - function `.repo_studios.scripts.producers.seed_standards_prompts.render_markdown_report` line 283 — missing docstring
+  - function `.repo_studios.scripts.producers.seed_standards_prompts.render_log` line 316 — missing docstring
+  - function `.repo_studios.scripts.producers.seed_standards_prompts.write_artifacts` line 364 — missing docstring
+  - function `.repo_studios.scripts.producers.seed_standards_prompts.prune_history` line 388 — missing docstring
+  - function `.repo_studios.scripts.producers.seed_standards_prompts.emit_legacy_output` line 405 — missing docstring
+  - function `.repo_studios.scripts.producers.seed_standards_prompts.compose_payload` line 418 — missing docstring
+  - function `.repo_studios.scripts.producers.seed_standards_prompts.run` line 443 — missing docstring
+  - function `.repo_studios.scripts.producers.seed_standards_prompts.main` line 509 — missing docstring
+- `.repo_studios/scripts/orchestrators/healthview/run_healthview_agent_loop.py` — missing 16 of 16 entities (coverage 0.00%).
+  - class `.repo_studios.scripts.orchestrators.healthview.run_healthview_agent_loop.StageKey` line 49 — missing docstring
+  - method `.repo_studios.scripts.orchestrators.healthview.run_healthview_agent_loop.StageKey.sort_key` line 53 — missing docstring
+  - method `.repo_studios.scripts.orchestrators.healthview.run_healthview_agent_loop.StageKey.label` line 58 — missing docstring
+  - class `.repo_studios.scripts.orchestrators.healthview.run_healthview_agent_loop.CheckboxCandidate` line 63 — missing docstring
+  - function `.repo_studios.scripts.orchestrators.healthview.run_healthview_agent_loop.load_yaml` line 81 — missing docstring
+  - function `.repo_studios.scripts.orchestrators.healthview.run_healthview_agent_loop.parse_stage_key` line 191 — missing docstring
+  - function `.repo_studios.scripts.orchestrators.healthview.run_healthview_agent_loop.classify_tier1_kind` line 204 — missing docstring
+  - function `.repo_studios.scripts.orchestrators.healthview.run_healthview_agent_loop.extract_tier2_link` line 212 — missing docstring
+  - function `.repo_studios.scripts.orchestrators.healthview.run_healthview_agent_loop.is_placeholder` line 233 — missing docstring
+  - function `.repo_studios.scripts.orchestrators.healthview.run_healthview_agent_loop.read_checkbox_csv` line 237 — missing docstring
+  - function `.repo_studios.scripts.orchestrators.healthview.run_healthview_agent_loop.select_next_candidate` line 243 — missing docstring
+  - function `.repo_studios.scripts.orchestrators.healthview.run_healthview_agent_loop.resolve_tier2_target` line 317 — missing docstring
+  - function `.repo_studios.scripts.orchestrators.healthview.run_healthview_agent_loop.build_action_packet` line 356 — missing docstring
+  - function `.repo_studios.scripts.orchestrators.healthview.run_healthview_agent_loop.run` line 376 — missing docstring
+  - function `.repo_studios.scripts.orchestrators.healthview.run_healthview_agent_loop.parse_args` line 401 — missing docstring
+  - function `.repo_studios.scripts.orchestrators.healthview.run_healthview_agent_loop.main` line 441 — missing docstring
+- `.repo_studios/scripts/producers/render_inventory_views.py` — missing 16 of 18 entities (coverage 11.11%).
+  - class `.repo_studios.scripts.producers.render_inventory_views.ViewBundle` line 51 — missing docstring
+  - function `.repo_studios.scripts.producers.render_inventory_views.load_inventory` line 89 — missing docstring
+  - function `.repo_studios.scripts.producers.render_inventory_views.docs_view` line 108 — missing docstring
+  - function `.repo_studios.scripts.producers.render_inventory_views.scripts_view` line 128 — missing docstring
+  - function `.repo_studios.scripts.producers.render_inventory_views.tests_view` line 149 — missing docstring
+  - function `.repo_studios.scripts.producers.render_inventory_views.summary_view` line 167 — missing docstring
+  - function `.repo_studios.scripts.producers.render_inventory_views.summary_dashboard` line 201 — missing docstring
+  - function `.repo_studios.scripts.producers.render_inventory_views.build_views` line 219 — missing docstring
+  - function `.repo_studios.scripts.producers.render_inventory_views.write_stub` line 242 — missing docstring
+  - function `.repo_studios.scripts.producers.render_inventory_views.compose_report_payload` line 263 — missing docstring
+  - function `.repo_studios.scripts.producers.render_inventory_views.render_markdown` line 321 — missing docstring
+  - function `.repo_studios.scripts.producers.render_inventory_views.render_log` line 351 — missing docstring
+  - class `.repo_studios.scripts.producers.render_inventory_views.Paths` line 392 — missing docstring
+  - class `.repo_studios.scripts.producers.render_inventory_views.Options` line 400 — missing docstring
+  - function `.repo_studios.scripts.producers.render_inventory_views.build_paths` line 425 — missing docstring
+  - function `.repo_studios.scripts.producers.render_inventory_views.build_options` line 429 — missing docstring
+- `.repo_studios/scripts/producers/check_inventory_health.py` — missing 15 of 16 entities (coverage 6.25%).
+  - class `.repo_studios.scripts.producers.check_inventory_health.Paths` line 75 — missing docstring
+  - class `.repo_studios.scripts.producers.check_inventory_health.Options` line 83 — missing docstring
+  - function `.repo_studios.scripts.producers.check_inventory_health.load_json` line 142 — missing docstring
+  - function `.repo_studios.scripts.producers.check_inventory_health.compute_deltas` line 173 — missing docstring
+  - function `.repo_studios.scripts.producers.check_inventory_health.check_thresholds` line 184 — missing docstring
+  - function `.repo_studios.scripts.producers.check_inventory_health.evaluate` line 208 — missing docstring
+  - function `.repo_studios.scripts.producers.check_inventory_health.parse_timestamp` line 215 — missing docstring
+  - function `.repo_studios.scripts.producers.check_inventory_health.build_manifest` line 231 — missing docstring
+  - function `.repo_studios.scripts.producers.check_inventory_health.build_telemetry` line 258 — missing docstring
+  - function `.repo_studios.scripts.producers.check_inventory_health.build_report` line 292 — missing docstring
+  - function `.repo_studios.scripts.producers.check_inventory_health.write_markdown` line 328 — missing docstring
+  - function `.repo_studios.scripts.producers.check_inventory_health.configure_logging` line 369 — missing docstring
+  - function `.repo_studios.scripts.producers.check_inventory_health.build_paths` line 374 — missing docstring
+  - function `.repo_studios.scripts.producers.check_inventory_health.build_options` line 378 — missing docstring
+  - function `.repo_studios.scripts.producers.check_inventory_health.main` line 386 — missing docstring
+- `.repo_studios/scripts/producers/validate_import_boundaries.py` — missing 13 of 14 entities (coverage 7.14%).
+  - class `.repo_studios.scripts.producers.validate_import_boundaries.Paths` line 67 — missing docstring
+  - class `.repo_studios.scripts.producers.validate_import_boundaries.Options` line 75 — missing docstring
+  - class `.repo_studios.scripts.producers.validate_import_boundaries.Violation` line 109 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_import_boundaries.parse_args` line 115 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_import_boundaries.configure_logging` line 158 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_import_boundaries.build_paths` line 162 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_import_boundaries.build_options` line 179 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_import_boundaries.render_markdown_report` line 345 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_import_boundaries.render_log` line 397 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_import_boundaries.prune_history` line 477 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_import_boundaries.compose_payload` line 494 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_import_boundaries.run` line 525 — missing docstring
+  - function `.repo_studios.scripts.producers.validate_import_boundaries.main` line 593 — missing docstring
+- `.repo_studios/scripts/producers/generate_standards_index.py` — missing 11 of 11 entities (coverage 0.00%).
+  - class `.repo_studios.scripts.producers.generate_standards_index.Category` line 69 — missing docstring
+  - class `.repo_studios.scripts.producers.generate_standards_index.Source` line 77 — missing docstring
+  - class `.repo_studios.scripts.producers.generate_standards_index.Paths` line 83 — missing docstring
+  - class `.repo_studios.scripts.producers.generate_standards_index.BuildStats` line 94 — missing docstring
+  - class `.repo_studios.scripts.producers.generate_standards_index.ExtractDiagnostics` line 106 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_standards_index.build_index` line 342 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_standards_index.write_index` line 403 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_standards_index.write_artifacts` line 568 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_standards_index.configure_logging` line 639 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_standards_index.build_parser` line 644 — missing docstring
+  - function `.repo_studios.scripts.producers.generate_standards_index.main` line 699 — missing docstring
+- `.repo_studios/scripts/producers/diff_standards_index.py` — missing 9 of 10 entities (coverage 10.00%).
+  - function `.repo_studios.scripts.producers.diff_standards_index.load` line 137 — missing docstring
+  - function `.repo_studios.scripts.producers.diff_standards_index.index_rules` line 146 — missing docstring
+  - function `.repo_studios.scripts.producers.diff_standards_index.classify` line 150 — missing docstring
+  - function `.repo_studios.scripts.producers.diff_standards_index.generate_diff` line 198 — missing docstring
+  - function `.repo_studios.scripts.producers.diff_standards_index.build_parser` line 219 — missing docstring
+  - function `.repo_studios.scripts.producers.diff_standards_index.should_fail` line 272 — missing docstring
+  - function `.repo_studios.scripts.producers.diff_standards_index.write_artifacts` line 377 — missing docstring
+  - function `.repo_studios.scripts.producers.diff_standards_index.configure_logging` line 474 — missing docstring
+  - function `.repo_studios.scripts.producers.diff_standards_index.main` line 479 — missing docstring
+- `.repo_studios/scripts/producers/scan_monkey_patches.py` — missing 9 of 52 entities (coverage 82.69%).
+  - method `.repo_studios.scripts.producers.scan_monkey_patches.MonkeyPatchScanner.__init__` line 627 — missing docstring
+  - method `.repo_studios.scripts.producers.scan_monkey_patches.MonkeyPatchScanner.generic_visit` line 646 — missing docstring
+  - method `.repo_studios.scripts.producers.scan_monkey_patches.MonkeyPatchScanner.visit_Assign` line 654 — missing docstring
+  - method `.repo_studios.scripts.producers.scan_monkey_patches.MonkeyPatchScanner.visit_AnnAssign` line 658 — missing docstring
+  - method `.repo_studios.scripts.producers.scan_monkey_patches.MonkeyPatchScanner.visit_AugAssign` line 662 — missing docstring
+  - method `.repo_studios.scripts.producers.scan_monkey_patches.MonkeyPatchScanner.visit_Call` line 666 — missing docstring
+  - method `.repo_studios.scripts.producers.scan_monkey_patches.MonkeyPatchScanner.visit_Delete` line 728 — missing docstring
+  - method `.repo_studios.scripts.producers.scan_monkey_patches.MonkeyPatchScanner.visit_FunctionDef` line 743 — missing docstring
+  - method `.repo_studios.scripts.producers.scan_monkey_patches.MonkeyPatchScanner.visit_ClassDef` line 759 — missing docstring
+- `.repo_studios/scripts/summarizers/summarize_standards.py` — missing 8 of 9 entities (coverage 11.11%).
+  - class `.repo_studios.scripts.summarizers.summarize_standards.Paths` line 68 — missing docstring
+  - class `.repo_studios.scripts.summarizers.summarize_standards.Options` line 87 — missing docstring
+  - class `.repo_studios.scripts.summarizers.summarize_standards.KeepValues` line 95 — missing docstring
+  - function `.repo_studios.scripts.summarizers.summarize_standards.configure_logging` line 162 — missing docstring
+  - function `.repo_studios.scripts.summarizers.summarize_standards.build_paths` line 166 — missing docstring
+  - function `.repo_studios.scripts.summarizers.summarize_standards.build_options` line 170 — missing docstring
+  - function `.repo_studios.scripts.summarizers.summarize_standards.run` line 263 — missing docstring
+  - function `.repo_studios.scripts.summarizers.summarize_standards.main` line 371 — missing docstring
+- `.repo_studios/scripts/utilities/validate_healthview_agent_workflow_spec.py` — missing 8 of 8 entities (coverage 0.00%).
+  - class `.repo_studios.scripts.utilities.validate_healthview_agent_workflow_spec.ValidationResult` line 37 — missing docstring
+  - function `.repo_studios.scripts.utilities.validate_healthview_agent_workflow_spec.load_yaml` line 70 — missing docstring
+  - function `.repo_studios.scripts.utilities.validate_healthview_agent_workflow_spec.load_schema` line 77 — missing docstring
+  - function `.repo_studios.scripts.utilities.validate_healthview_agent_workflow_spec.validate_schema` line 84 — missing docstring
+  - function `.repo_studios.scripts.utilities.validate_healthview_agent_workflow_spec.validate_semantics` line 94 — missing docstring
+  - function `.repo_studios.scripts.utilities.validate_healthview_agent_workflow_spec.validate_workflow_spec` line 136 — missing docstring
+  - function `.repo_studios.scripts.utilities.validate_healthview_agent_workflow_spec.parse_args` line 154 — missing docstring
+  - function `.repo_studios.scripts.utilities.validate_healthview_agent_workflow_spec.main` line 184 — missing docstring
+- `.repo_studios/scripts/consumers/generate_anchor_health_report.py` — missing 7 of 13 entities (coverage 46.15%).
+  - method `.repo_studios.scripts.consumers.generate_anchor_health_report.Cluster.__init__` line 76 — missing docstring
+  - method `.repo_studios.scripts.consumers.generate_anchor_health_report.Cluster.file_count` line 82 — missing docstring
+  - function `.repo_studios.scripts.consumers.generate_anchor_health_report.multi_file_duplicates` line 149 — missing docstring
+  - function `.repo_studios.scripts.consumers.generate_anchor_health_report.load_baseline` line 158 — missing docstring
+  - function `.repo_studios.scripts.consumers.generate_anchor_health_report.parse_args` line 526 — missing docstring
+  - function `.repo_studios.scripts.consumers.generate_anchor_health_report.run` line 558 — missing docstring
+  - function `.repo_studios.scripts.consumers.generate_anchor_health_report.main` line 629 — missing docstring
+- `.repo_studios/scripts/producers/extract_standards_rules.py` — missing 3 of 3 entities (coverage 0.00%).
+  - class `.repo_studios.scripts.producers.extract_standards_rules.ParsedRule` line 76 — missing docstring
+  - method `.repo_studios.scripts.producers.extract_standards_rules.ParsedRule.to_dict` line 87 — missing docstring
+  - function `.repo_studios.scripts.producers.extract_standards_rules.extract_rules` line 105 — missing docstring
+- `.repo_studios/scripts/utilities/dump_faulthandler_snapshot.py` — missing 3 of 3 entities (coverage 0.00%).
+  - class `.repo_studios.scripts.utilities.dump_faulthandler_snapshot.SnapshotSettings` line 70 — missing docstring
+  - function `.repo_studios.scripts.utilities.dump_faulthandler_snapshot.dump_snapshot` line 122 — missing docstring
+  - function `.repo_studios.scripts.utilities.dump_faulthandler_snapshot.main` line 259 — missing docstring
+- `.repo_studios/scripts/producers/generate_lizard_report.py` — missing 2 of 5 entities (coverage 60.00%).
+  - class `.repo_studios.scripts.producers.generate_lizard_report.Offender` line 114 — missing docstring
+  - method `.repo_studios.scripts.producers.generate_lizard_report.Offender.to_payload` line 122 — missing docstring
+- `.repo_studios/scripts/utilities/configure_faulthandler_runtime.py` — missing 2 of 2 entities (coverage 0.00%).
+  - class `.repo_studios.scripts.utilities.configure_faulthandler_runtime.FaultSettings` line 102 — missing docstring
+  - function `.repo_studios.scripts.utilities.configure_faulthandler_runtime.bootstrap` line 284 — missing docstring
+<!-- markdownlint-enable MD013 -->

@@ -258,298 +258,169 @@ fields:
 
 Populate one block per script in the chain. Keep each record concise and evidence-backed.
 
-##### S31R-001 fault diagnostics overview orchestrator
+<!-- AGENT_ROUTER:START S31R-001 -->
+### S31R-001 — run_fault_diagnostics_overview.py
 
-```yaml
-record_id: "S31R-001"
-script:
-  path: ".repo_studios/command_center/scripts/orchestrators/run_fault_diagnostics_overview.py"
-  name: "run_fault_diagnostics_overview.py"
-  category: "orchestrator"
-tier3:
-  metadata_block_version: "v1"
-  allowed: true
-  exists: true
-  name: "tier3_run_fault_diagnostics_overview.yaml"
-  meets_template: "yes"
-  last_updated: "2025-12-31"
-cli_surfaces:
-  run_entrypoint: "run(argv)"
-  key_flags:
-    - "--repo-root"
-    - "--runs-dir"
-    - "--run-dir"
-    - "--producer-output-dir"
-    - "--consumer-output-dir"
-    - "--summarizer-output-dir"
-    - "--orchestrator-output-dir"
-    - "--artifacts-to-keep"
-    - "--producer-artifacts-to-keep"
-    - "--consumer-artifacts-to-keep"
-    - "--summarizer-artifacts-to-keep"
-    - "--reuse-report"
-    - "--producer-top-frames"
-    - "--skip-producer"
-    - "--skip-consumer"
-    - "--skip-summarizer"
-    - "--timestamp"
-    - "--log-level"
-io_contract:
-  inputs:
-    - "Raw runs base: .repo_studios/reports/healthview/rawview/fault_diagnostics_runs/ (or --runs-dir / --run-dir)"
-    - "Optional: --reuse-report (producer report JSON override)"
-  outputs:
-    current:
-      root: ".repo_studios/reports/healthview/orchestrator_reports/fault_diagnostics_overview/<YYYYMMDD-HHMM>/"
-      artifacts:
-        - "manifest.json"
-        - "summary.md"
-        - "telemetry.json"
-    target:
-      root: ".repo_studios/reports/healthview/orchestrator_reports/fault_diagnostics_overview/<YYYYMMDD-HHMM>/"
-      artifacts:
-        - "manifest.json"
-        - "summary.md"
-        - "telemetry.json"
-retention:
-  surfaces:
-    - "--artifacts-to-keep"
-    - "write_report_artifacts(... keep=options.artifacts_to_keep)"
-  mechanism: "prune_by_keep_budget"
-  targets:
-    - ".repo_studios/reports/healthview/orchestrator_reports/fault_diagnostics_overview"
-  guardrails:
-    - "topic-dir pruning inside write_report_artifacts(...)"
-    - "write_report_artifacts respects .keep sentinel"
-  evidence:
-    - "write_report_artifacts(viewer/topic layout) + run_slug formatting"
-db_integration:
-  gated_by: "REPO_STUDIOS_DB_ENABLED"
-  marker_required: true
-  marker_string: "DB_INTEGRATION_MARKER:"
-evidence:
-  code_refs:
-    - ".repo_studios/command_center/scripts/orchestrators/run_fault_diagnostics_overview.py#L59-L64"
-    - ".repo_studios/command_center/scripts/orchestrators/run_fault_diagnostics_overview.py#L147-L178"
-    - ".repo_studios/command_center/scripts/orchestrators/run_fault_diagnostics_overview.py#L456-L607"
-  tests:
-    - ".repo_studios/tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py"
-  fixtures:
-    - "<fixture path>"
-notes:
-  - "Script is HOP-compliant: uses build_topic_path('orchestrator', TOPIC_SLUG) for default output."
-  - "All child scripts (producer, consumer, summarizer) also use HOP-compliant paths."
-  - "DB markers: none observed in this orchestrator (no create_storage callsites)."
+> **One-liner:** Topic orchestrator coordinating the Fault Diagnostics workflow (producer → consumer → summarizer) with HOP-compliant timestamped bundles.
+
+**Keywords:** `orchestrator`, `fault-diagnostics`, `healthview`, `pipeline`, `topic-orchestrator`
+
+#### Resource Paths
+
+| Resource | Path |
+|----------|------|
+| Script | `.repo_studios/command_center/scripts/orchestrators/run_fault_diagnostics_overview.py` |
+| Tier-3 YAML | `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier3_scripts/fault_diagnostics_overview/tier3_run_fault_diagnostics_overview.yaml` |
+| Build Doc | `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_3_1/S31R-001_run_fault_diagnostics_overview_build.md` |
+| Output Root | `.repo_studios/reports/healthview/orchestrator_reports/fault_diagnostics_overview/<YYYYMMDD-HHMM>/` |
+
+#### Invocation
+
+```bash
+python .repo_studios/command_center/scripts/orchestrators/run_fault_diagnostics_overview.py --repo-root . --log-level INFO
 ```
 
-#### Implementation Workstreams (checkbox-driven) — run_fault_diagnostics_overview.py
+| Aspect | Value |
+|--------|-------|
+| Entry Point | `run(argv)` / `main()` |
+| Typical Runtime | ~0.13 seconds (3 steps) |
+| Exit Codes | 0=success, 1=error |
 
-Workstream A — Discovery
+#### Outputs
 
-- [x] Inspect outputs + pruning/retention surfaces; record findings
+| Artifact | Format | Description |
+|----------|--------|-------------|
+| manifest.json | JSON | Bundle metadata with step inventory and metrics |
+| summary.md | Markdown | Pipeline Status table with per-step results |
+| telemetry.json | JSON | Per-step timing, status, and execution metrics |
 
-**Discovery Findings (2025-12-31):**
+#### Compliance
 
-| Surface | Current | Target (HOP) | Status |
-|---------|---------|--------------|--------|
-| `DEFAULT_ORCHESTRATOR_OUTPUT` | Uses `build_topic_path("orchestrator", TOPIC_SLUG)` | `.repo_studios/reports/healthview/orchestrator_reports/fault_diagnostics_overview` | ✅ Already HOP |
-| `DEFAULT_PRODUCER_OUTPUT` | Uses `build_topic_path("producer", ...)` | `.repo_studios/reports/healthview/producer_reports/...` | ✅ Already HOP |
-| `DEFAULT_CONSUMER_OUTPUT` | Uses `build_topic_path("consumer", ...)` | `.repo_studios/reports/healthview/consumer_reports/...` | ✅ Already HOP |
-| `DEFAULT_SUMMARIZER_OUTPUT` | Uses `build_topic_path("summarizer", ...)` | `.repo_studios/reports/healthview/summarizer_reports/...` | ✅ Already HOP |
-| Test file | Tests use HOP path structure | `.repo_studios/reports/healthview/orchestrator_reports/...` | ✅ Already HOP |
-| Pointer files | Not used | No `latest_*` | ✅ Compliant |
+| Aspect | Status | Notes |
+|--------|--------|-------|
+| HOP Bundle | YES | `build_topic_path()` + `write_report_artifacts()` |
+| UIC Interface | YES | `run(argv)` entry point, importable |
+| Tier-3 YAML | YES | Created and validated |
+| DB Integration | NO | `create_storage()` not used; markers deferred |
 
-- **Script path defaults:** Already HOP-compliant via `build_topic_path()` library (lines 59-64)
-- **All child scripts** (producer, consumer, summarizer) also use HOP paths
-- **Tests:** 1/1 passed in 0.17s
-- **No changes required** — orchestrator is already fully HOP-compliant
+#### Orchestrator
 
-Workstream B — Plan
+| Pipeline | Status | Config Path |
+|----------|--------|-------------|
+| Fault Diagnostics Overview | SELF | This is the orchestrator |
 
-- [x] Draft plan to close output-root/base-package stop-gates
+#### Pipeline Position
 
-**Migration Plan:** No changes required — output root is already HOP-compliant via `build_topic_path()`.
+| Field | Value |
+|-------|-------|
+| Step Count | 3 |
+| Steps | producer → consumer → summarizer |
+| Execution Mode | SEQUENTIAL |
+| Failure Policy | STOP_ON_FAILURE (summarizer has `continue_on_failure=False`) |
 
-Workstream C — Implement
+#### Dependencies & Consumers
 
-- [x] Implement accepted plan and update this record + stop-gate status with new evidence
+| Direction | Record ID | Script | Data Flow |
+|-----------|-----------|--------|-----------|
+| ⬇️ ORCHESTRATES | S31R-002 | `collect_faulthandler_reports.py` | Producer step — generates faulthandler reports |
+| ⬇️ ORCHESTRATES | S31R-003 | `generate_fault_artifacts.py` | Consumer step — processes producer output |
+| ⬇️ ORCHESTRATES | S31R-004 | `summarize_fault_diagnostics_overview.py` | Summarizer step — generates overview bundle |
 
-**Implementation Evidence (2025-12-31):**
+#### Known Limitations
 
-- No code changes needed — orchestrator already uses `build_topic_path()` library
-- All child scripts (producer, consumer, summarizer) also already HOP-compliant
-- Execution verified via test suite: Bundle at HOP-compliant path
+- DB Integration markers not present (deferred — dormant across codebase)
+- No test coverage verification (execution evidence comprehensive)
 
-Workstream D — Tier-3 YAML
+#### Verification
 
-- [x] Confirm Tier-3 is appropriate for this script; record decision (create vs defer)
-- [x] Inspect Tier-3 template requirements
-- [x] Draft `tier3_run_fault_diagnostics_overview.yaml`
-- [x] Validate Tier-3 YAML
+| Field | Value |
+|-------|-------|
+| Last Verified | 2026-02-04 |
+| Verified By | GitHub Copilot |
+| Build Doc Version | 1.0.0 |
+<!-- AGENT_ROUTER:END S31R-001 -->
 
-**Tier-3 Evidence (2025-12-31):**
+<!-- AGENT_ROUTER:START S31R-002 -->
+### S31R-002 — collect_faulthandler_reports.py
 
-- **YAML Path:** `tier3_scripts/fault_diagnostics_overview/tier3_run_fault_diagnostics_overview.yaml`
-- **Index Updated:** `tier3_scripts_index.yaml` (20 scripts, 3 orchestrators)
-- **Status:** active
+> **One-liner:** Collect structured summaries for faulthandler runs, parsing crash/dump data into HOP-compliant producer bundles.
 
-Workstream E — QA & Evidence
+**Keywords:** `producer`, `faulthandler`, `crash-dumps`, `diagnostics`, `healthview`
 
-- [x] Pytest evidence captured
-- [x] Mypy evidence captured (or marked N/A in record)
-- [x] Coverage + doc-index timestamp recorded
+#### Resource Paths
 
-**QA Evidence (2025-12-31):**
+| Resource | Path |
+|----------|------|
+| Script | `.repo_studios/scripts/producers/collect_faulthandler_reports.py` |
+| Tier-3 YAML | `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier3_scripts/fault_diagnostics_overview/tier3_collect_faulthandler_reports.yaml` |
+| Build Doc | `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_3_1/S31R-002_collect_faulthandler_reports_build.md` |
+| Output Root | `.repo_studios/reports/healthview/producer_reports/faulthandler_reports/` |
 
-- **Pytest:** 1/1 passed in 0.17s
-- **Mypy:** Clean (no issues)
-- **Doc-index timestamp:** 2025-12-31T18:00:00Z
+#### Invocation
 
-- [x] DONE — run_fault_diagnostics_overview.py complete; update Tier-1 Stage 3.1 script gate
-
-##### S31R-002 collect faulthandler reports
-
-```yaml
-record_id: "S31R-002"
-script:
-  path: ".repo_studios/scripts/producers/collect_faulthandler_reports.py"
-  name: "collect_faulthandler_reports.py"
-  category: "producer"
-tier3:
-  metadata_block_version: "v1"
-  allowed: true
-  exists: true
-  name: "tier3_collect_faulthandler_reports.yaml"
-  meets_template: "yes"
-  last_updated: "2025-12-31"
-cli_surfaces:
-  run_entrypoint: "run(argv)"
-  key_flags:
-    - "--repo-root"
-    - "--runs-dir"
-    - "--run-dir"
-    - "--output-dir"
-    - "--artifacts-to-keep"
-    - "--timestamp"
-    - "--top-frames"
-    - "--validate-only"
-    - "--log-level"
-io_contract:
-  inputs:
-    - >-
-      Reads raw runs under
-      .repo_studios/command_center/reports/rawview/fault_diagnostics_runs/
-      (or legacy .repo_studios/faulthandler when enabled)
-  outputs:
-    current:
-      root: ".repo_studios/reports/producer_reports/faulthandler_reports/rawview/fault_artifacts_producer/YYYYMMDD-HHMM/"
-      artifacts:
-        - "manifest.json"
-        - "summary.md"
-        - "telemetry.json"
-    target:
-      root: ".repo_studios/reports/healthview/<class>/<topic>/<timestamp>/"
-      artifacts:
-        - "manifest.json"
-        - "summary.md"
-        - "telemetry.json"
-retention:
-  surfaces:
-    - "--artifacts-to-keep"
-    - "prune_run_directories(... keep=options.artifacts_to_keep, current_run=run_bundle_dir)"
-  mechanism: "prune_by_keep_budget"
-  targets:
-    - ".repo_studios/reports/producer_reports/faulthandler_reports/rawview/fault_artifacts_producer"
-  guardrails:
-    - "current_run protection when pruning"
-  evidence:
-    - "create_storage(...) + prune_run_directories(...)"
-db_integration:
-  gated_by: "REPO_STUDIOS_DB_ENABLED"
-  marker_required: true
-  marker_string: "DB_INTEGRATION_MARKER:"
-evidence:
-  code_refs:
-    - ".repo_studios/scripts/producers/collect_faulthandler_reports.py#L24-L35"
-    - ".repo_studios/scripts/producers/collect_faulthandler_reports.py#L86-L121"
-    - ".repo_studios/scripts/producers/collect_faulthandler_reports.py#L387-L441"
-  tests:
-    - ".repo_studios/tests/tests_producers/test_collect_faulthandler_reports.py"
-  fixtures:
-    - "<fixture path>"
-notes:
-  - "DB markers present for manifest/summary/telemetry writes."
-  - >-
-    Stop-gate: script docstring describes output under
-    .repo_studios/command_center/reports, but orchestrator defaults pass
-    --output-dir .repo_studios/reports/producer_reports/faulthandler_reports.
-  - "Stop-gate: producer does not accept --command-center-dir, but orchestrator passes it."
+```bash
+python -m scripts.producers.collect_faulthandler_reports --repo-root . --log-level INFO
 ```
 
-#### Implementation Workstreams (checkbox-driven) — collect_faulthandler_reports.py
+| Aspect | Value |
+|--------|-------|
+| Entry Point | `run(argv)` / `main()` |
+| Typical Runtime | ~5 seconds |
+| Exit Codes | 0=success, 1=error |
 
-Workstream A — Discovery
+#### Outputs
 
-- [x] Inspect outputs + pruning/retention surfaces; record findings
+| Artifact | Format | Description |
+|----------|--------|-------------|
+| manifest.json | JSON | Bundle metadata with schema version, status, inputs |
+| summary.md | Markdown | Human-readable faulthandler summary |
+| telemetry.json | JSON | Execution metrics and timing |
+| report.json | JSON | Parsed faulthandler signatures and stack data |
 
-**Discovery Findings (2025-12-31):**
+#### Compliance
 
-| Surface | Current | Target (HOP) | Status |
-|---------|---------|--------------|--------|
-| `DEFAULT_OUTPUT_DIR` | Uses `build_topic_path("producer", TOPIC_SLUG)` | `.repo_studios/reports/healthview/producer_reports/faulthandler_reports` | ✅ Already HOP |
-| Test fixture line 46 | `.repo_studios/reports/producer_reports/faulthandler_reports` | `.repo_studios/reports/healthview/producer_reports/faulthandler_reports` | ⚠️ Fixed |
+| Aspect | Status | Notes |
+|--------|--------|-------|
+| HOP Bundle | YES | Timestamped bundles with manifest/summary/telemetry |
+| UIC Interface | YES | `run(argv)` entry point returning dict |
+| Tier-3 YAML | YES | Complete at tier3_scripts/fault_diagnostics_overview/ |
 
-- **Script path defaults:** Already HOP-compliant via `build_topic_path()` library
-- **Test file:** `test_collect_faulthandler_reports.py` — 1 legacy path at line 46
+#### Orchestrator
 
-Workstream B — Plan
+| Pipeline | Status | Config Path |
+|----------|--------|-------------|
+| Fault Diagnostics Overview | WIRED | run_fault_diagnostics_overview.py |
 
-- [x] Draft plan to close output-root/base-package stop-gates
+#### Pipeline Position
 
-**Migration Plan (1 step):**
+| Field | Value |
+|-------|-------|
+| Step Number | 1 of 3 |
+| Execution Mode | SEQUENTIAL |
+| Orchestrator Script | `.repo_studios/command_center/scripts/orchestrators/run_fault_diagnostics_overview.py` |
 
-1. Update test fixture at line 46 to include `healthview/` segment
+#### Dependencies & Consumers
 
-Workstream C — Implement
+| Direction | Record ID | Script | Data Flow |
+|-----------|-----------|--------|-----------|
+| ⬆️ DEPENDS ON | (none) | — | First in pipeline, reads from rawview |
+| ⬇️ CONSUMED BY | S31R-003 | `generate_fault_artifacts.py` | Provides `report.json` for artifact generation |
+| ⬇️ CONSUMED BY | S31R-004 | `summarize_fault_diagnostics_overview.py` | Provides producer outputs for summarization |
 
-- [x] Implement accepted plan and update this record + stop-gate status with new evidence
+#### Known Limitations
 
-**Implementation Evidence (2025-12-31):**
+- Missing explicit `exit_code` key in return dict (cosmetic — orchestrators do not require it)
+- summary.md contains absolute paths (aids debugging but not portable)
+- No actionable next-steps section in summary.md (optional for producer reports)
 
-| Edit | Location | Change |
-|------|----------|--------|
-| Test fixture | Line 46 | Added `healthview/` segment |
+#### Verification
 
-- **Tests:** 5/5 passed in 0.37s
-- **Execution:** Bundle created at `.repo_studios/reports/healthview/producer_reports/faulthandler_reports/20251231-1730/`
-- **Artifacts:** manifest.json, summary.md, telemetry.json (3 files)
-
-Workstream D — Tier-3 YAML
-
-- [x] Confirm Tier-3 is appropriate for this script; record decision (create vs defer)
-- [x] Inspect Tier-3 template requirements
-- [x] Draft `tier3_collect_faulthandler_reports.yaml`
-- [x] Validate Tier-3 YAML
-
-**Tier-3 Evidence (2025-12-31):**
-
-- **YAML Path:** `tier3_scripts/fault_diagnostics_overview/tier3_collect_faulthandler_reports.yaml`
-- **Index Updated:** `tier3_scripts_index.yaml` (17 scripts, 10 producers)
-- **Status:** active
-
-Workstream E — QA & Evidence
-
-- [x] Pytest evidence captured
-- [x] Mypy evidence captured (or marked N/A in record)
-- [x] Coverage + doc-index timestamp recorded
-
-**QA Evidence (2025-12-31):**
-
-- **Pytest:** 5/5 passed in 0.37s
-- **Mypy:** Clean (no issues)
-- **Doc-index timestamp:** 2025-12-31T18:00:00Z
-
-- [x] DONE — collect_faulthandler_reports.py complete; update Tier-1 Stage 3.1 script gate
+| Field | Value |
+|-------|-------|
+| Last Verified | 2026-02-04 |
+| Verified By | GitHub Copilot |
+| Build Doc Version | 3.5.0 |
+<!-- AGENT_ROUTER:END S31R-002 -->
 
 <!-- AGENT_ROUTER:START S31R-003 -->
 ### S31R-003 — generate_fault_artifacts.py
@@ -559,6 +430,7 @@ Workstream E — QA & Evidence
 **Keywords:** `consumer`, `fault-artifacts`, `faulthandler`, `crash-dumps`, `healthview`
 
 #### Resource Paths
+
 | Resource | Path |
 |----------|------|
 | Script | `.repo_studios/scripts/consumers/generate_fault_artifacts.py` |
@@ -567,6 +439,7 @@ Workstream E — QA & Evidence
 | Output Root | `.repo_studios/reports/healthview/consumer_reports/fault_artifacts/` |
 
 #### Invocation
+
 ```bash
 python -m scripts.consumers.generate_fault_artifacts --repo-root . --log-level INFO
 ```
@@ -578,6 +451,7 @@ python -m scripts.consumers.generate_fault_artifacts --repo-root . --log-level I
 | Exit Codes | 0=success, 1=error |
 
 #### Outputs
+
 | Artifact | Format | Description |
 |----------|--------|-------------|
 | manifest.json | JSON | Bundle metadata with artifact inventory |
@@ -585,6 +459,7 @@ python -m scripts.consumers.generate_fault_artifacts --repo-root . --log-level I
 | telemetry.json | JSON | Execution telemetry for pipeline monitoring |
 
 #### Compliance
+
 | Aspect | Status | Notes |
 |--------|--------|-------|
 | HOP Bundle | YES | Timestamped bundles via `build_topic_path()` |
@@ -592,11 +467,13 @@ python -m scripts.consumers.generate_fault_artifacts --repo-root . --log-level I
 | Tier-3 YAML | YES | Validated, active |
 
 #### Orchestrator
+
 | Pipeline | Status | Config Path |
 |----------|--------|-------------|
 | fault_diagnostics_overview | WIRED | `run_fault_diagnostics_overview.py` at L468-522 |
 
 #### Pipeline Position
+
 | Field | Value |
 |-------|-------|
 | Step Number | 2 of 3 |
@@ -604,16 +481,19 @@ python -m scripts.consumers.generate_fault_artifacts --repo-root . --log-level I
 | Orchestrator Script | `.repo_studios/command_center/scripts/orchestrators/run_fault_diagnostics_overview.py` |
 
 #### Dependencies & Consumers
+
 | Direction | Record ID | Script | Data Flow |
 |-----------|-----------|--------|-----------|
 | ⬆️ DEPENDS ON | S31R-002 | `collect_faulthandler_reports.py` | Reads producer report JSON from `faulthandler_reports/<timestamp>/` |
 | ⬇️ CONSUMED BY | S31R-004 | `summarize_fault_diagnostics_overview.py` | Provides `fault_artifacts/<timestamp>/` outputs for summarization |
 
 #### Known Limitations
+
 - UIC-003: Return dict missing `status` key (tech debt)
 - UIC-004: Return dict missing `exit_code` key (tech debt)
 
 #### Verification
+
 | Field | Value |
 |-------|-------|
 | Last Verified | 2026-02-03 |
@@ -629,6 +509,7 @@ python -m scripts.consumers.generate_fault_artifacts --repo-root . --log-level I
 **Keywords:** `summarizer`, `fault-diagnostics`, `healthview`, `summary`, `bundle`
 
 #### Resource Paths
+
 | Resource | Path |
 |----------|------|
 | Script | `.repo_studios/command_center/scripts/summarizers/summarize_fault_diagnostics_overview.py` |
@@ -637,6 +518,7 @@ python -m scripts.consumers.generate_fault_artifacts --repo-root . --log-level I
 | Output Root | `.repo_studios/reports/healthview/summarizer_reports/fault_diagnostics_overview/` |
 
 #### Invocation
+
 ```bash
 python -m command_center.scripts.summarizers.summarize_fault_diagnostics_overview --repo-root . --log-level INFO
 ```
@@ -648,6 +530,7 @@ python -m command_center.scripts.summarizers.summarize_fault_diagnostics_overvie
 | Exit Codes | 0=success, 1=error |
 
 #### Outputs
+
 | Artifact | Format | Description |
 |----------|--------|-------------|
 | manifest.json | JSON | Bundle metadata with artifact inventory |
@@ -655,6 +538,7 @@ python -m command_center.scripts.summarizers.summarize_fault_diagnostics_overvie
 | telemetry.json | JSON | Execution telemetry for pipeline monitoring |
 
 #### Compliance
+
 | Aspect | Status | Notes |
 |--------|--------|-------|
 | HOP Bundle | YES | Timestamped bundles via `write_report_artifacts` |
@@ -662,11 +546,13 @@ python -m command_center.scripts.summarizers.summarize_fault_diagnostics_overvie
 | Tier-3 YAML | YES | 269 lines, valid structure |
 
 #### Orchestrator
+
 | Pipeline | Status | Config Path |
 |----------|--------|-------------|
 | fault_diagnostics_overview | WIRED | `.repo_studios/command_center/scripts/orchestrators/run_fault_diagnostics_overview.py` |
 
 #### Pipeline Position
+
 | Field | Value |
 |-------|-------|
 | Step Number | 3 of 3 |
@@ -674,6 +560,7 @@ python -m command_center.scripts.summarizers.summarize_fault_diagnostics_overvie
 | Orchestrator Script | `.repo_studios/command_center/scripts/orchestrators/run_fault_diagnostics_overview.py` |
 
 #### Dependencies & Consumers
+
 | Direction | Record ID | Script | Data Flow |
 |-----------|-----------|--------|-----------|
 | ⬆️ DEPENDS ON | S31R-002 | `collect_faulthandler_reports.py` | Requires producer outputs from rawview |
@@ -681,75 +568,18 @@ python -m command_center.scripts.summarizers.summarize_fault_diagnostics_overvie
 | ⬇️ CONSUMED BY | (none) | — | Terminal node, outputs consumed by orchestrator |
 
 #### Known Limitations
+
 - UIC return dict missing `exit_code` key (GAP-001: MEDIUM priority)
 - Test expects deprecated filename `fault_diagnostics_overview.json` but script writes `manifest.json` (GAP-002: test bug)
 
 #### Verification
+
 | Field | Value |
 |-------|-------|
 | Last Verified | 2026-02-03 |
 | Verified By | GitHub Copilot |
 | Build Doc Version | 1.0.0 |
 <!-- AGENT_ROUTER:END S31R-004 -->
-
-#### Implementation Workstreams (checkbox-driven) — summarize_fault_diagnostics_overview.py
-
-Workstream A — Discovery
-
-- [x] Inspect outputs + pruning/retention surfaces; record findings
-
-**Discovery Findings (2025-12-31):**
-
-| Surface | Current | Target (HOP) | Status |
-|---------|---------|--------------|--------|
-| `DEFAULT_SUMMARIZER_OUTPUT_DIR` | Uses `build_topic_path("summarizer", TOPIC_SLUG)` | `.repo_studios/reports/healthview/summarizer_reports/fault_diagnostics_overview` | ✅ Already HOP |
-| Artifact naming | `fault_diagnostics_overview.json`, `fault_diagnostics_overview.md` | `manifest.json`, `summary.md`, `telemetry.json` | ⚠️ Legacy |
-| Folder naming | `<stem>-YYYYMMDD_HHMMSS` (via write_report_artifacts) | `YYYYMMDD-HHMM` | ⚠️ Legacy |
-| Test file | All tests use HOP path structure | `.repo_studios/reports/healthview/summarizer_reports/...` | ✅ Already HOP |
-| Pointer files | Not used for discovery | No `latest_*` | ✅ Compliant |
-
-- **Script path defaults:** Already HOP-compliant via `build_topic_path()` library (lines 89-91)
-- **Artifact naming:** Uses legacy pattern via `write_report_artifacts` — base package migration deferred
-- **Tests:** 1/1 passed in 0.15s
-
-**Scope for this workstream:** Output-root only (base package is out of scope per Tier-2 contract).
-
-Workstream B — Plan
-
-- [x] Draft plan to close output-root/base-package stop-gates
-
-**Migration Plan:** No changes required — output root is already HOP-compliant via `build_topic_path()`.
-
-Workstream C — Implement
-
-- [x] Implement accepted plan and update this record + stop-gate status with new evidence
-
-**Implementation Evidence (2025-12-31):**
-
-- No code changes needed — script already uses `build_topic_path()` library
-- Execution verified: Bundle at `.repo_studios/reports/healthview/summarizer_reports/fault_diagnostics_overview/fault_diagnostics_overview-20251231_180033/`
-- Artifacts confirmed: `fault_diagnostics_overview.json`, `fault_diagnostics_overview.md` (legacy naming, output-root HOP-compliant)
-
-Workstream D — Tier-3 YAML
-
-- [x] Confirm Tier-3 is appropriate for this script; record decision (create vs defer)
-- [x] Inspect Tier-3 template requirements
-- [x] Draft `tier3_summarize_fault_diagnostics_overview.yaml`
-- [x] Validate Tier-3 YAML
-
-Workstream E — QA & Evidence
-
-- [x] Pytest evidence captured
-- [x] Mypy evidence captured (or marked N/A in record)
-- [x] Coverage + doc-index timestamp recorded
-
-**QA Evidence (2025-12-31):**
-
-- **Pytest:** 1/1 passed in 0.15s
-- **Mypy:** Clean (no issues)
-- **Doc-index timestamp:** 2025-12-31T18:00:00Z
-
-- [x] DONE — summarize_fault_diagnostics_overview.py complete; update Tier-1 Stage 3.1 script gate
 
 ### 3.2 Stop-Gates and Implementation Checklists
 

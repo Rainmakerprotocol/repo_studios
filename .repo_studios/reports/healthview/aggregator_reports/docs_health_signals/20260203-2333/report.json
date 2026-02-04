@@ -1,0 +1,250 @@
+{
+  "generated_utc": "2026-02-03T23:33:37.285974+00:00",
+  "provenance": {
+    "coverage": {
+      "inputs": [
+        "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\producer_reports\\undocumented_logic"
+      ],
+      "schema_versions": {
+        "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\producer_reports\\undocumented_logic": 1
+      },
+      "score": 58.72,
+      "status": "critical"
+    },
+    "freshness": {
+      "inputs": [
+        "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\producer_reports\\code_doc_churn"
+      ],
+      "schema_versions": {
+        "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\producer_reports\\code_doc_churn": 1
+      },
+      "score": 66.66666666666666,
+      "status": "warning"
+    },
+    "hygiene": {
+      "inputs": [
+        "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\producer_reports\\code_placeholders",
+        "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\producer_reports\\monkey_patches"
+      ],
+      "schema_versions": {
+        "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\producer_reports\\code_placeholders": null,
+        "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\producer_reports\\monkey_patches": null
+      },
+      "score": 100.0,
+      "status": "healthy"
+    },
+    "integrity": {
+      "inputs": [
+        "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\producer_reports\\docs_integrity_validation",
+        "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\producer_reports\\metrics_anchor_stub_validation"
+      ],
+      "schema_versions": {
+        "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\producer_reports\\docs_integrity_validation": 1,
+        "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\producer_reports\\metrics_anchor_stub_validation": 1
+      },
+      "score": 100.0,
+      "status": "healthy"
+    },
+    "structure": {
+      "inputs": [
+        "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\producer_reports\\anchor_inventory\\20260203-2333\\telemetry.json",
+        "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\producer_reports\\markdown_anchor_validation"
+      ],
+      "schema_versions": {
+        "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\producer_reports\\anchor_inventory\\20260203-2333\\telemetry.json": 1,
+        "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\producer_reports\\markdown_anchor_validation": 1
+      },
+      "score": 10.180821917808217,
+      "status": "critical"
+    }
+  },
+  "schema_version": 1,
+  "signals": {
+    "coverage": {
+      "metrics": {
+        "docstring_coverage_percent": 58.72,
+        "entities_missing_docs": 374,
+        "entities_scanned": 906,
+        "modules_scanned": 85,
+        "modules_with_findings": 39
+      },
+      "notes": [
+        "41% of scanned entities lack docstrings."
+      ],
+      "score": 58.72,
+      "status": "critical",
+      "title": "Coverage",
+      "top_findings": [
+        {
+          "coverage_percent": 14.71,
+          "doc_candidates": [],
+          "missing_entities": 29,
+          "module_path": ".repo_studios/scripts/producers/validate_inventory.py"
+        },
+        {
+          "coverage_percent": 25.81,
+          "doc_candidates": [],
+          "missing_entities": 23,
+          "module_path": ".repo_studios/command_center/scripts/aggregators/scan_duplicates.py"
+        },
+        {
+          "coverage_percent": 4.55,
+          "doc_candidates": [],
+          "missing_entities": 21,
+          "module_path": ".repo_studios/scripts/producers/seed_standards_prompts.py"
+        },
+        {
+          "coverage_percent": 0.0,
+          "doc_candidates": [],
+          "missing_entities": 20,
+          "module_path": ".repo_studios/command_center/scripts/cc_producers/generate_commandview_inventory.py"
+        },
+        {
+          "coverage_percent": 0.0,
+          "doc_candidates": [],
+          "missing_entities": 19,
+          "module_path": ".repo_studios/command_center/scripts/cc_producers/analyze_standards_index_gaps.py"
+        }
+      ]
+    },
+    "freshness": {
+      "metrics": {
+        "allowlisted_modules": [],
+        "modules_with_code_churn": 3,
+        "modules_with_doc_updates": 2,
+        "modules_without_doc_updates": 1
+      },
+      "notes": [],
+      "score": 66.66666666666666,
+      "status": "warning",
+      "title": "Freshness",
+      "top_findings": [
+        {
+          "code_paths": [
+            ".repo_studios/tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py",
+            ".repo_studios/tests/tests_command_center/producers/test_generate_function_inventory_command_center.py",
+            ".repo_studios/tests/tests_command_center/test_artifacts.py",
+            ".repo_studios/tests/tests_command_center/test_execution_telemetry/test_summarize_test_execution_telemetry.py",
+            ".repo_studios/tests/tests_command_center/test_prune_logs.py",
+            ".repo_studios/tests/tests_consumers/test_generate_anchor_health_report.py",
+            ".repo_studios/tests/tests_consumers/test_generate_test_log_health_report.py",
+            ".repo_studios/tests/tests_orchestrators/test_run_available_scripts_oversight.py",
+            ".repo_studios/tests/tests_producers/test_analyze_standards_index_gaps.py",
+            ".repo_studios/tests/tests_producers/test_audit_helper_adoption.py",
+            ".repo_studios/tests/tests_producers/test_check_inventory_health.py",
+            ".repo_studios/tests/tests_producers/test_function_inventory_integration.py",
+            ".repo_studios/tests/tests_producers/test_generate_doc_index.py",
+            ".repo_studios/tests/tests_producers/test_generate_function_analysis.py",
+            ".repo_studios/tests/tests_producers/test_generate_function_inventory.py",
+            ".repo_studios/tests/tests_producers/test_generate_lizard_report.py",
+            ".repo_studios/tests/tests_producers/test_generate_test_coverage_inventory.py",
+            ".repo_studios/tests/tests_producers/test_render_inventory_views.py",
+            ".repo_studios/tests/tests_producers/test_validate_import_boundaries.py",
+            ".repo_studios/tests/tests_producers/test_validate_inventory.py",
+            ".repo_studios/tests/tests_summarizers/test_summarize_health_suite.py",
+            ".repo_studios/tests/tests_summarizers/test_summarize_standards.py"
+          ],
+          "doc_candidates": [],
+          "last_commit_utc": "2026-01-30T14:26:56-05:00",
+          "module": "tests"
+        }
+      ]
+    },
+    "hygiene": {
+      "metrics": {
+        "placeholder_status": "ok",
+        "placeholder_total_matches": 0
+      },
+      "notes": [],
+      "score": 100.0,
+      "status": "healthy",
+      "title": "Hygiene",
+      "top_findings": []
+    },
+    "integrity": {
+      "metrics": {
+        "anchors_referenced": 0,
+        "docs_integrity_status": "ok",
+        "documents_processed": 1,
+        "json_blocks_checked": 2,
+        "mismatched_blocks": 0,
+        "missing_metrics_stubs": 0
+      },
+      "notes": [],
+      "score": 100.0,
+      "status": "healthy",
+      "title": "Integrity",
+      "top_findings": []
+    },
+    "structure": {
+      "metrics": {
+        "anchor_validation_issue_count": 84,
+        "anchor_validation_status": "fail",
+        "cross_file_duplicates": 167,
+        "documents_missing_h1": 7,
+        "documents_missing_h2": 3,
+        "documents_with_cross_file_duplicates": 169,
+        "documents_with_repeated_anchors": 7,
+        "total_documents": 200,
+        "total_slugs": 1168
+      },
+      "notes": [
+        "Markdown anchor validator reported 84 issues."
+      ],
+      "score": 10.180821917808217,
+      "status": "critical",
+      "title": "Structure",
+      "top_findings": [
+        {
+          "documents": 176,
+          "root": ".repo_studios"
+        },
+        {
+          "documents": 12,
+          "root": "standards"
+        },
+        {
+          "documents": 6,
+          "root": "automation"
+        },
+        {
+          "documents": 4,
+          "root": "templates"
+        },
+        {
+          "documents": 1,
+          "root": "db_integrations"
+        }
+      ]
+    }
+  },
+  "summary": {
+    "category_scores": {
+      "coverage": 58.72,
+      "freshness": 66.66666666666666,
+      "hygiene": 100.0,
+      "integrity": 100.0,
+      "structure": 10.180821917808217
+    },
+    "overall_score": 60.41,
+    "status_counts": {
+      "critical": 2,
+      "healthy": 2,
+      "warning": 1
+    },
+    "statuses": {
+      "coverage": "critical",
+      "freshness": "warning",
+      "hygiene": "healthy",
+      "integrity": "healthy",
+      "structure": "critical"
+    },
+    "weights": {
+      "coverage": 0.35,
+      "freshness": 0.35,
+      "hygiene": 0.05,
+      "integrity": 0.1,
+      "structure": 0.15
+    }
+  }
+}

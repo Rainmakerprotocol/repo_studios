@@ -14,7 +14,7 @@ category: consumer
 schema_version: "1.0.0"
 registry_version: "1.0.0"
 valid_until: <YYYY-MM-DD>
-version: 3.0.0
+version: 3.1.0
 updated_at: 2026-02-03
 tags:
   - stage-12
@@ -157,13 +157,26 @@ STOP_GATES: CHECKPOINT-0, CHECKPOINT-2B, CHECKPOINT-9, CHECKPOINT-10
 | `COMPLIANCE_TIER` | Classification (A or B) | `A` | `PENDING` |
 | `TARGET_STAGE` | Assignment | `Stage 1.1` | `PENDING` |
 
-### 0.2 Optional Inputs
+### 0.2 Consumer-Specific Inputs — REQUIRED
+
+> ⚠️ **CONSUMER REQUIREMENT:** The `UPSTREAM_BUNDLE` field is MANDATORY for Consumer scripts.
+> You MUST identify and document the upstream producer bundle this consumer reads.
+> **Do NOT leave this field as `(none)` or `PENDING`.**
 
 | Input | Source | Default | Status |
 |-------|--------|---------|--------|
 | `TOPIC` | Derived from script purpose | Script name slug | `PENDING` |
 | `ASSIGNEE` | Human or orchestrator | Current agent | `PENDING` |
-| `UPSTREAM_BUNDLE` | Producer bundle path this consumer reads | (none) | `PENDING` |
+| **`UPSTREAM_BUNDLE`** | **Producer bundle path this consumer reads** | **(REQUIRED — MUST POPULATE)** | `PENDING` |
+
+**How to find UPSTREAM_BUNDLE:**
+
+1. Search for `load_*` or `read_*` functions that consume producer output
+2. Look for `--input-dir`, `--upstream-dir`, or similar CLI flags
+3. Check orchestrator wiring for upstream step dependencies
+4. Grep for paths containing `producer_reports/` or upstream topic slugs
+
+<!-- STOP: Do not proceed until UPSTREAM_BUNDLE is populated with actual path -->
 
 ### 0.3 Classification Rules
 
@@ -761,8 +774,8 @@ storage.write_telemetry(telemetry)
 
 <!-- METAPROMPT: PROMPT-67-EVIDENCE -->
 <!-- CHECKPOINT_ID: CHECKPOINT-7 -->
-<!-- STOP_CONDITION: Test results captured, code references linked -->
-<!-- PROCEED_SIGNAL: "CHECKPOINT-7: Evidence captured — {X} tests, {Y} code references" -->
+<!-- STOP_CONDITION: Test results captured, code references linked, upstream bundle verified -->
+<!-- PROCEED_SIGNAL: "CHECKPOINT-7: Evidence captured — {X} tests, {Y} code refs, UPSTREAM_VERIFIED: {YES/NO}" -->
 <!-- REENTRY_POINT: PROMPT-67-EVIDENCE -->
 
 ### 7.1 RUN: Tests
@@ -775,16 +788,37 @@ storage.write_telemetry(telemetry)
 
 - `<path>:<start>-<end>` — <description>
 
-### 7.3 VERIFY: Upstream Dependency
+### 7.3 VERIFY: Upstream Dependency — MANDATORY FOR CONSUMERS
 
-> **Consumer-specific verification:** Confirm the upstream producer bundle exists and is valid.
+> ⚠️ **CONSUMER REQUIREMENT:** This section is MANDATORY. Do NOT skip.
+> CHECKPOINT-7 signal MUST include `UPSTREAM_VERIFIED: YES/NO`.
+> **A Consumer build.md with this section unpopulated is INCOMPLETE.**
 
-| Check | Status | Evidence |
-|-------|--------|----------|
-| Upstream producer bundle path exists | `PENDING` | `Test-Path <UPSTREAM_BUNDLE>` |
-| Upstream manifest.json valid | `PENDING` | `python -m json.tool <manifest>` |
-| Upstream bundle timestamp recent | `PENDING` | Within expected freshness window |
-| Consumer correctly resolves upstream path | `PENDING` | Logs show correct path resolution |
+**Upstream Producer Identification:**
+
+| Field | Value |
+|-------|-------|
+| Upstream Script | `{PRODUCER_SCRIPT_NAME}` |
+| Upstream Record ID | `{PRODUCER_RECORD_ID}` |
+| Upstream Bundle Path | `{UPSTREAM_BUNDLE_PATH}` |
+
+**Verification Checks:**
+
+| Check | Command | Expected | Actual | Status |
+|-------|---------|----------|--------|--------|
+| Bundle directory exists | `Test-Path "{UPSTREAM_BUNDLE}"` | True | `<actual>` | `PENDING` |
+| manifest.json present | `Test-Path "{UPSTREAM_BUNDLE}/manifest.json"` | True | `<actual>` | `PENDING` |
+| manifest.json valid JSON | `python -m json.tool "{UPSTREAM_BUNDLE}/manifest.json"` | No errors | `<actual>` | `PENDING` |
+| telemetry.json present | `Test-Path "{UPSTREAM_BUNDLE}/telemetry.json"` | True | `<actual>` | `PENDING` |
+
+**Fallback Behavior Documentation:**
+
+| Scenario | Script Behavior | Code Reference |
+|----------|-----------------|----------------|
+| Upstream bundle not found | `{ERROR / SKIP / CREATE_EMPTY}` | `<path>:#L<line>` |
+| Upstream manifest invalid | `{ERROR / SKIP / USE_DEFAULT}` | `<path>:#L<line>` |
+
+<!-- CHECKPOINT-7 SIGNAL MUST INCLUDE: UPSTREAM_VERIFIED: YES/NO -->
 
 ### 7.4 Verification Log
 
@@ -1138,6 +1172,7 @@ Replace these placeholders when using this template:
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 3.1.0 | 2026-02-03 | Strengthened class-specific requirements: Section 0.2 UPSTREAM_BUNDLE now REQUIRED with discovery guidance; Section 7.3 upstream verification now MANDATORY with structured tables; CHECKPOINT-7 signal now includes UPSTREAM_VERIFIED flag |
 | 3.0.0 | 2026-02-03 | Full rewrite derived from Producer v3.5.0; added Section 0 (INPUT with UPSTREAM_BUNDLE), Requirements Registry, EXECUTION_ORDER block, CHECKPOINT/STOP_GATE markers throughout; added Section 7.3 upstream dependency verification; updated example paths for consumer context |
 | 2.1.0 | 2026-01-28 | Enhanced Section 7 with complete conclusion workflow (truth verification, roster update, finalization steps) |
 | 2.0.0 | 2026-01-26 | Added Universal Law, Compliance Tiers, Tier-3 YAML, DB Integration Preparation, Orchestration Readiness Checklist, ScriptConfig section |

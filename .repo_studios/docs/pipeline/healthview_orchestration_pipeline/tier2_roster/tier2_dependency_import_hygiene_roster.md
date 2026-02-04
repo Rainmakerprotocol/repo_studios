@@ -408,236 +408,163 @@ Workstream E — QA & Evidence
 
 - [x] DONE — run_dependency_import_hygiene.py complete; update Tier-1 Stage 4.1 script gate
 
-##### S41R-002 generate_dependency_hygiene_report.py
+<!-- AGENT_ROUTER:START S41R-002 -->
+### S41R-002 — generate_dependency_hygiene_report.py
 
-```yaml
-record_id: "S41R-002"
-script:
-  path: ".repo_studios/scripts/producers/generate_dependency_hygiene_report.py"
-  name: "generate_dependency_hygiene_report.py"
-  category: "producer"
-tier3:
-  metadata_block_version: "v1"
-  allowed: true
-  exists: true
-  name: "tier3_generate_dependency_hygiene_report.yaml"
-  meets_template: "yes"
-  last_updated: "2026-01-01"
-cli_surfaces:
-  run_entrypoint: "main(argv)"
-  key_flags:
-    - "--repo-root"
-    - "--output-dir"
-    - "--requirements-pattern"
-    - "--skip-pyproject"
-    - "--artifacts-to-keep"
-    - "--timestamp"
-    - "--log-level"
-io_contract:
-  inputs:
-    - "repo_root + requirements patterns (optional) + timestamp"
-  outputs:
-    current:
-      root: ".repo_studios/reports/healthview/producer_reports/dependency_hygiene/<YYYYMMDD-HHMM>/"
-      artifacts:
-        - "manifest.json"
-        - "summary.md"
-        - "telemetry.json"
-    target:
-      root: ".repo_studios/reports/healthview/producer_reports/dependency_hygiene/<YYYYMMDD-HHMM>/"
-      artifacts:
-        - "manifest.json"
-        - "summary.md"
-        - "telemetry.json"
-    status: "HOP-compliant"
-retention:
-  surfaces:
-    - "--artifacts-to-keep"
-    - "prune_run_directories(... keep=args.artifacts_to_keep, current_run=run_dir)"
-  mechanism: "prune_by_keep_budget"
-  targets:
-    - ".repo_studios/reports/healthview/producer_reports/dependency_hygiene"
-  guardrails:
-    - "prune_run_directories retains current_run"
-    - "prune_run_directories honors .keep sentinel"
-  evidence:
-    - "module docstring describes 3-artifact bundle"
-    - "prune_run_directories helper"
-db_integration:
-  gated_by: "REPO_STUDIOS_DB_ENABLED"
-  marker_required: true
-  marker_string: "DB_INTEGRATION_MARKER:"
-evidence:
-  code_refs:
-    - ".repo_studios/scripts/producers/generate_dependency_hygiene_report.py#L56 — build_topic_path('producer', TOPIC_SLUG)"
-    - ".repo_studios/scripts/producers/generate_dependency_hygiene_report.py#L45-L53 — library imports"
-  tests:
-    - ".repo_studios/tests/tests_producers/test_generate_dependency_hygiene_report.py — 2/2 passed (0.38s)"
-  qa:
-    mypy: "Success: no issues found in 1 source file"
-    pytest: "2 passed in 0.38s"
-    last_verified: "2026-01-01"
-notes:
-  - "Script already uses build_topic_path('producer', 'dependency_hygiene') — HOP-compliant."
-  - "No code changes required; only Tier-2 documentation and Tier-3 YAML creation."
+> **One-liner:** Dependency hygiene scanner with structured artifacts — reports risky dependency specifications (unpinned constraints, VCS refs, editable installs, local paths, duplicates) across dependency manifests.
+
+**Keywords:** `dependency-hygiene`, `requirements-scanner`, `pip-audit`
+
+#### Resource Paths
+| Resource | Path |
+|----------|------|
+| Script | `.repo_studios/scripts/producers/generate_dependency_hygiene_report.py` |
+| Tier-3 YAML | `tier3_scripts/dependency_import_hygiene/tier3_generate_dependency_hygiene_report.yaml` |
+| Build Doc | `tier2_roster/working_docs/stage_4_1/S41R-002_generate_dependency_hygiene_report_build.md` |
+| Output Root | `.repo_studios/reports/healthview/producer_reports/dependency_hygiene/<YYYYMMDD-HHMM>/` |
+
+#### Invocation
+```bash
+.venv/Scripts/python.exe -u .repo_studios/scripts/producers/generate_dependency_hygiene_report.py \
+  --repo-root . --log-level DEBUG --artifacts-to-keep 5
 ```
 
-**Discovery Findings — S41R-002:**
+| Aspect | Value |
+|--------|-------|
+| Entry Point | `main(argv: Sequence[str] \| None = None) -> int` |
+| Typical Runtime | <5s |
+| Exit Codes | 0=no issues, 1=hygiene issues detected |
 
-| Finding | Evidence |
-|---------|----------|
-| Output path library | Uses `build_topic_path("producer", TOPIC_SLUG)` at line 56 |
-| Default output dir | `.repo_studios/reports/healthview/producer_reports/dependency_hygiene` |
-| HOP compliance | ✅ Already aligned to HOP contract |
-| Base package | ✅ Emits `manifest.json`, `summary.md`, `telemetry.json` |
-| Pointer files | ✅ No `latest_*` artifacts |
-| Tests | 2/2 passed in 0.38s |
-| Mypy | Clean (no issues found) |
+#### Outputs
+| Artifact | Format | Description |
+|----------|--------|-------------|
+| `manifest.json` | JSON | Report metadata (timestamp, counts, version) |
+| `summary.md` | Markdown | Human-readable summary of dependency hygiene issues |
+| `telemetry.json` | JSON | Metrics for tracking (issue counts, file counts) |
 
-#### Implementation Workstreams (checkbox-driven) — generate_dependency_hygiene_report.py
+#### Compliance
+| Aspect | Status | Notes |
+|--------|--------|-------|
+| HOP Bundle | YES | 8/8 HOP requirements PASS |
+| UIC Interface | PARTIAL | Uses `main(argv)->int` instead of `run(argv)->dict` |
+| Tier-3 YAML | YES | 208 lines, validates clean |
 
-Workstream A — Discovery
+#### Orchestrator
+| Pipeline | Status | Config Path |
+|----------|--------|-------------|
+| `run_dependency_import_hygiene.py` | WIRED | Step 2 of 5 in orchestrator |
 
-- [x] Inspect outputs + pruning/retention surfaces; record findings
-  - Script uses `build_topic_path("producer", "dependency_hygiene")` at line 56
-  - Output: `.repo_studios/reports/healthview/producer_reports/dependency_hygiene/<YYYYMMDD-HHMM>/`
-  - Base package: `manifest.json`, `summary.md`, `telemetry.json`
-  - **Already HOP-compliant — no code changes required**
+#### Pipeline Position
+| Field | Value |
+|-------|-------|
+| Step Number | 2 of 5 |
+| Execution Mode | SEQUENTIAL |
+| Orchestrator Script | `.repo_studios/command_center/scripts/orchestrators/run_dependency_import_hygiene.py` |
 
-Workstream B — Plan
+#### Dependencies & Consumers
+| Direction | Record ID | Script | Data Flow |
+|-----------|-----------|--------|-----------|
+| ⬆️ DEPENDS ON | (none) | — | First producer in Stage 4.1; no upstream script dependencies |
+| ⬇️ CONSUMED BY | Orchestrator | `run_dependency_import_hygiene.py` | Provides hygiene bundle to HealthView aggregation |
 
-- [x] Draft plan to close output-root/base-package stop-gates
-  - No migration needed — script already uses `build_topic_path()` library
+#### Known Limitations
+- Entry point returns `int` exit code instead of UIC-compliant `dict[str, Any]` — orchestrator must use subprocess or interpret exit code
+- No try/except wrapper for structured error payloads
 
-Workstream C — Implement
+#### Verification
+| Field | Value |
+|-------|-------|
+| Last Verified | 2026-02-04 |
+| Verified By | copilot-claude-opus-4 |
+| Build Doc Version | 1.0.0 |
+<!-- AGENT_ROUTER:END S41R-002 -->
 
-- [x] Implement accepted plan and update this record + stop-gate status with new evidence
-  - No code changes required — updated Tier-2 record with current evidence
+- [x] DONE — generate_dependency_hygiene_report.py Phase 4 complete; Tier-1 Stage 4.1 script gate updated
 
-Workstream D — Tier-3 YAML
+<!-- AGENT_ROUTER:START S41R-003 -->
+### S41R-003 — generate_import_graph_report.py
 
-- [x] Confirm Tier-3 is appropriate for this script; record decision (create vs defer)
-  - Tier-3 appropriate: producer script with stable CLI contract
-- [x] Inspect Tier-3 template requirements
-- [x] Draft `tier3_generate_dependency_hygiene_report.yaml`
-  - Created at `tier3_scripts/dependency_import_hygiene/tier3_generate_dependency_hygiene_report.yaml`
-- [x] Validate Tier-3 YAML — YAML is valid
+> **One-liner:** Build import graph, detect cycles, compute coupling metrics with file/line provenance.
 
-Workstream E — QA & Evidence
+**Keywords:** `import-graph`, `cycles`, `dependencies`, `coupling`, `provenance`
 
-- [x] Pytest evidence captured — 2/2 passed in 0.38s
-- [x] Mypy evidence captured — Success: no issues found in 1 source file
-- [x] Coverage + doc-index timestamp recorded — 2026-01-01
+#### Resource Paths
 
-- [x] DONE — generate_dependency_hygiene_report.py complete; update Tier-1 Stage 4.1 script gate
+| Resource | Path |
+|----------|------|
+| Script | `.repo_studios/scripts/producers/generate_import_graph_report.py` |
+| Tier-3 YAML | `tier3_scripts/dependency_import_hygiene/tier3_generate_import_graph_report.yaml` |
+| Build Doc | `tier2_roster/working_docs/stage_4_1/S41R-003_generate_import_graph_report_build.md` |
+| Output Root | `.repo_studios/reports/healthview/producer_reports/import_graph/<YYYYMMDD-HHMM>/` |
 
-##### S41R-003 generate_import_graph_report.py
+#### Invocation
 
-```yaml
-record_id: "S41R-003"
-script:
-  path: ".repo_studios/scripts/producers/generate_import_graph_report.py"
-  name: "generate_import_graph_report.py"
-  category: "producer"
-tier3:
-  metadata_block_version: "v1"
-  allowed: true
-  exists: true
-  name: "tier3_generate_import_graph_report.yaml"
-  meets_template: "yes"
-  last_updated: "2026-01-02"
-cli_surfaces:
-  run_entrypoint: "main(argv)"
-  key_flags:
-    - "--repo-root"
-    - "--output-dir"
-    - "--owned"
-    - "--scan-all"
-    - "--exclude"
-    - "--artifacts-to-keep"
-    - "--timestamp"
-    - "--log-level"
-io_contract:
-  inputs:
-    - "repo_root + owned packages or --scan-all + exclude patterns + timestamp"
-  outputs:
-    current:
-      root: ".repo_studios/reports/healthview/producer_reports/import_graph/<YYYYMMDD-HHMM>/"
-      artifacts:
-        - "manifest.json"
-        - "summary.md"
-        - "telemetry.json"
-      enhanced_fields:
-        - "edge_provenance (file/line/statement per edge)"
-        - "cycle_provenance (file/line for cycle edges)"
-        - "files_scanned count"
-    target:
-      root: ".repo_studios/reports/healthview/producer_reports/import_graph/<YYYYMMDD-HHMM>/"
-      artifacts:
-        - "manifest.json"
-        - "summary.md"
-        - "telemetry.json"
-    status: "HOP-compliant"
-    schema_version: 2
-retention:
-  surfaces:
-    - "--artifacts-to-keep"
-    - "prune_run_directories(... keep=args.artifacts_to_keep, current_run=run_dir)"
-  mechanism: "prune_by_keep_budget"
-  targets:
-    - ".repo_studios/reports/healthview/producer_reports/import_graph"
-  guardrails:
-    - "prune_run_directories retains current_run"
-    - "prune_run_directories honors .keep sentinel"
-  evidence:
-    - "module docstring describes 3-artifact bundle"
-    - "prune_run_directories helper"
-db_integration:
-  gated_by: "REPO_STUDIOS_DB_ENABLED"
-  marker_required: true
-  marker_string: "DB_INTEGRATION_MARKER:"
-evidence:
-  code_refs:
-    - ".repo_studios/scripts/producers/generate_import_graph_report.py#L42 — build_topic_path('producer', TOPIC_SLUG)"
-    - ".repo_studios/scripts/producers/generate_import_graph_report.py#L27-L35 — library imports"
-    - ".repo_studios/scripts/producers/generate_import_graph_report.py#L60-L70 — ImportEdge dataclass"
-    - ".repo_studios/scripts/producers/generate_import_graph_report.py#L175-L240 — GraphResult with provenance"
-  tests:
-    - ".repo_studios/tests/tests_producers/test_generate_import_graph_report.py — 2/2 passed (0.20s)"
-  qa:
-    mypy: "Success: no issues found in 1 source file"
-    pytest: "2 passed in 0.20s"
-    last_verified: "2026-01-02"
-notes:
-  - "Script uses build_topic_path('producer', 'import_graph') — HOP-compliant."
-  - "Enhanced 2026-01-02: Added ImportEdge dataclass for file/line provenance."
-  - "Enhanced 2026-01-02: Added --scan-all flag to scan entire repo."
-  - "Enhanced 2026-01-02: Added --exclude flag with default exclusions (.venv, __pycache__, etc.)."
-  - "Enhanced 2026-01-02: edge_provenance and cycle_provenance now included in telemetry.json."
-  - "Schema version bumped to 2 for provenance additions."
+```bash
+python .repo_studios/scripts/producers/generate_import_graph_report.py --repo-root . --log-level INFO
 ```
 
-**Discovery Findings — S41R-003:**
+| Aspect | Value |
+|--------|-------|
+| Entry Point | `main(argv)` |
+| Typical Runtime | ~3-5 seconds |
+| Exit Codes | 0=success, 1=cycles detected |
 
-| Finding | Evidence |
-|---------|----------|
-| Output path library | Uses `build_topic_path("producer", TOPIC_SLUG)` at line 42 |
-| Default output dir | `.repo_studios/reports/healthview/producer_reports/import_graph` |
-| HOP compliance | ✅ Already aligned to HOP contract |
-| Base package | ✅ Emits `manifest.json`, `summary.md`, `telemetry.json` |
-| Pointer files | ✅ No `latest_*` artifacts |
-| Tests | 2/2 passed in 0.20s |
-| Mypy | Clean (no issues found) |
-| Enhancement | File/line provenance for edges and cycles |
-| New flags | `--scan-all`, `--exclude` |
-| Files scanned | 259 (with --scan-all) |
+#### Outputs
+
+| Artifact | Format | Description |
+|----------|--------|-------------|
+| manifest.json | JSON | Bundle metadata with file inventory |
+| summary.md | Markdown | Human-readable import graph statistics |
+| telemetry.json | JSON | Metrics with edge_provenance and cycle_provenance |
+
+#### Compliance
+
+| Aspect | Status | Notes |
+|--------|--------|-------|
+| HOP Bundle | YES | Timestamped bundles with manifest.json, summary.md, telemetry.json |
+| UIC Interface | PARTIAL | Uses `main(argv) -> int` instead of `run(argv) -> dict` |
+| Tier-3 YAML | YES | Created 2026-01-02, validated |
+
+#### Orchestrator
+
+| Pipeline | Status | Config Path |
+|----------|--------|-------------|
+| run_dependency_import_hygiene.py | WIRED | Lines 773-817 (`_import_graph_report()`) |
+
+#### Pipeline Position
+
+| Field | Value |
+|-------|-------|
+| Step Number | 2 of 5 (optional) |
+| Execution Mode | SEQUENTIAL |
+| Orchestrator Script | `.repo_studios/command_center/scripts/orchestrators/run_dependency_import_hygiene.py` |
+
+#### Dependencies & Consumers
+
+| Direction | Record ID | Script | Data Flow |
+|-----------|-----------|--------|-----------|
+| ⬆️ DEPENDS ON | S41R-002 | `generate_dependency_hygiene_report.py` | Runs after dependency analysis in pipeline |
+| ⬇️ CONSUMED BY | (none) | — | Terminal node for import analysis; orchestrator aggregates |
+
+#### Known Limitations
+
+- Uses `main(argv) -> int` instead of `run(argv) -> dict` (LOW priority — orchestrator handles via `_invoke_main()`)
+
+#### Verification
+
+| Field | Value |
+|-------|-------|
+| Last Verified | 2026-02-04 |
+| Verified By | GitHub Copilot (Claude Opus 4) |
+| Build Doc Version | 1.0.0 |
+<!-- AGENT_ROUTER:END S41R-003 -->
 
 #### Implementation Workstreams (checkbox-driven) — generate_import_graph_report.py
 
 Workstream A — Discovery
 
 - [x] Inspect outputs + pruning/retention surfaces; record findings
-  - Script uses `build_topic_path("producer", "import_graph")` at line 42
+  - Script uses `build_topic_path("producer", "import_graph")` at line 48
   - Output: `.repo_studios/reports/healthview/producer_reports/import_graph/<YYYYMMDD-HHMM>/`
   - Base package: `manifest.json`, `summary.md`, `telemetry.json`
   - **Already HOP-compliant — enhanced with provenance tracking**
@@ -667,11 +594,11 @@ Workstream D — Tier-3 YAML
 
 Workstream E — QA & Evidence
 
-- [x] Pytest evidence captured — 2/2 passed in 0.15s
+- [x] Pytest evidence captured — 2/2 passed in 0.19s
 - [x] Mypy evidence captured — Success: no issues found in 1 source file
-- [x] Coverage + doc-index timestamp recorded — 2026-01-01
+- [x] Coverage + doc-index timestamp recorded — 2026-02-04
 
-- [x] DONE — generate_import_graph_report.py complete; update Tier-1 Stage 4.1 script gate
+- [x] DONE — generate_import_graph_report.py Phase 4 complete; Tier-1 Stage 4.1 script gate updated
 
 ##### S41R-004 scan_code_placeholders.py
 

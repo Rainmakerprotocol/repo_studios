@@ -8,8 +8,8 @@ phase: 4
 checkpoints:
   - CHECKPOINT-9
   - CHECKPOINT-10
-version: 1.3.0
-updated_at: 2026-02-02
+version: 1.4.0
+updated_at: 2026-02-03
 related_files:
   - .repo_studios/docs/pipeline/healthview_orchestration_pipeline/stage12_templates/common/review_metaprompts.md
   - .repo_studios/docs/pipeline/healthview_orchestration_pipeline/stage12_templates/producer/build_template.md
@@ -570,11 +570,20 @@ python -m scripts.producers.generate_anchor_inventory --repo-root . --log-level 
 
 ---
 
-### Step 5: UPDATE Tier-1 Registry (Section 10.3) — CRITICAL
+### Step 5: VERIFY AND UPDATE Tier-1 Registry (Section 10.3) — MANDATORY
 
-> ⚠️ **YOU MUST ACTUALLY EDIT THE EXTERNAL FILE**
+> ⚠️ **VERIFY REGARDLESS OF CURRENT STATE**
 >
-> Do not just check the checkbox. Open the file, make the edit, save it.
+> Even if the Tier-1 entry appears complete, you MUST:
+>
+> 1. **LOCATE** the script's row in the Tier-1 table
+> 2. **VERIFY** the Tier-3 YAML column has the correct link (not `TBD`)
+> 3. **VERIFY** the Purpose/Description column is accurate
+> 4. **VERIFY** the Category column matches the script class
+> 5. **SHOW** evidence of verification (even if no changes needed)
+>
+> **Do NOT skip this step because the entry "looks fine" or is "already complete."**
+> **Do NOT report "NO UPDATE REQUIRED" without showing verification evidence.**
 
 #### 5A. Locate the Tier-1 File
 
@@ -590,7 +599,25 @@ Search for "Script Registry" or the stage heading (e.g., "Stage 2.1").
 Select-String -Path "{HOP_ROOT}/tier1_healthview_orchestration_pipeline.md" -Pattern "Stage {X.X}|Script Registry"
 ```
 
-#### 5C. Add or Update Registry Entry
+#### 5C. Verify Entry Fields (MANDATORY)
+
+Before making any changes, document verification of the existing entry:
+
+```powershell
+Select-String -Path "{HOP_ROOT}/tier1_healthview_orchestration_pipeline.md" -Pattern "{SCRIPT_NAME}"
+```
+
+**Verification Table (REQUIRED):**
+
+| Field | Expected | Actual | Status |
+|-------|----------|--------|--------|
+| Script name | `{SCRIPT_NAME}` | `<actual>` | `VERIFIED` / `MISMATCH` |
+| Category | `{SCRIPT_CLASS}` | `<actual>` | `VERIFIED` / `MISMATCH` |
+| Tier-3 YAML link | `[tier3_{script}.yaml](...)` | `<actual>` | `VERIFIED` / `TBD` / `MISSING` |
+| Status | `✅ Complete` | `<actual>` | `VERIFIED` / `NEEDS_UPDATE` |
+| Last Verified | `{TODAY}` | `<actual>` | `VERIFIED` / `STALE` |
+
+#### 5D. Add or Update Registry Entry
 
 **Format for new entry:**
 
@@ -602,7 +629,7 @@ Select-String -Path "{HOP_ROOT}/tier1_healthview_orchestration_pipeline.md" -Pat
 
 Change status from `🔄 In Progress` or `⏳ Pending` to `✅ Complete`.
 
-#### 5D. Verify with Git Diff
+#### 5E. Git Diff Verification (REQUIRED)
 
 **RUN THIS COMMAND:**
 
@@ -610,7 +637,9 @@ Change status from `🔄 In Progress` or `⏳ Pending` to `✅ Complete`.
 git diff "{HOP_ROOT}/tier1_healthview_orchestration_pipeline.md"
 ```
 
-**Expected output (VALID):**
+**Scenario A: Changes were made (TIER1_UPDATED: YES)**
+
+Expected output:
 
 ```diff
 diff --git a/.repo_studios/docs/pipeline/.../tier1_healthview_orchestration_pipeline.md b/...
@@ -622,7 +651,31 @@ index abc1234..def5678 100644
 +| S21R-003 | generate_anchor_inventory.py | producer | ✅ Complete | 2026-02-02 |
 ```
 
-**If git diff shows no changes, YOU HAVE NOT COMPLETED THE UPDATE.**
+**Scenario B: No changes needed — entry already correct (TIER1_VERIFIED: Entry correct)**
+
+If git diff shows NO output, you MUST still document verification:
+
+```text
+TIER-1 VERIFICATION: Entry verified correct, no changes needed.
+Evidence: Row found at line {LINE_NUMBER} with correct values:
+- Script: {SCRIPT_NAME} ✅
+- Category: {SCRIPT_CLASS} ✅
+- Tier-3 link: [tier3_{script}.yaml](...) ✅
+- Status: ✅ Complete ✅
+git diff output: (empty — no changes needed)
+```
+
+**❌ INVALID OUTPUTS (will cause Phase 4 rejection):**
+
+- "NO UPDATE REQUIRED — Entry already current"
+- "Skipped — entry looks complete"
+- (no mention of Tier-1 at all)
+- "Status unchanged" without verification evidence
+
+**✅ VALID OUTPUTS:**
+
+- `TIER1_UPDATED: YES` — TBD changed to tier3_script.yaml (diff shown)
+- `TIER1_VERIFIED: Entry correct at line 830` — all fields verified (table shown)
 
 ---
 
@@ -698,6 +751,15 @@ Command: git diff "{path}"
 
 {PASTE ACTUAL GIT DIFF OUTPUT HERE}
 
+OR if no changes needed:
+
+TIER-1 VERIFICATION: Entry verified correct, no changes needed.
+Evidence: Row found at line {LINE_NUMBER} with correct values:
+- Script: {SCRIPT_NAME} ✅
+- Category: {SCRIPT_CLASS} ✅
+- Tier-3 link: verified ✅
+- Status: ✅ Complete ✅
+
 ═══════════════════════════════════════════════════════════════════
 PLACEHOLDER SWEEP
 ═══════════════════════════════════════════════════════════════════
@@ -711,7 +773,7 @@ RECORD_ID: {RECORD_ID}
 SCRIPT: {SCRIPT_NAME}
 BUILD_DOC: {BUILD_DOC_PATH}
 TIER2_UPDATED: YES (diff shown above)
-TIER1_UPDATED: YES (diff shown above)
+TIER1_UPDATED: YES (diff shown above) | VERIFIED (entry correct, line {N})
 PLACEHOLDERS: NONE
 
 PHASE 4 DELIVERABLES READY — AWAITING FINAL HUMAN VERIFICATION
@@ -735,8 +797,9 @@ After emitting the completion signals above, **STOP** and wait for the human ope
 | **Git diff for Tier-2 is real** | Diff output shows actual `- [ ]` → `- [x]` changes |
 | **Agent Router replaced** | Diff shows `<!-- AGENT_ROUTER:START -->` markers |
 | **Old content deleted** | Diff shows `-` lines removing old YAML block or previous Agent Router |
-| **Git diff for Tier-1 is real** | Diff output shows row added/updated |
-| **No empty diffs** | Neither diff section says "no changes" |
+| **Git diff for Tier-1 is real** | Diff output shows row added/updated OR verification table shown |
+| **Tier-1 verified/updated** | `TIER1_UPDATED: YES` (diff shown) OR `TIER1_VERIFIED: Entry correct at line {N}` |
+| **No empty diffs without explanation** | Tier-1 section has either diff OR verification evidence |
 | **Placeholder sweep clean** | grep result shows 0 matches |
 | **Build doc complete** | Open file, scan for any remaining gaps |
 
@@ -846,6 +909,7 @@ Test-Path "{file_path}"
 
 | Version | Date | Changes |
 |---------|------|---------|
+| 1.4.0 | 2026-02-03 | Strengthened Step 5 (Tier-1 Registry) to MANDATE verification regardless of current state; added verification table requirement (5C); added valid/invalid output examples; updated completion signal to require `TIER1_UPDATED: YES` or `TIER1_VERIFIED: Entry correct`; renamed 5D to 5E |
 | 1.3.0 | 2026-02-02 | Strengthened Step 4E.2 with explicit deletion instructions: format identification (YAML vs Router), boundary detection, Python snippet, valid/invalid diff examples; added "Old content deleted" to verification checklist; added red flags for no deletions, duplicate sections, wrong section deleted |
 | 1.2.0 | 2026-02-02 | Added Pipeline Position + Dependencies & Consumers sections to Agent Router template; updated Field Population Guide with dependency tracing sources; enhanced example with verbal graph fields |
 | 1.1.0 | 2026-02-02 | Added "REPLACE REGARDLESS" principle; added standardized Agent Router template for Tier-2 script sections; added Step 4E |

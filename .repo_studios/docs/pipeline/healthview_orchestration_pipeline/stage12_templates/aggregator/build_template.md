@@ -1,5 +1,5 @@
 ---
-title: "Summarizer Build Template"
+title: "Aggregator Build Template"
 tier: working-document
 audience:
   - coding_agent
@@ -10,15 +10,15 @@ role:
   - build-template
   - phase-4-artifact
 status: active
-category: summarizer
+category: aggregator
 schema_version: "1.0.0"
 registry_version: "1.0.0"
 valid_until: <YYYY-MM-DD>
-version: 3.1.0
+version: 1.0.0
 updated_at: 2026-02-03
 tags:
   - stage-12
-  - summarizer
+  - aggregator
   - phase-4
   - <RECORD_ID>
 related_files:
@@ -33,7 +33,7 @@ related_files:
 EXECUTION_ORDER:
   PROMPT-01-SETUP: 0. INPUT (CHECKPOINT-0, STOP_GATE) → 1. IDENTIFY (CHECKPOINT-1)
   PROMPT-2A-ANALYZE: 2.1-2.4 (CHECKPOINT-2A)
-  PROMPT-2B-VERIFY: 2.5 (CHECKPOINT-2B, STOP_GATE)
+  PROMPT-2B-VERIFY: 2.5-2.6 (CHECKPOINT-2B, STOP_GATE)
   PROMPT-34-PREPARE: 3. Tier-3 (CHECKPOINT-3) → 4. DB (CHECKPOINT-4)
   PROMPT-5-GAPS: 5. Gaps (CHECKPOINT-5)
   PROMPT-67-EVIDENCE: 6. Changes (CHECKPOINT-6) → 7. Evidence (CHECKPOINT-7)
@@ -42,17 +42,24 @@ EXECUTION_ORDER:
 
 CRITICAL_PATH: CHECKPOINT-0 → CHECKPOINT-2B → CHECKPOINT-9 → CHECKPOINT-10
 STOP_GATES: CHECKPOINT-0, CHECKPOINT-2B, CHECKPOINT-9, CHECKPOINT-10
+
+AGGREGATOR_SPECIFIC:
+  - Section 0.2: Multi-upstream bundle table (REQUIRED)
+  - Section 2.5: Signal blending formula (REQUIRED)
+  - Section 2.6: Conditional upstreams (OPTIONAL)
+  - Section 5.1.4: AGC compliance gaps
+  - Section 7.3: Multi-upstream verification
+  - Section 7.4: Provenance tracking
 -->
 
 <!-- markdownlint-disable-next-line MD025 -->
-# Script Build Template — <SCRIPT_NAME>
+# Aggregator Build Template — <SCRIPT_NAME>
 
 > **Purpose:** Working document for Phase 4 per-script processing of <RECORD_ID>.
 > This template will evolve as the script is inspected, modified, documented, and tested.
 > Upon completion, content transfers to Tier-2 and this doc is archived with `status: archived`.
 >
 > **Record ID:** <RECORD_ID>
-> **Category:** Summarizer
 > **Status:** `active`
 > **Created:** <YYYY-MM-DD>
 > **Completed:** (pending)
@@ -60,6 +67,10 @@ STOP_GATES: CHECKPOINT-0, CHECKPOINT-2B, CHECKPOINT-9, CHECKPOINT-10
 > **Universal Law:** Every script in the HealthView pipeline SHALL be orchestration-ready,
 > agent-discoverable via Tier-3 YAML, and database-integration prepared — regardless of
 > whether it is currently assigned to an orchestrator.
+>
+> **Aggregator Principle:** Aggregators synthesize signals from MULTIPLE upstream producers
+> into composite health metrics. They must handle MISSING upstreams gracefully, apply
+> documented BLENDING FORMULAS, and track PROVENANCE for each contributing signal.
 
 ---
 
@@ -133,66 +144,99 @@ STOP_GATES: CHECKPOINT-0, CHECKPOINT-2B, CHECKPOINT-9, CHECKPOINT-10
 | ORC-002 | Idempotent (safe to re-run) | test confirms |
 | ORC-003 | ScriptConfig documented | Section 8.2 |
 
+### Aggregator Compliance (AGC) — Aggregator Only
+
+> **Purpose:** Aggregator-specific requirements for multi-upstream signal blending.
+> These requirements are IN ADDITION to UIC/HOP/AGT/DBI/ORC.
+
+| ID | Requirement | Evidence Location |
+|----|-------------|-------------------|
+| AGC-001 | All upstreams have `DEFAULT_*` path constants | `<path>:<line>` |
+| AGC-002 | Graceful loading: `None` on missing upstream | `<path>:<line>` |
+| AGC-003 | Signal blending formula documented | Section 2.5 |
+| AGC-004 | Weights sum to 1.0 (or documented alternative) | Section 2.5 |
+| AGC-005 | Partial score when upstreams missing | `<path>:<line>` |
+| AGC-006 | Provenance tracking per signal | `<path>:<line>` |
+
 ---
 
 ## 0. INPUT: Assignment Contract
 
 <!-- METAPROMPT: PROMPT-01-SETUP -->
 <!-- CHECKPOINT_ID: CHECKPOINT-0 -->
-<!-- STOP_CONDITION: All REQUIRED inputs have Status = PASS -->
-<!-- PROCEED_SIGNAL: "CHECKPOINT-0: Inputs verified — SCRIPT_PATH, RECORD_ID, COMPLIANCE_TIER, TARGET_STAGE confirmed" -->
+<!-- STOP_CONDITION: All REQUIRED inputs have Status = PASS, UPSTREAM_BUNDLES table complete -->
+<!-- PROCEED_SIGNAL: "CHECKPOINT-0: Inputs verified — SCRIPT_PATH, RECORD_ID, COMPLIANCE_TIER, TARGET_STAGE confirmed, {N} UPSTREAM_BUNDLES documented" -->
 <!-- REENTRY_POINT: PROMPT-01-SETUP (restart from beginning) -->
 
 <!-- STOP_GATE: TRUE -->
 
 > **Purpose:** Define what information must be provided BEFORE starting this template.
 > Agent cannot proceed until all REQUIRED inputs are supplied.
+>
+> **⚠️ AGGREGATOR CRITICAL:** Aggregators consume MULTIPLE upstream bundles.
+> Section 0.2 MUST document ALL upstream dependencies before proceeding.
 
 ### 0.1 Required Inputs
 
 | Input | Source | Example | Status |
 |-------|--------|---------|--------|
-| `SCRIPT_PATH` | Assignment or discovery | `.repo_studios/scripts/summarizers/summarize_health_suite.py` | `PENDING` |
-| `RECORD_ID` | Tier-2 roster or assigned | `ASR-008` | `PENDING` |
-| `COMPLIANCE_TIER` | Classification (A or B) | `A` | `PENDING` |
-| `TARGET_STAGE` | Assignment | `Stage 1.1` | `PENDING` |
+| `SCRIPT_PATH` | Assignment or discovery | `.repo_studios/scripts/aggregators/aggregate_docs_health_signals.py` | `PENDING` |
+| `RECORD_ID` | Tier-2 roster or assigned | `S21R-009` | `PENDING` |
+| `COMPLIANCE_TIER` | Classification (always A for Aggregators) | `A` | `PENDING` |
+| `TARGET_STAGE` | Assignment | `Stage 2.1` | `PENDING` |
 
-### 0.2 Summarizer-Specific Inputs — REQUIRED
+### 0.2 Upstream Bundles — REQUIRED
 
-> ⚠️ **SUMMARIZER REQUIREMENT:** The `INPUT_BUNDLE` field is MANDATORY for Summarizer scripts.
-> You MUST identify and document the upstream bundle(s) this summarizer reads.
-> **Do NOT leave this field as `(none)` or `PENDING`.**
+<!-- ⚠️ STOP: DO NOT PROCEED until this table is complete. -->
+<!-- DISCOVERY: If upstreams are unknown, run the script with --help or grep for DEFAULT_* constants -->
+
+> **⚠️ MANDATORY — Aggregators MUST document ALL upstream dependencies.**
+>
+> Aggregators synthesize signals from multiple upstream producers. Unlike Consumers
+> (single upstream) or Producers (no upstream), Aggregators depend on N upstream bundles.
+>
+> **How to discover upstreams:**
+> 1. Grep for `DEFAULT_*` constants in the script
+> 2. Check `--help` output for upstream path flags
+> 3. Review the script's docstring for input descriptions
+> 4. Check imports for references to other report modules
+
+| # | Upstream Bundle | Default Path Constant | Signal Extracted | Weight | Required/Optional |
+|---|-----------------|----------------------|------------------|--------|-------------------|
+| 1 | <upstream_name_1> | `DEFAULT_<NAME>_PATH` | <signal_name> | <weight> | `REQUIRED` / `OPTIONAL` |
+| 2 | <upstream_name_2> | `DEFAULT_<NAME>_PATH` | <signal_name> | <weight> | `REQUIRED` / `OPTIONAL` |
+| 3 | <upstream_name_3> | `DEFAULT_<NAME>_PATH` | <signal_name> | <weight> | `REQUIRED` / `OPTIONAL` |
+<!-- Add more rows as needed -->
+
+**Upstream count:** `<N>` upstreams documented
+
+**Discovery method used:** `<grep for DEFAULT_* | --help output | docstring review | code inspection>`
+
+### 0.3 Optional Inputs
 
 | Input | Source | Default | Status |
 |-------|--------|---------|--------|
 | `TOPIC` | Derived from script purpose | Script name slug | `PENDING` |
 | `ASSIGNEE` | Human or orchestrator | Current agent | `PENDING` |
-| **`INPUT_BUNDLE`** | **Upstream producer/consumer/orchestrator bundle path** | **(REQUIRED — MUST POPULATE)** | `PENDING` |
 
-**How to find INPUT_BUNDLE:**
-
-1. Search for bundle loading functions (`load_*`, `read_*`, `parse_*`)
-2. Look for `--input-dir`, `--consumer-output`, `--upstream-dir` flags
-3. Check orchestrator wiring for upstream step dependencies
-4. Grep for paths containing `producer_reports/`, `consumer_reports/`, or upstream topic slugs
-
-<!-- STOP: Do not proceed until INPUT_BUNDLE is populated with actual path -->
-
-### 0.3 Classification Rules
+### 0.4 Classification Rules
 
 **How to determine COMPLIANCE_TIER:**
 
 | If script... | Then Tier = | Rationale |
 |--------------|-------------|----------|
+| Aggregates multiple producer outputs into composite metrics | **A** | Report Generator (multi-upstream) |
 | Produces HOP bundle (manifest/summary/telemetry) | **A** | Report Generator |
-| Transforms input bundle without HOP output | **B** | Transformer |
 | Is unclear | **A** | Default to stricter requirements |
 
-**Classification Decision:** Tier {A|B} — {rationale}
+> **Note:** Aggregators are ALWAYS Tier A. If a script aggregates data but doesn't produce
+> a HOP bundle, it may be a Utility, not an Aggregator. Re-classify accordingly.
 
-<!-- PROCEED_WHEN: All REQUIRED inputs have status PASS -->
+<!-- PROCEED_WHEN: All REQUIRED inputs have status PASS AND UPSTREAM_BUNDLES table has ≥1 row -->
 
-> **⚠️ STOP:** Do not proceed to Section 1 until all REQUIRED inputs are provided.
+> **⚠️ STOP:** Do not proceed to Section 1 until:
+> - All REQUIRED inputs are provided
+> - UPSTREAM_BUNDLES table has at least 1 upstream documented
 
 ---
 
@@ -201,7 +245,7 @@ STOP_GATES: CHECKPOINT-0, CHECKPOINT-2B, CHECKPOINT-9, CHECKPOINT-10
 <!-- METAPROMPT: PROMPT-01-SETUP -->
 <!-- CHECKPOINT_ID: CHECKPOINT-1 -->
 <!-- STOP_CONDITION: All fields in identity table populated, 1.1 and 1.2 completed -->
-<!-- PROCEED_SIGNAL: "CHECKPOINT-1: Script identity captured — {SCRIPT_NAME} is Tier {A/B}" -->
+<!-- PROCEED_SIGNAL: "CHECKPOINT-1: Script identity captured — {SCRIPT_NAME} is Tier A Aggregator with {N} upstreams" -->
 <!-- REENTRY_POINT: PROMPT-01-SETUP -->
 
 <!-- PROCEED_WHEN: All fields in identity table populated -->
@@ -210,11 +254,12 @@ STOP_GATES: CHECKPOINT-0, CHECKPOINT-2B, CHECKPOINT-9, CHECKPOINT-10
 |-------|-------|
 | **Name** | `<SCRIPT_NAME>` |
 | **Path** | `<SCRIPT_PATH>` |
-| **Tier Class** | Producer / Consumer / Aggregator / Summarizer / Utility / Library |
-| **Compliance Tier** | A (Report Generator) / B (Action Utility) |
+| **Tier Class** | Aggregator |
+| **Compliance Tier** | A (Report Generator) |
 | **Lines** | <LINE_COUNT> |
 | **Record ID** | <RECORD_ID> |
 | **Planned Stage** | <TARGET_STAGE> |
+| **Upstream Count** | <N> (from Section 0.2) |
 
 **Compliance Tier Definitions:**
 
@@ -223,15 +268,25 @@ STOP_GATES: CHECKPOINT-0, CHECKPOINT-2B, CHECKPOINT-9, CHECKPOINT-10
 - **Tier B (Action Utility):** Performs actions without HOP bundles. Includes Utilities,
   Configurators, Diagnostics, Libraries.
 
+> **Aggregator Note:** All Aggregators are Tier A because they produce synthesized health
+> reports as HOP bundles.
+
 ### 1.1 DESCRIBE: Purpose
 
-<Brief description of what this script does and why>
+<Brief description of what this aggregator does, what signals it combines, and what composite metric it produces>
+
+**Aggregation summary:**
+- **Input signals:** <list signal names from upstream bundles>
+- **Blending method:** <weighted average / threshold-based / custom formula>
+- **Output metric:** <composite health score / dashboard / risk assessment>
 
 ### 1.2 LIST: Current Capabilities
 
-- <Capability 1>
-- <Capability 2>
-- <Capability 3>
+- <Capability 1: e.g., Loads churn metrics from code_doc_churn producer>
+- <Capability 2: e.g., Extracts coverage data from undocumented_logic producer>
+- <Capability 3: e.g., Computes weighted composite health score>
+- <Capability 4: e.g., Handles missing upstreams gracefully>
+- <Capability 5: e.g., Tracks provenance for each contributing signal>
 
 ### 1.3 Verification Log
 
@@ -246,9 +301,8 @@ STOP_GATES: CHECKPOINT-0, CHECKPOINT-2B, CHECKPOINT-9, CHECKPOINT-10
 <!-- METAPROMPT: PROMPT-2A-ANALYZE -->
 <!-- CHECKPOINT_ID: CHECKPOINT-2A -->
 <!-- STOP_CONDITION: Sections 2.1-2.4 complete, all Status columns != PENDING -->
-<!-- PROCEED_SIGNAL: "CHECKPOINT-2A: Static analysis complete — UIC checklist has {X} PASS, {Y} FAIL" -->
+<!-- PROCEED_SIGNAL: "CHECKPOINT-2A: Static analysis complete — UIC checklist has {X} PASS, {Y} FAIL, AGC checklist has {X} PASS, {Y} FAIL" -->
 <!-- REENTRY_POINT: PROMPT-2A-ANALYZE -->
-<!-- TIER_CHECK: If COMPLIANCE_TIER == "B", skip sections 2.2.2(Tier A), 2.3, 2.4.2 -->
 
 ### 2.1 DOCUMENT: CLI Interface
 
@@ -264,7 +318,11 @@ usage: <SCRIPT_NAME> [-h] [--repo-root REPO_ROOT] ...
 | `--output-dir` | path | HOP default | Output directory for artifacts |
 | `--timestamp` | str | auto | ISO timestamp override |
 | `--log-level` | choice | INFO | Logging verbosity |
-| `--artifacts-to-keep` | int | 5 | Retention budget (Tier A only) |
+| `--artifacts-to-keep` | int | 5 | Retention budget |
+| `--<upstream1>-path` | path | DEFAULT constant | Override path to <upstream1> |
+| `--<upstream2>-path` | path | DEFAULT constant | Override path to <upstream2> |
+<!-- Add upstream path flags as needed -->
+| `--skip-<signal>` | flag | false | Skip <signal> computation (optional) |
 | <additional flags> | | | |
 
 ### 2.2 INSPECT: Entry Points
@@ -296,60 +354,47 @@ usage: <SCRIPT_NAME> [-h] [--repo-root REPO_ROOT] ...
 | No `input()` prompts | UIC-009 | `PENDING` | grep confirms |
 | Exceptions return error payload | UIC-010 | `PENDING` | `<path>:<line>` |
 
-#### 2.2.2 Return Payload Contract
+#### 2.2.2 Return Payload Contract (Tier A — Aggregators)
 
-<!-- TIER: A -->
-<!-- SKIP_IF: compliance_tier == "B" -->
+> **Applies to:** Tier A (Report Generators) — Aggregator variant
 
-> **Applies to:** Tier A (Report Generators) only  
-> **Skip if:** Compliance Tier = B
-
-**Tier A (Report Generators) — REQUIRED keys:**
+**Tier A Aggregator — REQUIRED keys:**
 
 | Key | Type | Required | Description |
 |-----|------|----------|-------------|
-| `status` | str | ✅ | "ok", "error", "issues", "no_targets" |
-| `exit_code` | int | ✅ | 0=success, 1=issues, 2=error |
+| `status` | str | ✅ | "ok", "error", "partial", "no_upstreams" |
+| `exit_code` | int | ✅ | 0=success, 1=partial, 2=error |
 | `run_dir` | str | ✅ | Path to output bundle directory |
 | `output_dir` | str | ✅ | Parent output directory |
 | `run_id` | str | ✅ | Timestamp slug (YYYYMMDD-HHMM) |
 | `manifest` | dict | ✅ | Full manifest content |
 | `telemetry` | dict | ✅ | Full telemetry content |
 | `summary` | dict | ✅ | Summary metrics subset |
+| `composite_score` | float | ✅ | Aggregated health score (0.0-1.0) |
+| `signals_loaded` | int | ✅ | Count of successfully loaded upstreams |
+| `signals_total` | int | ✅ | Total upstreams expected |
+| `provenance` | dict | ✅ | Mapping of signal → source path |
 
-<!-- TIER: B -->
-<!-- SKIP_IF: compliance_tier == "A" -->
-
-> **Applies to:** Tier B (Action Utilities) only  
-> **Skip if:** Compliance Tier = A
-
-**Tier B (Action Utilities) — REQUIRED keys:**
-
-| Key | Type | Required | Description |
-|-----|------|----------|-------------|
-| `status` | str | `PASS` | "ok" or "error" |
-| `exit_code` | int | `PASS` | 0=success, non-zero=failure |
-| `action_taken` | str | `PASS` | Description of action performed |
-| `artifacts` | None | `PASS` | Explicit null (no bundle produced) |
-| `details` | dict | `PENDING` | Optional additional context |
+> **Aggregator-specific status values:**
+> - `ok` — All upstreams loaded, composite computed
+> - `partial` — Some upstreams missing, partial score computed
+> - `no_upstreams` — No upstreams found, score unavailable
+> - `error` — Fatal error during aggregation
 
 ### 2.3 DOCUMENT: Output Contract
 
-<!-- TIER: A -->
-<!-- SKIP_IF: compliance_tier == "B" -->
+> **Applies to:** Tier A (Report Generators)
 
-> **Applies to:** Tier A (Report Generators) only  
-> **Skip if:** Compliance Tier = B
-
-**Output root:** `.repo_studios/reports/healthview/summarizer_reports/<TOPIC>/<YYYYMMDD-HHMM>/`
+**Output root:** `.repo_studios/reports/healthview/aggregator_reports/<TOPIC>/<YYYYMMDD-HHMM>/`
 
 **Artifacts:**
 
 | Artifact | Format | Description |
 |----------|--------|-------------|
-| `manifest.json` | JSON | Schema version, status, inputs |
-| `summary.md` | Markdown | Human-readable summary |
-| `telemetry.json` | JSON | Execution metrics |
+| `manifest.json` | JSON | Schema version, status, inputs, provenance |
+| `summary.md` | Markdown | Human-readable composite health summary |
+| `telemetry.json` | JSON | Execution metrics, timing per upstream |
+| `composite.json` | JSON | Detailed breakdown of composite score |
 | <additional artifacts> | | |
 
 ### 2.4 ASSESS: Compliance
@@ -370,13 +415,9 @@ usage: <SCRIPT_NAME> [-h] [--repo-root REPO_ROOT] ...
 | Can be dynamically imported | `PENDING` | `importlib.util` works |
 | Idempotent (safe to re-run) | `PENDING` | Multiple runs don't corrupt |
 
-#### 2.4.2 HOP Bundle Compliance (Tier A Only)
+#### 2.4.2 HOP Bundle Compliance (Tier A)
 
-<!-- TIER: A -->
-<!-- SKIP_IF: compliance_tier == "B" -->
-
-> **Applies to:** Tier A (Report Generators) only  
-> **Skip if:** Compliance Tier = B
+> **Applies to:** Tier A (Report Generators)
 
 | Requirement | ID | Status | Evidence |
 |-------------|----|--------|----------|
@@ -389,14 +430,108 @@ usage: <SCRIPT_NAME> [-h] [--repo-root REPO_ROOT] ...
 | Directory format `YYYYMMDD-HHMM` | HOP-007 | `PENDING` | `<path>:<line>` |
 | `--artifacts-to-keep` flag supported | HOP-008 | `PENDING` | `<path>:<line>` |
 
-### 2.5 VERIFY: Output Quality
+#### 2.4.3 Aggregator Compliance (AGC)
+
+> **Applies to:** Aggregators ONLY
+>
+> **⚠️ MANDATORY — All items in this section MUST be verified for Aggregators.**
+
+| Requirement | ID | Status | Evidence |
+|-------------|----|--------|----------|
+| All upstreams have `DEFAULT_*` path constants | AGC-001 | `PENDING` | `<path>:<line>` |
+| Graceful loading: `None` on missing upstream | AGC-002 | `PENDING` | `<path>:<line>` |
+| Signal blending formula documented | AGC-003 | `PENDING` | Section 2.5 complete |
+| Weights sum to 1.0 (or documented alternative) | AGC-004 | `PENDING` | Section 2.5 verified |
+| Partial score when upstreams missing | AGC-005 | `PENDING` | `<path>:<line>` |
+| Provenance tracking per signal | AGC-006 | `PENDING` | `<path>:<line>` |
+
+### 2.5 DOCUMENT: Signal Blending Formula — REQUIRED
+
+<!-- AGGREGATOR_SPECIFIC: TRUE -->
+<!-- STOP_CONDITION: Formula table complete, weights sum verified -->
+
+> **⚠️ MANDATORY FOR AGGREGATORS — Do not skip this section.**
+>
+> Aggregators MUST document their signal blending formula. This enables:
+> - Agents to understand how composite scores are computed
+> - Humans to audit and adjust weights
+> - Future refactoring without losing institutional knowledge
+
+#### 2.5.1 Signal Weights Table
+
+| Signal Name | Source Upstream | Weight | Extraction Function | Fallback Value |
+|-------------|-----------------|--------|---------------------|----------------|
+| <signal_1> | <upstream_1> | <0.XX> | `_compute_<signal>()` | <default or None> |
+| <signal_2> | <upstream_2> | <0.XX> | `_compute_<signal>()` | <default or None> |
+| <signal_3> | <upstream_3> | <0.XX> | `_compute_<signal>()` | <default or None> |
+<!-- Add more rows as needed -->
+| **TOTAL** | — | **1.00** | — | — |
+
+**Weight validation:** Sum of weights = <calculated_sum> (should be 1.00)
+
+#### 2.5.2 Blending Formula
+
+```python
+# Example: Weighted average formula
+composite_score = (
+    signal_1 * 0.XX +
+    signal_2 * 0.XX +
+    signal_3 * 0.XX
+)
+
+# Code location: <path>:<line>
+```
+
+**Formula type:** `<weighted_average | threshold_based | custom>`
+
+**Normalization:** `<0.0-1.0 | 0-100 | custom range>`
+
+#### 2.5.3 Partial Score Computation
+
+> **When upstreams are missing, how does the script handle it?**
+
+| Scenario | Behavior | Result |
+|----------|----------|--------|
+| All upstreams present | Full weighted calculation | Composite score with full confidence |
+| Some upstreams missing | <re-normalize weights | use fallback | skip signal> | Partial score with degraded confidence |
+| No upstreams present | <return None | return 0 | error status> | `<status value>` |
+
+**Partial score code location:** `<path>:<line>`
+
+### 2.6 DOCUMENT: Conditional Upstreams — OPTIONAL
+
+<!-- AGGREGATOR_SPECIFIC: TRUE -->
+<!-- SKIP_IF: No conditional upstreams in this script -->
+
+> **Optional section for scripts with `--skip-*` flags or conditional signal inclusion.**
+>
+> Some aggregators allow skipping specific signals (e.g., `--skip-hygiene`). Document
+> the behavior here.
+
+#### 2.6.1 Conditional Flags
+
+| Flag | Effect | Default | Affected Signals |
+|------|--------|---------|------------------|
+| `--skip-<signal>` | Excludes signal from composite | `false` | <signal_name> |
+<!-- Add more rows as needed -->
+
+#### 2.6.2 Weight Redistribution
+
+**When a signal is skipped, how are weights redistributed?**
+
+| Method | Description | Code Location |
+|--------|-------------|---------------|
+| Re-normalize | Remaining weights scaled to sum to 1.0 | `<path>:<line>` |
+| Drop contribution | Weight simply excluded (sum < 1.0) | `<path>:<line>` |
+| Default to fallback | Fallback value used instead of skip | `<path>:<line>` |
+
+### 2.7 VERIFY: Output Quality
 
 <!-- METAPROMPT: PROMPT-2B-VERIFY -->
 <!-- CHECKPOINT_ID: CHECKPOINT-2B -->
-<!-- STOP_CONDITION: 2.5.1 QA all PASS, 2.5.5 truth table all Verdict = TRUE -->
-<!-- PROCEED_SIGNAL: "CHECKPOINT-2B: Output truth verified — script executed, all claims TRUE" -->
+<!-- STOP_CONDITION: 2.7.1 QA all PASS, 2.7.5 truth table all Verdict = TRUE -->
+<!-- PROCEED_SIGNAL: "CHECKPOINT-2B: Output truth verified — script executed, all claims TRUE, {N}/{M} upstreams loaded" -->
 <!-- REENTRY_POINT: PROMPT-2B-VERIFY (critical gate — must re-verify from scratch) -->
-<!-- TIER_CHECK: If COMPLIANCE_TIER == "B", skip sections 2.5.2, 2.5.3 -->
 
 > **⚠️ MANDATORY STOP-GATE — DO NOT SKIP**
 >
@@ -405,12 +540,18 @@ usage: <SCRIPT_NAME> [-h] [--repo-root REPO_ROOT] ...
 > artifacts MUST be verified against ground truth. If any claim is false, the script is BROKEN
 > regardless of test results.
 >
+> **Aggregator-specific verification:** You MUST verify that:
+> 1. Each upstream was actually loaded (or gracefully skipped)
+> 2. The blending formula was applied correctly
+> 3. Provenance tracking matches actual source paths
+> 4. Partial scores are computed correctly when upstreams missing
+>
 > **Agent Instruction:** You MUST run the script, read every output file, and verify each claim
 > against the actual filesystem/codebase state. Do not proceed until all claims are TRUE.
 
 **MANDATORY: Run script and inspect actual output before completing this section.**
 
-#### 2.5.1 QA Verification
+#### 2.7.1 QA Verification
 
 | Check | Command | Result | Evidence | CI/Artifact Link |
 |-------|---------|--------|----------|------------------|
@@ -419,13 +560,9 @@ usage: <SCRIPT_NAME> [-h] [--repo-root REPO_ROOT] ...
 | CLI execution | `python <script> --help` | `PENDING` | <runs without error> | `N/A` |
 | Actual run | `python <script> --log-level DEBUG` | `PENDING` | <output path confirmed> | `<artifact_path>` |
 
-#### 2.5.2 summary.md Quality (Aesthetics & Lint)
+#### 2.7.2 summary.md Quality (Aesthetics & Lint)
 
-<!-- TIER: A -->
-<!-- SKIP_IF: compliance_tier == "B" -->
-
-> **Applies to:** Tier A (Report Generators) only  
-> **Skip if:** Compliance Tier = B
+> **Applies to:** Tier A (Report Generators)
 
 | Check | Status | Evidence |
 |-------|--------|----------|
@@ -435,25 +572,25 @@ usage: <SCRIPT_NAME> [-h] [--repo-root REPO_ROOT] ...
 | Tables properly formatted | `PENDING` | <alignment, header row present> |
 | Actionable next-steps section | `PENDING` | <checkbox items present> |
 | No hardcoded absolute paths | `PENDING` | <paths are relative or parameterized> |
+| Composite score displayed | `PENDING` | <score shown prominently in summary> |
+| Signal breakdown included | `PENDING` | <individual signal contributions listed> |
 
-#### 2.5.3 Machine-Readable Artifacts (JSON Quality)
+#### 2.7.3 Machine-Readable Artifacts (JSON Quality)
 
-<!-- TIER: A -->
-<!-- SKIP_IF: compliance_tier == "B" -->
-
-> **Applies to:** Tier A (Report Generators) only  
-> **Skip if:** Compliance Tier = B
+> **Applies to:** Tier A (Report Generators)
 
 | Check | Status | Evidence |
 |-------|--------|----------|
 | manifest.json valid JSON | `PENDING` | `python -m json.tool <file>` |
 | telemetry.json valid JSON | `PENDING` | `python -m json.tool <file>` |
+| composite.json valid JSON | `PENDING` | `python -m json.tool <file>` |
 | Schema version present | `PENDING` | `schema_version` field in manifest |
 | Timestamp ISO 8601 format | `PENDING` | `YYYY-MM-DDTHH:MM:SS+00:00` |
-| Status field present | `PENDING` | `status: ok\|error\|violations` |
+| Status field present | `PENDING` | `status: ok\|partial\|error` |
+| Provenance field present | `PENDING` | `provenance` dict in manifest |
 | Consistent key naming | `PENDING` | snake_case throughout |
 
-#### 2.5.4 DB Integration Markers
+#### 2.7.4 DB Integration Markers
 
 > **⚠️ MANDATORY — Every script MUST have DB Integration markers for future database migration.**
 >
@@ -467,17 +604,11 @@ usage: <SCRIPT_NAME> [-h] [--repo-root REPO_ROOT] ...
 | Marker at manifest.json write | `PENDING` | `<path>:<line>` |
 | Marker at summary.md write | `PENDING` | `<path>:<line>` |
 | Marker at telemetry.json write | `PENDING` | `<path>:<line>` |
+| Marker at composite.json write | `PENDING` | `<path>:<line>` |
 | Uses `create_storage()` for writes | `PENDING` | `<path>:<line>` |
 | Marker describes target table/column | `PENDING` | `<path>:<line>` |
 
-**Tier B (Action Utilities) DB Markers:**
-
-| Check | Status | Evidence |
-|-------|--------|----------|
-| DB_INTEGRATION_MARKER at action log point | `PENDING` | `<path>:<line>` |
-| Marker describes action_log table intent | `PENDING` | `<path>:<line>` |
-
-#### 2.5.5 Output Truth Verification (CRITICAL)
+#### 2.7.5 Output Truth Verification (CRITICAL)
 
 <!-- STOP_GATE: TRUE -->
 <!-- PROCEED_WHEN: All claims in truth table have Verdict = TRUE -->
@@ -487,17 +618,24 @@ usage: <SCRIPT_NAME> [-h] [--repo-root REPO_ROOT] ...
 > Read every claim in summary.md and manifest.json. Verify each against ground truth.
 > A script that reports "0 violations" when it failed to load input data is **LYING**.
 > A script that references paths that don't exist is **BROKEN**.
+>
+> **Aggregator-specific checks:**
+> - Each upstream listed in provenance actually exists at that path
+> - The composite score matches the formula applied to actual signal values
+> - Missing upstreams are correctly reflected in `signals_loaded` vs `signals_total`
 
 | Claim in Output | Verification Method | Ground Truth | Verdict |
 |-----------------|---------------------|--------------|---------|
-| <claim from summary.md> | <how to verify> | <actual state> | ✅/❌ |
-| <input file path exists> | `Test-Path <path>` | <true/false> | ✅/❌ |
-| <upstream data loaded> | Check logs for "loaded" vs "not found" | <loaded/skipped> | ✅/❌ |
-| <count/metric is accurate> | Manual count or cross-reference | <actual count> | ✅/❌ |
+| <composite score value> | Manually calculate from signal values | <calculated value> | ✅/❌ |
+| <upstream 1 path exists> | `Test-Path <path>` | <true/false> | ✅/❌ |
+| <upstream 2 path exists> | `Test-Path <path>` | <true/false> | ✅/❌ |
+| <signals_loaded count> | Count upstreams that returned data | <actual count> | ✅/❌ |
+| <provenance path matches> | Compare manifest provenance to actual | <matches/differs> | ✅/❌ |
+<!-- Add rows for each upstream and major claim -->
 
 **If ANY claim is FALSE, the script is BROKEN. Fix it before proceeding.**
 
-### 2.6 Verification Log
+### 2.8 Verification Log
 
 | Date | Inspector | Findings | Status |
 |------|-----------|----------|--------|
@@ -534,26 +672,27 @@ usage: <SCRIPT_NAME> [-h] [--repo-root REPO_ROOT] ...
 |-------|--------|-------|
 | `name` | `PENDING` | `<SCRIPT_NAME>` |
 | `path` | `PENDING` | `<SCRIPT_PATH>` |
-| `category` | `PENDING` | producer/consumer/aggregator/summarizer/utility/library |
-| `compliance_tier` | `PENDING` | A (Report Generator) / B (Action Utility) |
+| `category` | `PENDING` | aggregator |
+| `compliance_tier` | `PENDING` | A (Report Generator) |
 | `entry_point` | `PENDING` | `run` |
 | `description` | `PENDING` | <one-line description> |
 | `inputs` | `PENDING` | List of input parameters with types |
 | `outputs` | `PENDING` | Description of return payload |
+| `upstreams` | `PENDING` | List of upstream dependencies (AGC-specific) |
 | `orchestrator_ready` | `PENDING` | `true` / `false` |
 | `db_integration_ready` | `PENDING` | `true` / `false` |
 
-### 3.3 REFERENCE: Tier-3 YAML Template
+### 3.3 REFERENCE: Tier-3 YAML Template (Aggregator)
 
 ```yaml
 # Tier-3 Metadata for <SCRIPT_NAME>
-# Agent-discoverable script definition
+# Agent-discoverable aggregator script definition
 name: <SCRIPT_NAME>
 path: <SCRIPT_PATH>
-category: <producer|consumer|aggregator|summarizer|utility|library>
-compliance_tier: <A|B>
+category: aggregator
+compliance_tier: A
 entry_point: run
-description: "<One-line description of what this script does>"
+description: "<One-line description: aggregates X, Y, Z signals into composite health score>"
 version: "1.0.0"
 
 inputs:
@@ -566,24 +705,57 @@ inputs:
     choices: [DEBUG, INFO, WARNING, ERROR]
     default: INFO
     description: "Logging verbosity"
-  # <additional inputs>
+  # Upstream path overrides (one per upstream)
+  - name: <upstream1>_path
+    type: path
+    required: false
+    description: "Override path to <upstream1> producer output"
+  - name: <upstream2>_path
+    type: path
+    required: false
+    description: "Override path to <upstream2> producer output"
+  # <additional upstream inputs>
 
 outputs:
-  status: "ok|error|issues"
-  exit_code: "0=success, 1=issues, 2=error"
-  # <additional outputs per compliance tier>
+  status: "ok|partial|no_upstreams|error"
+  exit_code: "0=success, 1=partial, 2=error"
+  composite_score: "Aggregated health score (0.0-1.0)"
+  signals_loaded: "Count of successfully loaded upstreams"
+  signals_total: "Total expected upstreams"
+  provenance: "Mapping of signal name to source path"
+
+# Aggregator-specific: upstream dependencies
+upstreams:
+  - name: <upstream1>
+    producer: <producer_script_name>
+    signal: <signal_name>
+    weight: <0.XX>
+    required: <true|false>
+  - name: <upstream2>
+    producer: <producer_script_name>
+    signal: <signal_name>
+    weight: <0.XX>
+    required: <true|false>
+  # <additional upstreams>
+
+blending_formula:
+  type: <weighted_average|threshold_based|custom>
+  normalization: <0.0-1.0|0-100|custom>
+  partial_score_handling: <re-normalize|skip|fallback>
 
 orchestrator_ready: true
 db_integration_ready: true
 
 tags:
-  - <tag1>
-  - <tag2>
+  - aggregator
+  - health-signals
+  - <additional_tags>
 
 consumers:
   - coding_agent
   - human_developer
   - ci_pipeline
+  - dashboard
 ```
 
 ### 3.4 Verification Log
@@ -610,19 +782,14 @@ consumers:
 
 ### 4.1 DOCUMENT: DB Schema Intent
 
-**For Tier A (Report Generators):**
+**For Tier A (Report Generators) — Aggregator:**
 
 | Artifact | Target Table | Key Columns |
 |----------|--------------|-------------|
-| manifest.json | `hop_manifests` | viewer_slug, topic, run_timestamp, schema_version |
+| manifest.json | `hop_manifests` | viewer_slug, topic, run_timestamp, schema_version, provenance_json |
 | summary.md | `hop_summaries` | viewer_slug, topic, run_timestamp, content_md |
 | telemetry.json | `hop_telemetry` | viewer_slug, topic, run_timestamp, metrics_json |
-
-**For Tier B (Action Utilities):**
-
-| Action | Target Table | Key Columns |
-|--------|--------------|-------------|
-| Action log | `utility_actions` | script_name, action_taken, status, timestamp |
+| composite.json | `aggregator_composites` | viewer_slug, topic, run_timestamp, composite_score, signals_json |
 
 ### 4.2 CHECK: DB Integration Readiness
 
@@ -634,18 +801,22 @@ consumers:
 | Passes `timestamp` correctly | `PENDING` | YYYYMMDD-HHMM format |
 | All writes go through `storage.write_*()` | `PENDING` | No direct `Path.write_text()` |
 | Payload is JSON-serializable | `PENDING` | No datetime objects, Path objects |
+| Provenance dict is JSON-serializable | `PENDING` | All paths converted to strings |
 
 ### 4.3 REFERENCE: DB Integration Marker Format
 
 ```python
-# DB_INTEGRATION_MARKER: <table_name>.<column_name> — <description>
+# DB_INTEGRATION_MARKER: hop_manifests.<column> — Aggregator manifest with provenance
 storage.write_manifest(manifest)
 
-# DB_INTEGRATION_MARKER: hop_summaries.content_md — Human-readable summary
+# DB_INTEGRATION_MARKER: hop_summaries.content_md — Human-readable composite summary
 storage.write_summary({"markdown": summary_md}, format="md")
 
-# DB_INTEGRATION_MARKER: hop_telemetry.metrics_json — Execution metrics
+# DB_INTEGRATION_MARKER: hop_telemetry.metrics_json — Execution metrics per upstream
 storage.write_telemetry(telemetry)
+
+# DB_INTEGRATION_MARKER: aggregator_composites.composite_score — Blended health score
+storage.write_json("composite.json", composite_data)
 ```
 
 ### 4.4 Verification Log
@@ -673,7 +844,7 @@ storage.write_telemetry(telemetry)
 > - `CLOSED` — Fix applied, awaiting verification
 > - `VERIFIED` — Fix confirmed working
 
-> **⚠️ EXAMPLE ROWS BELOW:** The GAP-001 through GAP-017 entries are EXAMPLES showing common gaps.
+> **⚠️ EXAMPLE ROWS BELOW:** The GAP-001 through GAP-022 entries are EXAMPLES showing common gaps.
 > **DELETE rows that don't apply.** Keep and update rows that match actual findings.
 > **ADD new rows** for gaps not covered by examples.
 
@@ -690,7 +861,7 @@ storage.write_telemetry(telemetry)
 | GAP-006 | AGT-001 | Missing Tier-3 YAML | High | `OPEN` | |
 <!-- END EXAMPLE ROWS -->
 
-#### 5.1.2 HOP Bundle Gaps (Tier A Only)
+#### 5.1.2 HOP Bundle Gaps (Tier A)
 
 | Gap ID | Req ID | Description | Priority | Status | Closed Date |
 |--------|--------|-------------|----------|--------|-------------|
@@ -715,11 +886,28 @@ storage.write_telemetry(telemetry)
 | GAP-017 | DBI-002 | Missing DB_INTEGRATION_MARKER at write points | Medium | `OPEN` | |
 <!-- END EXAMPLE ROWS -->
 
+#### 5.1.4 Aggregator Compliance Gaps (AGC)
+
+> **Applies to:** Aggregators ONLY
+>
+> **⚠️ MANDATORY — Check ALL AGC requirements for Aggregator scripts.**
+
+| Gap ID | Req ID | Description | Priority | Status | Closed Date |
+|--------|--------|-------------|----------|--------|-------------|
+<!-- EXAMPLE ROWS — Delete if not applicable to this script -->
+| GAP-018 | AGC-001 | Missing `DEFAULT_*` constant for upstream | High | `OPEN` | |
+| GAP-019 | AGC-002 | Upstream load raises exception instead of returning None | High | `OPEN` | |
+| GAP-020 | AGC-003 | Signal blending formula not documented | Medium | `OPEN` | |
+| GAP-021 | AGC-004 | Weights do not sum to 1.0 | Medium | `OPEN` | |
+| GAP-022 | AGC-005 | Script crashes when upstream missing (no partial score) | High | `OPEN` | |
+| GAP-023 | AGC-006 | No provenance tracking | Medium | `OPEN` | |
+<!-- END EXAMPLE ROWS -->
+
 ### 5.2 MAP: Alteration Locations
 
 | Location | Change | Standard |
 |----------|--------|----------|
-| `<path>:<start>-<end>` | <description> | <HOP/Universal requirement> |
+| `<path>:<start>-<end>` | <description> | <HOP/Universal/AGC requirement> |
 
 ### 5.3 Verification Log
 
@@ -748,7 +936,7 @@ storage.write_telemetry(telemetry)
 | 2 | <category> | `<path>:<line>` | <what was changed> | GAP-XXX | `<sha>` |
 
 <!-- EXAMPLE ROW — Delete after adding real changes:
-| 1 | Entry Point | `script.py:45-60` | Added `run(argv)` wrapper returning dict | GAP-001, GAP-002 | `abc123d` |
+| 1 | Graceful Loading | `script.py:120-135` | Added try/except returning None on missing upstream | GAP-019 | `abc123d` |
 -->
 
 **Change Categories:**
@@ -760,6 +948,9 @@ storage.write_telemetry(telemetry)
 - `DB Integration` — create_storage() markers
 - `Documentation` — docstrings, comments
 - `Testing` — test file additions/modifications
+- `Graceful Loading` — upstream None handling (AGC-002)
+- `Signal Blending` — weight/formula changes (AGC-003/004)
+- `Provenance` — source tracking additions (AGC-006)
 - `Other` — anything else
 
 ### 6.2 Verification Log
@@ -774,8 +965,8 @@ storage.write_telemetry(telemetry)
 
 <!-- METAPROMPT: PROMPT-67-EVIDENCE -->
 <!-- CHECKPOINT_ID: CHECKPOINT-7 -->
-<!-- STOP_CONDITION: Test results captured, code references linked, input bundle verified -->
-<!-- PROCEED_SIGNAL: "CHECKPOINT-7: Evidence captured — {X} tests, {Y} code refs, INPUT_VERIFIED: {YES/NO}" -->
+<!-- STOP_CONDITION: Test results captured, code references linked, upstream verification complete, provenance tracking verified -->
+<!-- PROCEED_SIGNAL: "CHECKPOINT-7: Evidence captured — {X} tests, {Y} code references, UPSTREAMS_VERIFIED: {YES/NO}, PROVENANCE_VERIFIED: {YES/NO}" -->
 <!-- REENTRY_POINT: PROMPT-67-EVIDENCE -->
 
 ### 7.1 RUN: Tests
@@ -788,39 +979,75 @@ storage.write_telemetry(telemetry)
 
 - `<path>:<start>-<end>` — <description>
 
-### 7.3 VERIFY: Input Bundle Dependency — MANDATORY FOR SUMMARIZERS
+### 7.3 VERIFY: Upstream Bundle Loading — MANDATORY
 
-> ⚠️ **SUMMARIZER REQUIREMENT:** This section is MANDATORY. Do NOT skip.
-> CHECKPOINT-7 signal MUST include `INPUT_VERIFIED: YES/NO`.
-> **A Summarizer build.md with this section unpopulated is INCOMPLETE.**
+<!-- AGGREGATOR_SPECIFIC: TRUE -->
+<!-- STOP_CONDITION: All upstreams verified, table complete -->
 
-**Input Bundle Identification:**
+> **⚠️ MANDATORY FOR AGGREGATORS — Do not skip this section.**
+>
+> Aggregators depend on multiple upstream bundles. This section verifies that:
+> 1. Each upstream path constant is defined
+> 2. Each upstream has a graceful loading function
+> 3. Missing upstreams don't crash the script
+>
+> **How to verify:**
+> 1. Grep for `DEFAULT_*` constants
+> 2. Trace each constant to its loading call
+> 3. Verify the loading function returns `None` on failure (not raises)
+> 4. Test with missing upstream to confirm graceful degradation
 
-| Field | Value |
-|-------|-------|
-| Input Script(s) | `{UPSTREAM_SCRIPT_NAME(S)}` |
-| Input Record ID(s) | `{UPSTREAM_RECORD_ID(S)}` |
-| Input Bundle Path | `{INPUT_BUNDLE_PATH}` |
+| # | Upstream | Path Constant | Load Function | Graceful (None on fail) | Status |
+|---|----------|---------------|---------------|-------------------------|--------|
+| 1 | <upstream_1> | `DEFAULT_<NAME>_PATH` | `_load_json()` / `_load_<name>()` | ✅/❌ | `PENDING` |
+| 2 | <upstream_2> | `DEFAULT_<NAME>_PATH` | `_load_json()` / `_load_<name>()` | ✅/❌ | `PENDING` |
+| 3 | <upstream_3> | `DEFAULT_<NAME>_PATH` | `_load_json()` / `_load_<name>()` | ✅/❌ | `PENDING` |
+<!-- Add more rows matching Section 0.2 -->
 
-**Verification Checks:**
+**Verification evidence:**
 
-| Check | Command | Expected | Actual | Status |
-|-------|---------|----------|--------|--------|
-| Bundle directory exists | `Test-Path "{INPUT_BUNDLE}"` | True | `<actual>` | `PENDING` |
-| manifest.json present | `Test-Path "{INPUT_BUNDLE}/manifest.json"` | True | `<actual>` | `PENDING` |
-| Required artifacts present | `ls "{INPUT_BUNDLE}"` | manifest, summary, telemetry | `<actual>` | `PENDING` |
-| Telemetry extractable | `python -c "import json; json.load(open(...))"` | No errors | `<actual>` | `PENDING` |
+- Path constant grep: `grep -n "DEFAULT_.*_PATH" <script>` → `<results>`
+- Graceful loading grep: `grep -n "return None" <script>` → `<results>`
+- Missing upstream test: `python <script> --<upstream>-path /nonexistent` → `<returns None or status: partial>`
 
-**Fallback Behavior Documentation:**
+### 7.4 VERIFY: Provenance Tracking — MANDATORY
 
-| Scenario | Script Behavior | Code Reference |
-|----------|-----------------|----------------|
-| Input bundle not found | `{ERROR / SKIP / CREATE_EMPTY}` | `<path>:#L<line>` |
-| Input telemetry invalid | `{ERROR / SKIP / USE_DEFAULT}` | `<path>:#L<line>` |
+<!-- AGGREGATOR_SPECIFIC: TRUE -->
+<!-- STOP_CONDITION: Provenance tracking verified -->
 
-<!-- CHECKPOINT-7 SIGNAL MUST INCLUDE: INPUT_VERIFIED: YES/NO -->
+> **⚠️ MANDATORY FOR AGGREGATORS — Do not skip this section.**
+>
+> Aggregators MUST track which upstream contributed which signal value.
+> This enables:
+> - Audit trail for composite scores
+> - Debugging when signals are missing
+> - Dashboard drill-down to source data
 
-### 7.4 Verification Log
+| Check | Status | Evidence |
+|-------|--------|----------|
+| Provenance dict created | `PENDING` | `<path>:<line>` where `provenance = {}` or similar |
+| Each signal records source path | `PENDING` | `<path>:<line>` where `provenance["signal"] = path` |
+| Provenance included in manifest | `PENDING` | `<path>:<line>` where manifest includes provenance |
+| Provenance included in return payload | `PENDING` | `<path>:<line>` where return dict includes provenance |
+
+**Sample provenance structure:**
+
+```json
+{
+  "provenance": {
+    "freshness": {
+      "source": ".repo_studios/reports/healthview/producer_reports/code_doc_churn/20260203-1430/manifest.json",
+      "schema_version": "1.0.0"
+    },
+    "coverage": {
+      "source": ".repo_studios/reports/healthview/producer_reports/undocumented_logic/20260203-1400/manifest.json",
+      "schema_version": "1.0.0"
+    }
+  }
+}
+```
+
+### 7.5 Verification Log
 
 | Date | Inspector | Findings | Status |
 |------|-----------|----------|--------|
@@ -849,7 +1076,7 @@ storage.write_telemetry(telemetry)
 > | `False` | Script uses internal `build_topic_path()` default | Topic-scoped ✅ | **SAFE** |
 > | `True` | Orchestrator passes generic parent dir | Cross-topic ❌ | **DANGEROUS** |
 >
-> When `True`, the orchestrator passes `--output-dir producer_reports/` (no topic slug),
+> When `True`, the orchestrator passes `--output-dir aggregator_reports/` (no topic slug),
 > causing the script to create output at the wrong level and prune ALL topics' directories.
 >
 > **Rule:** If script uses `build_topic_path()` for its default, set `supports_output_dir=False`.
@@ -901,6 +1128,8 @@ ScriptConfig(
 | Idempotent (safe to re-run) | ORC-002 | `PENDING` | Multiple runs don't corrupt state |
 | Tier-3 YAML complete | AGT-001—004 | `PENDING` | All required fields populated |
 | DB Integration markers present | DBI-001—003 | `PENDING` | `create_storage()` used |
+| Graceful upstream loading (AGC) | AGC-002 | `PENDING` | Missing upstreams don't crash |
+| Provenance tracking (AGC) | AGC-006 | `PENDING` | Source paths recorded |
 
 ### 8.4 Verification Log
 
@@ -945,6 +1174,8 @@ ScriptConfig(
 > - [ ] All PASS statuses reflect actual verification, not assumption
 > - [ ] All gaps identified were either CLOSED+VERIFIED or documented as deferred
 > - [ ] The script was actually executed and outputs verified against ground truth
+> - [ ] **Aggregator-specific:** All upstreams were verified (graceful loading, provenance)
+> - [ ] **Aggregator-specific:** Signal blending formula was documented and weights verified
 
 **Inspector attestation date:** `<YYYY-MM-DD>`
 
@@ -966,6 +1197,7 @@ ScriptConfig(
 > 2. The Tier-3 YAML exists and is validated
 > 3. The roster checkboxes are all checked including DONE
 > 4. This document's frontmatter shows `status: complete`
+> 5. **Aggregator-specific:** All upstreams documented and verified
 
 ### 10.1 CHECK: Build Document Completion
 
@@ -974,32 +1206,36 @@ ScriptConfig(
 
 **Discovery & Analysis:**
 
-- [ ] Section 1 (Script Identity) — All fields populated
+- [ ] Section 0.2 (Upstream Bundles) — ALL upstreams documented with paths and weights
+- [ ] Section 1 (Script Identity) — All fields populated, upstream count verified
 - [ ] Section 2.1 (CLI Interface) — Flags documented from `--help` output
 - [ ] Section 2.2 (Entry Points) — Signatures verified against code
-- [ ] Section 2.4 (Compliance Assessment) — All checks have evidence
+- [ ] Section 2.4.3 (AGC Compliance) — All aggregator-specific checks verified
+- [ ] Section 2.5 (Signal Blending) — Formula documented, weights sum to 1.0
 
 **Implementation & Testing:**
 
-- [ ] Section 5 (Gap Analysis) — Gaps identified with priority/effort
+- [ ] Section 5.1.4 (AGC Gaps) — Aggregator-specific gaps identified with priority/effort
 - [ ] Section 6 (Changes Made) — All modifications documented with line numbers
-- [ ] Section 7 (Evidence) — Test results captured (pytest/mypy/coverage)
+- [ ] Section 7.3 (Upstream Verification) — All upstreams verified for graceful loading
+- [ ] Section 7.4 (Provenance Tracking) — Provenance mechanism verified
 
 **Truth Verification (CRITICAL):**
 
-- [ ] Section 2.5.1 — QA tests passed (mypy, pytest, CLI execution)
-- [ ] Section 2.5.5 — Output truth verified: **SCRIPT WAS ACTUALLY RUN**
-- [ ] Section 2.5.5 — Every claim in output artifacts verified against ground truth
+- [ ] Section 2.7.1 — QA tests passed (mypy, pytest, CLI execution)
+- [ ] Section 2.7.5 — Output truth verified: **SCRIPT WAS ACTUALLY RUN**
+- [ ] Section 2.7.5 — Every claim in output artifacts verified against ground truth
+- [ ] Section 2.7.5 — Composite score manually verified against formula
 - [ ] **If any claim was FALSE, it was FIXED before checking this box**
 
 **Tier-3 & DB Integration:**
 
-- [ ] Section 3 — Tier-3 YAML created/updated and validated
+- [ ] Section 3 — Tier-3 YAML created/updated with `upstreams` list
 - [ ] Section 4 — DB Integration markers present at all write points
 
 **Orchestrator Readiness:**
 
-- [ ] Section 8.3 — All orchestration readiness checks pass
+- [ ] Section 8.3 — All orchestration readiness checks pass (including AGC checks)
 
 ### 10.2 UPDATE: Tier-2 Roster
 
@@ -1020,13 +1256,15 @@ ScriptConfig(
 - [x] F. Output truth verification — script run, output claims verified TRUE
 - [x] G. Tier-3 YAML — created/updated <tier3_name>.yaml
 - [x] H. Orchestrator integration — ScriptConfig documented (Section 8.2)
+- [x] I. Upstream verification — all {N} upstreams verified (Aggregator-specific)
+- [x] J. Provenance tracking — source paths recorded (Aggregator-specific)
 - [x] DONE — Phase 4 compliance complete (<YYYY-MM-DD>)
 ```
 
 **Roster update checklist:**
 
 - [ ] Located script record in Tier-2 roster
-- [ ] Checked workstream boxes A through H
+- [ ] Checked workstream boxes A through J
 - [ ] Added DONE marker with date
 - [ ] Updated `phase4_build_doc` field to point to this document
 - [ ] Updated `tier3_yaml` field to point to Tier-3 YAML path
@@ -1042,7 +1280,7 @@ ScriptConfig(
 
 | Script | Record ID | Stage | Tier | Status | Build Doc | Last Verified |
 |--------|-----------|-------|------|--------|-----------|---------------|
-| <SCRIPT_NAME> | <RECORD_ID> | <TARGET_STAGE> | <COMPLIANCE_TIER> | ✅ Phase 4 Complete | `<BUILD_DOC_PATH>` | <YYYY-MM-DD> |
+| <SCRIPT_NAME> | <RECORD_ID> | <TARGET_STAGE> | A (Aggregator) | ✅ Phase 4 Complete | `<BUILD_DOC_PATH>` | <YYYY-MM-DD> |
 
 **Registry update checklist:**
 
@@ -1080,11 +1318,14 @@ updated_at: <YYYY-MM-DD>
 |--------|--------|----------|
 | Universal compliance | ✅ | Section 2.2.1 all checked |
 | HOP bundle compliance | ✅ | Section 2.4.2 all checked |
-| Output truth verified | ✅ | Section 2.5.5 — all claims TRUE |
+| **Aggregator compliance** | ✅ | Section 2.4.3 all AGC requirements checked |
+| Output truth verified | ✅ | Section 2.7.5 — all claims TRUE |
 | Tier-3 YAML | ✅ | `<tier3_yaml_path>` |
 | DB Integration ready | ✅ | `<path>:<line>`, `<path>:<line>`, `<path>:<line>` |
 | Orchestrator ready | ✅ | Section 8.3 all checked |
-| Tier-2 roster updated | ✅ | Workstreams A-H + DONE checked, file SAVED |
+| **Upstream verification** | ✅ | Section 7.3 — {N}/{N} upstreams verified |
+| **Provenance tracking** | ✅ | Section 7.4 — provenance mechanism verified |
+| Tier-2 roster updated | ✅ | Workstreams A-J + DONE checked, file SAVED |
 | Tier-1 registry updated | ✅ | Script entry added/updated, file SAVED |
 
 **Propagation confirmation:**
@@ -1109,12 +1350,13 @@ updated_at: <YYYY-MM-DD>
 - [ ] Stale language removed (no "was", "used to", "previously")
 - [ ] Evidence reflects most recent verification
 - [ ] Verification Logs updated with inspection date
+- [ ] Upstream table (Section 0.2) reflects current state
 
 ### 11.2 APPLY: Language Standards
 
 **Use current tense:**
-- ✅ "Script returns dict with status key"
-- ❌ "Script was updated to return dict"
+- ✅ "Aggregator loads 5 upstream bundles"
+- ❌ "We added support for loading upstream bundles"
 
 **Use facts, not narrative:**
 - ✅ "Entry point: `run(argv)` at line 45"
@@ -1123,9 +1365,10 @@ updated_at: <YYYY-MM-DD>
 ### 11.3 IDENTIFY: Re-Inspection Triggers
 
 This document should be re-inspected when:
-- [ ] Requirements Registry changes (new UIC/HOP/AGT/DBI/ORC requirements)
+- [ ] Requirements Registry changes (new UIC/HOP/AGT/DBI/ORC/AGC requirements)
 - [ ] Script code is modified
-- [ ] Upstream dependencies change
+- [ ] Upstream dependencies change (new producers added/removed)
+- [ ] Signal blending formula changes
 - [ ] Orchestrator integration changes
 - [ ] Quarterly audit cycle
 
@@ -1142,23 +1385,26 @@ Replace these placeholders when using this template:
 
 | Variable | Description |
 |----------|-------------|
-| `<SCRIPT_NAME>` | Script filename (e.g., `summarize_health_suite.py`) |
-| `<SCRIPT_PATH>` | Full path (e.g., `.repo_studios/scripts/summarizers/summarize_health_suite.py`) |
-| `<SCRIPT_DIR>` | Script directory (e.g., `.repo_studios/scripts/summarizers`) |
-| `<RECORD_ID>` | ASR record ID (e.g., `ASR-008`) |
+| `<SCRIPT_NAME>` | Script filename (e.g., `aggregate_docs_health_signals.py`) |
+| `<SCRIPT_PATH>` | Full path (e.g., `.repo_studios/scripts/aggregators/aggregate_docs_health_signals.py`) |
+| `<SCRIPT_DIR>` | Script directory (e.g., `.repo_studios/scripts/aggregators`) |
+| `<RECORD_ID>` | ASR record ID (e.g., `S21R-009`) |
 | `<YYYY-MM-DD>` | ISO date |
 | `<LINE_COUNT>` | Script line count |
-| `<TARGET_STAGE>` | Destination stage (e.g., `Stage 4.2`) |
-| `<TOPIC>` | Topic slug (e.g., `health_suite_summary`) |
+| `<TARGET_STAGE>` | Destination stage (e.g., `Stage 2.1`) |
+| `<TOPIC>` | Topic slug (e.g., `docs_health_signals`) |
 | `<ASSIGNEE>` | Person or agent performing the inspection |
 | `<registry_version>` | Version of Requirements Registry in effect |
 | `<valid_until>` | Date when this inspection expires (typically +90 days) |
-| `<path>:<line>` | Line reference format (e.g., `.repo_studios/scripts/summarizers/script.py:123`) |
-| `<path>:<start>-<end>` | Line range format (e.g., `.repo_studios/scripts/summarizers/script.py:45-67`) |
+| `<path>:<line>` | Line reference format (e.g., `.repo_studios/scripts/aggregators/script.py:123`) |
+| `<path>:<start>-<end>` | Line range format (e.g., `.repo_studios/scripts/aggregators/script.py:45-67`) |
 | `<CI_URL>` | CI job URL (e.g., `https://github.com/org/repo/actions/runs/12345`) |
 | `<sha>` | Git commit SHA (short form, e.g., `abc123d`) |
 | `<artifact_path>` | Path to archived artifact with optional hash |
 | `<agent_id>` | Agent identifier (e.g., `copilot-v4`, `claude-3.5`) |
+| `<upstream_name>` | Name of upstream producer bundle |
+| `<signal_name>` | Name of signal extracted from upstream |
+| `<weight>` | Signal weight in blending formula (e.g., `0.35`) |
 
 ---
 
@@ -1166,8 +1412,5 @@ Replace these placeholders when using this template:
 
 | Version | Date | Changes |
 |---------|------|---------|
-| 3.1.0 | 2026-02-03 | Strengthened class-specific requirements: Section 0.2 INPUT_BUNDLE now REQUIRED with discovery guidance; Section 7.3 input verification now MANDATORY with structured tables (NEW section); CHECKPOINT-7 signal now includes INPUT_VERIFIED flag |
-| 3.0.0 | 2026-02-02 | Full rewrite derived from Producer v3.5.0; added Section 0 (INPUT with INPUT_BUNDLE), Requirements Registry, EXECUTION_ORDER block, CHECKPOINT/STOP_GATE markers throughout; updated example paths for summarizer context |
-| 2.1.0 | 2026-01-28 | Enhanced Section 7 with complete conclusion workflow (truth verification, roster update, finalization steps) |
-| 2.0.0 | 2026-01-26 | Added Universal Law, Compliance Tiers, Tier-3 YAML, DB Integration Preparation, Orchestration Readiness Checklist, ScriptConfig section |
-| 1.0.0 | (original) | Initial template with HOP compliance focus |
+| 1.0.0 | 2026-02-03 | Initial Aggregator template based on Producer v3.5.0. Aggregator-specific additions: (1) Section 0.2 UPSTREAM_BUNDLES table (REQUIRED), (2) AGC Requirements Registry (AGC-001 through AGC-006), (3) Section 2.4.3 Aggregator Compliance checklist, (4) Section 2.5 Signal Blending Formula (REQUIRED), (5) Section 2.6 Conditional Upstreams (OPTIONAL), (6) Section 5.1.4 AGC Compliance Gaps, (7) Section 7.3 Upstream Verification (MANDATORY), (8) Section 7.4 Provenance Tracking (MANDATORY), (9) Section 9.2 Aggregator-specific attestation items, (10) Section 10.2 Workstreams I/J for aggregator verification, (11) Aggregator-specific template variables |
+

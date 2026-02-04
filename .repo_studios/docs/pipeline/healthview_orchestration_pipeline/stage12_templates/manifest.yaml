@@ -115,7 +115,8 @@ templates:
     category: orchestrator
     compliance_tier: A
     phase: "4A"
-    use_when: "Designing or modifying orchestrator for stage pipeline"
+    version: "1.0.0"
+    use_when: "Processing existing or new orchestrator script for Universal Law compliance and pipeline coordination"
     produces: "{RECORD_ID}_{script_stem}_build.md"
     metaprompts:
       - path: common/review_metaprompts.md

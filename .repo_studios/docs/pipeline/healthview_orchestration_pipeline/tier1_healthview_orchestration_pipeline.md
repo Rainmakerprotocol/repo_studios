@@ -242,7 +242,7 @@ Meta-orchestrator chains all Stage NN.1 orchestrators for full-suite diagnostics
 - **Phase 1 (Structure & Global Concepts):** Complete – Spine, Envelope, Global Controls, Stage Matrix
 - **Phase 2 (Stage-by-Stage Hardening):** Pass B complete (100%)
   - Stage 1 (Test Execution Telemetry): Pass B complete, Pass C pending
-  - Stage 2 (Docs Health Overview): Pass B complete, Pass C pending
+  - Stage 2 (Docs Health Overview): **Pass C complete** (HOP-compliant 2026-02-03, build doc finalized)
   - Stage 3 (Fault Diagnostics Overview): Pass B complete, Pass C pending
   - Stage 4 (Dependency & Import Hygiene): Pass B complete, Pass C pending
   - Stage 5 (Monkey Patch Oversight): **Pass C complete** (HOP-compliant 2026-01-03)
@@ -608,8 +608,7 @@ exceptions explicitly recorded in the relevant manifests when enabled).
 
 _Tier-2 references (depth lives here):_
 
-- [Contract snapshot](tier2_roster/tier2_docs_health_overview_roster.
-  d#23-current-vs-target-contract-snapshot-stage-21) — target vs current, bundle invariants, naming/paths
+- [Contract snapshot](tier2_roster/tier2_docs_health_overview_roster.md#23-current-vs-target-contract-snapshot-stage-21) — target vs current, bundle invariants, naming/paths
 - [Stop-gates](tier2_roster/tier2_docs_health_overview_roster.md#32-stop-gates-and-implementation-checklists)
   — verification checks + failure signatures + next actions
 - [Records index](tier2_roster/tier2_docs_health_overview_roster.md#311-records-index) — per-script
@@ -617,15 +616,15 @@ _Tier-2 references (depth lives here):_
 
 **Stage 2.1 Script Gate Summary (Tier-1):**
 
-- [x] generate_doc_index.py — complete. See: [Tier-2 record](tier2_roster/tier2_docs_health_overview_roster.md#s21r-002-generate-doc-index)
-- [x] generate_anchor_inventory.py — complete. See: [Tier-2 record](tier2_roster/tier2_docs_health_overview_roster.md#s21r-003-generate-anchor-inventory)
-- [x] validate_markdown_anchors.py — complete. See: [Tier-2 record](tier2_roster/tier2_docs_health_overview_roster.md#s21r-004-validate-markdown-anchors)
-- [x] verify_docs_integrity.py — complete. See: [Tier-2 record](tier2_roster/tier2_docs_health_overview_roster.md#s21r-005-verify-docs-integrity)
-- [x] validate_metrics_anchor_stubs.py — complete. See: [Tier-2 record](tier2_roster/tier2_docs_health_overview_roster.md#s21r-006-validate-metrics-anchor-stubs)
-- [x] generate_code_doc_churn_report.py — complete. See: [Tier-2 record](tier2_roster/tier2_docs_health_overview_roster.md#s21r-007-generate-code-doc-churn-report)
-- [x] generate_undocumented_logic_report.py — complete. See: [Tier-2 record](tier2_roster/tier2_docs_health_overview_roster.md#s21r-008-generate-undocumented-logic-report)
-- [x] aggregate_docs_health_signals.py — complete. See: [Tier-2 record](tier2_roster/tier2_docs_health_overview_roster.md#s21r-009-aggregate-docs-health-signals)
-- [x] run_docs_health_overview.py — complete. See: [Tier-2 record](tier2_roster/tier2_docs_health_overview_roster.md#s21r-001-docs-health-overview-orchestrator)
+- [x] **S21R-001** run_docs_health_overview.py (orchestrator) — complete. See: [Tier-2 record](tier2_roster/tier2_docs_health_overview_roster.md#s21r-001--run_docs_health_overviewpy), [Build doc](tier2_roster/working_docs/stage_2_1/S21R-001_run_docs_health_overview_build.md)
+- [x] **S21R-002** generate_doc_index.py — complete. See: [Tier-2 record](tier2_roster/tier2_docs_health_overview_roster.md#s21r-002--generate_doc_indexpy)
+- [x] **S21R-003** generate_anchor_inventory.py — complete. See: [Tier-2 record](tier2_roster/tier2_docs_health_overview_roster.md#s21r-003--generate_anchor_inventorypy)
+- [x] **S21R-004** validate_markdown_anchors.py — complete. See: [Tier-2 record](tier2_roster/tier2_docs_health_overview_roster.md#s21r-004--validate_markdown_anchorspy)
+- [x] **S21R-005** verify_docs_integrity.py — complete. See: [Tier-2 record](tier2_roster/tier2_docs_health_overview_roster.md#s21r-005--verify_docs_integritypy)
+- [x] **S21R-006** validate_metrics_anchor_stubs.py — complete. See: [Tier-2 record](tier2_roster/tier2_docs_health_overview_roster.md#s21r-006--validate_metrics_anchor_stubspy)
+- [x] **S21R-007** generate_code_doc_churn_report.py — complete. See: [Tier-2 record](tier2_roster/tier2_docs_health_overview_roster.md#s21r-007--generate_code_doc_churn_reportpy)
+- [x] **S21R-008** generate_undocumented_logic_report.py — complete. See: [Tier-2 record](tier2_roster/tier2_docs_health_overview_roster.md#s21r-008--generate_undocumented_logic_reportpy)
+- [x] **S21R-009** aggregate_docs_health_signals.py — complete. See: [Tier-2 record](tier2_roster/tier2_docs_health_overview_roster.md#s21r-009--aggregate_docs_health_signalspy)
 
 **Stage 2.1 Gate Checklist (Tier-1):**
 
@@ -646,9 +645,10 @@ These are Stage 2.1 readiness gates after all Tier-2 DONE script gates are close
 
 **Current evidence (Stage 2.1):**
 
-- Current output root observed: `.repo_studios/command_center/reports/healthview/docs_health/<YYYYMMDD-HHMM>/`.
-- Base package artifacts observed for current runs: `manifest.json`, `summary.md`, `telemetry.json`.
-- Pointer artifacts remain a stop-gate (`latest_*`), per Stage 2.1 stop-gates.
+- Output root: `.repo_studios/reports/healthview/orchestrator_reports/docs_health/<YYYYMMDD-HHMM>/` (HOP-compliant).
+- Base package artifacts: `manifest.json`, `summary.md`, `telemetry.json` — present for all runs.
+- No pointer artifacts (`latest_*`) — stop-gate closed.
+- All 9 scripts verified with Tier-3 YAML and build documentation.
 - Details and evidence live in the Stage 2.1 Tier-2 roster:
   [Current vs Target snapshot](tier2_roster/tier2_docs_health_overview_roster.md#23-current-vs-target-contract-snapshot-stage-21),
   [Stop-gates](tier2_roster/tier2_docs_health_overview_roster.md#32-stop-gates-and-implementation-checklists).
@@ -666,18 +666,19 @@ anchor validation and churn aggregation. Replaces legacy ad hoc docs inventory/a
 **Orchestrator:**  
 [.repo_studios/command_center/scripts/orchestrators/run_docs_health_overview.py](../../../command_center/scripts/orchestrators/run_docs_health_overview.py)
 
-**Invoked Scripts (8):**
+**Orchestrator + Invoked Scripts (9 total):**
 
 | Script | Category | Purpose | Tier-3 YAML |
 | ------ | -------- | ------- | ----------- |
-| `generate_doc_index.py` | Producer | Scan repository for markdown files, extract headings, build document inventory | TBD |
-| `generate_anchor_inventory.py` | Producer | Extract markdown anchor IDs, build cross-reference map with duplicates flagged | TBD |
-| `validate_markdown_anchors.py` | Producer | Check for broken internal links, orphaned anchors, cross-file reference errors | TBD |
+| `run_docs_health_overview.py` | Orchestrator | Coordinate 8-step docs health pipeline, export HOP bundles | [tier3_run_docs_health_overview.yaml](tier3_scripts/docs_health_overview/tier3_run_docs_health_overview.yaml) |
+| `generate_doc_index.py` | Producer | Scan repository for markdown files, extract headings, build document inventory | [tier3_generate_doc_index.yaml](tier3_scripts/docs_health_overview/tier3_generate_doc_index.yaml) |
+| `generate_anchor_inventory.py` | Producer | Extract markdown anchor IDs, build cross-reference map with duplicates flagged | [tier3_generate_anchor_inventory.yaml](tier3_scripts/docs_health_overview/tier3_generate_anchor_inventory.yaml) |
+| `validate_markdown_anchors.py` | Producer | Check for broken internal links, orphaned anchors, cross-file reference errors | [tier3_validate_markdown_anchors.yaml](tier3_scripts/docs_health_overview/tier3_validate_markdown_anchors.yaml) |
 | `verify_docs_integrity.py` | Producer | Validate governed JSON `content_hash` blocks and refresh the docs index table | [tier3_verify_docs_integrity.yaml](tier3_scripts/docs_health_overview/tier3_verify_docs_integrity.yaml) |
 | `validate_metrics_anchor_stubs.py` | Producer | Ensure metric definitions have corresponding anchor points for linking | [tier3_validate_metrics_anchor_stubs.yaml](tier3_scripts/docs_health_overview/tier3_validate_metrics_anchor_stubs.yaml) |
 | `generate_code_doc_churn_report.py` | Producer | Compare code file churn vs. doc file churn, identify staleness risk areas | [tier3_generate_code_doc_churn_report.yaml](tier3_scripts/docs_health_overview/tier3_generate_code_doc_churn_report.yaml) |
-| `generate_undocumented_logic_report.py` | Producer | Identify functions/classes lacking docstrings or external doc references | TBD |
-| `aggregate_docs_health_signals.py` | Aggregator | Synthesize all doc metrics into single health score, trend report, signal matrix | TBD |
+| `generate_undocumented_logic_report.py` | Producer | Identify functions/classes lacking docstrings or external doc references | [tier3_generate_undocumented_logic_report.yaml](tier3_scripts/docs_health_overview/tier3_generate_undocumented_logic_report.yaml) |
+| `aggregate_docs_health_signals.py` | Aggregator | Synthesize all doc metrics into single health score, trend report, signal matrix | [tier3_aggregate_docs_health_signals.yaml](tier3_scripts/docs_health_overview/tier3_aggregate_docs_health_signals.yaml) |
 
 **Inputs:**
 
@@ -697,7 +698,7 @@ anchor validation and churn aggregation. Replaces legacy ad hoc docs inventory/a
   [Contract snapshot](tier2_roster/tier2_docs_health_overview_roster.md#23-current-vs-target-contract-snapshot-stage-21),
   [Stop-gates](tier2_roster/tier2_docs_health_overview_roster.md#32-stop-gates-and-implementation-checklists).
 
-**Status:** `Operational – Partial hardening complete`
+**Status:** `Complete – All scripts verified, Tier-3 YAML present, build documentation finalized`
 
 **Execution Details:**
 
@@ -743,11 +744,12 @@ anchor validation and churn aggregation. Replaces legacy ad hoc docs inventory/a
   - [generate_code_doc_churn_report.py](../../../scripts/producers/generate_code_doc_churn_report.py)
     (lines 557-584: `_execute_churn` invocation)
   - [generate_undocumented_logic_report.py](../../../scripts/producers/generate_undocumented_logic_report.py)
-    (lines 585-649: `_execute_undocumented` invocation
+    (lines 585-649: `_execute_undocumented` invocation)
 - **Aggregator script:**
   [aggregate_docs_health_signals.py](../../../scripts/aggregators/aggregate_docs_health_signals.py)
   (lines 650-710: `_execute_aggregator` invocation)
-- **Tests:** No dedicated orchestrator tests found (marked "tests TBD" in Stage Matrix)
+- **Tests:** [test_run_docs_health_overview.py](../../../tests/tests_command_center/docs_health/test_run_docs_health_overview.py) — 2 tests passing
+- **Build Doc:** [S21R-001_run_docs_health_overview_build.md](tier2_roster/working_docs/stage_2_1/S21R-001_run_docs_health_overview_build.md) — Phase 4 complete
 
 ---
 
@@ -769,18 +771,10 @@ _Tier-2 references (depth lives here):_
 
 **Stage 3.1 Script Gate Summary (Tier-1):**
 
-- [x] collect_faulthandler_reports.py — complete.
-  See: [Tier-2 record](tier2_roster/tier2_fault_diagnostics_overview_roster.md#s31r-002-collect-faulthandler-reports)
-  Tier-3: [tier3_collect_faulthandler_reports.yaml](tier3_scripts/fault_diagnostics_overview/tier3_collect_faulthandler_reports.yaml)
-- [x] generate_fault_artifacts.py — complete.
-  See: [Tier-2 record](tier2_roster/tier2_fault_diagnostics_overview_roster.md#s31r-003-generate-fault-artifacts)
-  Tier-3: [tier3_generate_fault_artifacts.yaml](tier3_scripts/fault_diagnostics_overview/tier3_generate_fault_artifacts.yaml)
-- [x] summarize_fault_diagnostics_overview.py — complete.
-  See: [Tier-2 record](tier2_roster/tier2_fault_diagnostics_overview_roster.md#s31r-004-summarize-fault-diagnostics-overview)
-  Tier-3: [tier3_summarize_fault_diagnostics_overview.yaml](tier3_scripts/fault_diagnostics_overview/tier3_summarize_fault_diagnostics_overview.yaml)
-- [x] run_fault_diagnostics_overview.py — complete.
-  See: [Tier-2 record](tier2_roster/tier2_fault_diagnostics_overview_roster.md#s31r-001-fault-diagnostics-overview-orchestrator)
-  Tier-3: [tier3_run_fault_diagnostics_overview.yaml](tier3_scripts/fault_diagnostics_overview/tier3_run_fault_diagnostics_overview.yaml)
+- [x] **S31R-001** run_fault_diagnostics_overview.py (orchestrator) — complete. See: [Tier-2 record](tier2_roster/tier2_fault_diagnostics_overview_roster.md#s31r-001--run_fault_diagnostics_overviewpy), [Build doc](tier2_roster/working_docs/stage_3_1/S31R-001_run_fault_diagnostics_overview_build.md), [Tier-3 YAML](tier3_scripts/fault_diagnostics_overview/tier3_run_fault_diagnostics_overview.yaml)
+- [x] **S31R-002** collect_faulthandler_reports.py — complete. See: [Tier-2 record](tier2_roster/tier2_fault_diagnostics_overview_roster.md#s31r-002--collect_faulthandler_reportspy), [Build doc](tier2_roster/working_docs/stage_3_1/S31R-002_collect_faulthandler_reports_build.md), [Tier-3 YAML](tier3_scripts/fault_diagnostics_overview/tier3_collect_faulthandler_reports.yaml)
+- [x] **S31R-003** generate_fault_artifacts.py — complete. See: [Tier-2 record](tier2_roster/tier2_fault_diagnostics_overview_roster.md#s31r-003--generate_fault_artifactspy), [Tier-3 YAML](tier3_scripts/fault_diagnostics_overview/tier3_generate_fault_artifacts.yaml)
+- [x] **S31R-004** summarize_fault_diagnostics_overview.py — complete. See: [Tier-2 record](tier2_roster/tier2_fault_diagnostics_overview_roster.md#s31r-004--summarize_fault_diagnostics_overviewpy), [Tier-3 YAML](tier3_scripts/fault_diagnostics_overview/tier3_summarize_fault_diagnostics_overview.yaml)
 
 **Stage 3.1 Gate Checklist (Tier-1):**
 
@@ -798,34 +792,34 @@ These are Stage 3.1 readiness gates after all Tier-2 DONE script gates are close
 
 **Target contract (HOP):**
 
-- Output root migrates to `.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`.
-- Base package is present: `manifest.json`, `summary.md`, `telemetry.json`.
+- Output root: `.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`.
+- Base package: `manifest.json`, `summary.md`, `telemetry.json`.
 - Discovery is timestamp-based only (no pointer files such as `latest_*`).
 
 **Current evidence (Stage 3.1):**
 
-- Stage 3.1 output root is aligned to the Tier-1 contract:
-  `.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`.
-- Base package is present (`manifest.json`, `summary.md`, `telemetry.json`).
-- No pointer artifacts (`latest_*` / `current_*`) were observed under `.repo_studios/reports/healthview`.
-- All 4 scripts use `build_topic_path()` library for HOP-compliant output paths.
+- Output root: `.repo_studios/reports/healthview/<class>/<topic>/<YYYYMMDD-HHMM>/` (HOP-compliant).
+- Base package artifacts: `manifest.json`, `summary.md`, `telemetry.json` — present for all runs.
+- No pointer artifacts (`latest_*`) — stop-gate closed.
+- All 4 scripts verified with Tier-3 YAML and build documentation.
 - Details and evidence live in the Stage 3.1 Tier-2 roster:
   [Current vs Target snapshot](tier2_roster/tier2_fault_diagnostics_overview_roster.md#23-current-vs-target-contract-snapshot-stage-31),
   [Stop-gates](tier2_roster/tier2_fault_diagnostics_overview_roster.md#32-stop-gates-and-implementation-checklists).
 
 **Overview:**  
-The Fault Diagnostics Overview orchestrator chains a 3-script pipeline
+The Fault Diagnostics Overview orchestrator chains a 3-step pipeline
 (producer → consumer → summarizer) for end-to-end faulthandler diagnostics. Replaces legacy
-`run_fault_pipeline.py`. Runtime: 3-5 minutes typical (from docstring, lines 1-25).
+`run_fault_pipeline.py`. Runtime: ~0.13 seconds typical (3 steps, sequential execution).
 
 **Orchestrator:**
 [run_fault_diagnostics_overview.py](../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py)
-(604 lines)
+(1015 lines)
 
-**Invoked Scripts (3):**
+**Orchestrator + Invoked Scripts (4 total):**
 
 | Script | Category | Purpose | Tier-3 YAML |
 | ------ | -------- | ------- | ----------- |
+| `run_fault_diagnostics_overview.py` | Orchestrator | Coordinate 3-step fault diagnostics pipeline, export HOP bundles | [tier3_run_fault_diagnostics_overview.yaml](tier3_scripts/fault_diagnostics_overview/tier3_run_fault_diagnostics_overview.yaml) |
 | `collect_faulthandler_reports.py` | Producer | Scan HealthView rawview fault diagnostics runs, parse faulthandler dumps, categorize faults | [tier3_collect_faulthandler_reports.yaml](tier3_scripts/fault_diagnostics_overview/tier3_collect_faulthandler_reports.yaml) |
 | `generate_fault_artifacts.py` | Consumer | Process producer output into structured artifacts (CSV, JSON, SUMMARY.md) | [tier3_generate_fault_artifacts.yaml](tier3_scripts/fault_diagnostics_overview/tier3_generate_fault_artifacts.yaml) |
 | `summarize_fault_diagnostics_overview.py` | Summarizer | Generate HealthView overview bundle with cross-run comparisons | [tier3_summarize_fault_diagnostics_overview.yaml](tier3_scripts/fault_diagnostics_overview/tier3_summarize_fault_diagnostics_overview.yaml) |
@@ -845,22 +839,17 @@ The Fault Diagnostics Overview orchestrator chains a 3-script pipeline
 - Summarizer bundle: `.repo_studios/reports/healthview/summarizer_reports/fault_diagnostics_overview/<YYYYMMDD-HHMM>/`
 - Orchestrator bundle: `.repo_studios/reports/healthview/orchestrator_reports/fault_diagnostics_overview/<YYYYMMDD-HHMM>/`
 
-**Execution Notes:**
+**Status:** `Complete – All scripts verified, Tier-3 YAML present, build documentation finalized`
 
-- Dynamic imports via `_load_callable()` for producer, consumer, and summarizer scripts (lines 218-235)
-- Supports 3 skip flags: `--skip-producer`, `--skip-consumer`, `--skip-summarizer` (lines 206-208)
-- Can reuse existing producer reports via `--reuse-report` flag (lines 211, 343-344)
-- Can override producer frame depth via `--producer-top-frames` (lines 212, 293-294)
-- Retention behavior is enforced in code; see Tier-2 Stage 3.1 for current evidence.
-- Fail-fast: Aborts on summarizer failure, continues if producer/consumer skipped (lines 512-518)
-- Writes orchestrator telemetry to HealthView bundle with metrics (file count, total bytes,
-  timestamps, lines 534-543)
-- Execution functions: `_execute_producer()` (lines 272-312), `_execute_consumer()` (lines 315-371),
-  `_execute_summarizer()` (lines 374-423)
-- Script registration via `CatalogRegistry` for downstream discovery (lines 427-431)
+**Execution Details:**
 
-**Status:** `Operational (partial hardening)` – Script count corrected from 2 to 3, runtime verified
-at 3-5 minutes, special reuse/override flags confirmed
+- Scripts invoked via `build_topic_pipeline()` with inline step closures (lines 883-896)
+- Supports 3 skip flags: `--skip-producer`, `--skip-consumer`, `--skip-summarizer` (lines 200-211)
+- Can reuse existing producer reports via `--reuse-report` flag
+- Can override producer frame depth via `--producer-top-frames`
+- Retention behavior enforced via `write_report_artifacts()` with `--artifacts-to-keep` (default: 5)
+- Fail-fast: `raise_for_failure()` called after pipeline completion (lines 894-896)
+- Writes orchestrator telemetry to HealthView bundle with per-step timing and status
 
 **Planned Expansions:**
 
@@ -872,12 +861,23 @@ at 3-5 minutes, special reuse/override flags confirmed
 - Faulthandler collection requires explicit environment variable configuration; not all CI/CD runs
   enable it
 - Crash dump parsing is basic; does not yet extract full stack frames or thread states
+- DB Integration markers not present (deferred — dormant across codebase)
 
 **Evidence Links:**
 
-- [.repo_studios/scripts/producers/collect_faulthandler_reports.py](../../../scripts/producers/collect_faulthandler_reports.py)
-- [.repo_studios/scripts/consumers/generate_fault_artifacts.py](../../../scripts/consumers/generate_fault_artifacts.py)
-- [.repo_studios/tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py](../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py)
+- **Orchestrator:** [run_fault_diagnostics_overview.py](../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py)
+  (pipeline coordination, TopicStep definitions at lines 883-896)
+- **Producer script:**
+  [collect_faulthandler_reports.py](../../../scripts/producers/collect_faulthandler_reports.py)
+  (lines 846-865: `producer_step()` closure)
+- **Consumer script:**
+  [generate_fault_artifacts.py](../../../scripts/consumers/generate_fault_artifacts.py)
+  (lines 867-881: `consumer_step()` closure)
+- **Summarizer script:**
+  [summarize_fault_diagnostics_overview.py](../../../command_center/scripts/summarizers/summarize_fault_diagnostics_overview.py)
+  (lines 883-896: `summarizer_step()` closure)
+- **Tests:** [test_run_fault_diagnostics_overview.py](../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py)
+- **Build Doc:** [S31R-001_run_fault_diagnostics_overview_build.md](tier2_roster/working_docs/stage_3_1/S31R-001_run_fault_diagnostics_overview_build.md) — Phase 4 complete
 
 ---
 
@@ -960,8 +960,8 @@ typical in CI, with linting and mypy dominating when baseline refresh is enabled
 
 | Script | Category | Purpose | Tier-3 YAML |
 | ------ | -------- | ------- | ----------- |
-| `generate_dependency_hygiene_report.py` | Producer | Analyze `requirements.txt`/`pyproject.toml`, detect unused dependencies, version conflicts | TBD |
-| `generate_import_graph_report.py` | Producer (optional) | Build import graph, detect cycles, compute coupling metrics | TBD |
+| `generate_dependency_hygiene_report.py` | Producer | Analyze `requirements.txt`/`pyproject.toml`, detect unused dependencies, version conflicts | [tier3_generate_dependency_hygiene_report.yaml](tier3_scripts/dependency_import_hygiene/tier3_generate_dependency_hygiene_report.yaml) |
+| `generate_import_graph_report.py` | Producer (optional) | Build import graph, detect cycles, compute coupling metrics | [tier3_generate_import_graph_report.yaml](tier3_scripts/dependency_import_hygiene/tier3_generate_import_graph_report.yaml) |
 | `scan_code_placeholders.py` | Producer | Extract TODO/FIXME/HACK comments from code, track technical debt markers | TBD |
 | `generate_typecheck_report.py` | Producer (optional) | Run mypy, collect type errors, categorize by severity | TBD |
 | `refresh_mypy_baselines.py` | Utility (optional) | Update mypy baseline files after type errors are resolved | TBD |
@@ -1741,8 +1741,8 @@ timestamped HealthView bundles. Stage 12 (Script Development Templates) is compl
 
 - **Stage 1 (Test Execution Telemetry):** Pass B complete – code-verified 6-script pipeline,
   artifact retention, dynamic imports, 5-6 min runtime
-- **Stage 2 (Docs Health Overview):** Pass B complete – code-verified 8-script pipeline,
-  skip flags (9 CLI options), report naming guardrails, 6-8 min runtime
+- **Stage 2 (Docs Health Overview):** **Pass C complete** – 9-script pipeline (1 orchestrator + 7 producers + 1 aggregator),
+  all Tier-3 YAML present, build doc finalized (S21R-001), HOP-compliant outputs, ~6s runtime
 - **Stage 3 (Fault Diagnostics Overview):** Pass B complete – code-verified 3-script pipeline
   (corrected from 2), 3-5 min runtime, special reuse/override flags
 - **Stage 4 (Dependency & Import Hygiene):** Pass B complete – code-verified 5-script pipeline
@@ -1787,7 +1787,7 @@ dynamic imports. Stage 11.1 orchestrator is operational but not yet wired to Sta
 | Stage | Name | Orchestrators | Status | Top Gap | Evidence |
 | ----- | ---- | ------------- | ------ | ------- | -------- |
 | 1 | Testing Perspectives | 1.1 Test Execution Telemetry (6 scripts) | Operational (partial hardening) | Flaky test metrics not in health summary | [orchestrator](../../../command_center/scripts/orchestrators/run_test_execution_telemetry.py), [tests](../../../tests/tests_command_center/orchestrators/test_run_test_execution_telemetry.py) |
-| 2 | Documentation Quality | 2.1 Docs Health Overview (8 scripts) | Operational (partial hardening) | Anchor health report not integrated | [orchestrator](../../../command_center/scripts/orchestrators/run_docs_health_overview.py), tests TBD |
+| 2 | Documentation Quality | 2.1 Docs Health Overview (9 scripts) | **Complete** | — | [orchestrator](../../../command_center/scripts/orchestrators/run_docs_health_overview.py), [tests](../../../tests/tests_command_center/docs_health/test_run_docs_health_overview.py), [build doc](tier2_roster/working_docs/stage_2_1/S21R-001_run_docs_health_overview_build.md) |
 | 3 | Runtime Reliability | 3.1 Fault Diagnostics Overview (3 scripts) | Operational (partial hardening) | Runtime utilities not integrated | [orchestrator](../../../command_center/scripts/orchestrators/run_fault_diagnostics_overview.py), [tests](../../../tests/tests_command_center/fault_diagnostics/test_run_fault_diagnostics_overview.py) |
 | 4 | Dependency Management | 4.1 Dependency & Import Hygiene (5 scripts) | Operational (partial hardening) | Import boundary validation not integrated | [orchestrator](../../../command_center/scripts/orchestrators/run_dependency_import_hygiene.py), [tests](../../../tests/tests_command_center/dependency_import_hygiene/test_run_dependency_import_hygiene.py) |
 | 5 | Technical Debt Oversight | 5.1 Monkey Patch Oversight (5 scripts) | Operational (partial hardening) | Risk scoring incomplete | [orchestrator](../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py), [tests](../../../tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py) |
@@ -1808,8 +1808,8 @@ dynamic imports. Stage 11.1 orchestrator is operational but not yet wired to Sta
 | CR-004 | Timestamp directory shape varies across stages (`<YYYY-MM-DD>`, `<YYYYmmdd-HHmm>`, `<timestamp>`), which makes discovery ambiguous. | 1.2, stage output bullets | Stage tables and output examples in this Tier-1 doc | Standardize Tier-1 narrative to use `<timestamp>` consistently; push exact formatting requirements into Tier-2 verticals and Tier-3 artifacts doc. |
 | CR-005 | Stage 1.1 base package is incomplete (missing required `summary.md` in the HealthView bundle). | 4.1 | Stage 1.1 Tier-2 roster | Treat as a stop-gate for Stage 1.1 contract compliance; track closure in Tier-2 stop-gates and update Tier-1 when resolved. |
 | CR-006 | Stage 1.1 emits pointer artifacts (`latest_*`) in downstream outputs (violates “no mutable pointers”). | 4.1 | Stage 1.1 Tier-2 roster | Treat as a stop-gate for Stage 1.1 contract compliance; remove pointers during migration and close the contradiction when Tier-2 evidence confirms. |
-| CR-007 | Stage 2.1 retains split intermediate output roots (producer/aggregator reports) during migration rather than a single HOP-rooted bundle surface. | 5.1 | Stage 2.1 Tier-2 roster | Treat as a stop-gate until output roots converge; rely on Tier-2 evidence for current roots and close when migrations land. |
-| CR-008 | Stage 2.1 emits pointer artifacts (`latest_*`) in intermediate outputs (violates “no mutable pointers”). | 5.1 | Stage 2.1 Tier-2 roster | Treat as a stop-gate; close via Tier-2 stop-gates when pointers are removed and evidence confirms. |
+| CR-007 | ~~Stage 2.1 retains split intermediate output roots (producer/aggregator reports) during migration rather than a single HOP-rooted bundle surface.~~ | 5.1 | Stage 2.1 Tier-2 roster | **CLOSED (2026-02-03):** Stage 2.1 outputs align to HOP contract (`.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`). |
+| CR-008 | ~~Stage 2.1 emits pointer artifacts (`latest_*`) in intermediate outputs (violates "no mutable pointers").~~ | 5.1 | Stage 2.1 Tier-2 roster | **CLOSED (2026-02-03):** Pointer artifacts removed; build doc S21R-001 confirms no `latest_*` files. |
 | CR-009 | ~~Stage 3.1 current bundle writes land under a CommandView-rooted path (viewer/root mismatch vs HealthView/HOP contract).~~ | 6.1 | Stage 3.1 Tier-2 roster | **CLOSED (2026-01-06):** Stage 3.1 pipeline output roots align to the HOP contract (`.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`). |
 | CR-010 | Stage 4.1 remains on the current output root (`.repo_studios/command_center/reports/...`) rather than the HOP contract root. | 7.1 | Stage 4.1 Tier-2 roster | Track as a stop-gate in Tier-2; update Tier-1 once output roots align and evidence confirms. |
 | CR-011 | ~~Stage 5.1 mixes run slug formats and uses pointer artifacts (`latest_*`) across pipeline outputs.~~ | 8.1 | Stage 5.1 Tier-2 roster | **CLOSED (2026-01-03):** All scripts now use `YYYYMMDD-HHMM` slug format; pointer artifacts removed. |

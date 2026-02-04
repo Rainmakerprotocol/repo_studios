@@ -1,0 +1,47 @@
+{
+  "finished_at": "2026-02-04T02:34:03.553018+00:00",
+  "metrics": {
+    "artifact_bytes": 6874,
+    "artifact_files": 3,
+    "runtime_seconds": 0.051821,
+    "step_count": 3,
+    "steps_failed": 0,
+    "steps_skipped": 1,
+    "steps_succeeded": 2
+  },
+  "run_slug": "20260204-0234",
+  "started_at": "2026-02-04T02:34:03.501197+00:00",
+  "steps": [
+    {
+      "detail": "producer step skipped by flag",
+      "finished_at": "2026-02-04T02:34:03.501253+00:00",
+      "name": "producer",
+      "started_at": "2026-02-04T02:34:03.501249+00:00",
+      "status": "skipped"
+    },
+    {
+      "detail": "signatures=0, repeat_offender=0",
+      "finished_at": "2026-02-04T02:34:03.536920+00:00",
+      "name": "consumer",
+      "payload": {
+        "repeat_offender": 0,
+        "signatures": 0
+      },
+      "started_at": "2026-02-04T02:34:03.501320+00:00",
+      "status": "success"
+    },
+    {
+      "detail": "slug=20260204-0234",
+      "finished_at": "2026-02-04T02:34:03.552963+00:00",
+      "name": "summarizer",
+      "payload": {
+        "slug": "20260204-0234"
+      },
+      "started_at": "2026-02-04T02:34:03.537013+00:00",
+      "status": "success"
+    }
+  ],
+  "success": true,
+  "topic": "fault-diagnostics",
+  "viewer": "healthview"
+}

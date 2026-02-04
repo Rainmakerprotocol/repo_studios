@@ -1,0 +1,36 @@
+{
+  "viewer": "healthview",
+  "topic": "dependency_hygiene",
+  "run_timestamp": "20260204-1122",
+  "generated_utc": "2026-02-04T11:22:54.233263+00:00",
+  "metrics": {
+    "status": "passed",
+    "issue_count": 0,
+    "requirements_scanned": 2,
+    "pyproject_scanned": true,
+    "issue_counts": []
+  },
+  "payload": {
+    "schema_version": 1,
+    "generated_utc": "2026-02-04T11:22:54.233263+00:00",
+    "repo_root": "C:\\Users\\genet\\repo_studios",
+    "summary": {
+      "status": "passed",
+      "issue_count": 0,
+      "requirements_scanned": 2,
+      "pyproject_scanned": true
+    },
+    "issue_counts": [],
+    "requirements_patterns": [
+      "requirements.txt",
+      "requirements-dev.txt",
+      "requirements/*.txt"
+    ],
+    "requirements_files": [
+      "requirements-dev.txt",
+      "requirements.txt"
+    ],
+    "pyproject_path": "pyproject.toml",
+    "issues": []
+  }
+}

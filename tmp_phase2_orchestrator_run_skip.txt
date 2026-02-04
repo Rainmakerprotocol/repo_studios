@@ -1,0 +1,62 @@
+INFO Indexed 388 documents (3201 headings, 378 links)
+INFO Including additional documentation roots: C:\Users\genet\repo_studios\.repo_studios\docs
+INFO Documents scanned=200 missing_h1=7 missing_h2=3 repeated=7 cross_file_members=169
+INFO SLUG                                      CNT FILES
+INFO ---------------------------------------------------
+INFO purpose                                    31    31
+INFO update-log                                 29    29
+INFO testing                                    28    28
+INFO invocation                                 23    23
+INFO outputs                                    23    23
+INFO 1-script-identity                          18    18
+INFO 2-current-state-analysis                   18    18
+INFO goals                                      17    17
+INFO 0-input-assignment-contract                16    16
+INFO 1-identify-script-identity                 16    16
+INFO 2-analyze-current-state                    16    16
+INFO operational-notes                          16    16
+INFO requirements-registry                      16    16
+INFO status-values-legend                       16    16
+INFO 0-instruction-block-for-editors-ai-assis   15    15
+INFO 10-finalize-completion                     15    15
+INFO 11-maintain-doc-hygiene                    15    15
+INFO 12-reference-template-variables            15    15
+INFO 13-log-version-history                     15    15
+INFO 9-attest-compliance-sign-off               15    15
+INFO system-context                             15    15
+INFO 3-gap-analysis                             14    14
+INFO 3-prepare-tier-3-yaml                      14    14
+INFO 4-changes-made                             14    14
+INFO 4-prepare-database-integration             14    14
+INFO Top duplicates (up to 10):
+INFO   purpose -> 31 files (31 headings)
+INFO   update-log -> 29 files (29 headings)
+INFO   testing -> 28 files (28 headings)
+INFO   invocation -> 23 files (23 headings)
+INFO   outputs -> 23 files (23 headings)
+INFO   1-script-identity -> 18 files (18 headings)
+INFO   2-current-state-analysis -> 18 files (18 headings)
+INFO   goals -> 17 files (17 headings)
+INFO   0-input-assignment-contract -> 16 files (16 headings)
+INFO   1-identify-script-identity -> 16 files (16 headings)
+INFO Cross-file duplicate members (up to 5):
+INFO   .repo_studios/docs/Repo_Studios_MOU_Strategic_Architecture.md -> executive-summary
+INFO   .repo_studios/docs/archives/temp_check_inventory_health_build.md -> 1-script-identity, 2-current-state-analysis, 3-build-plan, 4-alteration-locations, 5-modifications-log, 6-test-section, 7-transfer-checklist, 8-update-log, script-build-template-checkinventoryhealthpy
+INFO   .repo_studios/docs/archives/temp_validate_import_boundaries_build.md -> 1-script-identity, 10-future-considerations, 11-update-log, 2-current-state-analysis, 3-build-plan, 4-alteration-locations, 5-modifications-log, 6-documentation-section, 7-test-section, 8-transfer-checklist, 9-qa-section-prove-it, payloadstatus-ok-or-violations
+INFO   .repo_studios/docs/archives/temp_validate_inventory_build.md -> assessment-2026-01-25, completion, evidence
+INFO   .repo_studios/docs/automation/aggregate_docs_health_signals.md -> purpose
+INFO Docs missing H2 (up to 5): .repo_studios/docs/project_tree_overview.md, .repo_studios/docs/templates/script_inventory.md, standards/global/std-docs-integrity-handbook.md
+INFO Step anchor-validation skipped: anchor validation skipped
+INFO Repo root: C:\Users\genet\repo_studios
+INFO Index path: C:\Users\genet\repo_studios\.repo_studios\docs\standards\docs_index.md
+INFO Output directory: C:\Users\genet\repo_studios\.repo_studios\reports\healthview\producer_reports\docs_integrity_validation
+INFO Repo root: C:\Users\genet\repo_studios
+INFO Output directory: C:\Users\genet\repo_studios\.repo_studios\reports\healthview\producer_reports\metrics_anchor_stub_validation
+INFO Legacy file: C:\Users\genet\repo_studios\docs\api\metrics_orchestrator.md
+INFO [metrics-anchor-stubs] OK ù no missing anchors detected
+INFO Commits examined: 18
+INFO Modules missing doc updates: 1
+INFO Modules with undocumented logic: 39
+WARNING monkey patch scan contains no telemetry.json bundles: C:\Users\genet\repo_studios\.repo_studios\reports\healthview\producer_reports\monkey_patches
+INFO Docs health overall score: 60.41
+INFO Docs Health orchestrator complete (slug=20260203-2333)

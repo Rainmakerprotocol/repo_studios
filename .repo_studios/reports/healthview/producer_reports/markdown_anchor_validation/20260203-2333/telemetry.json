@@ -1,0 +1,817 @@
+{
+  "schema_version": 1,
+  "generated_utc": "2026-02-03T23:33:11.911609+00:00",
+  "status": "fail",
+  "metrics": {
+    "files_scanned": 200,
+    "links_checked": 448,
+    "issue_count": 84,
+    "missing_file_count": 51,
+    "missing_anchor_count": 33
+  },
+  "payload": {
+    "report": {
+      "schema_version": 1,
+      "generated_utc": "2026-02-03T23:33:11.911609+00:00",
+      "status": "fail",
+      "root": "C:\\Users\\genet\\repo_studios",
+      "patterns": [
+        "docs/**/*.md",
+        ".repo_studios/docs/**/*.md"
+      ],
+      "issue_count": 84,
+      "issues": [
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 488,
+          "kind": "anchor",
+          "target": "tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates",
+          "message": "Missing anchor slug '32-stop-gates' in target file"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 495,
+          "kind": "anchor",
+          "target": "tier2_roster/tier2_test_execution_telemetry_roster.md#record--collect_test_log_reportspy",
+          "message": "Missing anchor slug 'record-collecttestlogreportspy' in target file"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 496,
+          "kind": "anchor",
+          "target": "tier2_roster/tier2_test_execution_telemetry_roster.md#record--generate_test_coverage_inventorypy",
+          "message": "Missing anchor slug 'record-generatetestcoverageinventorypy' in target file"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 497,
+          "kind": "anchor",
+          "target": "tier2_roster/tier2_test_execution_telemetry_roster.md#record--analyze_test_hardeningpy",
+          "message": "Missing anchor slug 'record-analyzetesthardeningpy' in target file"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 498,
+          "kind": "anchor",
+          "target": "tier2_roster/tier2_test_execution_telemetry_roster.md#record--generate_test_log_health_reportpy",
+          "message": "Missing anchor slug 'record-generatetestloghealthreportpy' in target file"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 499,
+          "kind": "anchor",
+          "target": "tier2_roster/tier2_test_execution_telemetry_roster.md#record--generate_churn_complexity_heatmappy",
+          "message": "Missing anchor slug 'record-generatechurncomplexityheatmappy' in target file"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 500,
+          "kind": "anchor",
+          "target": "tier2_roster/tier2_test_execution_telemetry_roster.md#record--summarize_test_execution_telemetrypy",
+          "message": "Missing anchor slug 'record-summarizetestexecutiontelemetrypy' in target file"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 502,
+          "kind": "anchor",
+          "target": "tier2_roster/tier2_test_execution_telemetry_roster.md#fixture-example-permanent--run_test_execution_telemetrypy",
+          "message": "Missing anchor slug 'fixture-example-permanent-runtestexecutiontelemetrypy' in target file"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 509,
+          "kind": "anchor",
+          "target": "tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates",
+          "message": "Missing anchor slug '32-stop-gates' in target file"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 511,
+          "kind": "anchor",
+          "target": "tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates",
+          "message": "Missing anchor slug '32-stop-gates' in target file"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 529,
+          "kind": "anchor",
+          "target": "tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates",
+          "message": "Missing anchor slug '32-stop-gates' in target file"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 560,
+          "kind": "anchor",
+          "target": "tier2_roster/tier2_test_execution_telemetry_roster.md#32-stop-gates",
+          "message": "Missing anchor slug '32-stop-gates' in target file"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 620,
+          "kind": "anchor",
+          "target": "tier2_roster/tier2_docs_health_overview_roster.md#s21r-002-generate-doc-index",
+          "message": "Missing anchor slug 's21r-002-generate-doc-index' in target file"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 621,
+          "kind": "anchor",
+          "target": "tier2_roster/tier2_docs_health_overview_roster.md#s21r-003-generate-anchor-inventory",
+          "message": "Missing anchor slug 's21r-003-generate-anchor-inventory' in target file"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 622,
+          "kind": "anchor",
+          "target": "tier2_roster/tier2_docs_health_overview_roster.md#s21r-004-validate-markdown-anchors",
+          "message": "Missing anchor slug 's21r-004-validate-markdown-anchors' in target file"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 623,
+          "kind": "anchor",
+          "target": "tier2_roster/tier2_docs_health_overview_roster.md#s21r-005-verify-docs-integrity",
+          "message": "Missing anchor slug 's21r-005-verify-docs-integrity' in target file"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 624,
+          "kind": "anchor",
+          "target": "tier2_roster/tier2_docs_health_overview_roster.md#s21r-006-validate-metrics-anchor-stubs",
+          "message": "Missing anchor slug 's21r-006-validate-metrics-anchor-stubs' in target file"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 625,
+          "kind": "anchor",
+          "target": "tier2_roster/tier2_docs_health_overview_roster.md#s21r-007-generate-code-doc-churn-report",
+          "message": "Missing anchor slug 's21r-007-generate-code-doc-churn-report' in target file"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 626,
+          "kind": "anchor",
+          "target": "tier2_roster/tier2_docs_health_overview_roster.md#s21r-008-generate-undocumented-logic-report",
+          "message": "Missing anchor slug 's21r-008-generate-undocumented-logic-report' in target file"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 627,
+          "kind": "anchor",
+          "target": "tier2_roster/tier2_docs_health_overview_roster.md#s21r-009-aggregate-docs-health-signals",
+          "message": "Missing anchor slug 's21r-009-aggregate-docs-health-signals' in target file"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 776,
+          "kind": "anchor",
+          "target": "tier2_roster/tier2_fault_diagnostics_overview_roster.md#s31r-003-generate-fault-artifacts",
+          "message": "Missing anchor slug 's31r-003-generate-fault-artifacts' in target file"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 779,
+          "kind": "anchor",
+          "target": "tier2_roster/tier2_fault_diagnostics_overview_roster.md#s31r-004-summarize-fault-diagnostics-overview",
+          "message": "Missing anchor slug 's31r-004-summarize-fault-diagnostics-overview' in target file"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md",
+          "line": 1796,
+          "kind": "file",
+          "target": "../../../tests/tests_command_center/orchestrators/test_run_available_scripts_oversight.py",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/stage12_templates/README.md",
+          "line": 15,
+          "kind": "file",
+          "target": "consumer/review_metaprompts.md",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/stage12_templates/README.md",
+          "line": 16,
+          "kind": "file",
+          "target": "aggregator/review_metaprompts.md",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/stage12_templates/README.md",
+          "line": 17,
+          "kind": "file",
+          "target": "summarizer/review_metaprompts.md",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/stage12_templates/README.md",
+          "line": 18,
+          "kind": "file",
+          "target": "utility/review_metaprompts.md",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/stage12_templates/README.md",
+          "line": 19,
+          "kind": "file",
+          "target": "orchestrator/design_metaprompts.md",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/stage12_templates/README.md",
+          "line": 20,
+          "kind": "file",
+          "target": "producer/create_metaprompts.md",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/stage12_templates/README.md",
+          "line": 21,
+          "kind": "file",
+          "target": "promotion/wire_metaprompts.md",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/stage12_templates/README.md",
+          "line": 40,
+          "kind": "file",
+          "target": "utility/build_template.md",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/stage12_templates/README.md",
+          "line": 41,
+          "kind": "file",
+          "target": "promotion/build_template.md",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_docs_health_overview_roster.md",
+          "line": 178,
+          "kind": "anchor",
+          "target": "#s21r-002-generate-doc-index",
+          "message": "Missing anchor slug 's21r-002-generate-doc-index' in same file"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_docs_health_overview_roster.md",
+          "line": 179,
+          "kind": "anchor",
+          "target": "#s21r-003-generate-anchor-inventory",
+          "message": "Missing anchor slug 's21r-003-generate-anchor-inventory' in same file"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_docs_health_overview_roster.md",
+          "line": 180,
+          "kind": "anchor",
+          "target": "#s21r-004-validate-markdown-anchors",
+          "message": "Missing anchor slug 's21r-004-validate-markdown-anchors' in same file"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_docs_health_overview_roster.md",
+          "line": 181,
+          "kind": "anchor",
+          "target": "#s21r-005-verify-docs-integrity",
+          "message": "Missing anchor slug 's21r-005-verify-docs-integrity' in same file"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_docs_health_overview_roster.md",
+          "line": 182,
+          "kind": "anchor",
+          "target": "#s21r-006-validate-metrics-anchor-stubs",
+          "message": "Missing anchor slug 's21r-006-validate-metrics-anchor-stubs' in same file"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_docs_health_overview_roster.md",
+          "line": 183,
+          "kind": "anchor",
+          "target": "#s21r-007-generate-code-doc-churn-report",
+          "message": "Missing anchor slug 's21r-007-generate-code-doc-churn-report' in same file"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_docs_health_overview_roster.md",
+          "line": 184,
+          "kind": "anchor",
+          "target": "#s21r-008-generate-undocumented-logic-report",
+          "message": "Missing anchor slug 's21r-008-generate-undocumented-logic-report' in same file"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_docs_health_overview_roster.md",
+          "line": 185,
+          "kind": "anchor",
+          "target": "#s21r-009-aggregate-docs-health-signals",
+          "message": "Missing anchor slug 's21r-009-aggregate-docs-health-signals' in same file"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_fault_diagnostics_overview_roster.md",
+          "line": 170,
+          "kind": "anchor",
+          "target": "#s31r-003-generate-fault-artifacts",
+          "message": "Missing anchor slug 's31r-003-generate-fault-artifacts' in same file"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_fault_diagnostics_overview_roster.md",
+          "line": 171,
+          "kind": "anchor",
+          "target": "#s31r-004-summarize-fault-diagnostics-overview",
+          "message": "Missing anchor slug 's31r-004-summarize-fault-diagnostics-overview' in same file"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_1_1/TER-003_generate_test_coverage_inventory_build.md",
+          "line": 444,
+          "kind": "file",
+          "target": ".repo_studios/scripts/producers/generate_test_coverage_inventory.py",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_1_1/TER-003_generate_test_coverage_inventory_build.md",
+          "line": 454,
+          "kind": "file",
+          "target": ".repo_studios/tests/tests_producers/test_generate_test_coverage_inventory.py",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-004_validate_markdown_anchors_build.md",
+          "line": 215,
+          "kind": "anchor",
+          "target": "#anchor",
+          "message": "Missing anchor slug 'anchor' in same file"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-004_validate_markdown_anchors_build.md",
+          "line": 215,
+          "kind": "file",
+          "target": "path/to/file.md#optional-anchor",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-004_validate_markdown_anchors_build.md",
+          "line": 818,
+          "kind": "file",
+          "target": "tier2_roster/tier2_docs_health_overview_roster.md#s21r-004-validate-markdown-anchors",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-005_verify_docs_integrity_build.md",
+          "line": 572,
+          "kind": "file",
+          "target": "../../../../../scripts/producers/verify_docs_integrity.py#L869-L990",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-005_verify_docs_integrity_build.md",
+          "line": 573,
+          "kind": "file",
+          "target": "../../../../../scripts/producers/verify_docs_integrity.py#L992-L1003",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-005_verify_docs_integrity_build.md",
+          "line": 574,
+          "kind": "file",
+          "target": "../../../../../scripts/producers/verify_docs_integrity.py#L40",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-005_verify_docs_integrity_build.md",
+          "line": 575,
+          "kind": "file",
+          "target": "../../../../../scripts/producers/verify_docs_integrity.py#L77",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-005_verify_docs_integrity_build.md",
+          "line": 576,
+          "kind": "file",
+          "target": "../../../../../scripts/producers/verify_docs_integrity.py#L941-L944",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-005_verify_docs_integrity_build.md",
+          "line": 577,
+          "kind": "file",
+          "target": "../../../../../scripts/producers/verify_docs_integrity.py#L955-L963",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-005_verify_docs_integrity_build.md",
+          "line": 578,
+          "kind": "file",
+          "target": "../../../../../scripts/producers/verify_docs_integrity.py#L213-L254",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-005_verify_docs_integrity_build.md",
+          "line": 579,
+          "kind": "file",
+          "target": "../../../../../scripts/producers/verify_docs_integrity.py#L697-L723",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-005_verify_docs_integrity_build.md",
+          "line": 580,
+          "kind": "file",
+          "target": "../../../../../scripts/producers/verify_docs_integrity.py#L759-L786",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-005_verify_docs_integrity_build.md",
+          "line": 581,
+          "kind": "file",
+          "target": "../../../../../scripts/producers/verify_docs_integrity.py#L788-L826",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-005_verify_docs_integrity_build.md",
+          "line": 582,
+          "kind": "file",
+          "target": "../../../../../scripts/producers/verify_docs_integrity.py#L828-L867",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-005_verify_docs_integrity_build.md",
+          "line": 583,
+          "kind": "file",
+          "target": "../../../../../scripts/producers/verify_docs_integrity.py#L946",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-005_verify_docs_integrity_build.md",
+          "line": 584,
+          "kind": "file",
+          "target": "../../../../../scripts/producers/verify_docs_integrity.py#L948",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-005_verify_docs_integrity_build.md",
+          "line": 585,
+          "kind": "file",
+          "target": "../../../../../scripts/producers/verify_docs_integrity.py#L950",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-006_validate_metrics_anchor_stubs_build.md",
+          "line": 562,
+          "kind": "file",
+          "target": "../.repo_studios/scripts/producers/validate_metrics_anchor_stubs.py#L600-L703",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-006_validate_metrics_anchor_stubs_build.md",
+          "line": 563,
+          "kind": "file",
+          "target": "../.repo_studios/scripts/producers/validate_metrics_anchor_stubs.py#L705-L718",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-006_validate_metrics_anchor_stubs_build.md",
+          "line": 564,
+          "kind": "file",
+          "target": "../.repo_studios/scripts/producers/validate_metrics_anchor_stubs.py#L79",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-006_validate_metrics_anchor_stubs_build.md",
+          "line": 565,
+          "kind": "file",
+          "target": "../.repo_studios/scripts/producers/validate_metrics_anchor_stubs.py#L664",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-006_validate_metrics_anchor_stubs_build.md",
+          "line": 566,
+          "kind": "file",
+          "target": "../.repo_studios/scripts/producers/validate_metrics_anchor_stubs.py#L667",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-006_validate_metrics_anchor_stubs_build.md",
+          "line": 567,
+          "kind": "file",
+          "target": "../.repo_studios/scripts/producers/validate_metrics_anchor_stubs.py#L669",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-006_validate_metrics_anchor_stubs_build.md",
+          "line": 568,
+          "kind": "file",
+          "target": "../.repo_studios/scripts/producers/validate_metrics_anchor_stubs.py#L671",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-006_validate_metrics_anchor_stubs_build.md",
+          "line": 569,
+          "kind": "file",
+          "target": "../.repo_studios/scripts/producers/validate_metrics_anchor_stubs.py#L591-L597",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-006_validate_metrics_anchor_stubs_build.md",
+          "line": 570,
+          "kind": "file",
+          "target": "../.repo_studios/scripts/producers/validate_metrics_anchor_stubs.py#L207",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-007_generate_code_doc_churn_report_build.md",
+          "line": 796,
+          "kind": "file",
+          "target": "tier3_scripts/docs_health_overview/tier3_generate_code_doc_churn_report.yaml",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_3_1/S31R-004_summarize_fault_diagnostics_overview_build.md",
+          "line": 714,
+          "kind": "file",
+          "target": "../../../command_center/scripts/summarizers/summarize_fault_diagnostics_overview.py#L590-L735",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_3_1/S31R-004_summarize_fault_diagnostics_overview_build.md",
+          "line": 715,
+          "kind": "file",
+          "target": "../../../command_center/scripts/summarizers/summarize_fault_diagnostics_overview.py#L738-L745",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_3_1/S31R-004_summarize_fault_diagnostics_overview_build.md",
+          "line": 721,
+          "kind": "file",
+          "target": "../../../command_center/scripts/summarizers/summarize_fault_diagnostics_overview.py#L179-L225",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_3_1/S31R-004_summarize_fault_diagnostics_overview_build.md",
+          "line": 722,
+          "kind": "file",
+          "target": "../../../command_center/scripts/summarizers/summarize_fault_diagnostics_overview.py#L264-L276",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_3_1/S31R-004_summarize_fault_diagnostics_overview_build.md",
+          "line": 723,
+          "kind": "file",
+          "target": "../../../command_center/scripts/summarizers/summarize_fault_diagnostics_overview.py#L279-L301",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_3_1/S31R-004_summarize_fault_diagnostics_overview_build.md",
+          "line": 729,
+          "kind": "file",
+          "target": "../../../command_center/scripts/summarizers/summarize_fault_diagnostics_overview.py#L91",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_3_1/S31R-004_summarize_fault_diagnostics_overview_build.md",
+          "line": 730,
+          "kind": "file",
+          "target": "../../../command_center/scripts/summarizers/summarize_fault_diagnostics_overview.py#L712-L720",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_3_1/S31R-004_summarize_fault_diagnostics_overview_build.md",
+          "line": 731,
+          "kind": "file",
+          "target": "../../../command_center/scripts/summarizers/summarize_fault_diagnostics_overview.py#L708-L710",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_3_1/S31R-004_summarize_fault_diagnostics_overview_build.md",
+          "line": 737,
+          "kind": "file",
+          "target": "../../../command_center/scripts/summarizers/summarize_fault_diagnostics_overview.py#L390-L406",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_3_1/S31R-004_summarize_fault_diagnostics_overview_build.md",
+          "line": 738,
+          "kind": "file",
+          "target": "../../../command_center/scripts/summarizers/summarize_fault_diagnostics_overview.py#L422-L438",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_3_1/S31R-004_summarize_fault_diagnostics_overview_build.md",
+          "line": 739,
+          "kind": "file",
+          "target": "../../../command_center/scripts/summarizers/summarize_fault_diagnostics_overview.py#L503-L548",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_3_1/S31R-004_summarize_fault_diagnostics_overview_build.md",
+          "line": 740,
+          "kind": "file",
+          "target": "../../../command_center/scripts/summarizers/summarize_fault_diagnostics_overview.py#L369-L387",
+          "message": "Target file does not exist"
+        },
+        {
+          "file": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_3_1/S31R-004_summarize_fault_diagnostics_overview_build.md",
+          "line": 856,
+          "kind": "file",
+          "target": "../tier2_fault_diagnostics_overview_roster.md#s31r-001-fault-diagnostics-overview-orchestrator",
+          "message": "Target file does not exist"
+        }
+      ],
+      "scanned_files": [
+        ".repo_studios/docs/Repo_Studios_MOU_Strategic_Architecture.md",
+        ".repo_studios/docs/archives/temp_check_inventory_health_build.md",
+        ".repo_studios/docs/archives/temp_validate_import_boundaries_build.md",
+        ".repo_studios/docs/archives/temp_validate_inventory_build.md",
+        ".repo_studios/docs/automation/aggregate_docs_health_signals.md",
+        ".repo_studios/docs/automation/analyze_test_hardening.md",
+        ".repo_studios/docs/automation/check_inventory_health.md",
+        ".repo_studios/docs/automation/ci_metrics_checks.md",
+        ".repo_studios/docs/automation/classify_monkey_patches.md",
+        ".repo_studios/docs/automation/collect_faulthandler_reports.md",
+        ".repo_studios/docs/automation/collect_test_log_reports.md",
+        ".repo_studios/docs/automation/configure_faulthandler_runtime.md",
+        ".repo_studios/docs/automation/diff_standards_index.md",
+        ".repo_studios/docs/automation/dump_faulthandler_snapshot.md",
+        ".repo_studios/docs/automation/extract_standards_rules.md",
+        ".repo_studios/docs/automation/function_analysis_guide.md",
+        ".repo_studios/docs/automation/function_inventory_integration_plan.md",
+        ".repo_studios/docs/automation/generate_anchor_health_report.md",
+        ".repo_studios/docs/automation/generate_anchor_inventory.md",
+        ".repo_studios/docs/automation/generate_code_doc_churn_report.md",
+        ".repo_studios/docs/automation/generate_dependency_hygiene_report.md",
+        ".repo_studios/docs/automation/generate_doc_index.md",
+        ".repo_studios/docs/automation/generate_import_graph_report.md",
+        ".repo_studios/docs/automation/generate_lizard_report.md",
+        ".repo_studios/docs/automation/generate_standards_index.md",
+        ".repo_studios/docs/automation/generate_test_coverage_inventory.md",
+        ".repo_studios/docs/automation/generate_test_log_health_report.md",
+        ".repo_studios/docs/automation/generate_typecheck_report.md",
+        ".repo_studios/docs/automation/generate_undocumented_logic_report.md",
+        ".repo_studios/docs/automation/healthview_onboarding.md",
+        ".repo_studios/docs/automation/orchestrator_automation_hooks.md",
+        ".repo_studios/docs/automation/refactor_library_integration_notes.md",
+        ".repo_studios/docs/automation/refresh_mypy_baselines.md",
+        ".repo_studios/docs/automation/render_inventory_views.md",
+        ".repo_studios/docs/automation/report_paths_migration_pattern.md",
+        ".repo_studios/docs/automation/run_fault_pipeline.md",
+        ".repo_studios/docs/automation/run_pytest_log_capture.md",
+        ".repo_studios/docs/automation/run_standards_index_cli.md",
+        ".repo_studios/docs/automation/scan_code_placeholders.md",
+        ".repo_studios/docs/automation/scan_monkey_patches.md",
+        ".repo_studios/docs/automation/seed_standards_prompts.md",
+        ".repo_studios/docs/automation/standards-extraction-spec.md",
+        ".repo_studios/docs/automation/standards-index-schema.md",
+        ".repo_studios/docs/automation/summarize_standards.md",
+        ".repo_studios/docs/automation/traceability/aggregator_dependency_audit.md",
+        ".repo_studios/docs/automation/traceability/analyze_monkey_patch_trends_modernization_plan.md",
+        ".repo_studios/docs/automation/traceability/fault_pipeline_aggregator_plan.md",
+        ".repo_studios/docs/automation/traceability/generate_churn_complexity_heatmap_modernization_plan.md",
+        ".repo_studios/docs/automation/traceability/generate_code_doc_churn_report_plan.md",
+        ".repo_studios/docs/automation/traceability/producer_consumer_traceability_audit.md",
+        ".repo_studios/docs/automation/traceability/run_batch_cleanup_modernization_plan.md",
+        ".repo_studios/docs/automation/traceability/run_standards_index_cli_modernization_plan.md",
+        ".repo_studios/docs/automation/validate_import_boundaries.md",
+        ".repo_studios/docs/automation/validate_inventory.md",
+        ".repo_studios/docs/automation/validate_markdown_anchors.md",
+        ".repo_studios/docs/automation/validate_metrics_anchor_stubs.md",
+        ".repo_studios/docs/automation/verify_docs_integrity.md",
+        ".repo_studios/docs/directory_layout.md",
+        ".repo_studios/docs/governance/alignment-ledger.md",
+        ".repo_studios/docs/inventory/inventory-notes.md",
+        ".repo_studios/docs/inventory_reports.md",
+        ".repo_studios/docs/inventory_schema_spec.md",
+        ".repo_studios/docs/inventory_validation.md",
+        ".repo_studios/docs/naming_conventions.md",
+        ".repo_studios/docs/pipeline/README.md",
+        ".repo_studios/docs/pipeline/checkbox_report/outputs/checkbox_report.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/docstring_compliance_plan.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage12_metaprompts.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage12_template_development_plan.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage_11_1_implementation_plan.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage_3_1_implementation_plan.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage_4_1_implementation_plan.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage_5_1_implementation_plan.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage_5_hop_refactor_plan.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage_6_1_hop_refactor_plan.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage_6_1_implementation_plan.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage_7_1_implementation_plan.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/stage12_templates/BOOTSTRAP.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/stage12_templates/PROMPT_PHASE1_BOOTSTRAP.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/stage12_templates/PROMPT_PHASE2_ANALYSIS.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/stage12_templates/PROMPT_PHASE3_EVIDENCE.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/stage12_templates/PROMPT_PHASE4_FINALIZE.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/stage12_templates/PROMPT_ZERO.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/stage12_templates/README.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/stage12_templates/aggregator/build_template.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/stage12_templates/common/review_metaprompts.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/stage12_templates/consumer/build_template.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/stage12_templates/orchestrator/build_template.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/stage12_templates/producer/QUICK_START.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/stage12_templates/producer/build_template.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/stage12_templates/producer/review_metaprompts.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/stage12_templates/summarizer/build_template.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier1_healthview_orchestration_pipeline.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/README.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/templates/README.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/templates/tier2_aggregator_template.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/templates/tier2_consumer_template.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/templates/tier2_orchestrator_template.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/templates/tier2_producer_template.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/templates/tier2_promotion_template.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/templates/tier2_summarizer_template.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/templates/tier2_utility_template.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_available_scripts_orchestrator_roster.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_available_scripts_roster.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_dependency_import_hygiene_roster.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_docs_health_overview_roster.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_fault_diagnostics_overview_roster.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_healthview_roster_template.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_monkey_patch_oversight_roster.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_onboarding_tools_roster.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_standards_integrity_roster.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/tier2_test_execution_telemetry_roster.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_11_1/ASR-001_generate_anchor_health_report_build.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_11_1/ASR-005_validate_import_boundaries_build.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_11_1/ASR-007_check_inventory_health_build.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_11_1/ASR-008_validate_inventory_build.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_11_1/ASR-010_render_inventory_views_build.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_11_1/ASR-011_generate_lizard_report_build.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_11_1/ASR-011_generate_lizard_report_promote.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_1_1/TER-001_investigation_notes.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_1_1/TER-001_run_test_execution_telemetry_build.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_1_1/TER-002_collect_test_log_reports_build.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_1_1/TER-003_generate_test_coverage_inventory_build.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_1_1/TER-004_analyze_test_hardening_build.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_1_1/TER-005_generate_test_log_health_report_build.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_1_1/TER-006_generate_churn_complexity_heatmap_build.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_1_1/TER-007_summarize_test_execution_telemetry_build.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-001_run_docs_health_overview_build.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-002_generate_anchor_inventory_build.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-003_generate_doc_index_build.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-004_validate_markdown_anchors_build.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-005_verify_docs_integrity_build.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-006_validate_metrics_anchor_stubs_build.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-007_generate_code_doc_churn_report_build.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-008_generate_undocumented_logic_report_build.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-009_aggregate_docs_health_signals_build.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_3_1/S31R-003_generate_fault_artifacts_build.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_3_1/S31R-004_summarize_fault_diagnostics_overview_build.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_tier2_compliance_alignment.md",
+        ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/workflows/healthview_agent_loop_implementation_plan.md",
+        ".repo_studios/docs/pipeline/pipeline_doc_map.md",
+        ".repo_studios/docs/pipeline/pipeline_templates/tier1_pipeline_howto.md",
+        ".repo_studios/docs/pipeline/pipeline_templates/tier1_pipeline_template.md",
+        ".repo_studios/docs/pipeline/pipeline_templates/tier2_pipeline_howto.md",
+        ".repo_studios/docs/pipeline/pipeline_templates/tier2_pipeline_template.md",
+        ".repo_studios/docs/pipeline/pipeline_templates/tier3_pipeline_template.md",
+        ".repo_studios/docs/pipeline/pipeline_templates/tier_doc_system_instructions.md",
+        ".repo_studios/docs/pipeline/tier3_index/IMPLEMENTATION_SUMMARY.md",
+        ".repo_studios/docs/pipeline/tier3_index/README (1).md",
+        ".repo_studios/docs/playbooks/playbook-agent-operations.md",
+        ".repo_studios/docs/playbooks/playbook-memory-refresh.md",
+        ".repo_studios/docs/playbooks/playbook-migration.md",
+        ".repo_studios/docs/playbooks/playbook-prompt-library.md",
+        ".repo_studios/docs/project_tree_overview.md",
+        ".repo_studios/docs/repo_studios_build_plan.md",
+        ".repo_studios/docs/standards/docs_index.md",
+        ".repo_studios/docs/standards/global/README.md",
+        ".repo_studios/docs/standards/global/std-global-chainlit-ui.md",
+        ".repo_studios/docs/standards/global/std-global-code-cleanup.md",
+        ".repo_studios/docs/standards/global/std-global-css-authoring.md",
+        ".repo_studios/docs/standards/global/std-global-html-coding.md",
+        ".repo_studios/docs/standards/global/std-global-javascript-engineering.md",
+        ".repo_studios/docs/standards/global/std-global-markdown-authoring.md",
+        ".repo_studios/docs/standards/global/std-global-mission-parameters.md",
+        ".repo_studios/docs/standards/global/std-global-monkey-patching.md",
+        ".repo_studios/docs/standards/global/std-global-prompt-engineering.md",
+        ".repo_studios/docs/standards/global/std-global-python-engineering.md",
+        ".repo_studios/docs/standards/project/README.md",
+        ".repo_studios/docs/standards/project/std-project-operating-standard.md",
+        ".repo_studios/docs/standards/project/std-project-python-instructions.md",
+        ".repo_studios/docs/templates/agent_note_template.md",
+        ".repo_studios/docs/templates/integration_alignment_template.md",
+        ".repo_studios/docs/templates/script_inventory.md",
+        ".repo_studios/docs/templates/script_inventory_template.md",
+        ".repo_studios/docs/templates/structural_checklist_template.md",
+        "docs/automation/examples/healthview_manifest_example.md",
+        "docs/automation/orchestrator_implementation.md",
+        "docs/automation/orchestrator_legacy_cleanup_checklist.md",
+        "docs/automation/orchestrator_migration_announcement.md",
+        "docs/automation/orchestrator_topic_refactor_rfc.md",
+        "docs/automation/reviews/standards_integrity_output_review-2026-01-21.md",
+        "docs/db_integrations/README.md",
+        "docs/pipeline/healthview_orchestration_pipeline/implementation_plans/stage_2_1_docs_health_expectations_temp.md",
+        "docs/standards/docs_index.md",
+        "docs/standards/global/std-docs-integrity-handbook.md",
+        "docs/standards/global/std-global-chainlit-ui.md",
+        "docs/standards/global/std-global-code-cleanup.md",
+        "docs/standards/global/std-global-html-coding.md",
+        "docs/standards/global/std-global-markdown-authoring.md",
+        "docs/standards/global/std-global-mission-parameters.md",
+        "docs/standards/global/std-global-monkey-patching.md",
+        "docs/standards/global/std-global-prompt-engineering.md",
+        "docs/standards/global/std-global-python-engineering.md",
+        "docs/standards/project/std-project-operating-standard.md",
+        "docs/standards/project/std-project-python-instructions.md",
+        "docs/templates/meta_prompt_markdown_lint_hygiene.md",
+        "docs/templates/meta_prompts.md",
+        "docs/templates/meta_prompts2.md",
+        "docs/templates/test_execution_telemetry_summary_template.md"
+      ]
+    }
+  }
+}
