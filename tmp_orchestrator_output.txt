@@ -1,0 +1,21 @@
+DEBUG Starting topic step producer
+INFO Scanning repo: C:\Users\genet\repo_studios
+INFO Scan root: C:\Users\genet\repo_studios\.repo_studios\command_center\scripts
+INFO Output directory: C:\Users\genet\repo_studios\.repo_studios\reports\healthview\producer_reports\monkey_patch_scans
+INFO Project packages: tests
+DEBUG DB_INTEGRATION_MARKER: Database writes DORMANT
+DEBUG Wrote manifest to C:\Users\genet\repo_studios\.repo_studios\reports\healthview\producer_reports\monkey_patch_scans\20260205-0126\manifest.json
+DEBUG Wrote summary to C:\Users\genet\repo_studios\.repo_studios\reports\healthview\producer_reports\monkey_patch_scans\20260205-0126\summary.md
+DEBUG Wrote telemetry to C:\Users\genet\repo_studios\.repo_studios\reports\healthview\producer_reports\monkey_patch_scans\20260205-0126\telemetry.json
+INFO Done. Findings: 10
+DEBUG Step producer completed successfully
+DEBUG Starting topic step consumer
+[INFO] Wrote monkey patch risk bundle to C:\Users\genet\repo_studios\.repo_studios\reports\healthview\consumer_reports\monkey_patch_risk\20260205-0126 (source=structured, pruned=1)
+[DEBUG] Step consumer completed successfully
+[DEBUG] Starting topic step aggregator
+[INFO] Trend bundle written to C:\Users\genet\repo_studios\.repo_studios\reports\healthview\aggregator_reports\monkey_patch_trends\20260205-0126 (mode=consumer, runs=3, pruned=1)
+[DEBUG] Step aggregator completed successfully
+[DEBUG] Starting topic step summarizer
+[INFO] Monkey Patch overview artifacts written to C:\Users\genet\repo_studios\.repo_studios\reports\healthview\summarizer_reports\monkey_patch_overview\20260205-0126 (slug=20260205-0126)
+[DEBUG] Step summarizer completed successfully
+[INFO] Monkey Patch Oversight orchestrator complete (slug=20260205-0126)

@@ -129,8 +129,18 @@ templates:
     category: utility
     compliance_tier: B
     phase: "4A"
-    use_when: "Processing utility script (no HOP bundle output)"
+    version: "1.0.0"
+    use_when: "Processing utility script (no HOP bundle output) — B-CLI utilities with run(argv) or B-LIB pure libraries"
     produces: "{RECORD_ID}_{script_stem}_build.md"
+    architecture: "C-1"
+    branch_point: "Section 0 (CHECKPOINT-0)"
+    paths:
+      b_cli: "Sections 1-10 (full inspection)"
+      b_lib: "Section 11 (library checklist)"
+    requirements:
+      b_cli: ["UIC", "UTL", "AGT", "DBI", "ORC"]
+      b_lib: ["LIB"]
+    hop_applicable: false
     metaprompts:
       - path: common/review_metaprompts.md
         use_case: "Existing utility script Phase 4A review"

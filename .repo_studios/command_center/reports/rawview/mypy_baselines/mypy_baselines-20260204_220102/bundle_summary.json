@@ -1,0 +1,24 @@
+{
+  "append_timestamp": true,
+  "generated_utc": "2026-02-04T22:01:02.113728+00:00",
+  "repo_root": "C:\\Users\\genet\\repo_studios",
+  "run_slug": "20260204_220102",
+  "schema_version": 1,
+  "status": "ok",
+  "targets_meta": {
+    "test_target": {
+      "append_timestamp": true,
+      "command": [
+        "C:\\Users\\genet\\repo_studios\\.venv\\Scripts\\python.exe",
+        "-m",
+        "mypy",
+        "--hide-error-context",
+        "--no-error-summary",
+        ".repo_studios/scripts/utilities"
+      ],
+      "duration_seconds": 4.823,
+      "exit_code": 0,
+      "filename": "mypy_test_target.txt"
+    }
+  }
+}

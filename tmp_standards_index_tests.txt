@@ -1,0 +1,14 @@
+============================= test session starts =============================
+platform win32 -- Python 3.13.3, pytest-9.0.1, pluggy-1.6.0 -- C:\Users\genet\repo_studios\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\genet\repo_studios
+configfile: pytest.ini (WARNING: ignoring pytest config in pyproject.toml!)
+plugins: cov-5.0.0
+collecting ... collected 4 items
+
+.repo_studios/tests/tests_producers/test_generate_standards_index.py::test_structured_artifacts_success PASSED [ 25%]
+.repo_studios/tests/tests_producers/test_generate_standards_index.py::test_failure_path_writes_artifacts_and_prunes PASSED [ 50%]
+.repo_studios/tests/tests_producers/test_generate_standards_index.py::test_missing_source_file_reports_error PASSED [ 75%]
+.repo_studios/tests/tests_producers/test_generate_standards_index.py::test_extraction_enabled_writes_pending_file PASSED [100%]
+
+============================== 4 passed in 0.24s ==============================

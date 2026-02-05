@@ -909,21 +909,22 @@ _Tier-2 references (depth lives here):_
   Tier-3: [tier3_generate_typecheck_report.yaml](tier3_scripts/dependency_import_hygiene/tier3_generate_typecheck_report.yaml)
 - [x] refresh_mypy_baselines.py — complete (utility, non-HOP). See: [Tier-2 record](tier2_roster/tier2_dependency_import_hygiene_roster.md#s41r-006-refresh_mypy_baselinespy)
   Tier-3: [tier3_refresh_mypy_baselines.yaml](tier3_scripts/dependency_import_hygiene/tier3_refresh_mypy_baselines.yaml)
-- [x] run_dependency_import_hygiene.py — complete (orchestrator). See: [Tier-2 record](tier2_roster/tier2_dependency_import_hygiene_roster.md#s41r-001-dependency-import-hygiene-orchestrator)
+- [x] run_dependency_import_hygiene.py — complete (orchestrator). See: [Tier-2 record](tier2_roster/tier2_dependency_import_hygiene_roster.md#s41r-001--run_dependency_import_hygienepy)
   Tier-3: [tier3_run_dependency_import_hygiene.yaml](tier3_scripts/dependency_import_hygiene/tier3_run_dependency_import_hygiene.yaml)
 
-**Stage 4.1 Gate Checklist (Tier-1):**
+**Stage 4.1 Gate Checklist (Tier-1): ✅ ALL CLOSED (2026-02-04)**
 
 These are Stage 4.1 readiness gates after all Tier-2 DONE script gates are closed.
 
-- [ ] Base package complete (`manifest.json`, `summary.md`, `telemetry.json`).
+- [x] Base package complete (`manifest.json`, `summary.md`, `telemetry.json`).
   See: [Stop-gates](tier2_roster/tier2_dependency_import_hygiene_roster.md#32-stop-gates-and-implementation-checklists)
-- [ ] No pointer artifacts (`latest_*` / `current_*`).
+- [x] No pointer artifacts (`latest_*` / `current_*`) in HOP paths.
   See: [Stop-gates](tier2_roster/tier2_dependency_import_hygiene_roster.md#32-stop-gates-and-implementation-checklists)
-- [ ] Output root aligned to HOP contract
+  Note: S41R-006 uses `latest_*` in rawview by design (utility, non-HOP).
+- [x] Output root aligned to HOP contract
   (`.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/`).
   See: [Contract snapshot](tier2_roster/tier2_dependency_import_hygiene_roster.md#23-current-vs-target-contract-snapshot-stage-41)
-- [ ] Tier-3 eligible (Stage 4.1 Tier-2 depth captured; ready for Tier-3 extraction).
+- [x] Tier-3 YAMLs created for all 6 scripts.
   See: [Records index](tier2_roster/tier2_dependency_import_hygiene_roster.md#311-records-index)
 
 **Target contract (locked decisions):**
@@ -932,14 +933,15 @@ These are Stage 4.1 readiness gates after all Tier-2 DONE script gates are close
 - Base package is present: `manifest.json`, `summary.md`, `telemetry.json`.
 - Discovery is timestamp-based only (no pointer files such as `latest_*`).
 
-**Current evidence (Stage 4.1):**
+**Current evidence (Stage 4.1) — Verified 2026-02-04:**
 
-- HealthView bundle root is still under `.repo_studios/command_center/reports/healthview/...`
-  (not the canonical target root).
-- Base package artifacts (`manifest.json`, `summary.md`, `telemetry.json`) are observed
-  in current runs.
-- Pointer artifacts remain a stop-gate (cleanup planning and mypy baselines flows write
-  `latest_*` artifacts in rawview roots).
+- ✅ HealthView bundle roots aligned to HOP contract:
+  - Orchestrator: `.repo_studios/reports/healthview/orchestrator_reports/dependency_import_hygiene/<YYYYMMDD-HHMM>/`
+  - Producers: `.repo_studios/reports/healthview/producer_reports/<topic>/<YYYYMMDD-HHMM>/`
+  - Utility (S41R-006): `.repo_studios/command_center/reports/rawview/mypy_baselines/` (non-HOP by design)
+- ✅ Base package artifacts (`manifest.json`, `summary.md`, `telemetry.json`) present in all HOP-compliant bundles.
+- ✅ No pointer artifacts in HOP paths — S41R-006 uses `latest_*` in rawview (utility design exception).
+- ✅ All 6 scripts inspected via Stage 12 prompt system (see Tier-2 Agent Router blocks).
 - Details and evidence live in the Stage 4.1 Tier-2 roster:
   [Current vs Target snapshot](tier2_roster/tier2_dependency_import_hygiene_roster.md#23-current-vs-target-contract-snapshot-stage-41),
   [Stop-gates](tier2_roster/tier2_dependency_import_hygiene_roster.md#32-stop-gates-and-implementation-checklists).
@@ -962,9 +964,9 @@ typical in CI, with linting and mypy dominating when baseline refresh is enabled
 | ------ | -------- | ------- | ----------- |
 | `generate_dependency_hygiene_report.py` | Producer | Analyze `requirements.txt`/`pyproject.toml`, detect unused dependencies, version conflicts | [tier3_generate_dependency_hygiene_report.yaml](tier3_scripts/dependency_import_hygiene/tier3_generate_dependency_hygiene_report.yaml) |
 | `generate_import_graph_report.py` | Producer (optional) | Build import graph, detect cycles, compute coupling metrics | [tier3_generate_import_graph_report.yaml](tier3_scripts/dependency_import_hygiene/tier3_generate_import_graph_report.yaml) |
-| `scan_code_placeholders.py` | Producer | Extract TODO/FIXME/HACK comments from code, track technical debt markers | TBD |
-| `generate_typecheck_report.py` | Producer (optional) | Run mypy, collect type errors, categorize by severity | TBD |
-| `refresh_mypy_baselines.py` | Utility (optional) | Update mypy baseline files after type errors are resolved | TBD |
+| `scan_code_placeholders.py` | Producer | Extract TODO/FIXME/HACK comments from code, track technical debt markers | [tier3_scan_code_placeholders.yaml](tier3_scripts/dependency_import_hygiene/tier3_scan_code_placeholders.yaml) |
+| `generate_typecheck_report.py` | Producer (optional) | Run mypy, collect type errors, categorize by severity | [tier3_generate_typecheck_report.yaml](tier3_scripts/dependency_import_hygiene/tier3_generate_typecheck_report.yaml) |
+| `refresh_mypy_baselines.py` | Utility (optional) | Update mypy baseline files after type errors are resolved | [tier3_refresh_mypy_baselines.yaml](tier3_scripts/dependency_import_hygiene/tier3_refresh_mypy_baselines.yaml) |
 
 **Inputs:**
 
@@ -1114,17 +1116,17 @@ enabled; trend aggregation scales with the configured history window (from docst
 
 **Orchestrator:**
 [run_monkey_patch_oversight.py](../../../command_center/scripts/orchestrators/run_monkey_patch_oversight.py)
-(735 lines)
+(1240 lines)
 
 **Invoked Scripts (5):**
 
 | Script | Category | Purpose | Tier-3 YAML |
 | ------ | -------- | ------- | ----------- |
-| `scan_monkey_patches.py` | Producer | Detect monkey patches via AST analysis, extract patch locations with Git enrichment | TBD |
-| `classify_monkey_patches.py` | Consumer | Categorize patches (test fixture, workaround, production risk) into risk bundles | TBD |
-| `analyze_monkey_patch_trends.py` | Aggregator | Track patch count over time across multiple runs, identify growth patterns | TBD |
-| `summarize_monkey_patch_overview.py` | Summarizer | Generate HealthView overview bundle with cross-run comparisons | TBD |
-| `monkey_patch_risk.py` | Utility | Compute risk score per patch based on scope, target, frequency (registered for catalog) | TBD |
+| `scan_monkey_patches.py` | Producer | Detect monkey patches via AST analysis, extract patch locations with Git enrichment | [tier3_scan_monkey_patches.yaml](tier3_scripts/monkey_patch_oversight/tier3_scan_monkey_patches.yaml) |
+| `classify_monkey_patches.py` | Consumer | Categorize patches (test fixture, workaround, production risk) into risk bundles | [tier3_classify_monkey_patches.yaml](tier3_scripts/monkey_patch_oversight/tier3_classify_monkey_patches.yaml) |
+| `analyze_monkey_patch_trends.py` | Aggregator | Track patch count over time across multiple runs, identify growth patterns | [tier3_analyze_monkey_patch_trends.yaml](tier3_scripts/monkey_patch_oversight/tier3_analyze_monkey_patch_trends.yaml) |
+| `summarize_monkey_patch_overview.py` | Summarizer | Generate HealthView overview bundle with cross-run comparisons | [tier3_summarize_monkey_patch_overview.yaml](tier3_scripts/monkey_patch_oversight/tier3_summarize_monkey_patch_overview.yaml) |
+| `monkey_patch_risk.py` | Utility | Compute risk score per patch based on scope, target, frequency (registered for catalog) | N/A (utility) |
 
 **Inputs:**
 
@@ -1168,9 +1170,9 @@ enabled; trend aggregation scales with the configured history window (from docst
 - Pipeline steps: producer, consumer, aggregator, summarizer (4-step sequential with fail-fast
   on summarizer, lines 658-665)
 
-**Status:** `Operational (partial hardening)` – 4-script pipeline verified, 4-7 min runtime
-confirmed, 4 skip flags documented, Git enrichment capability validated,
-trend analysis with configurable history window confirmed
+**Status:** `Operational (Phase 4 complete 2026-02-05)` – All 6 scripts have Agent Router blocks,
+Tier-3 YAML manifests validated, 4-7 min runtime confirmed, Git enrichment validated,
+trend analysis with configurable history window confirmed, Stage 12 prompt system inspection complete
 
 **Planned Expansions:**
 
@@ -1184,7 +1186,7 @@ trend analysis with configurable history window confirmed
 **Evidence:**
 
 - Code: `.repo_studios/command_center/scripts/orchestrators/run_monkey_patch_oversight.py`
-  (lines 1-735)
+  (lines 1-1240)
   - Script constants: Lines 48-60 (6 script paths including utility and summarizer)
   - Default paths: Lines 63-68 (6 output directories)
   - Option parsing: Lines 254-279 (`build_options()`)
@@ -1195,7 +1197,9 @@ trend analysis with configurable history window confirmed
   - Pipeline definition: Lines 658-665 (4-step pipeline with fail-fast on summarizer)
   - Telemetry/manifest: Lines 670-691 (telemetry payload, artifacts section, manifest assembly)
   - Report bundle write: Lines 707-716 (3 artifacts, HealthView retention)
+  - Agent Router block: Lines 1045-1240 (Phase 4 complete 2026-02-05)
 - Tests: `.repo_studios/tests/tests_command_center/orchestrators/test_run_monkey_patch_oversight.py`
+- Build doc: `tier2_roster/working_docs/stage_5_1/S51R-001_run_monkey_patch_oversight_build.md`
 
 ---
 
@@ -1282,11 +1286,11 @@ upper bound. This Stage 6.1 orchestrator supersedes older ad-hoc entry points (n
 
 | Script | Category | Purpose | Tier-3 YAML |
 | ------ | -------- | ------- | ----------- |
-| `generate_standards_index.py` | Producer | Scan `docs/standards/`, extract rules, build compliance index with integrity hash | TBD |
-| `analyze_standards_index_gaps.py` | Producer | Identify standards coverage gaps across markdown sources, build gap report with candidate suggestions | TBD |
-| `diff_standards_index.py` | Producer | Compare current vs. baseline index, identify additions/removals/changes, optional fail-on policy | TBD |
-| `seed_standards_prompts.py` | Producer | Generate AI agent prompt bundles from standards with configurable formats (text/yaml/json) | TBD |
-| `summarize_standards.py` | Summarizer | Synthesize standards metrics, compliance scores, gap analysis | TBD |
+| `generate_standards_index.py` | Producer | Scan `docs/standards/`, extract rules, build compliance index with integrity hash | [tier3_generate_standards_index.yaml](tier3_scripts/standards_integrity/tier3_generate_standards_index.yaml) |
+| `analyze_standards_index_gaps.py` | Producer | Identify standards coverage gaps across markdown sources, build gap report with candidate suggestions | [tier3_analyze_standards_index_gaps.yaml](tier3_scripts/standards_integrity/tier3_analyze_standards_index_gaps.yaml) |
+| `diff_standards_index.py` | Producer | Compare current vs. baseline index, identify additions/removals/changes, optional fail-on policy | [tier3_diff_standards_index.yaml](tier3_scripts/standards_integrity/tier3_diff_standards_index.yaml) |
+| `seed_standards_prompts.py` | Producer | Generate AI agent prompt bundles from standards with configurable formats (text/yaml/json) | [tier3_seed_standards_prompts.yaml](tier3_scripts/standards_integrity/tier3_seed_standards_prompts.yaml) |
+| `summarize_standards.py` | Summarizer | Synthesize standards metrics, compliance scores, gap analysis | [tier3_summarize_standards.yaml](tier3_scripts/standards_integrity/tier3_summarize_standards.yaml) |
 
 **Inputs:**
 

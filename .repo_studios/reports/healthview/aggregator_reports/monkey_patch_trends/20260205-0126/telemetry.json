@@ -1,0 +1,42 @@
+{
+  "artifacts": {
+    "bundle_summary": "bundle_summary.json",
+    "trend_json": "trend.json",
+    "trend_md": "trend.md"
+  },
+  "generated_at": "2026-02-05T01:26:34+00:00",
+  "latest": {
+    "cur": {
+      "counts": {
+        "HIGH": 10,
+        "MODERATE": 0,
+        "SAFE": 0
+      },
+      "total": 10,
+      "ts": "2026-02-05T01:26:34+00:00"
+    },
+    "delta": {
+      "HIGH": -5,
+      "MODERATE": -51,
+      "SAFE": -56
+    },
+    "prev": {
+      "counts": {
+        "HIGH": 15,
+        "MODERATE": 51,
+        "SAFE": 56
+      },
+      "total": 122,
+      "ts": "2026-02-04T19:02:53+00:00"
+    }
+  },
+  "mode": "consumer",
+  "notes": [],
+  "repo_root": "C:\\Users\\genet\\repo_studios",
+  "run_timestamp": "20260205-0126",
+  "runs_considered": 3,
+  "schema_version": 1,
+  "status": "ok",
+  "topic": "monkey_patch_trends",
+  "viewer": "healthview"
+}

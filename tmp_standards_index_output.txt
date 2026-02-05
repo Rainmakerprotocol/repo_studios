@@ -1,0 +1,15 @@
+DEBUG: DB_INTEGRATION_MARKER: Database writes DORMANT
+ERROR: build failed: Category mapping file not found: C:\Users\genet\repo_studios\.repo_studios\scripts\.repo_studios\standards_categories.yaml
+Traceback (most recent call last):
+  File "C:\Users\genet\repo_studios\.repo_studios\scripts\producers\generate_standards_index.py", line 717, in main
+    index, stats = build_index(paths)
+                   ~~~~~~~~~~~^^^^^^^
+  File "C:\Users\genet\repo_studios\.repo_studios\scripts\producers\generate_standards_index.py", line 343, in build_index
+    categories, sources = _load_categories(paths)
+                          ~~~~~~~~~~~~~~~~^^^^^^^
+  File "C:\Users\genet\repo_studios\.repo_studios\scripts\producers\generate_standards_index.py", line 134, in _load_categories
+    raise FileNotFoundError(f"Category mapping file not found: {paths.categories_file}")
+FileNotFoundError: Category mapping file not found: C:\Users\genet\repo_studios\.repo_studios\scripts\.repo_studios\standards_categories.yaml
+DEBUG: Wrote manifest to C:\Users\genet\repo_studios\.repo_studios\reports\healthview\producer_reports\standards_index\20260205-0202\manifest.json
+DEBUG: Wrote summary to C:\Users\genet\repo_studios\.repo_studios\reports\healthview\producer_reports\standards_index\20260205-0202\summary.md
+DEBUG: Wrote telemetry to C:\Users\genet\repo_studios\.repo_studios\reports\healthview\producer_reports\standards_index\20260205-0202\telemetry.json

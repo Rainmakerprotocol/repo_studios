@@ -1,0 +1,408 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-02-05T01:26:34+00:00",
+  "source": "structured",
+  "scan_dir": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\producer_reports\\monkey_patch_scans\\20260205-0126",
+  "producer_report": null,
+  "artifacts": {
+    "summary_json": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\consumer_reports\\monkey_patch_risk\\20260205-0126\\summary.json",
+    "summary_md": "C:\\Users\\genet\\repo_studios\\.repo_studios\\reports\\healthview\\consumer_reports\\monkey_patch_risk\\20260205-0126\\summary.md"
+  },
+  "counts_by_risk": {
+    "HIGH": 10
+  },
+  "top_files": [
+    [
+      ".repo_studios\\command_center\\scripts\\aggregators\\scan_duplicates.py",
+      1
+    ],
+    [
+      ".repo_studios\\command_center\\scripts\\orchestrators\\run_automation_dry_run.py",
+      1
+    ],
+    [
+      ".repo_studios\\command_center\\scripts\\orchestrators\\run_available_scripts_oversight.py",
+      1
+    ],
+    [
+      ".repo_studios\\command_center\\scripts\\orchestrators\\run_command_center_pipeline.py",
+      1
+    ],
+    [
+      ".repo_studios\\command_center\\scripts\\orchestrators\\run_dependency_import_hygiene.py",
+      1
+    ],
+    [
+      ".repo_studios\\command_center\\scripts\\orchestrators\\run_docs_health_overview.py",
+      1
+    ],
+    [
+      ".repo_studios\\command_center\\scripts\\orchestrators\\run_fault_diagnostics_overview.py",
+      1
+    ],
+    [
+      ".repo_studios\\command_center\\scripts\\orchestrators\\run_monkey_patch_oversight.py",
+      1
+    ],
+    [
+      ".repo_studios\\command_center\\scripts\\orchestrators\\run_standards_integrity.py",
+      1
+    ],
+    [
+      ".repo_studios\\command_center\\scripts\\orchestrators\\run_test_execution_telemetry.py",
+      1
+    ]
+  ],
+  "top_categories": [
+    [
+      "sys_modules_assignment",
+      10
+    ]
+  ],
+  "run_metadata": {
+    "schema_version": 1,
+    "viewer": "healthview",
+    "topic": "monkey_patch_scans",
+    "run_timestamp": "20260205-0126",
+    "generated_at": "2026-02-05T01:26:34.548872+00:00",
+    "status": "ok",
+    "git_sha": null,
+    "repo_root": "C:\\Users\\genet\\repo_studios",
+    "inputs": {
+      "scan_root": ".repo_studios\\command_center\\scripts",
+      "project_packages": [
+        "tests"
+      ],
+      "exclude_dirs": [
+        ".founder_files",
+        ".git",
+        ".venv",
+        "__pycache__",
+        "build",
+        "dist",
+        "external",
+        "libraries",
+        "node_modules",
+        "venv",
+        "z_FUTURE_IMPIMENTATIONS",
+        "zzz_agent_repos"
+      ],
+      "exclude_globs": [
+        "**/site-packages/**",
+        "**/zzz_agent_repos/**",
+        ".founder_files/**",
+        "external/**",
+        "libraries/**",
+        "scripts/test_torch_vision_audio.py",
+        "src/audio/**",
+        "src/vision/**"
+      ],
+      "context_lines": 2,
+      "with_git": false,
+      "strict": false,
+      "keep": 5,
+      "timestamp": "20260205-0126"
+    },
+    "catalog": [
+      {
+        "artifact": "manifest.json",
+        "path": ".repo_studios/reports/healthview/producer_reports/monkey_patch_scans/20260205-0126/manifest.json"
+      },
+      {
+        "artifact": "summary.md",
+        "path": ".repo_studios/reports/healthview/producer_reports/monkey_patch_scans/20260205-0126/summary.md"
+      },
+      {
+        "artifact": "telemetry.json",
+        "path": ".repo_studios/reports/healthview/producer_reports/monkey_patch_scans/20260205-0126/telemetry.json"
+      }
+    ],
+    "provenance": {
+      "script": "scan_monkey_patches.py",
+      "trigger": "cli"
+    },
+    "payload": {
+      "timestamp": "2026-02-05T01:26:34.548872+00:00",
+      "scan_root": ".repo_studios\\command_center\\scripts",
+      "files_scanned": 25,
+      "files_with_findings": 10,
+      "total_findings": 10,
+      "parse_errors": 0,
+      "duration_ms": 504,
+      "summary": {
+        "by_category": {
+          "sys_modules_assignment": 10
+        },
+        "by_import_base": {},
+        "top_files": [
+          {
+            "path": ".repo_studios\\command_center\\scripts\\aggregators\\scan_duplicates.py",
+            "count": 1
+          },
+          {
+            "path": ".repo_studios\\command_center\\scripts\\orchestrators\\run_automation_dry_run.py",
+            "count": 1
+          },
+          {
+            "path": ".repo_studios\\command_center\\scripts\\orchestrators\\run_available_scripts_oversight.py",
+            "count": 1
+          },
+          {
+            "path": ".repo_studios\\command_center\\scripts\\orchestrators\\run_command_center_pipeline.py",
+            "count": 1
+          },
+          {
+            "path": ".repo_studios\\command_center\\scripts\\orchestrators\\run_dependency_import_hygiene.py",
+            "count": 1
+          },
+          {
+            "path": ".repo_studios\\command_center\\scripts\\orchestrators\\run_docs_health_overview.py",
+            "count": 1
+          },
+          {
+            "path": ".repo_studios\\command_center\\scripts\\orchestrators\\run_fault_diagnostics_overview.py",
+            "count": 1
+          },
+          {
+            "path": ".repo_studios\\command_center\\scripts\\orchestrators\\run_monkey_patch_oversight.py",
+            "count": 1
+          },
+          {
+            "path": ".repo_studios\\command_center\\scripts\\orchestrators\\run_standards_integrity.py",
+            "count": 1
+          },
+          {
+            "path": ".repo_studios\\command_center\\scripts\\orchestrators\\run_test_execution_telemetry.py",
+            "count": 1
+          }
+        ],
+        "total_findings_test": 0,
+        "total_findings_non_test": 10,
+        "module_scope_total": 10,
+        "module_scope_test": 0,
+        "module_scope_non_test": 10,
+        "by_category_test": {},
+        "by_category_non_test": {
+          "sys_modules_assignment": 10
+        },
+        "top_files_test": [],
+        "top_files_non_test": [
+          {
+            "path": ".repo_studios\\command_center\\scripts\\aggregators\\scan_duplicates.py",
+            "count": 1
+          },
+          {
+            "path": ".repo_studios\\command_center\\scripts\\orchestrators\\run_automation_dry_run.py",
+            "count": 1
+          },
+          {
+            "path": ".repo_studios\\command_center\\scripts\\orchestrators\\run_available_scripts_oversight.py",
+            "count": 1
+          },
+          {
+            "path": ".repo_studios\\command_center\\scripts\\orchestrators\\run_command_center_pipeline.py",
+            "count": 1
+          },
+          {
+            "path": ".repo_studios\\command_center\\scripts\\orchestrators\\run_dependency_import_hygiene.py",
+            "count": 1
+          },
+          {
+            "path": ".repo_studios\\command_center\\scripts\\orchestrators\\run_docs_health_overview.py",
+            "count": 1
+          },
+          {
+            "path": ".repo_studios\\command_center\\scripts\\orchestrators\\run_fault_diagnostics_overview.py",
+            "count": 1
+          },
+          {
+            "path": ".repo_studios\\command_center\\scripts\\orchestrators\\run_monkey_patch_oversight.py",
+            "count": 1
+          },
+          {
+            "path": ".repo_studios\\command_center\\scripts\\orchestrators\\run_standards_integrity.py",
+            "count": 1
+          },
+          {
+            "path": ".repo_studios\\command_center\\scripts\\orchestrators\\run_test_execution_telemetry.py",
+            "count": 1
+          }
+        ],
+        "_extended_schema_version": 1,
+        "_extended_total_findings": 10
+      },
+      "findings": [
+        {
+          "file": ".repo_studios\\command_center\\scripts\\aggregators\\scan_duplicates.py",
+          "line": 304,
+          "code": "    sys.modules[module_name] = module",
+          "category": "sys_modules_assignment",
+          "intent": "module injection/aliasing",
+          "import_base": null,
+          "is_test": false,
+          "is_module_scope": true,
+          "function": null,
+          "class_name": null,
+          "nearby_comment": null,
+          "context": "    1:         raise ImportError(f\"Unable to load module from {script_path}\")\n    2:     module = importlib.util.module_from_spec(spec)\n    3:     sys.modules[module_name] = module\n    4:     spec.loader.exec_module(module)\n    5:     return module",
+          "git_author": null,
+          "git_commit": null,
+          "git_commit_date": null
+        },
+        {
+          "file": ".repo_studios\\command_center\\scripts\\orchestrators\\run_automation_dry_run.py",
+          "line": 49,
+          "code": "    sys.modules[module_name] = module",
+          "category": "sys_modules_assignment",
+          "intent": "module injection/aliasing",
+          "import_base": null,
+          "is_test": false,
+          "is_module_scope": true,
+          "function": null,
+          "class_name": null,
+          "nearby_comment": null,
+          "context": "    1:         raise ImportError(f\"Unable to load module from {script_path}\")\n    2:     module = importlib.util.module_from_spec(spec)\n    3:     sys.modules[module_name] = module\n    4:     spec.loader.exec_module(module)\n    5:     return module",
+          "git_author": null,
+          "git_commit": null,
+          "git_commit_date": null
+        },
+        {
+          "file": ".repo_studios\\command_center\\scripts\\orchestrators\\run_available_scripts_oversight.py",
+          "line": 387,
+          "code": "        sys.modules[module_name] = module",
+          "category": "sys_modules_assignment",
+          "intent": "module injection/aliasing",
+          "import_base": null,
+          "is_test": false,
+          "is_module_scope": true,
+          "function": null,
+          "class_name": null,
+          "nearby_comment": null,
+          "context": "    1:             raise ImportError(f\"Unable to load module from {script_abs}\")\n    2:         module = importlib.util.module_from_spec(spec)\n    3:         sys.modules[module_name] = module\n    4:         spec.loader.exec_module(module)\n    5:     func = getattr(module, attribute, None)",
+          "git_author": null,
+          "git_commit": null,
+          "git_commit_date": null
+        },
+        {
+          "file": ".repo_studios\\command_center\\scripts\\orchestrators\\run_command_center_pipeline.py",
+          "line": 104,
+          "code": "    sys.modules[module_name] = module",
+          "category": "sys_modules_assignment",
+          "intent": "module injection/aliasing",
+          "import_base": null,
+          "is_test": false,
+          "is_module_scope": true,
+          "function": null,
+          "class_name": null,
+          "nearby_comment": null,
+          "context": "    1:         raise ImportError(f\"Unable to load module from {script_path}\")\n    2:     module = importlib.util.module_from_spec(spec)\n    3:     sys.modules[module_name] = module\n    4:     spec.loader.exec_module(module)\n    5:     return module",
+          "git_author": null,
+          "git_commit": null,
+          "git_commit_date": null
+        },
+        {
+          "file": ".repo_studios\\command_center\\scripts\\orchestrators\\run_dependency_import_hygiene.py",
+          "line": 620,
+          "code": "        sys.modules[module_name] = module",
+          "category": "sys_modules_assignment",
+          "intent": "module injection/aliasing",
+          "import_base": null,
+          "is_test": false,
+          "is_module_scope": true,
+          "function": null,
+          "class_name": null,
+          "nearby_comment": null,
+          "context": "    1:             raise ImportError(f\"Unable to load module from {script_path}\")\n    2:         module = importlib.util.module_from_spec(spec)\n    3:         sys.modules[module_name] = module\n    4:         spec.loader.exec_module(module)\n    5:     func = getattr(module, attribute, None)",
+          "git_author": null,
+          "git_commit": null,
+          "git_commit_date": null
+        },
+        {
+          "file": ".repo_studios\\command_center\\scripts\\orchestrators\\run_docs_health_overview.py",
+          "line": 654,
+          "code": "        sys.modules[module_name] = module",
+          "category": "sys_modules_assignment",
+          "intent": "module injection/aliasing",
+          "import_base": null,
+          "is_test": false,
+          "is_module_scope": true,
+          "function": null,
+          "class_name": null,
+          "nearby_comment": null,
+          "context": "    1:             raise ImportError(f\"Unable to load module from {script_abs}\")\n    2:         module = importlib.util.module_from_spec(spec)\n    3:         sys.modules[module_name] = module\n    4:         spec.loader.exec_module(module)\n    5:     func = getattr(module, attribute, None)",
+          "git_author": null,
+          "git_commit": null,
+          "git_commit_date": null
+        },
+        {
+          "file": ".repo_studios\\command_center\\scripts\\orchestrators\\run_fault_diagnostics_overview.py",
+          "line": 331,
+          "code": "        sys.modules[module_name] = module",
+          "category": "sys_modules_assignment",
+          "intent": "module injection/aliasing",
+          "import_base": null,
+          "is_test": false,
+          "is_module_scope": true,
+          "function": null,
+          "class_name": null,
+          "nearby_comment": null,
+          "context": "    1:             raise ImportError(f\"Unable to load module from {script_abs}\")\n    2:         module = importlib.util.module_from_spec(spec)\n    3:         sys.modules[module_name] = module\n    4:         spec.loader.exec_module(module)\n    5:     func = getattr(module, attribute, None)",
+          "git_author": null,
+          "git_commit": null,
+          "git_commit_date": null
+        },
+        {
+          "file": ".repo_studios\\command_center\\scripts\\orchestrators\\run_monkey_patch_oversight.py",
+          "line": 508,
+          "code": "        sys.modules[module_name] = module",
+          "category": "sys_modules_assignment",
+          "intent": "module injection/aliasing",
+          "import_base": null,
+          "is_test": false,
+          "is_module_scope": true,
+          "function": null,
+          "class_name": null,
+          "nearby_comment": null,
+          "context": "    1:             raise ImportError(f\"Unable to load module from {script_path}\")\n    2:         module = importlib.util.module_from_spec(spec)\n    3:         sys.modules[module_name] = module\n    4:         spec.loader.exec_module(module)\n    5:     func = getattr(module, attribute, None)",
+          "git_author": null,
+          "git_commit": null,
+          "git_commit_date": null
+        },
+        {
+          "file": ".repo_studios\\command_center\\scripts\\orchestrators\\run_standards_integrity.py",
+          "line": 333,
+          "code": "        sys.modules[module_name] = module",
+          "category": "sys_modules_assignment",
+          "intent": "module injection/aliasing",
+          "import_base": null,
+          "is_test": false,
+          "is_module_scope": true,
+          "function": null,
+          "class_name": null,
+          "nearby_comment": null,
+          "context": "    1:             raise ImportError(f\"Unable to load module from {script_path}\")\n    2:         module = importlib.util.module_from_spec(spec)\n    3:         sys.modules[module_name] = module\n    4:         spec.loader.exec_module(module)\n    5:     func = getattr(module, attribute, None)",
+          "git_author": null,
+          "git_commit": null,
+          "git_commit_date": null
+        },
+        {
+          "file": ".repo_studios\\command_center\\scripts\\orchestrators\\run_test_execution_telemetry.py",
+          "line": 561,
+          "code": "    sys.modules[module_name] = module",
+          "category": "sys_modules_assignment",
+          "intent": "module injection/aliasing",
+          "import_base": null,
+          "is_test": false,
+          "is_module_scope": true,
+          "function": null,
+          "class_name": null,
+          "nearby_comment": null,
+          "context": "    1:         raise ImportError(f\"Unable to load module from {script_path}\")\n    2:     module = importlib.util.module_from_spec(spec)\n    3:     sys.modules[module_name] = module\n    4:     spec.loader.exec_module(module)\n    5:     run_callable = getattr(module, \"run\", None)",
+          "git_author": null,
+          "git_commit": null,
+          "git_commit_date": null
+        }
+      ]
+    }
+  }
+}

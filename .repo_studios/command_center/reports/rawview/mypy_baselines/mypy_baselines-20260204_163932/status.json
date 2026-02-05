@@ -1,0 +1,12 @@
+{
+  "generated_utc": "2026-02-04T16:39:32.269615+00:00",
+  "run_slug": "20260204_163932",
+  "status": "ok",
+  "targets": [
+    {
+      "exit_code": 0,
+      "filename": "mypy_test.txt",
+      "label": "test_target"
+    }
+  ]
+}

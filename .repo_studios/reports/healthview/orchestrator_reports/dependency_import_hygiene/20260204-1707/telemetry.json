@@ -1,0 +1,73 @@
+{
+  "finished_at": "2026-02-04T17:07:07.537145+00:00",
+  "metrics": {
+    "artifact_bytes": 7649,
+    "artifact_files": 3,
+    "runtime_seconds": 6.956266,
+    "step_count": 6,
+    "steps_failed": 0,
+    "steps_skipped": 4,
+    "steps_succeeded": 2
+  },
+  "run_slug": "20260204-1707",
+  "started_at": "2026-02-04T17:07:00.580879+00:00",
+  "steps": [
+    {
+      "detail": "dependency hygiene completed",
+      "finished_at": "2026-02-04T17:07:00.614649+00:00",
+      "name": "dependency",
+      "payload": {
+        "issue_count": 0,
+        "pyproject_scanned": true,
+        "requirements_scanned": 2,
+        "status": "passed"
+      },
+      "started_at": "2026-02-04T17:07:00.580885+00:00",
+      "status": "success"
+    },
+    {
+      "detail": "import graph step skipped via flag",
+      "finished_at": "2026-02-04T17:07:00.614663+00:00",
+      "name": "import_graph",
+      "started_at": "2026-02-04T17:07:00.614659+00:00",
+      "status": "skipped"
+    },
+    {
+      "detail": "total matches 11",
+      "finished_at": "2026-02-04T17:07:07.536997+00:00",
+      "name": "placeholders",
+      "payload": {
+        "allowlist_size": 5,
+        "status": "ok",
+        "total_matches": 11,
+        "unallowlisted_matches": 6
+      },
+      "started_at": "2026-02-04T17:07:00.614713+00:00",
+      "status": "success"
+    },
+    {
+      "detail": "batch cleanup skipped via flag",
+      "finished_at": "2026-02-04T17:07:07.537010+00:00",
+      "name": "cleanup",
+      "started_at": "2026-02-04T17:07:07.537007+00:00",
+      "status": "skipped"
+    },
+    {
+      "detail": "typecheck skipped via flag",
+      "finished_at": "2026-02-04T17:07:07.537066+00:00",
+      "name": "typecheck",
+      "started_at": "2026-02-04T17:07:07.537062+00:00",
+      "status": "skipped"
+    },
+    {
+      "detail": "baseline refresh not requested",
+      "finished_at": "2026-02-04T17:07:07.537106+00:00",
+      "name": "refresh_baselines",
+      "started_at": "2026-02-04T17:07:07.537102+00:00",
+      "status": "skipped"
+    }
+  ],
+  "success": true,
+  "topic": "dependency-import-hygiene",
+  "viewer": "healthview"
+}

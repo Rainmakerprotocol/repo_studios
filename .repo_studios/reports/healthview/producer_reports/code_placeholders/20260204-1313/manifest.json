@@ -1,0 +1,143 @@
+{
+  "schema_version": 1,
+  "viewer": "healthview",
+  "topic": "code_placeholders",
+  "status": "ok",
+  "timestamp": "2026-02-04T13:13:41.456622+00:00",
+  "generated_utc": "2026-02-04T13:13:41.456622+00:00",
+  "run_timestamp": "20260204-1313",
+  "run_id": "20260204-1313",
+  "repo_root": "C:\\Users\\genet\\repo_studios",
+  "bundle_dir": ".repo_studios/reports/healthview/producer_reports/code_placeholders/20260204-1313",
+  "scan_root": ".",
+  "include_extensions": [
+    ".js",
+    ".json",
+    ".md",
+    ".py",
+    ".ts",
+    ".txt",
+    ".yaml",
+    ".yml"
+  ],
+  "patterns": [
+    "FIXME",
+    "NOTE",
+    "OPTIMIZE",
+    "REVIEW",
+    "TODO",
+    "XXX"
+  ],
+  "allowlist_size": 0,
+  "exclude_prefixes": [
+    ".venv/",
+    "node_modules/"
+  ],
+  "exclude_segments": [
+    "site-packages"
+  ],
+  "default_exclusions_applied": true,
+  "total_matches": 12,
+  "summary": {
+    "by_pattern": {
+      "NOTE": 3,
+      "TODO": 1,
+      "XXX": 8
+    },
+    "by_extension": {
+      ".md": 9,
+      ".py": 2,
+      ".yaml": 1
+    }
+  },
+  "log": "status=ok\nrun_timestamp=20260204-1313\nscan_root=.\ntotal_matches=12\npatterns=FIXME,NOTE,OPTIMIZE,REVIEW,TODO,XXX\nextensions=.js,.json,.md,.py,.ts,.txt,.yaml,.yml\nallowlist_size=0\nby_pattern_NOTE=3\nby_pattern_TODO=1\nby_pattern_XXX=8\n",
+  "matches_total": 12,
+  "matches_sample_limit": 200,
+  "matches_sample_truncated": false,
+  "matches_sample": [
+    {
+      "path": ".repo_studios/command_center/docs/db_integration_template.md",
+      "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\docs\\db_integration_template.md",
+      "line": 161,
+      "pattern": "XXX",
+      "text": "# Line ~XXX in main() or run()"
+    },
+    {
+      "path": ".repo_studios/command_center/docs/db_integration_template.md",
+      "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\docs\\db_integration_template.md",
+      "line": 172,
+      "pattern": "XXX",
+      "text": "# Line ~XXX - write manifest"
+    },
+    {
+      "path": ".repo_studios/command_center/docs/db_integration_template.md",
+      "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\docs\\db_integration_template.md",
+      "line": 175,
+      "pattern": "XXX",
+      "text": "# Line ~XXX - write telemetry"
+    },
+    {
+      "path": ".repo_studios/command_center/scripts/libraries/retention_policy.py",
+      "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\command_center\\scripts\\libraries\\retention_policy.py",
+      "line": 253,
+      "pattern": "NOTE",
+      "text": "# NOTE: We intentionally do NOT call get_script_retention(script_key) here."
+    },
+    {
+      "path": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/stage12_templates/common/review_metaprompts.md",
+      "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\docs\\pipeline\\healthview_orchestration_pipeline\\stage12_templates\\common\\review_metaprompts.md",
+      "line": 555,
+      "pattern": "XXX",
+      "text": "* Gap ID(s) Resolved: Link to GAP-XXX from Section 5"
+    },
+    {
+      "path": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/stage12_templates/PROMPT_PHASE4_FINALIZE.md",
+      "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\docs\\pipeline\\healthview_orchestration_pipeline\\stage12_templates\\PROMPT_PHASE4_FINALIZE.md",
+      "line": 307,
+      "pattern": "XXX",
+      "text": "##### S21R-XXX {script_name}"
+    },
+    {
+      "path": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/stage12_templates/PROMPT_PHASE4_FINALIZE.md",
+      "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\docs\\pipeline\\healthview_orchestration_pipeline\\stage12_templates\\PROMPT_PHASE4_FINALIZE.md",
+      "line": 320,
+      "pattern": "XXX",
+      "text": "<!-- AGENT_ROUTER:START S21R-XXX -->"
+    },
+    {
+      "path": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/stage12_templates/PROMPT_PHASE4_FINALIZE.md",
+      "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\docs\\pipeline\\healthview_orchestration_pipeline\\stage12_templates\\PROMPT_PHASE4_FINALIZE.md",
+      "line": 321,
+      "pattern": "XXX",
+      "text": "### S21R-XXX \u2014 {script_name}"
+    },
+    {
+      "path": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/stage12_templates/PROMPT_PHASE4_FINALIZE.md",
+      "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\docs\\pipeline\\healthview_orchestration_pipeline\\stage12_templates\\PROMPT_PHASE4_FINALIZE.md",
+      "line": 323,
+      "pattern": "XXX",
+      "text": "<!-- AGENT_ROUTER:END S21R-XXX -->"
+    },
+    {
+      "path": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/stage_prefix_index.yaml",
+      "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\docs\\pipeline\\healthview_orchestration_pipeline\\tier2_roster\\stage_prefix_index.yaml",
+      "line": 113,
+      "pattern": "NOTE",
+      "text": "# NOTE: library/ removed 2026-02-02 \u2014 no library scripts exist yet."
+    },
+    {
+      "path": ".repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_2_1/S21R-004_validate_markdown_anchors_build.md",
+      "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\docs\\pipeline\\healthview_orchestration_pipeline\\tier2_roster\\working_docs\\stage_2_1\\S21R-004_validate_markdown_anchors_build.md",
+      "line": 822,
+      "pattern": "TODO",
+      "text": "**Command:** `Select-String -Path \"BUILD_DOC_PATH\" -Pattern \"<[A-Z_]+>|TODO|TBD|PLACEHOLDER\"`"
+    },
+    {
+      "path": ".repo_studios/scripts/producers/scan_monkey_patches.py",
+      "absolute_path": "C:\\Users\\genet\\repo_studios\\.repo_studios\\scripts\\producers\\scan_monkey_patches.py",
+      "line": 94,
+      "pattern": "NOTE",
+      "text": "# NOTE: Keep the producer default topic aligned with the Stage 5.1 orchestrator naming."
+    }
+  ]
+}

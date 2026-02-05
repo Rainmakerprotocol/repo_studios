@@ -1,0 +1,56 @@
+DEBUG Categories file missing; falling back to index sources
+DEBUG DB_INTEGRATION_MARKER: Database writes DORMANT
+DEBUG Wrote manifest to C:\Users\genet\repo_studios\.repo_studios\reports\healthview\producer_reports\standards_index_gaps\20260205-0311\manifest.json
+DEBUG Wrote summary to C:\Users\genet\repo_studios\.repo_studios\reports\healthview\producer_reports\standards_index_gaps\20260205-0311\summary.md
+DEBUG Wrote telemetry to C:\Users\genet\repo_studios\.repo_studios\reports\healthview\producer_reports\standards_index_gaps\20260205-0311\telemetry.json
+INFO .repo_studios\docs\standards\global\std-global-code-cleanup.md: 4 candidate(s)
+INFO   L  37 | 8. Ensure each module, class, and function includes a clear and concise docstring.
+INFO   L  38 | 9. Prefer in-place changes, but fully rewrite files if a logical restructuring results in clearer logic or better maintainability.
+INFO   L  39 | 10. Use in-code annotations to explain why changes were made (to assist future agents).
+INFO   L 103 | - Prefer small, focused diffs. Avoid touching unrelated files.
+INFO .repo_studios\docs\standards\global\std-global-html-coding.md: 16 candidate(s)
+INFO   L  31 | - Use semantic HTML5 tags (`<header>`, `<main>`, `<footer>`, `<nav>`, `<section>`, `<article>`, etc.).
+INFO   L  32 | - Ensure every page includes:
+INFO   L  36 | - Use one `<h1>` per page.
+INFO   L  42 | - Use **kebab-case** for all `id` and `class` attributes:
+INFO   L  48 | - Prefer reusable class names over inline styles.
+INFO   L  49 | - Avoid vague class names (for example, `style1`, `x123`).
+INFO   L  53 | - Prefer Tailwind CSS or a shared utility layer for styling.
+INFO   L  54 | - Do not embed large `<style>` blocks inside HTML files.
+INFO   ... (+8 more)
+INFO .repo_studios\docs\standards\global\std-global-markdown-authoring.md: 17 candidate(s)
+INFO   L  47 | - Use top-level headings (`#`) to name the file purpose.
+INFO   L  48 | - Use second-level headings (`##`) for section groups (for example, `## Goals`, `## File Summary`, `## Agent Tasks`).
+INFO   L  49 | - Use third-level headings (`###`) only when subdividing known sections.
+INFO   L  50 | - Use bullet points or tables for enumerated items.
+INFO   L  51 | - Avoid overloading a single section with too many nested points ù prefer separation.
+INFO   L  67 | - Avoid ambiguous section headers like "Stuff", "Etc", or "Misc".
+INFO   L  70 | - Prefer explicit formatting over implied meaning ù avoid AI confusion.
+INFO   L  71 | - Ensure code examples are wrapped in triple backticks with proper language markers.
+INFO   ... (+9 more)
+INFO .repo_studios\docs\standards\global\std-global-python-engineering.md: 14 candidate(s)
+INFO   L  39 | - Enforce Ruff formatting and linting (`ruff format`, `ruff check --fix`) with repo configuration files.
+INFO   L  55 | - Use data containers (`dataclasses.dataclass`, `typing.NamedTuple`, or Pydantic models) for structured payloads.
+INFO   L  57 | - Avoid circular imports by pushing integration glue to `__main__` or dedicated wiring modules.
+INFO   L  87 | - Prefer `async def` for FastAPI routes or I/O-heavy orchestrators.
+INFO   L 122 | - Use the standard library `logging` module; never use `print()` in runtime paths.
+INFO   L 149 | - Document default values and override mechanisms in README or standards.
+INFO   L 175 | - Pin minimum versions in CI to expose breaking changes early; avoid blanket version upper bounds unless mandated by security policies.
+INFO   L 221 | - Ensure CI workflows mirror local commands; update pipeline definitions when adding new required validation steps.
+INFO   ... (+6 more)
+INFO .repo_studios\docs\standards\project\std-project-operating-standard.md: 6 candidate(s)
+INFO   L  25 | Use this document as the single source of truth for how Repo Studios projects are structured, validated, and kept in sync with automation. The guidance applies to all code and documentation inside the project workspace unless an approved override exists in `docs/standards/project/`.
+INFO   L  72 | - Prefer installing Git hooks with `make install-hooks` for anchor and slug hygiene.
+INFO   L  81 | - Avoid global mutable state and hardcoded paths; rely on typed settings objects and dependency injection.
+INFO   L 104 | Use these commands locally before opening pull requests to prevent CI churn.
+INFO   L 141 | - ensure-commands-run: ["pytest", "ruff check", "mypy"]
+INFO   L 147 | - ensure-anchor-check: true
+INFO .repo_studios\docs\standards\project\std-project-python-instructions.md: 7 candidate(s)
+INFO   L  25 | Use this guide to prevent repeated mistakes, apply pre-approved solutions, and capture new recurring issues with precise remediation steps. Agents may append to this document when a new recurring issue emerges and a fix can be clearly defined.
+INFO   L  31 | - Prefer Make targets for validation: `make qa` (runs lint, type-check, tests).
+INFO   L  32 | - Never hardcode secrets or tokens; read from environment variables such as `METRICS_API_TOKEN` or `INTERNAL_API_KEYS`.
+INFO   L  34 | - Use `api.server.get_db_path()` (or the injected dependency) instead of hardcoding database paths.
+INFO   L  58 | * Use clear function or variable names (for example, `convert_to_inches` not `x`).
+INFO   L  61 | * Use logging instead of `print` for production paths.
+INFO   L  62 | * Use list comprehensions where appropriate.
+INFO Total candidate directives: 64
