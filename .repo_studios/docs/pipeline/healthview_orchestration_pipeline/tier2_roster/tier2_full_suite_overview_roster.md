@@ -58,15 +58,35 @@ related_files:
   - ≥80% coverage on touched modules
   - updated Tier-1/Tier-2 docs
   - clean formatting/lint behavior
-- After meaningful checkbox edits, run `make -C .repo_studios doc-index` and record
-  the timestamp in the Update Log.
-- Workstream semantics:
-  - Workstream D (Tier-3 YAML) is the reward workstream and is conditional.
-    - If Tier-3 is allowed/required for a record, complete Workstream D and check its checkbox.
-    - If Tier-3 is not allowed/required, do not silently skip D: explicitly record
-      "Deferred: Tier-3 not appropriate" (or similar) in the record notes/evidence.
-  - Tier-2 DONE requires Workstreams A–C + E, plus an explicit Workstream D decision
-    (completed if required, otherwise explicitly deferred).
+
+### Stage 12 Prompt System (Script Inspection)
+
+When processing scripts in Stage 7, use the **Stage 12 prompt sequence** for systematic inspection:
+
+| Phase | Prompt | Purpose |
+|-------|--------|---------|
+| 0 | `PROMPT_ZERO.md` | Agent setup and context loading |
+| 1 | `PROMPT_PHASE1_BOOTSTRAP.md` | Build document creation, script identity |
+| 2 | `PROMPT_PHASE2_ANALYSIS.md` | CLI analysis, entry points, output verification |
+| 3 | `PROMPT_PHASE3_EVIDENCE.md` | Gap analysis, compliance evidence collection |
+| 4 | `PROMPT_PHASE4_FINALIZE.md` | Attestation, Tier-2/Tier-1 updates, git diff evidence |
+
+**Prompt Templates Location:** `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/stage12_templates/`
+
+**Build Document Output:** `tier2_roster/working_docs/stage_7/<RECORD_ID>_<script_name>_build.md`
+
+**Checkpoints per Phase:**
+- Phase 1: CHECKPOINT-0, CHECKPOINT-1
+- Phase 2: CHECKPOINT-2A, CHECKPOINT-2B, CHECKPOINT-3, CHECKPOINT-4
+- Phase 3: CHECKPOINT-5, CHECKPOINT-6, CHECKPOINT-7, CHECKPOINT-8
+- Phase 4: CHECKPOINT-9, CHECKPOINT-10
+
+### Workstream Semantics
+
+- Workstream A–C + E are required for Tier-2 DONE.
+- Workstream D (Tier-3 YAML) is conditional:
+  - If Tier-3 is allowed/required: complete Workstream D and check its checkbox.
+  - If Tier-3 is not allowed/required: explicitly record "Deferred: Tier-3 not appropriate".
 
 ---
 
@@ -330,83 +350,103 @@ Implementation checkpoints:
 
 Populate one block per script in the chain. Keep each record concise and evidence-backed.
 
-##### S7R-001 full-diagnostic meta-orchestrator
+<!-- AGENT_ROUTER:START S7R-001 -->
+### S7R-001 — orchestrate_full_diagnostic.py
 
-```yaml
-record_id: "S7R-001"
-script:
-  path: ".repo_studios/command_center/scripts/orchestrators/orchestrate_full_diagnostic.py"
-  name: "orchestrate_full_diagnostic.py"
-  category: "orchestrator"
-tier3:
-  metadata_block_version: "v1"
-  allowed: false
-  exists: false
-  name: "tier3_orchestrate_full_diagnostic.yaml"
-  meets_template: "NA"
-  last_updated: null
-cli_surfaces:
-  run_entrypoint: "run(argv)"
-  key_flags:
-    - "--repo-root"
-    - "--reports-root"
-    - "--log-level"
-    - "--timestamp"
-    - "--artifacts-to-keep"
-    - "--include"
-    - "--exclude"
-    - "--stop-on-first-failure / --keep-going"
-io_contract:
-  inputs:
-    - "Selects topics from TOPIC_DEFINITIONS; supports include/exclude"
-    - "Forwards --timestamp (ISO-8601) and derives run_slug as YYYYMMDD-HHMM (UTC)"
-  outputs:
-    current:
-      root: ".repo_studios/reports/healthview/orchestrator_reports/full_diagnostic/YYYYMMDD-HHMM/"
-      artifacts:
-        - "manifest.json"
-        - "summary.md"
-        - "telemetry.json"
-    target:
-      root: ".repo_studios/reports/healthview/<class>/<topic>/<timestamp>/"
-      artifacts:
-        - "manifest.json"
-        - "summary.md"
-        - "telemetry.json"
-retention:
-  surfaces:
-    - "--artifacts-to-keep"
-    - "write_report_artifacts(... keep=options.artifacts_to_keep)"
-  mechanism: "prune_by_keep_budget"
-  targets:
-    - ".repo_studios/reports/healthview/orchestrator_reports/full_diagnostic"
-  guardrails:
-    - "Topic record includes artifact_dir when HEALTHVIEW_TOPIC or TOPIC_SLUG is present"
-  evidence:
-    - "orchestrate_full_diagnostic.py: meta_run_slug formatting + report writer"
-db_integration:
-  gated_by: "REPO_STUDIOS_DB_ENABLED"
-  marker_required: true
-  marker_string: "DB_INTEGRATION_MARKER:"
-evidence:
-  code_refs:
-    - ".repo_studios/command_center/scripts/orchestrators/orchestrate_full_diagnostic.py#L36-L39"
-    - ".repo_studios/command_center/scripts/orchestrators/orchestrate_full_diagnostic.py#L175-L186"
-    - ".repo_studios/command_center/scripts/orchestrators/orchestrate_full_diagnostic.py#L320-L371"
-    - ".repo_studios/command_center/scripts/orchestrators/orchestrate_full_diagnostic.py#L510-L521"
-  tests:
-    - ".repo_studios/tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py"
-  fixtures: []
-record_status:
-  state: "in_progress"
-  next_action: "Close token-consistency stop-gate (fault_diagnostics topic) and keep bundle roots HOP-first."
-  stop_gates_open:
-    - "token_consistency:fault_diagnostics_overview"
-notes:
-  - "Meta bundle output root is HOP-aligned via build_topic_path('orchestrator', 'full_diagnostic')."
-  - "This orchestrator computes per-topic artifact_dir from module HEALTHVIEW_TOPIC (preferred) or TOPIC_SLUG."
-  - "Some modules still expose VIEWER_SLUG with legacy semantics; do not treat it as the HealthView surface slug."
+> **One-liner:** Meta orchestrator that executes every topic runner sequentially, producing a consolidated full-suite diagnostic snapshot.
+
+**Keywords:** `meta-orchestrator`, `full-diagnostic`, `healthview`, `pipeline`, `sequential`
+
+#### Resource Paths
+
+| Resource | Path |
+|----------|------|
+| Script | `.repo_studios/command_center/scripts/orchestrators/orchestrate_full_diagnostic.py` |
+| Tier-3 YAML | `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier3_scripts/full_suite_overview/tier3_orchestrate_full_diagnostic.yaml` |
+| Build Doc | `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_7/S7R-001_orchestrate_full_diagnostic_build.md` |
+| Output Root | `.repo_studios/reports/healthview/orchestrator_reports/full_diagnostic/` |
+
+#### Invocation
+
+```bash
+python .repo_studios/command_center/scripts/orchestrators/orchestrate_full_diagnostic.py \
+  --repo-root . \
+  --log-level INFO \
+  [--timestamp <ISO8601>] \
+  [--artifacts-to-keep <n>] \
+  [--include <topic-slug>] \
+  [--exclude <topic-slug>] \
+  [--stop-on-first-failure | --keep-going]
 ```
+
+| Aspect | Value |
+|--------|-------|
+| Entry Point | `run(argv)` |
+| Typical Runtime | ~5-10 minutes (depends on topic orchestrators) |
+| Exit Codes | 0=success, 1=error |
+
+#### Outputs
+
+| Artifact | Format | Description |
+|----------|--------|-------------|
+| manifest.json | JSON | Meta-bundle manifest with per-topic execution status, metrics, artifact references |
+| summary.md | Markdown | Human-readable summary of topic execution results |
+| telemetry.json | JSON | Telemetry payload for aggregation and trend analysis |
+
+#### Compliance
+
+| Aspect | Status | Notes |
+|--------|--------|-------|
+| HOP Bundle | YES | Timestamped bundles via `build_topic_path("orchestrator", "full_diagnostic")` |
+| UIC Interface | PARTIAL | `run(argv)` returns `int` (accepted deviation for meta-orchestrator) |
+| Tier-3 YAML | YES | Created 2026-02-05 |
+
+#### Orchestrator
+
+| Pipeline | Status | Config Path |
+|----------|--------|-------------|
+| HealthView | WIRED | N/A — this IS the top-level orchestrator |
+
+#### Pipeline Position
+
+| Field | Value |
+|-------|-------|
+| Step Number | N/A (top-level) |
+| Execution Mode | SEQUENTIAL (fail-fast by default) |
+| Orchestrator Script | N/A — this script IS the meta-orchestrator |
+
+#### Dependencies & Consumers
+
+| Direction | Record ID | Script | Data Flow |
+|-----------|-----------|--------|-----------|
+| ⬆️ DEPENDS ON | (none) | — | Top-level entry point, no upstream dependencies |
+| ⬇️ CONSUMED BY | (none) | — | Terminal node; outputs consumed by CI/CD and humans |
+
+#### Coordinated Topics (6)
+
+| # | Slug | Module | Record ID |
+|---|------|--------|-----------|
+| 1 | `test-execution-telemetry` | `run_test_execution_telemetry.py` | S7R-002 |
+| 2 | `docs-health` | `run_docs_health_overview.py` | S7R-003 |
+| 3 | `fault-diagnostics` | `run_fault_diagnostics_overview.py` | S7R-004 |
+| 4 | `dependency-import-hygiene` | `run_dependency_import_hygiene.py` | S7R-005 |
+| 5 | `monkey-patch-oversight` | `run_monkey_patch_oversight.py` | S7R-006 |
+| 6 | `standards-integrity` | `run_standards_integrity.py` | S7R-007 |
+
+#### Known Limitations
+
+- GAP-001: Missing Google-style docstring on `run()` (LOW priority)
+- GAP-002: Returns `int` instead of `dict` (accepted deviation for meta-orchestrator)
+- GAP-003: Topic orchestrator S7R-002 returns `dict` when meta expects `int` (external dependency)
+
+#### Verification
+
+| Field | Value |
+|-------|-------|
+| Last Verified | 2026-02-05 |
+| Verified By | GitHub Copilot |
+| Build Doc Version | 1.0.0 |
+<!-- AGENT_ROUTER:END S7R-001 -->
 
 ##### S7R-002 test-execution-telemetry
 
@@ -1082,6 +1122,7 @@ checks:
 
 | Date | Change | Author | Doc-index timestamp | Regression suites |
 | --- | --- | --- | --- | --- |
+| 2026-02-05 | Added Stage 12 prompt system documentation; replaced S7R-001 YAML block with Agent Router template; updated instruction block to reference Stage 12 workflow; S7R-001 Phase 4 inspection complete with build doc v1.0.0, Tier-3 YAML created. | GitHub Copilot | 20260205-1530 | Phase 4 inspection complete |
 | 2026-01-23 | Closed Stage 7 token-consistency stop-gate for Fault Diagnostics: added `HEALTHVIEW_TOPIC` and aligned `TOPIC_SLUG` (hyphenated) while keeping bundle output rooted at `orchestrator_reports/fault_diagnostics_overview/`; refreshed S7R-004 flags/paths/retention evidence. | GitHub Copilot | 20260123-1958 | doc-index; pytest focused suites (4 passed) |
 | 2026-01-23 | Stage 7 reality + wiring pass: explained meta-orchestrator intent, tightened pruning mini-block, removed stray control characters, populated token-consistency stop-gate with a repo-observed token map, and linked existing pytest suites for each S7R record. | GitHub Copilot | 20260123-1903 | doc-index; pytest Stage 7 focused suites (27 passed) |
 | 2026-01-23 | Stage 6.1 reality sync: corrected Standards Integrity orchestrator output root to `.repo_studios/reports/healthview/orchestrator_reports/standards_integrity/YYYYMMDD-HHMM/` and aligned retention target list. | GitHub Copilot | 20260123-0152 | doc-index; pytest Stage 6.1 focused suites (11 passed) |

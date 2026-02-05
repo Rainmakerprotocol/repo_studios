@@ -1,6 +1,6 @@
 {
   "artifacts": {
-    "coverage_report": "C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-2001/test_run_handles_missing_logs0/telemetry_missing/coverage/test_coverage-20251201_010100",
+    "coverage_report": "C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-2036/test_run_handles_missing_logs0/telemetry_missing/coverage/test_coverage-20251201_010100",
     "hardening": null,
     "health_bundle_summary": null,
     "health_report": null,
@@ -15,7 +15,7 @@
       "warnings_total": 0
     },
     "coverage": {
-      "report_dir": "C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-2001/test_run_handles_missing_logs0/telemetry_missing/coverage/test_coverage-20251201_010100",
+      "report_dir": "C:/Users/genet/AppData/Local/Temp/pytest-of-genet/pytest-2036/test_run_handles_missing_logs0/telemetry_missing/coverage/test_coverage-20251201_010100",
       "summary": {
         "status": "ok"
       }
@@ -40,7 +40,7 @@
       "collect: no pytest logs discovered"
     ]
   },
-  "generated_at": "2026-01-29T19:19:48+00:00",
+  "generated_at": "2026-02-05T13:40:58+00:00",
   "metrics": {
     "coverage_status": "ok",
     "hardening_high_severity": null,
@@ -65,7 +65,7 @@
   "steps": [
     {
       "detail": "no pytest logs discovered",
-      "finished_at": "2026-01-29T19:19:48.065250+00:00",
+      "finished_at": "2026-02-05T13:40:58.974662+00:00",
       "name": "collect",
       "payload": {
         "coverage": {
@@ -76,7 +76,7 @@
           "warnings_total": 0
         }
       },
-      "started_at": "2026-01-29T19:19:48.064958+00:00",
+      "started_at": "2026-02-05T13:40:58.974325+00:00",
       "status": "failed"
     }
   ],

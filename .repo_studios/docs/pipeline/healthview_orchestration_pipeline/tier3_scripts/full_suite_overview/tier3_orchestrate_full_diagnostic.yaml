@@ -1,0 +1,181 @@
+# Tier-3 Script Specification — orchestrate_full_diagnostic.py
+# Template version: v1
+# Generated: 2026-02-05
+# Last validated: 2026-02-05
+
+tool:
+  name: orchestrate_full_diagnostic
+  category: meta-orchestrator
+  purpose: |
+    Meta orchestrator that executes every topic runner sequentially. This is the top-level
+    entry point for running the full HealthView diagnostic suite. It coordinates 6 topic
+    orchestrators (test-execution-telemetry, docs-health, fault-diagnostics,
+    dependency-import-hygiene, monkey-patch-oversight, standards-integrity) and produces a
+    consolidated meta-bundle that indexes all per-topic bundles.
+  path: .repo_studios/command_center/scripts/orchestrators/orchestrate_full_diagnostic.py
+  tier2_record_ref: tier2_roster/tier2_full_suite_overview_roster.md#s7r-001-full-diagnostic-meta-orchestrator
+  stage: "7"
+  status: active
+
+invocation:
+  entrypoint: run(argv)
+  return_type: int
+  cli_pattern: |
+    python .repo_studios/command_center/scripts/orchestrators/orchestrate_full_diagnostic.py \
+      --repo-root . \
+      [--reports-root <dir>] \
+      [--log-level DEBUG|INFO|WARNING|ERROR|CRITICAL] \
+      [--timestamp <ISO8601>] \
+      [--artifacts-to-keep <n>] \
+      [--include <topic-slug>] \
+      [--exclude <topic-slug>] \
+      [--stop-on-first-failure] \
+      [--keep-going]
+  required_flags:
+    - --repo-root
+  optional_flags:
+    - --reports-root
+    - --log-level
+    - --timestamp
+    - --artifacts-to-keep
+    - --include
+    - --exclude
+    - --stop-on-first-failure
+    - --keep-going
+
+parameters:
+  inputs:
+    - name: repo_root
+      type: Path
+      description: Repository root for input scanning and output placement
+      required: true
+      default: null
+    - name: reports_root
+      type: Path
+      description: Output root for meta-orchestrator HOP bundle
+      required: false
+      default: build_topic_path("orchestrator", "full_diagnostic")
+    - name: log_level
+      type: str
+      description: Logging verbosity level
+      required: false
+      default: INFO
+    - name: timestamp
+      type: datetime
+      description: ISO-8601 timestamp forwarded to all topic orchestrators for shared run slug
+      required: false
+      default: datetime.now(UTC)
+    - name: artifacts_to_keep
+      type: int
+      description: Retention budget for meta-orchestrator bundles
+      required: false
+      default: 3
+    - name: include
+      type: list[str]
+      description: Limit execution to provided topic slug(s); comma-separated or repeated flags
+      required: false
+      default: null
+    - name: exclude
+      type: list[str]
+      description: Skip provided topic slug(s); comma-separated or repeated flags
+      required: false
+      default: null
+    - name: stop_on_first_failure
+      type: bool
+      description: Abort remaining topics after first failure (default behavior)
+      required: false
+      default: true
+
+  outputs:
+    - name: manifest.json
+      type: json
+      description: Full bundle manifest with per-topic execution status, metrics, and artifact references
+    - name: summary.md
+      type: markdown
+      description: Human-readable summary of topic execution results
+    - name: telemetry.json
+      type: json
+      description: Telemetry payload for aggregation and trend analysis
+
+orchestration:
+  topic_definitions:
+    - slug: test-execution-telemetry
+      module: command_center.scripts.orchestrators.run_test_execution_telemetry
+      record_id: S7R-002
+      description: Test execution telemetry topic orchestrator
+    - slug: docs-health
+      module: command_center.scripts.orchestrators.run_docs_health_overview
+      record_id: S7R-003
+      description: Docs health overview orchestrator
+    - slug: fault-diagnostics
+      module: command_center.scripts.orchestrators.run_fault_diagnostics_overview
+      record_id: S7R-004
+      description: Fault diagnostics orchestrator
+    - slug: dependency-import-hygiene
+      module: command_center.scripts.orchestrators.run_dependency_import_hygiene
+      record_id: S7R-005
+      description: Dependency and import hygiene orchestrator
+    - slug: monkey-patch-oversight
+      module: command_center.scripts.orchestrators.run_monkey_patch_oversight
+      record_id: S7R-006
+      description: Monkey patch oversight orchestrator
+    - slug: standards-integrity
+      module: command_center.scripts.orchestrators.run_standards_integrity
+      record_id: S7R-007
+      description: Standards integrity orchestrator
+  failure_policy:
+    default: stop-on-first-failure
+    configurable: true
+    flags:
+      - --stop-on-first-failure
+      - --keep-going
+
+hop_compliance:
+  tier: A
+  output_root: .repo_studios/reports/healthview/orchestrator_reports/full_diagnostic/
+  bundle_pattern: YYYYMMDD-HHMM/
+  artifacts:
+    - manifest.json
+    - summary.md
+    - telemetry.json
+  retention:
+    flag: --artifacts-to-keep
+    default: 3
+  uses_write_report_artifacts: true
+  uses_build_topic_path: true
+
+db_integration:
+  enabled: false
+  reason: Meta-orchestrator delegates to topic orchestrators; DB writes occur in leaf scripts
+
+dependencies:
+  internal:
+    - libraries.KeepSpec
+    - libraries.OptionsConfig
+    - libraries.PathSpec
+    - libraries.PathsConfig
+    - libraries.ReportArtifact
+    - libraries.ArtifactMetrics
+    - libraries.measure_artifact_directory
+    - libraries.build_standard_options
+    - libraries.build_standard_paths
+    - libraries.write_report_artifacts
+    - libraries.report_paths.build_topic_path
+  external: []
+  stdlib:
+    - argparse
+    - importlib
+    - json
+    - logging
+    - sys
+    - dataclasses
+    - datetime
+    - pathlib
+    - typing
+
+metadata:
+  line_count: 561
+  created: 2026-02-05
+  last_validated: 2026-02-05
+  validator: GitHub Copilot
+  version: 1.0.0

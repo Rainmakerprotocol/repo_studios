@@ -1226,7 +1226,7 @@ _Tier-2 references (depth lives here):_
 - [x] diff_standards_index.py — Tier-2 DONE. HOP-compliant. pytest: 2. mypy: OK. Tier-3: created. See: [Tier-2 record](tier2_roster/tier2_standards_integrity_roster.md#s61r-004-standards-index-diff-producer)
 - [x] seed_standards_prompts.py — Tier-2 DONE. HOP-compliant. pytest: 2. mypy: OK. Tier-3: created. See: [Tier-2 record](tier2_roster/tier2_standards_integrity_roster.md#s61r-005-standards-prompt-seed-producer)
 - [x] summarize_standards.py — Tier-2 DONE. HOP-compliant. pytest: 2. mypy: OK. Tier-3: created. See: [Tier-2 record](tier2_roster/tier2_standards_integrity_roster.md#s61r-006-standards-overview-summarizer)
-- [x] run_standards_integrity.py — Tier-2 DONE. HOP-compliant. pytest: 2. mypy: 7 errors (nested closures — acceptable). Tier-3: created. See: [Tier-2 record](tier2_roster/tier2_standards_integrity_roster.md#s61r-001-standards-integrity-orchestrator)
+- [x] run_standards_integrity.py — Tier-2 DONE. HOP-compliant. pytest: 2. mypy: 7 errors (nested closures — acceptable). Tier-3: created. Build doc v1.0.0. See: [Tier-2 record](tier2_roster/tier2_standards_integrity_roster.md#s61r-001--run_standards_integritypy)
 
 **Stage 6.1 Gate Checklist (Tier-1):**
 
@@ -1258,6 +1258,11 @@ These are Stage 6.1 readiness gates after all Tier-2 DONE script gates are close
 - Details and evidence live in the Stage 6.1 Tier-2 roster:
   [Current vs Target snapshot](tier2_roster/tier2_standards_integrity_roster.md#23-current-vs-target-contract-snapshot-stage-61),
   [Stop-gates](tier2_roster/tier2_standards_integrity_roster.md#32-stop-gates-and-implementation-checklists).
+
+**Processing Scripts (Stage 12 Prompt System):**
+
+When processing scripts in Stage 6.1, use the [Stage 12 prompt sequence](stage12_templates/README.md):
+PROMPT_ZERO → PROMPT_PHASE1_BOOTSTRAP → PROMPT_PHASE2_ANALYSIS → PROMPT_PHASE3_EVIDENCE → PROMPT_PHASE4_FINALIZE.
 
 **What Happens (Tier-1) — shim:**
 
@@ -1434,6 +1439,10 @@ _Tier-2 references (depth lives here):_
 
 **Stage 7 Script Gate Summary (Tier-1):**
 
+- [x] **S7R-001 — Meta-orchestrator** (`orchestrate_full_diagnostic.py`) — ✅ Complete (Phase 4 inspection).
+  [Tier-2 record](../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#s7r-001--orchestrate_full_diagnosticpy)
+  | [Tier-3 YAML](../healthview_orchestration_pipeline/tier3_scripts/full_suite_overview/tier3_orchestrate_full_diagnostic.yaml)
+  | [Build Doc](../healthview_orchestration_pipeline/tier2_roster/working_docs/stage_7/S7R-001_orchestrate_full_diagnostic_build.md)
 - [x] Stage 1.1 — Test execution telemetry — complete.
   [Tier-2 record](../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#s7r-002-test-execution-telemetry)
 - [x] Stage 2.1 — Docs health overview — complete.
@@ -1449,17 +1458,17 @@ _Tier-2 references (depth lives here):_
 
 **Stage 7 Stage Gate Checklist (Tier-1):**
 
-- [ ] Base package complete (`manifest.json`, `summary.md`, `telemetry.json`) — pending until Tier-2
-  DONE is checked —
+- [x] Base package complete (`manifest.json`, `summary.md`, `telemetry.json`) — ✅ verified via Phase 4
+  inspection (S7R-001) —
   [Contract snapshot](../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#23-current-vs-target-contract-snapshot-stage-7)
-- [ ] No pointer artifacts (`latest_*` / `current_*`) — pending until Tier-2 DONE is checked —
+- [x] No pointer artifacts (`latest_*` / `current_*`) — ✅ verified via Phase 4 inspection (S7R-001) —
   [Stop-gates](../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#32-stop-gates-and-implementation-checklists)
-- [ ] Output root aligned to HealthView contract:
-  `.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/` — pending until Tier-2 DONE is
-  checked —
+- [x] Output root aligned to HealthView contract:
+  `.repo_studios/reports/healthview/<class>/<topic>/<timestamp>/` — ✅ verified via Phase 4 inspection
+  (S7R-001 uses `build_topic_path("orchestrator", "full_diagnostic")`) —
   [Contract snapshot](../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#23-current-vs-target-contract-snapshot-stage-7)
-- [ ] Tier-3 eligible (Tier-2 depth captured; ready for Tier-3 extraction) — pending until Tier-2
-  DONE is checked —
+- [x] Tier-3 eligible (Tier-2 depth captured; ready for Tier-3 extraction) — ✅ Tier-3 YAML created
+  2026-02-05 —
   [Stop-gates](../healthview_orchestration_pipeline/tier2_roster/tier2_full_suite_overview_roster.md#32-stop-gates-and-implementation-checklists)
 
 **Target contract (locked decisions):**
@@ -1494,50 +1503,79 @@ each topic orchestrator and invoking its `run(argv)` with shared configuration (
 `--log-level`). Non-zero exit codes abort the remaining topics (fail-fast). Contract alignment and
 proof live in Tier-2.
 
+**Status:** ✅ **Complete (Phase 4 inspection, 2026-02-05)**
+
 **Orchestrator:**  
 [.repo_studios/command_center/scripts/orchestrators/orchestrate_full_diagnostic.py](../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py)
 
+**Documentation:**
+- **Build Doc:** [S7R-001_orchestrate_full_diagnostic_build.md](tier2_roster/working_docs/stage_7/S7R-001_orchestrate_full_diagnostic_build.md)
+- **Tier-2 Record:** [tier2_full_suite_overview_roster.md#S7R-001](tier2_roster/tier2_full_suite_overview_roster.md#s7r-001--orchestrate_full_diagnosticpy)
+- **Tier-3 YAML:** [tier3_orchestrate_full_diagnostic.yaml](tier3_scripts/full_suite_overview/tier3_orchestrate_full_diagnostic.yaml)
+
 **Invoked Orchestrators (6):**
 
-1. `run_test_execution_telemetry.py` (Stage 1.1) – topic slug: `test-execution-telemetry`
-1. `run_docs_health_overview.py` (Stage 2.1) – topic slug: `docs-health`
-1. `run_fault_diagnostics_overview.py` (Stage 3.1) – topic slug: `fault-diagnostics`
-1. `run_dependency_import_hygiene.py` (Stage 4.1) – topic slug: `dependency-import-hygiene`
-1. `run_monkey_patch_oversight.py` (Stage 5.1) – topic slug: `monkey-patch-oversight`
-1. `run_standards_integrity.py` (Stage 6.1) – topic slug: `standards-integrity`
+| # | Topic Slug | Script | Record ID |
+|---|------------|--------|-----------|
+| 1 | `test-execution-telemetry` | `run_test_execution_telemetry.py` | S7R-002 |
+| 2 | `docs-health` | `run_docs_health_overview.py` | S7R-003 |
+| 3 | `fault-diagnostics` | `run_fault_diagnostics_overview.py` | S7R-004 |
+| 4 | `dependency-import-hygiene` | `run_dependency_import_hygiene.py` | S7R-005 |
+| 5 | `monkey-patch-oversight` | `run_monkey_patch_oversight.py` | S7R-006 |
+| 6 | `standards-integrity` | `run_standards_integrity.py` | S7R-007 |
 
 **Execution Notes:**
 
 - Sequential execution only; topic orchestrators are invoked directly (dynamic import, no subprocess).
-- Shared `--repo-root` and `--log-level` are threaded through every topic.
+- Shared `--repo-root`, `--log-level`, and `--timestamp` are threaded through every topic.
 - Output rooting and pruning behavior are treated as contract items and are validated via Tier-2 stop-gates.
 
 **Inputs:**
 
-- Repository root path (auto-detected or via `--repo-root`)
-- Shared log level configuration (default: INFO)
-- Optional timestamp override (ISO 8601 format)
+| Input | Description |
+|-------|-------------|
+| `--repo-root` | Repository root path (auto-detected or explicit) |
+| `--log-level` | Shared log level configuration (default: INFO) |
+| `--timestamp` | Optional timestamp override (ISO 8601 format) |
+| `--artifacts-to-keep` | Retention budget for output bundles (default: 3) |
+| `--include` / `--exclude` | Topic selection filters |
+| `--stop-on-first-failure` | Fail-fast mode (default) |
+| `--keep-going` | Continue on topic failure |
 
 **Outputs:**
 
-- Meta-level HealthView bundle + the six delegated topic bundles.
-- Target vs current bundle roots are tracked in Tier-2 (Stage 7 contract snapshot).
+| Artifact | Description |
+|----------|-------------|
+| `manifest.json` | Meta-bundle manifest with per-topic execution status, metrics, artifact references |
+| `summary.md` | Human-readable summary of topic execution results |
+| `telemetry.json` | Telemetry payload for aggregation and trend analysis |
 
-**Status:** `Operational – Partial hardening complete`
+**Output Root:** `.repo_studios/reports/healthview/orchestrator_reports/full_diagnostic/YYYYMMDD-HHMM/`
 
-**Known Gaps:**
+**Known Gaps (from Phase 4 inspection):**
 
-- Stage 7 still needs contract convergence (output rooting, pruning targets) and checklist closure.
-- Treat all gap details and remediation steps as Tier-2 stop-gates.
+| ID | Description | Priority |
+|----|-------------|----------|
+| GAP-001 | Missing Google-style docstring on `run()` | LOW |
+| GAP-002 | Returns `int` instead of `dict` (accepted deviation) | N/A |
+| GAP-003 | Topic orchestrator return type mismatch | EXTERNAL |
+
+**Processing Scripts (Stage 12 Prompt System):**
+
+When processing scripts in Stage 7, use the [Stage 12 prompt sequence](stage12_templates/README.md):
+`PROMPT_ZERO` → `PROMPT_PHASE1_BOOTSTRAP` → `PROMPT_PHASE2_ANALYSIS` → `PROMPT_PHASE3_EVIDENCE` → `PROMPT_PHASE4_FINALIZE`.
 
 **Evidence Links:**
 
+- **Build Doc:**
+  [S7R-001_orchestrate_full_diagnostic_build.md](tier2_roster/working_docs/stage_7/S7R-001_orchestrate_full_diagnostic_build.md)
+  (Phase 4 complete, v1.0.0, 13 code refs, 3 gaps documented)
 - **Orchestrator:**
   [orchestrate_full_diagnostic.py](../../../command_center/scripts/orchestrators/orchestrate_full_diagnostic.py)
-  (lines 1-554: dynamic imports, sequential execution, composite manifest)
-- **Tests:**
-  [test_orchestrate_full_diagnostic.py](../../../tests/tests_command_center/orchestrators/test_orchestrate_full_diagnostic.py)
-  (integration tests with mocked topic orchestrators)
+  (561 lines: dynamic imports, sequential execution, composite manifest)
+- **Tier-3 YAML:**
+  [tier3_orchestrate_full_diagnostic.yaml](tier3_scripts/full_suite_overview/tier3_orchestrate_full_diagnostic.yaml)
+  (agent-discoverable metadata)
 
 ---
 

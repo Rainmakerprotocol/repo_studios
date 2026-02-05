@@ -220,7 +220,11 @@ A compact, mechanism-oriented summary of pruning surfaces and how pruning is enf
 
 #### 3.1.3 ScriptInspectionRecordV1 Schema
 
-Use this schema as the per-script record structure for this stage.
+> **DEPRECATED:** This YAML schema is retained for reference only. New records use the
+> **Agent Router template** (see completed records below). The Stage 12 prompt system
+> generates build documents that supersede this schema.
+
+_Legacy schema (do not use for new records):_
 
 ```yaml
 schema: ScriptInspectionRecordV1
@@ -542,10 +546,9 @@ python .repo_studios/scripts/producers/scan_monkey_patches.py --repo-root . --lo
 | Build Doc Version | 1.0.0 |
 <!-- AGENT_ROUTER:END S51R-003 -->
 
-##### S51R-004 monkey patch trend aggregator
-
 <!-- AGENT_ROUTER:START S51R-004 -->
-### S51R-004 — analyze_monkey_patch_trends.py
+### S51R-004 — analyze_monkey_patch_trends
+
 > **One-liner:** Analyze historical monkey patch trends from consumer/producer bundles
 
 | Field | Value |
@@ -559,6 +562,7 @@ python .repo_studios/scripts/producers/scan_monkey_patches.py --repo-root . --lo
 | Status | ✅ Phase 4 Complete |
 
 **Workstreams:**
+
 - [x] A – Discovery: Code inspection complete. 2 upstreams documented.
 - [x] B – Plan: Dead code removal identified (_update_latest function).
 - [x] C – Implement: Removed dead code. HOP-compliant via build_topic_path.
@@ -586,6 +590,7 @@ python .repo_studios/scripts/producers/scan_monkey_patches.py --repo-root . --lo
 **Keywords:** `healthview`, `summarizer`, `monkey-patch`, `oversight`, `stage-5.1`, `overview`
 
 #### Resource Paths
+
 | Resource | Path |
 |----------|------|
 | Script | `.repo_studios/command_center/scripts/summarizers/summarize_monkey_patch_overview.py` |
@@ -594,6 +599,7 @@ python .repo_studios/scripts/producers/scan_monkey_patches.py --repo-root . --lo
 | Output Root | `.repo_studios/reports/healthview/summarizer_reports/monkey_patch_overview/<YYYYMMDD-HHMM>/` |
 
 #### Invocation
+
 ```bash
 python -m command_center.scripts.summarizers.summarize_monkey_patch_overview --repo-root . --log-level INFO
 ```
@@ -605,6 +611,7 @@ python -m command_center.scripts.summarizers.summarize_monkey_patch_overview --r
 | Exit Codes | 0=success, 1=error |
 
 #### Outputs
+
 | Artifact | Format | Description |
 |----------|--------|-------------|
 | manifest.json | JSON | Bundle metadata with file inventory and timestamps |
@@ -612,6 +619,7 @@ python -m command_center.scripts.summarizers.summarize_monkey_patch_overview --r
 | telemetry.json | JSON | Execution metrics and timing data |
 
 #### Compliance
+
 | Aspect | Status | Notes |
 |--------|--------|-------|
 | HOP Bundle | YES | `build_topic_path()` at L50-53, `write_report_artifacts()` at L821-828 |
@@ -619,11 +627,13 @@ python -m command_center.scripts.summarizers.summarize_monkey_patch_overview --r
 | Tier-3 YAML | YES | Created 2026-01-02, validated 2026-02-04 |
 
 #### Orchestrator
+
 | Pipeline | Status | Config Path |
 |----------|--------|-------------|
 | monkey_patch_oversight | WIRED | `run_monkey_patch_oversight.py` Lines 67-68 |
 
 #### Pipeline Position
+
 | Field | Value |
 |-------|-------|
 | Step Number | 4 of 4 |
@@ -631,6 +641,7 @@ python -m command_center.scripts.summarizers.summarize_monkey_patch_overview --r
 | Orchestrator Script | `.repo_studios/command_center/scripts/orchestrators/run_monkey_patch_oversight.py` |
 
 #### Dependencies & Consumers
+
 | Direction | Record ID | Script | Data Flow |
 |-----------|-----------|--------|-----------|
 | ⬆️ DEPENDS ON | S51R-002 | `scan_monkey_patches.py` | Reads producer bundle from `monkey_patch_scans/` |
@@ -639,10 +650,12 @@ python -m command_center.scripts.summarizers.summarize_monkey_patch_overview --r
 | ⬇️ CONSUMED BY | (none) | — | Terminal node, outputs consumed by orchestrator |
 
 #### Known Limitations
+
 - Test coverage limited (1 test for content, no CLI integration tests)
 - Error paths for missing upstream bundles are untested
 
 #### Verification
+
 | Field | Value |
 |-------|-------|
 | Last Verified | 2026-02-04 |
@@ -658,6 +671,7 @@ python -m command_center.scripts.summarizers.summarize_monkey_patch_overview --r
 **Keywords:** `utility`, `library`, `risk-classification`, `monkey-patch`, `severity-bucketing`
 
 #### Resource Paths
+
 | Resource | Path |
 |----------|------|
 | Script | `.repo_studios/scripts/utilities/monkey_patch_risk.py` |
@@ -666,6 +680,7 @@ python -m command_center.scripts.summarizers.summarize_monkey_patch_overview --r
 | Output Root | N/A (pure library, no outputs) |
 
 #### Invocation
+
 ```python
 # Direct import — not CLI invocable
 from scripts.utilities.monkey_patch_risk import classify_monkey_patch, FindingSignals, RiskLevel
@@ -678,6 +693,7 @@ from scripts.utilities.monkey_patch_risk import classify_monkey_patch, FindingSi
 | Exit Codes | N/A |
 
 #### Exports
+
 | Export | Type | Description |
 |--------|------|-------------|
 | `RiskLevel` | TypeAlias | `Literal["HIGH", "MODERATE", "SAFE"]` — severity buckets |
@@ -688,6 +704,7 @@ from scripts.utilities.monkey_patch_risk import classify_monkey_patch, FindingSi
 | `GLOBAL_ENV_MUTATION` | Constant | Special category string for environment mutations |
 
 #### Compliance
+
 | Aspect | Status | Notes |
 |--------|--------|-------|
 | HOP Bundle | N/A | B-LIB — pure library, no outputs |
@@ -696,6 +713,7 @@ from scripts.utilities.monkey_patch_risk import classify_monkey_patch, FindingSi
 | Library Checklist | 5/6 PASS | LIB-001 FAIL (missing `__all__`) |
 
 #### Library Checklist (B-LIB)
+
 | ID | Check | Status | Evidence |
 |----|-------|--------|----------|
 | LIB-001 | `__all__` exports defined | `FAIL` | No `__all__` defined |
@@ -706,11 +724,13 @@ from scripts.utilities.monkey_patch_risk import classify_monkey_patch, FindingSi
 | LIB-006 | Tests exist | `PASS` | `test_monkey_patch_risk.py` (5 tests) |
 
 #### Orchestrator
+
 | Pipeline | Status | Config Path |
 |----------|--------|-------------|
 | Stage 5.1 Monkey Patch | IMPORT_ONLY | N/A — consumed via import by `classify_monkey_patches.py` |
 
 #### Pipeline Position
+
 | Field | Value |
 |-------|-------|
 | Step Number | N/A (library, not a pipeline step) |
@@ -718,6 +738,7 @@ from scripts.utilities.monkey_patch_risk import classify_monkey_patch, FindingSi
 | Orchestrator Script | N/A |
 
 #### Dependencies & Consumers
+
 | Direction | Record ID | Script | Data Flow |
 |-----------|-----------|--------|-----------|
 | ⬆️ DEPENDS ON | (none) | — | Standalone library, stdlib only |
@@ -725,51 +746,17 @@ from scripts.utilities.monkey_patch_risk import classify_monkey_patch, FindingSi
 | ⬇️ CONSUMED BY | S51R-004 | `analyze_monkey_patch_trends.py` | Provides `RiskLevel` type for trend analysis |
 
 #### Known Limitations
+
 - Missing `__all__` exports declaration (GAP-L01, LOW priority, deferred)
 
 #### Verification
+
 | Field | Value |
 |-------|-------|
 | Last Verified | 2026-02-04 |
 | Verified By | copilot-claude-4 |
 | Build Doc Version | 1.0.0 |
 <!-- AGENT_ROUTER:END S51R-006 -->
-
-#### Implementation Workstreams (checkbox-driven) — monkey_patch_risk.py
-
-Workstream A — Discovery
-
-- [x] Inspect outputs + pruning/retention surfaces; record findings
-  - N/A: Pure utility library with no CLI or output artifacts.
-
-Workstream B — Plan
-
-- [x] Draft plan to close output-root/base-package stop-gates
-  - N/A: No HOP changes needed for utility libraries.
-
-Workstream C — Implement
-
-- [x] Implement accepted plan and update this record + stop-gate status with new evidence
-  - N/A: No code changes needed.
-
-Workstream D — Tier-3 YAML
-
-- [x] Confirm Tier-3 is appropriate for this script; record decision (create vs defer)
-  - Decision: **Deferred** — pure utility libraries do not get Tier-3 recipes (no CLI entrypoint).
-- [x] Inspect Tier-3 template requirements — N/A
-- [x] Draft `tier3_<script_stem>.yaml` — N/A
-- [x] Validate Tier-3 YAML — N/A
-
-Workstream E — QA & Evidence
-
-- [x] Pytest evidence captured
-  - Result: 5 passed in 0.07s (2026-01-02)
-- [x] Mypy evidence captured (or marked N/A in record)
-  - Result: Success: no issues found (2026-01-02)
-- [x] Coverage + doc-index timestamp recorded
-  - N/A (pure utility, no coverage threshold)
-
-- [x] DONE — monkey_patch_risk.py complete; update Tier-1 Stage 5.1 script gate
 
 ### 3.2 Stop-Gates and Implementation Checklists
 
@@ -798,12 +785,6 @@ stage are satisfied and the Tier-2 record set is stable enough to extract reusab
 - Tier-1 stage section is updated and contradiction entries are closed as evidence confirms.
 
 **Discovery stop-gates (repo-observed mismatches to resolve before code-phase claims):**
-
-- [x] ~~Orchestrator bundle docstring root conflicts with actual layout.~~ — RESOLVED: Uses `build_topic_path("orchestrator", "monkey_patch_oversight")`.
-- [x] ~~Orchestrator uses `viewer=commandview` for the HealthView bundle write.~~ — RESOLVED: Now uses `healthview` viewer.
-- [x] ~~Producer/consumer disagree on artifact naming (`manifest.json` vs `report.json`).~~ — RESOLVED: Consumer reads `manifest.payload.findings`.
-- [x] ~~Consumer + aggregator create `latest_*` pointer artifacts.~~ — RESOLVED: Removed `_write_legacy_outputs()` call.
-- [x] ~~Stage outputs use multiple timestamp slug formats.~~ — RESOLVED: All scripts use `YYYYMMDD-HHMM`.
 
 ---
 
@@ -848,11 +829,13 @@ stage are satisfied and the Tier-2 record set is stable enough to extract reusab
 
 1. Editors follow `.github/instructions/markdown.instructions.md` and
    `.github/instructions/pipeline_doc_tiers.instructions.md`.
-1. Keep this document’s section order intact.
-1. After adding or moving checkboxes, run `make -C .repo_studios doc-index` and
+2. Keep this document's section order intact.
+3. **Script processing uses the Stage 12 prompt system** — see Section 0 for prompt links.
+4. After adding or moving checkboxes, run `make -C .repo_studios doc-index` and
    record the timestamp in Update Logs.
-1. Keep “Target contract (locked decisions)” and “Current evidence (repo-observed)” explicit;
-    mismatch is treated as a stop-gate.
+5. Keep "Target contract (locked decisions)" and "Current evidence (repo-observed)" explicit;
+   mismatch is treated as a stop-gate.
+6. Build documents live in `working_docs/stage_5_1/` — one per record ID.
 
 ---
 
@@ -889,6 +872,7 @@ checks:
 
 | Date | Change | Author | Doc-index timestamp | Regression suites |
 | --- | --- | --- | --- | --- |
+| 2026-02-05 | **Stage 12 modernization:** Section 0 updated with prompt system tables and links. Section 3.1.3 deprecated (Agent Router supersedes). Section 6 updated with Stage 12 references. Legacy workstream semantics removed. | GitHub Copilot | 2026-02-05 | HOP validation passed |
 | 2026-02-05 | Phase 4 complete: All 6 records have Agent Router blocks, build docs, Tier-1 synced. Frontmatter updated to `status: complete`, `version: 1.0.0`. Section 0 modernized with Stage 12 prompt system guidance. | repo_studios_ai | 2026-02-05 | HOP validation passed |
 | 2026-01-03 | HOP compliance verified for all scripts; Tier-3 YAMLs created. | repo_studios_ai | 2026-01-03 | HOP validation passed |
 | 2025-12-20 | Discovery Pass A + doc-index. | repo_studios_ai | 2025-12-20 11:07-05:00 | Not run |

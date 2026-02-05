@@ -1,0 +1,194 @@
+{
+  "schema_version": 1,
+  "viewer": "orchestrator_reports",
+  "topic": "test_execution_telemetry",
+  "run_slug": "20260205-1340",
+  "generated_at": "2026-02-05T13:42:16.603185+00:00",
+  "status": "ok",
+  "exit_code": 0,
+  "telemetry": {
+    "viewer": "orchestrator_reports",
+    "topic": "test-execution-telemetry",
+    "run_slug": "20260205-1340",
+    "success": true,
+    "started_at": "2026-02-05T13:40:52.663933+00:00",
+    "finished_at": "2026-02-05T13:42:16.603133+00:00",
+    "steps": [
+      {
+        "name": "collect",
+        "status": "success",
+        "started_at": "2026-02-05T13:40:52.663944+00:00",
+        "finished_at": "2026-02-05T13:42:08.249428+00:00",
+        "detail": "log report captured",
+        "payload": {
+          "coverage": {
+            "status": "ok",
+            "total_files": 84,
+            "total_functions": 1587,
+            "covered_functions": 1554,
+            "overall_coverage_pct": 97.92,
+            "files_below_threshold": [],
+            "threshold": null,
+            "include_empty": false
+          },
+          "log_report": {
+            "warnings_total": 0,
+            "slow_tests": 0
+          }
+        }
+      },
+      {
+        "name": "analyse",
+        "status": "success",
+        "started_at": "2026-02-05T13:42:08.249440+00:00",
+        "finished_at": "2026-02-05T13:42:16.584400+00:00",
+        "detail": "analysis completed",
+        "payload": {
+          "hardening_status": "issues-found",
+          "heatmap_mode": "consumer"
+        }
+      },
+      {
+        "name": "summarize",
+        "status": "success",
+        "started_at": "2026-02-05T13:42:16.584412+00:00",
+        "finished_at": "2026-02-05T13:42:16.603122+00:00",
+        "detail": "health summary generated",
+        "payload": {
+          "source": "producer"
+        }
+      }
+    ],
+    "metrics": {
+      "runtime_seconds": 83.9392,
+      "step_count": 3,
+      "steps_succeeded": 3,
+      "steps_failed": 0,
+      "steps_skipped": 0,
+      "artifact_files": 3,
+      "artifact_bytes": 10368
+    },
+    "status": "ok",
+    "exit_code": 0
+  },
+  "artifacts": {
+    "log_report": ".repo_studios/reports/healthview/rawview/test_log_reports/20260205-1340",
+    "coverage_report": ".repo_studios/reports/healthview/producer_reports/test_coverage_inventory/20260205-1340",
+    "heatmap": ".repo_studios/reports/healthview/aggregator_reports/churn_complexity_heatmap/20260205-1342",
+    "hardening": ".repo_studios/reports/healthview/producer_reports/test_hardening/20260205-1340",
+    "health_report": ".repo_studios/reports/healthview/consumer_reports/test_log_health_reports/20260205-1340",
+    "health_bundle_summary": ".repo_studios/reports/healthview/consumer_reports/test_log_health_reports/20260205-1340/bundle_summary.json",
+    "summary_markdown": ".repo_studios/reports/healthview/summarizer_reports/test_execution_telemetry/20260205-1340/test_execution_telemetry_summary.md",
+    "summary_json": ".repo_studios/reports/healthview/summarizer_reports/test_execution_telemetry/20260205-1340/test_execution_telemetry_summary.json"
+  },
+  "inputs": {
+    "logs_dir": ".repo_studios/reports/healthview/rawview/test_execution_runs",
+    "coverage_xml": "coverage.xml",
+    "metrics_source": null
+  },
+  "catalog": [
+    {
+      "script_path": ".repo_studios/scripts/aggregators/generate_churn_complexity_heatmap.py",
+      "topic": "test-execution-telemetry",
+      "role": "aggregator"
+    },
+    {
+      "script_path": ".repo_studios/scripts/consumers/generate_test_log_health_report.py",
+      "topic": "test-execution-telemetry",
+      "role": "consumer"
+    },
+    {
+      "script_path": ".repo_studios/command_center/scripts/orchestrators/run_test_execution_telemetry.py",
+      "topic": "test-execution-telemetry",
+      "role": "orchestrator"
+    },
+    {
+      "script_path": ".repo_studios/scripts/producers/analyze_test_hardening.py",
+      "topic": "test-execution-telemetry",
+      "role": "producer"
+    },
+    {
+      "script_path": ".repo_studios/scripts/producers/collect_test_log_reports.py",
+      "topic": "test-execution-telemetry",
+      "role": "producer"
+    },
+    {
+      "script_path": ".repo_studios/scripts/producers/generate_test_coverage_inventory.py",
+      "topic": "test-execution-telemetry",
+      "role": "producer"
+    },
+    {
+      "script_path": ".repo_studios/command_center/scripts/summarizers/summarize_test_execution_telemetry.py",
+      "topic": "test-execution-telemetry",
+      "role": "summarizer"
+    }
+  ],
+  "child_outcomes": [
+    {
+      "name": "generate_test_coverage_inventory.py",
+      "path": ".repo_studios/scripts/producers/generate_test_coverage_inventory.py",
+      "status": "ok",
+      "exit_code": 0,
+      "run_dir": "C:/Users/genet/repo_studios/.repo_studios/reports/healthview/producer_reports/test_coverage_inventory/20260205-1340",
+      "duration_seconds": 75.55070010002237,
+      "error": null
+    },
+    {
+      "name": "collect_test_log_reports.py",
+      "path": ".repo_studios/scripts/producers/collect_test_log_reports.py",
+      "status": "ok",
+      "exit_code": 0,
+      "run_dir": "C:/Users/genet/repo_studios/.repo_studios/reports/healthview/rawview/test_log_reports/20260205-1340",
+      "duration_seconds": 0.0345701000187546,
+      "error": null
+    },
+    {
+      "name": "analyze_test_hardening.py",
+      "path": ".repo_studios/scripts/producers/analyze_test_hardening.py",
+      "status": "issues-found",
+      "exit_code": 1,
+      "run_dir": "C:/Users/genet/repo_studios/.repo_studios/reports/healthview/producer_reports/test_hardening/20260205-1340",
+      "duration_seconds": 1.1797980000264943,
+      "error": null
+    },
+    {
+      "name": "generate_churn_complexity_heatmap.py",
+      "path": ".repo_studios/scripts/aggregators/generate_churn_complexity_heatmap.py",
+      "status": "ok",
+      "exit_code": 0,
+      "run_dir": "C:/Users/genet/repo_studios/.repo_studios/reports/healthview/aggregator_reports/churn_complexity_heatmap/20260205-1342",
+      "duration_seconds": 7.1550104999914765,
+      "error": null
+    },
+    {
+      "name": "generate_test_log_health_report.py",
+      "path": ".repo_studios/scripts/consumers/generate_test_log_health_report.py",
+      "status": "ok",
+      "exit_code": 0,
+      "run_dir": "C:/Users/genet/repo_studios/.repo_studios/reports/healthview/consumer_reports/test_log_health_reports/20260205-1340",
+      "duration_seconds": 0.0186027999734506,
+      "error": null
+    },
+    {
+      "name": "summarize_test_execution_telemetry.py",
+      "path": ".repo_studios/command_center/scripts/summarizers/summarize_test_execution_telemetry.py",
+      "status": "ok",
+      "exit_code": 0,
+      "run_dir": "C:/Users/genet/repo_studios/.repo_studios/reports/healthview/summarizer_reports/test_execution_telemetry/20260205-1340",
+      "duration_seconds": 0.01962389994878322,
+      "error": null
+    }
+  ],
+  "scripts_run": 6,
+  "scripts_passed": 5,
+  "scripts_failed": 1,
+  "metrics": {
+    "runtime_seconds": 83.9392,
+    "step_count": 3,
+    "steps_succeeded": 3,
+    "steps_failed": 0,
+    "steps_skipped": 0,
+    "artifact_files": 3,
+    "artifact_bytes": 10368
+  }
+}

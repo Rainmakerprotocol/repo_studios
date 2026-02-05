@@ -297,128 +297,86 @@ fields:
 
 Populate one block per script in the chain. Keep each record concise and evidence-backed.
 
-##### S61R-001: Standards Integrity Orchestrator
+<!-- AGENT_ROUTER:START S61R-001 -->
+### S61R-001 — run_standards_integrity.py
 
-```yaml
-record_id: "S61R-001"
-script:
-  path: ".repo_studios/command_center/scripts/orchestrators/run_standards_integrity.py"
-  name: "run_standards_integrity.py"
-  category: "orchestrator"
-tier3:
-  metadata_block_version: "v1"
-  allowed: true
-  exists: true
-  name: "tier3_run_standards_integrity.yaml"
-  meets_template: "v1"
-  last_updated: "2026-01-02"
-cli_surfaces:
-  run_entrypoint: "run(argv)"
-  key_flags:
-    - "--repo-root"
-    - "--healthview-root"
-    - "--index-output-dir"
-    - "--gap-output-dir"
-    - "--diff-output-dir"
-    - "--prompt-output-dir"
-    - "--diff-old-index"
-    - "--diff-fail-on"
-    - "--gap-max-show"
-    - "--prompt-include-warn"
-    - "--prompt-formats"
-    - "--timestamp"
-    - "--artifacts-to-keep"
-    - "--index-artifacts-to-keep"
-    - "--gap-artifacts-to-keep"
-    - "--diff-artifacts-to-keep"
-    - "--prompt-artifacts-to-keep"
-    - "--log-level"
-io_contract:
-  inputs:
-    - "Delegates to standards index producer, gap analysis, diff, prompt seed, summarizer."
-    - "Reads standards index + categories + optional baseline index for diffs."
-  outputs:
-    current:
-      root: ".repo_studios/reports/healthview/orchestrator_reports/standards_integrity/<YYYYMMDD-HHMM>/"
-      artifacts:
-        - "manifest.json"
-        - "summary.md"
-        - "telemetry.json"
-    target:
-      root: ".repo_studios/reports/healthview/<class>/<topic>/<timestamp>/"
-      artifacts:
-        - "manifest.json"
-        - "summary.md"
-        - "telemetry.json"
-retention:
-  surfaces:
-    - "--artifacts-to-keep (orchestrator bundle)"
-    - "Per-step keep flags forwarded to delegated scripts"
-  mechanism: "prune_by_timestamp"
-  targets:
-    - ".repo_studios/reports/healthview/orchestrator_reports/standards_integrity/"
-  guardrails:
-    - "Shared pruning enforces keep>=1 and protects current run"
-  evidence:
-    - ".repo_studios/command_center/scripts/orchestrators/run_standards_integrity.py#L788-L815"
-db_integration:
-  gated_by: "REPO_STUDIOS_DB_ENABLED"
-  marker_required: false
-  marker_string: "DB_INTEGRATION_MARKER:"
-evidence:
-  code_refs:
-    - ".repo_studios/command_center/scripts/orchestrators/run_standards_integrity.py#L72"
-    - ".repo_studios/command_center/scripts/orchestrators/run_standards_integrity.py#L793-L801"
-  tests:
-    - ".repo_studios/tests/tests_command_center/standards_integrity/test_run_standards_integrity.py"
-  fixtures:
-    - ".repo_studios/tests/tests_command_center/standards_integrity/test_run_standards_integrity_helpers.py"
-qa:
-  pytest: "2 passed in 0.18s (2026-01-02)"
-  mypy: "7 errors (nested closures — acceptable) (2026-01-02)"
-  coverage: "N/A"
-notes:
-  - "Writes a Healthview manifest/summary/telemetry bundle and embeds delegated run dirs in the manifest."
+> **One-liner:** Topic orchestrator for standards integrity that coordinates index generation, gap analysis, diff comparison, prompt seeding, and summary creation.
+
+**Keywords:** `orchestrator`, `standards`, `integrity`, `pipeline`, `healthview`, `compliance`
+
+#### Resource Paths
+| Resource | Path |
+|----------|------|
+| Script | `.repo_studios/command_center/scripts/orchestrators/run_standards_integrity.py` |
+| Tier-3 YAML | `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier3_scripts/standards_integrity/tier3_run_standards_integrity.yaml` |
+| Build Doc | `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_6_1/S61R-001_run_standards_integrity_build.md` |
+| Output Root | `.repo_studios/reports/healthview/orchestrator_reports/standards_integrity/` |
+
+#### Invocation
+```bash
+python .repo_studios/command_center/scripts/orchestrators/run_standards_integrity.py --repo-root . --log-level INFO
 ```
 
-#### Implementation Workstreams (checkbox-driven) — run_standards_integrity.py
+| Aspect | Value |
+|--------|-------|
+| Entry Point | `run(argv)` returns `int` |
+| Typical Runtime | 5-8 minutes |
+| Exit Codes | 0=success, 1=pipeline failure |
 
-Workstream A — Discovery
+#### Outputs
+| Artifact | Format | Description |
+|----------|--------|-------------|
+| manifest.json | JSON | Full pipeline state, artifact paths, catalog, inputs |
+| summary.md | Markdown | Human-readable step report with outcomes |
+| telemetry.json | JSON | Pipeline telemetry with step results and metrics |
 
-- [x] Inspect outputs + pruning/retention surfaces; record findings
-  - Uses `build_topic_path("orchestrator", "standards_integrity")` at L72 — HOP-compliant.
-  - No pointer file creation (HOP-compliant).
-  - Uses `write_report_artifacts` with keep parameter — proper retention at L793-L801.
-  - Delegates to 5 sub-producers, each with their own retention parameters.
+#### Compliance
+| Aspect | Status | Notes |
+|--------|--------|-------|
+| HOP Bundle | YES | Timestamped bundles with manifest, uses `write_report_artifacts()` |
+| UIC Interface | PARTIAL | `run(argv)` returns `int` (orchestrator deviation, acceptable) |
+| Tier-3 YAML | YES | Created 2026-01-02, 294 lines |
 
-Workstream B — Plan
+#### Orchestrator
+| Pipeline | Status | Config Path |
+|----------|--------|-------------|
+| (self) | IS_ORCHESTRATOR | N/A — this is the orchestrator |
 
-- [x] Draft plan to close output-root/base-package stop-gates
-  - No changes needed. Script is already HOP-compliant.
+#### Pipeline Position
+| Field | Value |
+|-------|-------|
+| Step Number | N/A — Orchestrator |
+| Execution Mode | COORDINATES 5 SEQUENTIAL STEPS |
+| Orchestrator Script | (self) |
 
-Workstream C — Implement
+#### Pipeline Steps Coordinated
+| # | Step Name | Script | Record ID |
+|---|-----------|--------|-----------|
+| 1 | index | `generate_standards_index.py` | S61R-002 |
+| 2 | gap | `analyze_standards_index_gaps.py` | S61R-003 |
+| 3 | diff | `diff_standards_index.py` | S61R-004 |
+| 4 | prompts | `seed_standards_prompts.py` | S61R-005 |
+| 5 | summary | `summarize_standards.py` | S61R-006 |
 
-- [x] Implement accepted plan and update this record + stop-gate status with new evidence
-  - No code changes required. Updated evidence block with test path and QA results.
+#### Dependencies & Consumers
+| Direction | Record ID | Script | Data Flow |
+|-----------|-----------|--------|-----------|
+| ⬆️ DEPENDS ON | (none) | — | Top-level orchestrator, no upstream dependencies |
+| ⬇️ CONSUMED BY | (none) | — | Terminal node, outputs consumed by HealthView dashboard |
 
-Workstream D — Tier-3 YAML
+#### Known Limitations
+- `run()` missing Google-style docstring (GAP-001)
+- Skip flags not implemented (GAP-002)
+- Tier-3 YAML retention default mismatch (GAP-003)
+- Tier-3 YAML continue_on_failure mismatch on index step (GAP-004)
 
-- [x] Confirm Tier-3 is appropriate for this script; record decision (create vs defer)
-  - Decision: **Created** — Tier-3 YAML created per user mandate.
-- [x] Inspect Tier-3 template requirements — Reviewed v1 template structure.
-- [x] Draft `tier3_<script_stem>.yaml` — Created `tier3_run_standards_integrity.yaml` (2026-01-02).
-- [x] Validate Tier-3 YAML — Verified structure matches template v1.
-
-Workstream E — QA & Evidence
-
-- [x] Pytest evidence captured
-  - Result: 2 passed in 0.18s (2026-01-02)
-- [x] Mypy evidence captured (or marked N/A in record)
-  - Result: 7 errors (nested closures for pipeline steps — acceptable) (2026-01-02)
-- [x] Coverage + doc-index timestamp recorded
-  - N/A (no coverage threshold for this orchestrator)
-
-- [x] DONE — run_standards_integrity.py complete; update Tier-1 Stage 6.1 script gate
+#### Verification
+| Field | Value |
+|-------|-------|
+| Last Verified | 2026-02-05 |
+| Verified By | GitHub Copilot |
+| Build Doc Version | 1.0.0 |
+<!-- AGENT_ROUTER:END S61R-001 -->
 
 <!-- AGENT_ROUTER:START S61R-002 -->
 ### S61R-002 — generate_standards_index.py
@@ -494,44 +452,6 @@ python .repo_studios/scripts/producers/generate_standards_index.py --repo-root .
 | Build Doc Version | 1.0.0 |
 <!-- AGENT_ROUTER:END S61R-002 -->
 
-#### Implementation Workstreams (checkbox-driven) — generate_standards_index.py
-
-Workstream A — Discovery
-
-- [x] Inspect outputs + pruning/retention surfaces; record findings
-  - Uses `build_topic_path("producer", "standards_index")` at L55 — HOP-compliant.
-  - No pointer file creation (`_update_latest`, `latest_*` absent).
-  - Uses `prune_run_directories` at L728, L753 — proper retention.
-
-Workstream B — Plan
-
-- [x] Draft plan to close output-root/base-package stop-gates
-  - No changes needed. Script is already HOP-compliant.
-
-Workstream C — Implement
-
-- [x] Implement accepted plan and update this record + stop-gate status with new evidence
-  - No code changes required. Updated evidence block with test path and QA results.
-
-Workstream D — Tier-3 YAML
-
-- [x] Confirm Tier-3 is appropriate for this script; record decision (create vs defer)
-  - Decision: **Created** — Tier-3 YAML created per user mandate.
-- [x] Inspect Tier-3 template requirements — Reviewed v1 template structure.
-- [x] Draft `tier3_<script_stem>.yaml` — Created `tier3_generate_standards_index.yaml` (2026-01-02).
-- [x] Validate Tier-3 YAML — Verified structure matches template v1.
-
-Workstream E — QA & Evidence
-
-- [x] Pytest evidence captured
-  - Result: 4 passed in 0.24s (2026-02-05)
-- [x] Mypy evidence captured (or marked N/A in record)
-  - Result: Success: no issues found (2026-02-05)
-- [x] Coverage + doc-index timestamp recorded
-  - N/A (no coverage threshold for this producer)
-
-- [x] DONE — generate_standards_index.py complete; update Tier-1 Stage 6.1 script gate (Phase 4 complete 2026-02-05)
-
 <!-- AGENT_ROUTER:START S61R-003 -->
 ### S61R-003 — analyze_standards_index_gaps.py
 
@@ -574,11 +494,13 @@ python -m scripts.producers.analyze_standards_index_gaps --repo-root . --log-lev
 | Tier-3 YAML | YES | Created 2026-01-02, v1 template |
 
 #### Orchestrator
+
 | Pipeline | Status | Config Path |
 |----------|--------|-------------|
 | run_standards_integrity.py | WIRED | Step 2 of 5 (index → **gap** → diff → prompts → summary) |
 
 #### Pipeline Position
+
 | Field | Value |
 |-------|-------|
 | Step Number | 2 of 5 |
@@ -586,61 +508,26 @@ python -m scripts.producers.analyze_standards_index_gaps --repo-root . --log-lev
 | Orchestrator Script | `.repo_studios/command_center/scripts/orchestrators/run_standards_integrity.py` |
 
 #### Dependencies & Consumers
+
 | Direction | Record ID | Script | Data Flow |
 |-----------|-----------|--------|-----------|
 | ⬆️ DEPENDS ON | S61R-002 | `generate_standards_index.py` | Requires `repo_standards_index.yaml` for gap analysis |
 | ⬇️ CONSUMED BY | S61R-006 | `summarize_standards.py` | Provides gap data for standards overview |
 
 #### Known Limitations
+
 - Return dict missing `status` and `exit_code` keys (GAP-001, GAP-002)
 - Exceptions raise instead of returning error dict (GAP-003)
 - Summary.md contains absolute paths (cosmetic, GAP-004)
 
 #### Verification
+
 | Field | Value |
 |-------|-------|
 | Last Verified | 2026-02-05 |
 | Verified By | GitHub Copilot |
 | Build Doc Version | 0.3.0 |
 <!-- AGENT_ROUTER:END S61R-003 -->
-
-#### Implementation Workstreams (checkbox-driven) — analyze_standards_index_gaps.py
-
-Workstream A — Discovery
-
-- [x] Inspect outputs + pruning/retention surfaces; record findings
-  - Uses `build_topic_path("producer", "standards_index_gaps")` at L51 — HOP-compliant.
-  - No pointer file creation (LEGACY_INDEX_PATH at L56 is a read fallback only).
-  - Uses `prune_run_directories` at L516 — proper retention.
-
-Workstream B — Plan
-
-- [x] Draft plan to close output-root/base-package stop-gates
-  - No changes needed. Script is already HOP-compliant.
-
-Workstream C — Implement
-
-- [x] Implement accepted plan and update this record + stop-gate status with new evidence
-  - No code changes required. Updated evidence block with test path and QA results.
-
-Workstream D — Tier-3 YAML
-
-- [x] Confirm Tier-3 is appropriate for this script; record decision (create vs defer)
-  - Decision: **Created** — Tier-3 YAML created per user mandate.
-- [x] Inspect Tier-3 template requirements — Reviewed v1 template structure.
-- [x] Draft `tier3_<script_stem>.yaml` — Created `tier3_analyze_standards_index_gaps.yaml` (2026-01-02).
-- [x] Validate Tier-3 YAML — Verified structure matches template v1.
-
-Workstream E — QA & Evidence
-
-- [x] Pytest evidence captured
-  - Result: 7 passed in 0.22s (2026-02-05)
-- [x] Mypy evidence captured (or marked N/A in record)
-  - Result: Success: no issues found (2026-02-05)
-- [x] Coverage + doc-index timestamp recorded
-  - N/A (no coverage threshold for this producer)
-
-- [x] DONE — analyze_standards_index_gaps.py complete; update Tier-1 Stage 6.1 script gate (Phase 4 complete 2026-02-05)
 
 <!-- AGENT_ROUTER:START S61R-004 -->
 ### S61R-004 — diff_standards_index.py
@@ -650,6 +537,7 @@ Workstream E — QA & Evidence
 **Keywords:** `standards`, `diff`, `index`, `compliance`, `producer`
 
 #### Resource Paths
+
 | Resource | Path |
 |----------|------|
 | Script | `.repo_studios/scripts/producers/diff_standards_index.py` |
@@ -658,6 +546,7 @@ Workstream E — QA & Evidence
 | Output Root | `.repo_studios/reports/healthview/producer_reports/standards_index_diff/` |
 
 #### Invocation
+
 ```bash
 python .repo_studios/scripts/producers/diff_standards_index.py <old_index> <new_index> --repo-root . --log-level INFO --fail-on any
 ```
@@ -669,6 +558,7 @@ python .repo_studios/scripts/producers/diff_standards_index.py <old_index> <new_
 | Exit Codes | 0=success/no-changes, 1=changes-match-fail-on, 2=error |
 
 #### Outputs
+
 | Artifact | Format | Description |
 |----------|--------|-------------|
 | manifest.json | JSON | Schema version, status, inputs, diff summary |
@@ -676,6 +566,7 @@ python .repo_studios/scripts/producers/diff_standards_index.py <old_index> <new_
 | telemetry.json | JSON | Execution metrics and timing |
 
 #### Compliance
+
 | Aspect | Status | Notes |
 |--------|--------|-------|
 | HOP Bundle | YES | 8/8 checks pass, uses `build_topic_path()` |
@@ -683,11 +574,13 @@ python .repo_studios/scripts/producers/diff_standards_index.py <old_index> <new_
 | Tier-3 YAML | YES | 232-line YAML with all required fields |
 
 #### Orchestrator
+
 | Pipeline | Status | Config Path |
 |----------|--------|-------------|
 | run_standards_integrity.py | WIRED | Step 3 of 5 (conditional, skipped if no baseline) |
 
 #### Pipeline Position
+
 | Field | Value |
 |-------|-------|
 | Step Number | 3 of 5 |
@@ -695,16 +588,19 @@ python .repo_studios/scripts/producers/diff_standards_index.py <old_index> <new_
 | Orchestrator Script | `.repo_studios/command_center/scripts/orchestrators/run_standards_integrity.py` |
 
 #### Dependencies & Consumers
+
 | Direction | Record ID | Script | Data Flow |
 |-----------|-----------|--------|-----------|
 | ⬆️ DEPENDS ON | S61R-002 | `generate_standards_index.py` | Requires baseline and current index YAML files |
 | ⬇️ CONSUMED BY | S61R-006 | `summarize_standards.py` | Provides diff data for standards overview summary |
 
 #### Known Limitations
+
 - Missing `run(argv) -> dict` entry point (UIC gaps GAP-001 through GAP-006 documented, deferred)
 - Orchestrator invokes via `main()` function, not UIC-compliant `run()` pattern
 
 #### Verification
+
 | Field | Value |
 |-------|-------|
 | Last Verified | 2026-02-05 |
@@ -787,115 +683,76 @@ python -m scripts.producers.seed_standards_prompts --repo-root . --log-level INF
 | Build Doc Version | 1.0.0 |
 <!-- AGENT_ROUTER:END S61R-005 -->
 
-##### S61R-006: Standards Overview Summarizer
+<!-- AGENT_ROUTER:START S61R-006 -->
+### S61R-006 — summarize_standards.py
 
-```yaml
-record_id: "S61R-006"
-script:
-  path: ".repo_studios/scripts/summarizers/summarize_standards.py"
-  name: "summarize_standards.py"
-  category: "summarizer"
-tier3:
-  metadata_block_version: "v1"
-  allowed: true
-  exists: true
-  name: "tier3_summarize_standards.yaml"
-  meets_template: "v1"
-  last_updated: "2026-01-02"
-cli_surfaces:
-  run_entrypoint: "run(argv)"
-  key_flags:
-    - "--repo-root"
-    - "--index-path"
-    - "--pending-path"
-    - "--output-dir"
-    - "--label"
-    - "--timestamp"
-    - "--artifacts-to-keep"
-    - "--log-level"
-io_contract:
-  inputs:
-    - "Reads repo_standards_index.yaml and repo_standards_pending.yaml for metrics and notes."
-  outputs:
-    current:
-      root: ".repo_studios/reports/healthview/summarizer_reports/standards_overview/<YYYYMMDD-HHMM>/"
-      artifacts:
-        - "manifest.json"
-        - "summary.md"
-        - "telemetry.json"
-    target:
-      root: ".repo_studios/reports/healthview/<class>/<topic>/<timestamp>/"
-      artifacts:
-        - "manifest.json"
-        - "summary.md"
-        - "telemetry.json"
-retention:
-  surfaces:
-    - "--artifacts-to-keep"
-    - "write_report_artifacts(keep=...)"
-  mechanism: "prune_by_timestamp"
-  targets:
-    - ".repo_studios/reports/healthview/summarizer_reports/standards_overview/"
-  guardrails:
-    - "Shared pruning enforces keep>=1 and protects current run"
-  evidence:
-    - ".repo_studios/scripts/summarizers/summarize_standards.py#L324-L334"
-db_integration:
-  gated_by: "REPO_STUDIOS_DB_ENABLED"
-  marker_required: false
-  marker_string: "DB_INTEGRATION_MARKER:"
-evidence:
-  code_refs:
-    - ".repo_studios/scripts/summarizers/summarize_standards.py#L324-L334"
-  tests:
-    - ".repo_studios/tests/tests_summarizers/test_summarize_standards.py"
-  fixtures:
-    - "NA"
-qa:
-  pytest: "2 passed in 0.14s (2026-01-02)"
-  mypy: "Success: no issues found (2026-01-02)"
-  coverage: "N/A"
-notes:
-  - "Writes full base package (manifest.json, summary.md, telemetry.json)."
+> **One-liner:** Generates a HealthView-ready summary of the standards index with metrics, markdown samples, and pending file status.
+
+**Keywords:** `standards`, `summarizer`, `metrics`, `healthview`, `compliance`
+
+#### Resource Paths
+| Resource | Path |
+|----------|------|
+| Script | `.repo_studios/scripts/summarizers/summarize_standards.py` |
+| Tier-3 YAML | `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier3_scripts/standards_integrity/tier3_summarize_standards.yaml` |
+| Build Doc | `.repo_studios/docs/pipeline/healthview_orchestration_pipeline/tier2_roster/working_docs/stage_6_1/S61R-006_summarize_standards_build.md` |
+| Output Root | `.repo_studios/reports/healthview/summarizer_reports/standards_overview/` |
+
+#### Invocation
+```bash
+python .repo_studios/scripts/summarizers/summarize_standards.py --repo-root . --log-level INFO
 ```
 
-#### Implementation Workstreams (checkbox-driven) — summarize_standards.py
+| Aspect | Value |
+|--------|-------|
+| Entry Point | `run(argv)` / `main()` |
+| Typical Runtime | ~2 seconds |
+| Exit Codes | 0=success, 1=error |
 
-Workstream A — Discovery
+#### Outputs
+| Artifact | Format | Description |
+|----------|--------|-------------|
+| manifest.json | JSON | Bundle metadata with metrics, samples, artifact paths |
+| summary.md | Markdown | Human-readable overview with metrics table |
+| telemetry.json | JSON | Telemetry payload with schema version and metrics |
 
-- [x] Inspect outputs + pruning/retention surfaces; record findings
-  - Uses `build_topic_path("summarizer", "standards_overview")` at L60 — HOP-compliant.
-  - No pointer file creation (LEGACY_INDEX_PATH at L57 is a read fallback only).
-  - Uses `write_report_artifacts` with keep parameter — proper retention.
+#### Compliance
+| Aspect | Status | Notes |
+|--------|--------|-------|
+| HOP Bundle | YES | Emits manifest.json + summary.md + telemetry.json |
+| UIC Interface | PARTIAL | Missing `exit_code` in return dict (GAP-001) |
+| Tier-3 YAML | YES | 141 lines, validated |
 
-Workstream B — Plan
+#### Orchestrator
+| Pipeline | Status | Config Path |
+|----------|--------|-------------|
+| Standards Integrity | WIRED | `run_standards_integrity.py` |
 
-- [x] Draft plan to close output-root/base-package stop-gates
-  - No changes needed. Script is already HOP-compliant.
+#### Pipeline Position
+| Field | Value |
+|-------|-------|
+| Step Number | 5 of 5 |
+| Execution Mode | SEQUENTIAL |
+| Orchestrator Script | `.repo_studios/command_center/scripts/orchestrators/run_standards_integrity.py` |
 
-Workstream C — Implement
+#### Dependencies & Consumers
+| Direction | Record ID | Script | Data Flow |
+|-----------|-----------|--------|-----------|
+| ⬆️ DEPENDS ON | S61R-002 | `generate_standards_index.py` | Reads `repo_standards_index.yaml` |
+| ⬆️ DEPENDS ON | (none) | `repo_standards_pending.yaml` | Reads pending standards file |
+| ⬇️ CONSUMED BY | (none) | — | Terminal node, outputs consumed by orchestrator |
 
-- [x] Implement accepted plan and update this record + stop-gate status with new evidence
-  - No code changes required. Updated evidence block with test path and QA results.
+#### Known Limitations
+- Return dict missing `exit_code` key (UIC-004 gap)
+- `run()` function lacks Google-style docstring (UIC-007 gap)
 
-Workstream D — Tier-3 YAML
-
-- [x] Confirm Tier-3 is appropriate for this script; record decision (create vs defer)
-  - Decision: **Created** — Tier-3 YAML created per user mandate.
-- [x] Inspect Tier-3 template requirements — Reviewed v1 template structure.
-- [x] Draft `tier3_<script_stem>.yaml` — Created `tier3_summarize_standards.yaml` (2026-01-02).
-- [x] Validate Tier-3 YAML — Verified structure matches template v1.
-
-Workstream E — QA & Evidence
-
-- [x] Pytest evidence captured
-  - Result: 2 passed in 0.14s (2026-01-02)
-- [x] Mypy evidence captured (or marked N/A in record)
-  - Result: Success: no issues found (2026-01-02)
-- [x] Coverage + doc-index timestamp recorded
-  - N/A (no coverage threshold for this summarizer)
-
-- [x] DONE — summarize_standards.py complete; update Tier-1 Stage 6.1 script gate
+#### Verification
+| Field | Value |
+|-------|-------|
+| Last Verified | 2026-02-05 |
+| Verified By | GitHub Copilot (copilot-claude-opus-4.5) |
+| Build Doc Version | 1.0.0 |
+<!-- AGENT_ROUTER:END S61R-006 -->
 
 ### 3.2 Stop-Gates and Implementation Checklists
 
